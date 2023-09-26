@@ -12,6 +12,13 @@ Welcome to the SHIFT-4 repository! This repository is dedicated to our exclusive
 
 To get started with the project, follow these steps:
 
+`IMPORTANT`
+
+For the first pull run this in the terminal:
+````
+git config pull.rebase false
+``````
+
 1. Clone the repository to your local machine.
    ```
    git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
