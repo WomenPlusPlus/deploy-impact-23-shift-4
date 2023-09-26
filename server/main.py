@@ -19,18 +19,24 @@ import os
 database_uri = os.environ.get("DATABASE_URI")
 secret_key = os.environ.get("SECRET_KEY")
 
+# App config
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
-# Keep the server reloading on changes
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
 
+# Database
 db = SQLAlchemy(app)
+
+# Login manager
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
 
 class User(db.Model, UserMixin):
+    """
+    Postgres table schema
+    """
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)   # Store the hashed password
