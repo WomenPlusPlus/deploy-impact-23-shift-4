@@ -48,4 +48,3 @@ To get started with the project, follow these steps:
 We welcome contributions from the community. If you'd like to contribute to this project, please follow the steps mentioned in the "Getting Started" section and make sure to adhere to our coding guidelines and best practices.
 
 Thank you for being a part of SHIFT-4, and together, we can make a positive impact in the tech industry by promoting diversity and connecting talent with opportunities.
->>>>>>> 4a3f2cfce240b623e2002e5a9d433e08311d19cf
