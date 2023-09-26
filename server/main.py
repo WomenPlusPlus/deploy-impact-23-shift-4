@@ -164,7 +164,7 @@ def check_authentication():
     else:
         return jsonify({"authenticated": False})
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 @login_required
 def logout():
     """
