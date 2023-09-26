@@ -1,6 +1,9 @@
 Flask==2.1.1
-Flask-SQLAlchemy==3.0.0
-Flask-Login==0.5.0
+Flask-SQLAlchemy==2.5.0
+Flask-Login==0.6.2
 python-dotenv==1.0.0
 psycopg2-binary==2.9.7  # PostgreSQL database adapter
 passlib==1.7.4
+types-passlib==1.7.7.13
+flake8==6.1.0
+mypy==1.5.1
