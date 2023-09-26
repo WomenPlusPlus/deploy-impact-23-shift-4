@@ -17,31 +17,28 @@ To get started with the project, follow these steps:
    git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
    ```
 
-2. Switch to the `development` branch.
+2. Create a new branch for your feature or bug fix from the remote development branch.
    ```
-   git checkout development
-   ```
-
-3. Create a new branch for your feature or bug fix.
-   ```
-   git checkout -b feature/your-feature-name
+   git checkout -b contributor-name/your-branch-name origin/development
    ```
 
-4. Make your changes and commit them to your branch.
+3. Add and check your changes, and commit them to your branch.
    ```
+   git add . 
+   git status
    git commit -m "Add your commit message here"
    ```
 
-5. Push your branch to the remote repository.
+4. Push your branch to the remote repository.
    ```
-   git push origin contributor-name/your-feature-name
+   git push origin contributor-name/your-branch-name
    ```
 
-6. When your feature or fix is ready, create a pull request from your branch to the `development` branch. Ensure that your code follows the project's coding standards.
+5. When your feature or fix is ready, create a pull request from your branch to the `development` branch. Ensure that your code follows the project's coding standards.
 
-7. Once the pull request is reviewed and approved, it will be merged into the `development` branch.
+6. Once the pull request is reviewed and approved, it will be merged into the `development` branch.
 
-8. Periodically, the changes in the `development` branch will be tested, and when deemed stable, they will be merged into the `main` branch for production deployment.
+7. Periodically, the changes in the `development` branch will be tested, and when deemed stable, they will be merged into the `main` branch for production deployment.
 
 ## Contributing
 
