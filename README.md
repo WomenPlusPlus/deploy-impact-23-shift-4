@@ -1,7 +1,4 @@
 # SHIFT-4
-Certainly! Here's a short README.md for your repository, SHIFT-4:
-
-# SHIFT-4 Repository
 
 Welcome to the SHIFT-4 repository! This repository is dedicated to our exclusive recruiting platform designed to support underrepresented groups in tech to secure entry-level jobs and internships. Additionally, it aids companies in finding tech talent for their entry-level positions and internships.
 
