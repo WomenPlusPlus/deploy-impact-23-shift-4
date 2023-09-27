@@ -7,7 +7,7 @@ PYTHON_VERSION=3.8
 MAIN_PY_FILE="main.py"
 
 # List of required tools
-REQUIRED_TOOLS=("flake8" "mypy")
+REQUIRED_TOOLS=("flake8")
 
 # Function to check if a tool is installed
 check_tool() {
