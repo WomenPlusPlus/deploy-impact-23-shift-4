@@ -2,7 +2,7 @@ import pytest
 import sys, os
 import time
 sys.path.append(os.path.abspath(__file__).split("/tests")[0])
-from services.temporaryURL import route, localhost, is_token_valid, expiration_time
+from services.temporary_url import route, localhost, is_token_valid, expiration_time
 
 # Run `pytest -s tests/test_temporaryURL.py`
 def test_temporary_url():
