@@ -16,7 +16,7 @@ To get started with the project, follow these steps:
 
 For the first pull run this in the terminal:
 ````
-git config pull.rebase false
+git config pull.rebase false --global
 ``````
 
 1. Clone the repository to your local machine.
