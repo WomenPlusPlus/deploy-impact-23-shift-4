@@ -6,3 +6,4 @@ psycopg2-binary==2.9.7  # PostgreSQL database adapter
 passlib==1.7.4
 types-passlib==1.7.7.13
 flake8==6.1.0
+flask-cors==4.0.0
