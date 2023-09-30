@@ -8,7 +8,7 @@ from flask_login import (
     logout_user,
     current_user,
 )
-from passlib.hash import bcrypt 
+from passlib.hash import bcrypt
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,7 +21,9 @@ secret_key = os.environ.get("SECRET_KEY")
 # App config
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True # Keep the server reloading on changes
+app.config[
+    "SQLALCHEMY_TRACK_MODIFICATIONS"
+] = True  # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
 
 # Database
@@ -36,9 +38,12 @@ class User(db.Model, UserMixin):
     """
     Postgres table schema
     """
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)   # Store the hashed password
+    password_hash = db.Column(
+        db.String(128), nullable=False
+    )  # Store the hashed password
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __init__(
@@ -81,7 +86,6 @@ def register():
         username = data.get("username")
         password = data.get("password")
         email = data.get("email")
-        print("REGISTRATION: ",password)
 
         # Check if the username already exists in the database
         existing_user = User.query.filter_by(username=username).first()
@@ -90,7 +94,7 @@ def register():
 
         # Hash the password before saving it to the database using passlib
         hashed_password = bcrypt.hash(password)
-        print("REGISTRATION",hashed_password)
+
         # Create a new user and save it to the database
         new_user = User(username=username, password_hash=hashed_password, email=email)
         db.session.add(new_user)
@@ -114,7 +118,7 @@ def login():
         data = request.get_json()
         username = data.get("username")
         password = data.get("password")
-        
+
         if not username or not password:
             return jsonify({"message": "Username and password are required"}), 400
         # Retrieve the user from the database based on the provided username
@@ -129,6 +133,7 @@ def login():
 
         return jsonify({"message": "Invalid username or password"}), 401
 
+
 @app.route("/delete_user", methods=["POST"])
 @login_required
 def delete_user():
@@ -139,9 +144,8 @@ def delete_user():
         str: JSON response indicating successful user deletion.
     """
     if request.method == "POST":
-        print(current_user)
         current_db_user = User.query.get(current_user.id)
-        print(current_db_user)
+
         data = request.get_json()
         username = data.get("username")
 
@@ -156,6 +160,7 @@ def delete_user():
         return jsonify({"message": "User not found"}), 404
     return jsonify({"message": "Not POST method"}), 403
 
+
 @app.route("/check_authentication", methods=["GET"])
 def check_authentication():
     """
@@ -168,6 +173,7 @@ def check_authentication():
         return jsonify({"authenticated": True, "username": current_user.username})
     else:
         return jsonify({"authenticated": False})
+
 
 @app.route("/logout", methods=["GET"])
 @login_required
