@@ -47,6 +47,27 @@ git config pull.rebase false --global
 
 7. Periodically, the changes in the `development` branch will be tested, and when deemed stable, they will be merged into the `main` branch for production deployment.
 
+## How to run Docker image
+
+### Build Docker image
+We will build the docker image for the `server`. 
+Please ensure that your docker desktop is running. Else you may get this error:
+
+`Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
+
+To build the image, run the command:
+```bash
+docker build -t shift4-test . 
+```
+
+Now, run the Docker image:
+
+```bash
+docker run -p 5001:5001 shift4-test
+```
+
+Then, you're ready to test the server!
+
 ## Contributing
 
 We welcome contributions from the community. If you'd like to contribute to this project, please follow the steps mentioned in the "Getting Started" section and make sure to adhere to our coding guidelines and best practices.
