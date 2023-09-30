@@ -6,6 +6,7 @@ route = "company-registration"
 # expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
 expiration_time = int(time.time()) + 60  # 1 minute in seconds (for testing)
 
+
 # Function to generate a temporary link with expiration
 def generate_temporary_link(expiration_time):
     # Generate a random token
@@ -13,8 +14,9 @@ def generate_temporary_link(expiration_time):
 
     # Combine the token and expiration time in a structured format
     temporary_link = f"{localhost}/{route}?token={token}&expires={expiration_time}"
-    
+
     return temporary_link
+
 
 # Function to extract expiration timestamp from the link
 def extract_expiration_timestamp(link):
@@ -28,6 +30,7 @@ def extract_expiration_timestamp(link):
     except Exception as e:
         # Handle parsing errors here
         return None
+
 
 def is_token_valid(temporary_link):
     # Extract the expiration timestamp from the token
@@ -43,5 +46,3 @@ def is_token_valid(temporary_link):
     else:
         print("Link has expired.")
         return False
-
-

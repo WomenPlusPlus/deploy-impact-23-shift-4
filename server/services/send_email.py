@@ -1,6 +1,7 @@
 import sendgrid
 from sendgrid.helpers.mail import Mail, From, To, Subject, PlainTextContent, HtmlContent
 import sys, os
+
 sys.path.append(os.path.abspath(__file__).split("services")[0])
 from services.temporary_url import generate_temporary_link
 from dotenv import load_dotenv
