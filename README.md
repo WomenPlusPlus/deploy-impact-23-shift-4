@@ -15,28 +15,33 @@ To get started with the project, follow these steps:
 `IMPORTANT`
 
 For the first pull run this in the terminal:
-````
+
+```
 git config pull.rebase false --global
-``````
+```
 
 1. Clone the repository to your local machine.
+
    ```
    git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
    ```
 
 2. Create a new branch for your feature or bug fix from the remote development branch.
+
    ```
    git checkout -b contributor-name/your-branch-name origin/development
    ```
 
 3. Add and check your changes, and commit them to your branch.
+
    ```
-   git add . 
+   git add .
    git status
    git commit -m "Add your commit message here"
    ```
 
 4. Push your branch to the remote repository.
+
    ```
    git push origin contributor-name/your-branch-name
    ```
@@ -46,27 +51,6 @@ git config pull.rebase false --global
 6. Once the pull request is reviewed and approved, it will be merged into the `development` branch.
 
 7. Periodically, the changes in the `development` branch will be tested, and when deemed stable, they will be merged into the `main` branch for production deployment.
-
-## How to run Docker image
-
-### Build Docker image
-We will build the docker image for the `server`. 
-Please ensure that your docker desktop is running. Else you may get this error:
-
-`Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
-
-To build the image, run the command:
-```bash
-docker build -t shift4-test . 
-```
-
-Now, run the Docker image:
-
-```bash
-docker run -p 5001:5001 shift4-test
-```
-
-Then, you're ready to test the server!
 
 ## Contributing
 
