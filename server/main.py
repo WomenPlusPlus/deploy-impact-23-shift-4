@@ -2,20 +2,22 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
-    UserMixin,
     login_user,
     login_required,
     logout_user,
     current_user,
 )
 from passlib.hash import bcrypt
+from db_model.user import init_user_model
+from db_model.company import init_company_model
+from db_model.candidate import init_candidate_model
 from dotenv import load_dotenv
 
 load_dotenv()
 import os
 
 # Constants
-database_uri = os.environ.get("DATABASE_URI")
+database_uri = os.environ.get("DATABASE_URI_TEST")
 secret_key = os.environ.get("SECRET_KEY")
 
 # App config
@@ -33,36 +35,10 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
-
-class User(db.Model, UserMixin):
-    """
-    Postgres table schema
-    """
-
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(
-        db.String(128), nullable=False
-    )  # Store the hashed password
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __init__(
-        self,
-        username,
-        password_hash,
-        email,
-    ):
-        """
-        Initialize a new user object.
-
-        Args:
-            username (str): The user's username.
-            email (str): The user's email address.
-            password (str): The user's password (plaintext).
-        """
-        self.username = username
-        self.password_hash = password_hash
-        self.email = email
+# Models
+User = init_user_model(db)
+Candidate = init_candidate_model(db)
+Company = init_company_model(db)
 
 
 @login_manager.user_loader
@@ -81,38 +57,122 @@ def load_user(user_id):
 
 @app.route("/register", methods=["POST"])
 def register():
+    """
+    Register a new user.
+
+    This route handles user registration by accepting a POST request with JSON data.
+    It validates the data, checks if the username already exists, and saves the
+    user information in the appropriate table based on the provided user_type.
+
+    Parameters (POST JSON data):
+        - username (str): The username for the new user.
+        - password (str): The password for the new user (will be hashed).
+        - email (str): The email address of the new user.
+        - user_type (str): The type of user (e.g., "candidate" or "company").
+
+    Returns:
+        - 200 OK: If the registration is successful.
+        - 400 Bad Request: If the provided username already exists or if the
+          user_type is invalid.
+    """
     if request.method == "POST":
         data = request.get_json()
         username = data.get("username")
         password = data.get("password")
         email = data.get("email")
+        user_type = data.get("user_type")  # Get user type from the request
 
-        # Check if the username already exists in the database
+        # Hash the password before saving it to the appropriate table
+        hashed_password = bcrypt.hash(password)
+
+        # Check if the username already exists in the appropriate table
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             return jsonify({"message": "Username already exists"}), 400
 
-        # Hash the password before saving it to the database using passlib
-        hashed_password = bcrypt.hash(password)
-
-        # Create a new user and save it to the database
-        new_user = User(username=username, password_hash=hashed_password, email=email)
+        # Save the new user in the "user" table
+        new_user = User(
+            username=username,
+            password=hashed_password,
+            email=email,
+            user_type=user_type,
+        )
         db.session.add(new_user)
         db.session.commit()
 
+        # Create a new user and save it to the appropriate table
+        if user_type == "candidate":
+            # Save the user also in the "candidate" table
+            new_user = Candidate(
+                username=username, password=hashed_password, email=email
+            )
+            db.session.add(new_user)
+            db.session.commit()
+        elif user_type == "company":
+            # Save the user also in the "company" table
+            new_user = Company(username=username, password=hashed_password, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+        else:
+            return jsonify({"message": "Invalid user type"}), 400
+
         return jsonify({"message": "User registered successfully"})
+
+
+@app.route("/find_user", methods=["POST"])
+def find_user_type():
+    """
+    Find the user type of a given username.
+
+    This route handles a POST request to find the user type associated with a
+    given username by querying the database.
+
+    Parameters (POST JSON data):
+        - username (str): The username for which to find the user type.
+
+    Returns:
+        - JSON: A JSON response containing the user type associated with the
+          provided username.
+
+    Note:
+        - If the username is not found in the database, it returns an empty
+          JSON response.
+    """
+    try:
+        if request.method == "POST":
+            data = request.get_json()
+            username = data.get("username")
+            existing_user = User.query.filter_by(username=username).first()
+
+            return jsonify({"user": existing_user.user_type})
+    except Exception:
+        pass
 
 
 @app.route("/login", methods=["POST"])
 def login():
     """
-    Handle user login.
+    Authenticate and log in a user.
 
-    Accepts a POST request with username and password. Validates the credentials
-    and logs in the user if valid.
+    This route handles user authentication and login by accepting a POST request with
+    JSON data containing the username and password. It verifies the provided
+    credentials, and if they are correct, marks the user as authenticated using the
+    `login_user` function.
+
+    Parameters (POST JSON data):
+        - username (str): The username of the user trying to log in.
+        - password (str): The password provided by the user.
 
     Returns:
-        str: JSON response indicating success or failure of login.
+        - 200 OK: If the login is successful.
+        - 400 Bad Request: If either the username or password is missing.
+        - 401 Unauthorized: If the provided username is not registered or if the
+          password is incorrect.
+
+    Note:
+        - The route uses the `bcrypt` library to securely verify the password.
+        - After a successful login, the user is marked as authenticated with `login_user()`, 
+          and they can access protected resources.
     """
     if request.method == "POST":
         data = request.get_json()
@@ -125,17 +185,26 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user:
+            # Find the user
+            user_type = user.user_type
+            if user_type == "candidate":
+                existing_user = Candidate.query.filter_by(username=username).first()
+            elif user_type == "company":
+                existing_user = Company.query.filter_by(username=username).first()
+
             # Verify the password using passlib
-            if bcrypt.verify(password, user.password_hash):
+            if bcrypt.verify(password, existing_user.password):
                 # If the password is valid, mark the user as authenticated
                 login_user(user)
                 return jsonify({"message": "Login successful"})
-
-        return jsonify({"message": "Invalid username or password"}), 401
+            else:
+                return jsonify({"message": "Invalid username or password"}), 401
+        else:
+            return jsonify({"message": "User is not registered"}), 401
 
 
 @app.route("/delete_user", methods=["POST"])
-@login_required
+# @login_required
 def delete_user():
     """
     Delete the currently authenticated user.
@@ -144,8 +213,9 @@ def delete_user():
         str: JSON response indicating successful user deletion.
     """
     if request.method == "POST":
-        current_db_user = User.query.get(current_user.id)
-
+        # print(current_user)
+        # current_db_user = User.query.get(current_user.id)
+        # print(current_db_user)
         data = request.get_json()
         username = data.get("username")
 
@@ -203,5 +273,6 @@ def protected():
 
 
 if __name__ == "__main__":
+    # Start the server
     db.create_all()
     app.run(port=5001, debug=True)
