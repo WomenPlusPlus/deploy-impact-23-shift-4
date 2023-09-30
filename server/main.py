@@ -24,7 +24,9 @@ secret_key = os.environ.get("SECRET_KEY")
 # App config
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True # Keep the server reloading on changes
+app.config[
+    "SQLALCHEMY_TRACK_MODIFICATIONS"
+] = True  # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
 
 # Database
@@ -120,7 +122,7 @@ def login():
         data = request.get_json()
         username = data.get("username")
         password = data.get("password")
-        
+
         if not username or not password:
             return jsonify({"message": "Username and password are required"}), 400
         # Retrieve the user from the database based on the provided username
@@ -143,6 +145,7 @@ def login():
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
             return jsonify({"message": "User is not registered"}), 401
+
 
 @app.route("/delete_user", methods=["POST"])
 # @login_required
@@ -171,6 +174,7 @@ def delete_user():
         return jsonify({"message": "User not found"}), 404
     return jsonify({"message": "Not POST method"}), 403
 
+
 @app.route("/check_authentication", methods=["GET"])
 def check_authentication():
     """
@@ -183,6 +187,7 @@ def check_authentication():
         return jsonify({"authenticated": True, "username": current_user.username})
     else:
         return jsonify({"authenticated": False})
+
 
 @app.route("/logout", methods=["GET"])
 @login_required
