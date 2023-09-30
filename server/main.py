@@ -17,7 +17,7 @@ load_dotenv()
 import os
 
 # Constants
-database_uri = os.environ.get("DATABASE_URI")
+database_uri = os.environ.get("DATABASE_URI_TEST")
 secret_key = os.environ.get("SECRET_KEY")
 
 # App config
