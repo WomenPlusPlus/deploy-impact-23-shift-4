@@ -1,12 +1,9 @@
-import Homepage from './components/Pages/Homepage';
-import './App.css';
+import "./App.css";
+import Routes from "./routes/routes";
+import "./config";
 
 function App() {
-  return (
-    <div className="App">
-      <Homepage/>
-    </div>
-  );
+  return <Routes />;
 }
 
 export default App;

@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
@@ -27,7 +28,8 @@ app.config[
     "SQLALCHEMY_TRACK_MODIFICATIONS"
 ] = True  # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
-
+# Initialize CORS with your Flask app
+CORS(app)
 # Database
 db = SQLAlchemy(app)
 
@@ -55,7 +57,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/register", methods=["POST"])
 def register():
     """
     Register a new user.
@@ -119,7 +121,7 @@ def register():
         return jsonify({"message": "User registered successfully"})
 
 
-@app.route("/find_user", methods=["POST"])
+@app.route("/api/find_user", methods=["POST"])
 def find_user_type():
     """
     Find the user type of a given username.
@@ -149,7 +151,7 @@ def find_user_type():
         pass
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
     """
     Authenticate and log in a user.
@@ -171,7 +173,7 @@ def login():
 
     Note:
         - The route uses the `bcrypt` library to securely verify the password.
-        - After a successful login, the user is marked as authenticated with `login_user()`, 
+        - After a successful login, the user is marked as authenticated with `login_user()`,
           and they can access protected resources.
     """
     if request.method == "POST":
@@ -196,14 +198,14 @@ def login():
             if bcrypt.verify(password, existing_user.password):
                 # If the password is valid, mark the user as authenticated
                 login_user(user)
-                return jsonify({"message": "Login successful"})
+                return jsonify({"message": "Login successful"}), 200
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
             return jsonify({"message": "User is not registered"}), 401
 
 
-@app.route("/delete_user", methods=["POST"])
+@app.route("/api/delete_user", methods=["POST"])
 # @login_required
 def delete_user():
     """
@@ -231,7 +233,7 @@ def delete_user():
     return jsonify({"message": "Not POST method"}), 403
 
 
-@app.route("/check_authentication", methods=["GET"])
+@app.route("/api/check_authentication", methods=["GET"])
 def check_authentication():
     """
     Check if the user is authenticated.
@@ -245,7 +247,7 @@ def check_authentication():
         return jsonify({"authenticated": False})
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/api/logout", methods=["GET"])
 @login_required
 def logout():
     """
@@ -258,7 +260,7 @@ def logout():
     return jsonify({"message": "Logged out successfully"})
 
 
-@app.route("/protected")
+@app.route("/api/protected")
 @login_required
 def protected():
     """

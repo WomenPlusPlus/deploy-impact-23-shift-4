@@ -15,28 +15,33 @@ To get started with the project, follow these steps:
 `IMPORTANT`
 
 For the first pull run this in the terminal:
-````
+
+```
 git config pull.rebase false --global
-``````
+```
 
 1. Clone the repository to your local machine.
+
    ```
    git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
    ```
 
 2. Create a new branch for your feature or bug fix from the remote development branch.
+
    ```
    git checkout -b contributor-name/your-branch-name origin/development
    ```
 
 3. Add and check your changes, and commit them to your branch.
+
    ```
-   git add . 
+   git add .
    git status
    git commit -m "Add your commit message here"
    ```
 
 4. Push your branch to the remote repository.
+
    ```
    git push origin contributor-name/your-branch-name
    ```
