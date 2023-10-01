@@ -117,8 +117,9 @@ def register():
             db.session.commit()
         else:
             return jsonify({"message": "Invalid user type"}), 400
-
-        return jsonify({"message": "User registered successfully"})
+        
+        login_user(new_user)
+        return jsonify({"message": "User registered successfully", "user_type": user_type})
 
 
 @app.route("/api/find_user", methods=["POST"])
@@ -189,16 +190,12 @@ def login():
         if user:
             # Find the user
             user_type = user.user_type
-            if user_type == "candidate":
-                existing_user = Candidate.query.filter_by(username=username).first()
-            elif user_type == "company":
-                existing_user = Company.query.filter_by(username=username).first()
 
             # Verify the password using passlib
-            if bcrypt.verify(password, existing_user.password):
+            if bcrypt.verify(password, user.password):
                 # If the password is valid, mark the user as authenticated
                 login_user(user)
-                return jsonify({"message": "Login successful"}), 200
+                return jsonify({"message": "Login successful", "user_type": user_type}), 200
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
