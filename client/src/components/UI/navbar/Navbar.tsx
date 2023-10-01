@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Layout, Drawer, Menu, Input } from "antd";
+import { Layout, Drawer, Menu, Input, Button } from "antd";
 import {
   IconBookmark,
   IconBell,
   IconUser,
   IconLogout,
+  IconMenu2,
 } from "@tabler/icons-react";
 
 import "./Navbar.css";
@@ -66,6 +67,10 @@ const Navbar = () => {
               </Menu>
             </div>
 
+            <Button className="menuButton" onClick={showDrawer}>
+              <IconMenu2 color="#696969" />
+            </Button>
+
             <Drawer
               title={"Brand Here"}
               placement="right"
@@ -75,21 +80,18 @@ const Navbar = () => {
               style={{ zIndex: 99999 }}
             >
               <Menu mode={"inline"}>
-                <Menu.Item key="explore">Explore</Menu.Item>
-                <Menu.Item key="features">Features</Menu.Item>
-                <Menu.Item key="about">About Us</Menu.Item>
-                <Menu.Item key="contact">Contact Us</Menu.Item>
-              </Menu>
-
-              <Menu mode={"inline"}>
-                <Menu.SubMenu title={<IconUser />}>
-                  <Menu.Item key="about-us">
-                    <IconUser /> Profile
-                  </Menu.Item>
-                  <Menu.Item key="log-out">
-                    <IconLogout /> Logout
-                  </Menu.Item>
-                </Menu.SubMenu>
+                <Menu.Item key="about-us">
+                  <IconUser color="#696969" /> Profile
+                </Menu.Item>
+                <Menu.Item>
+                  <IconBookmark color="#696969" /> Saved
+                </Menu.Item>
+                <Menu.Item>
+                  <IconBell color="#696969" /> Notifications
+                </Menu.Item>
+                <Menu.Item key="log-out">
+                  <IconLogout color="#696969" /> Logout
+                </Menu.Item>
               </Menu>
             </Drawer>
           </div>

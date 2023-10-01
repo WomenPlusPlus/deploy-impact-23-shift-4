@@ -14,11 +14,13 @@
   background-color: white;
   border-bottom: 0;
   padding: 0 4px 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
   width: 200px;
-  float: left;
 }
 
 .logo a {
@@ -28,54 +30,57 @@
 }
 
 .navbar-menu {
-  width: calc(100% - 200px);
-  float: left;
-}
-.navbar-menu .ant-layout-header {
-  padding: 0 20px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5rem;
 }
 
 .navbar-menu .ant-menu-horizontal {
   border-bottom: 0;
+  margin: 0;
 }
 
-.navbar-menu .ant-menu-item {
-  height: 4rem;
-  padding: 5px;
-}
-
+.navbar-menu .ant-menu-item,
 .navbar-menu .ant-menu-submenu {
   height: 4rem;
   padding: 5px;
-}
-
-.navbar-menu .ant-menu-submenu-title {
-  padding-top: 6px;
+  margin-left: 1rem;
 }
 
 .navbar-menu .leftMenu {
-  float: left;
-  padding-top: 1.5rem;
-  margin-left: 5rem;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-menu .rightMenu {
-  float: right;
+  display: flex;
+  align-items: center;
+  padding-bottom: 2rem;
 }
 
 .navbar-menu .rightMenu .ant-menu {
   height: 4rem;
 }
 
-/* Remove underline when hovering */
 .ant-menu-horizontal > .ant-menu-item:hover::after {
   border-bottom-color: transparent !important;
 }
 
-/* Remove underline when selected */
 .ant-menu-horizontal > .ant-menu-item-selected::after {
   border-bottom-color: transparent !important;
 }
+
+/* .menuButton {
+  float: right;
+  height: 32px;
+  padding: 6px;
+  margin-top: 14px;
+  display: none;
+  background: none;
+  margin-right: 10px;
+} */
 
 .ant-drawer-body {
   padding: 0;
@@ -95,9 +100,22 @@
   border-bottom-color: transparent;
 }
 
-.username {
-  display: none;
-  margin-left: 8px;
+.ant-menu-inline.ant-menu-root .ant-menu-item > .ant-menu-title-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ant-menu-light > .ant-menu .ant-menu-item-selected {
+  color: none;
+}
+
+.ant-drawer-body .ant-menu-item-selected {
+  color: inherit;
+}
+
+.ant-drawer-body .ant-menu-item-selected {
+  background-color: rgb(251, 198, 251);
 }
 
 @media (max-width: 767px) {
@@ -122,4 +140,25 @@
   .username {
     display: inline-block;
   }
+
+  .navbar-menu {
+    display: none;
+  }
+
+  /* .ant-menu-title-content {
+    display: flex;
+    align-items: center; 
+  }
+
+  .ant-menu-title-content svg {
+    margin-right: 8px; 
+  }
+
+  .ant-menu-inline > .ant-menu-item:hover::after {
+    border-bottom-color: transparent !important;
+  }
+
+  .ant-menu-inline > .ant-menu-item-selected::after {
+    border-bottom-color: transparent !important;
+  } */
 }
