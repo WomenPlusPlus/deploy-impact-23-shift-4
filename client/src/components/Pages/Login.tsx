@@ -11,18 +11,21 @@ const Login: React.FC = () => {
     username: "",
     password: "",
   });
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const navigate = useNavigate();
 
   const onFinish = (values: any) => {
-    // Update the state with form values
-    setFormData({
-      username: values.username,
-      password: values.password,
-    });
-
     // Send login data to the backend (you'll need to replace the URL and method)
     axios
-      .post("/api/login", formData)
+      .post("/api/login", formData, { withCredentials: true })
       .then((response) => {
         // Handle the backend response here
         console.log("Backend Response:", response.data);
@@ -56,7 +59,11 @@ const Login: React.FC = () => {
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
+              type="text"
+              name="username"
+              value={formData.username}
               placeholder="Username"
+              onChange={handleInputChange}
             />
           </Form.Item>
           <Form.Item
@@ -66,7 +73,10 @@ const Login: React.FC = () => {
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
+              name="password"
+              value={formData.password}
               placeholder="Password"
+              onChange={handleInputChange}
             />
           </Form.Item>
           <Form.Item>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Layout, Drawer, Menu, Input, Button } from "antd";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Layout, Input } from "antd";
+import { DropdownComponent } from "../dropdown/Dropdown";
 import {
   IconBookmark,
   IconBell,
@@ -9,25 +10,35 @@ import {
   IconMenu2,
 } from "@tabler/icons-react";
 
-import "./Navbar.css";
 import logo from "../../../media/shift-logo-morado.png";
 
+import "./Navbar.css";
+
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const { Search } = Input;
 
-  const [visible, setVisible] = useState(false);
-  const showDrawer = () => {
-    setVisible(!visible);
+  const logout = () => {
+    // Send logout request to the backend
+    axios
+      .get("/api/logout", { withCredentials: true })
+      .then((response) => {
+        // Handle the backend response here
+        console.log("Backend Response:", response.data);
+        console.log("Response", response.status);
+        navigate("/login");
+      })
+      .catch((error) => {
+        // Handle any errors here
+        if (error.response) {
+          console.error("HTTP Status Code:", error.response.status);
+          console.error("Response Data:", error.response.data);
+        } else {
+          console.error("Network Error:", error.message);
+        }
+      });
   };
-
-  // If you do not want to auto-close the mobile drawer when a path i∏s selected
-  // Delete or comment out the code block below
-  // From here
-  let { pathname: location } = useLocation();
-  useEffect(() => {
-    setVisible(false);
-  }, [location]);
-  // Upto here
 
   return (
     <nav className="navbar">
@@ -49,51 +60,74 @@ const Navbar = () => {
             </div>
 
             <div className="rightMenu">
-              <Menu mode={"horizontal"}>
-                <Menu.Item>
-                  <IconBell color="#696969" />
-                </Menu.Item>
-                <Menu.Item>
-                  <IconBookmark color="#696969" />
-                </Menu.Item>
-                <Menu.SubMenu title={<IconUser color="#696969" />}>
-                  <Menu.Item key="about-us">
-                    <IconUser /> Profile
-                  </Menu.Item>
-                  <Menu.Item key="log-out">
-                    <IconLogout /> Logout
-                  </Menu.Item>
-                </Menu.SubMenu>
-              </Menu>
+              <IconBell color="#696969" />
+              <IconBookmark color="#696969" />
+              <DropdownComponent
+                icon={<IconUser color="#696969" />}
+                items={[
+                  {
+                    key: "1",
+                    label: (
+                      <>
+                        <IconUser color="#696969" /> Profile
+                      </>
+                    ),
+                  },
+                  {
+                    key: "2",
+                    label: (
+                      <>
+                        <IconLogout color="#696969" /> Logout
+                      </>
+                    ),
+                    onClick: logout,
+                  },
+                ]}
+                placement="bottom"
+              />
             </div>
+          </div>
 
-            <Button className="menuButton" onClick={showDrawer}>
-              <IconMenu2 color="#696969" />
-            </Button>
-
-            <Drawer
-              title={"Brand Here"}
-              placement="right"
-              closable={true}
-              onClose={showDrawer}
-              visible={visible}
-              style={{ zIndex: 99999 }}
-            >
-              <Menu mode={"inline"}>
-                <Menu.Item key="about-us">
-                  <IconUser color="#696969" /> Profile
-                </Menu.Item>
-                <Menu.Item>
-                  <IconBookmark color="#696969" /> Saved
-                </Menu.Item>
-                <Menu.Item>
-                  <IconBell color="#696969" /> Notifications
-                </Menu.Item>
-                <Menu.Item key="log-out">
-                  <IconLogout color="#696969" /> Logout
-                </Menu.Item>
-              </Menu>
-            </Drawer>
+          <div className="mobileMenu">
+            <DropdownComponent
+              icon={<IconMenu2 color="#696969" />}
+              items={[
+                {
+                  key: "1",
+                  label: (
+                    <>
+                      <IconUser color="#696969" /> Profile
+                    </>
+                  ),
+                },
+                {
+                  key: "2",
+                  label: (
+                    <>
+                      <IconBookmark color="#696969" /> Saved
+                    </>
+                  ),
+                },
+                {
+                  key: "3",
+                  label: (
+                    <>
+                      <IconBell color="#696969" /> Notifications
+                    </>
+                  ),
+                },
+                {
+                  key: "4",
+                  label: (
+                    <>
+                      <IconLogout color="#696969" /> Logout
+                    </>
+                  ),
+                  onClick: logout,
+                },
+              ]}
+              placement="bottom"
+            />
           </div>
         </Layout.Header>
       </Layout>
