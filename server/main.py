@@ -12,6 +12,7 @@ from passlib.hash import bcrypt
 from db_model.user import init_user_model
 from db_model.company import init_company_model
 from db_model.candidate import init_candidate_model
+from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,13 +30,14 @@ app.config[
 ] = True  # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
 # Initialize CORS with your Flask app
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 # Database
 db = SQLAlchemy(app)
 
 # Login manager
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+login_manager.init_app(app)
 
 # Models
 User = init_user_model(db)
@@ -151,7 +153,7 @@ def find_user_type():
         pass
 
 
-@app.route("/api/login", methods=["POST"])
+@app.route("/api/login", methods=["GET","POST"])
 def login():
     """
     Authenticate and log in a user.
@@ -189,20 +191,26 @@ def login():
         if user:
             # Find the user
             user_type = user.user_type
-            if user_type == "candidate":
-                existing_user = Candidate.query.filter_by(username=username).first()
-            elif user_type == "company":
-                existing_user = Company.query.filter_by(username=username).first()
-
             # Verify the password using passlib
-            if bcrypt.verify(password, existing_user.password):
+            if bcrypt.verify(password, user.password):
                 # If the password is valid, mark the user as authenticated
-                login_user(user)
-                return jsonify({"message": "Login successful"}), 200
+                is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
+                if is_logged:
+                    return jsonify({"message": "Login successful", "user_type": user_type}), 200
+                else:
+                    return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
             return jsonify({"message": "User is not registered"}), 401
+    
+    if request.method == "GET":
+        if current_user.is_authenticated:
+            return jsonify({"message": "Logged in"}), 200
+        else:
+            return jsonify({"message": "Not logged in"}), 200
+
+    return jsonify({"message": "Method Not Allowed"}), 405
 
 
 @app.route("/api/delete_user", methods=["POST"])
