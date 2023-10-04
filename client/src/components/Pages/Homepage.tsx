@@ -19,11 +19,11 @@ const headerStyle: React.CSSProperties = {
 };
 
 const contentStyle: React.CSSProperties = {
-  textAlign: "center",
+  // textAlign: "center",
   minHeight: 120,
-  lineHeight: "100vh",
+  // lineHeight: "100vh",
   color: "#fff",
-  backgroundColor: "#108ee9",
+  backgroundColor: "#fff",
 };
 
 const siderStyle: React.CSSProperties = {
@@ -71,7 +71,10 @@ const LayoutC = () => {
         <Navbar />
         <Layout hasSider>
           <Sider width={256} style={siderStyle}>
-            <Sidebar selectedKey={selectedComponent} setSelectedKey={setSelectedComponent}/>
+            <Sidebar
+              selectedKey={selectedComponent}
+              setSelectedKey={setSelectedComponent}
+            />
           </Sider>
           <Content style={contentStyle}>{componentToRender}</Content>
         </Layout>
