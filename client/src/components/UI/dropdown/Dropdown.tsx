@@ -3,7 +3,7 @@ import { ConfigProvider, Dropdown } from "antd";
 import "./Dropdown.css";
 
 interface DropdownProps {
-  icon: React.ReactNode;
+  icon: any;
   items: ItemType[];
   placement:
     | "topLeft"

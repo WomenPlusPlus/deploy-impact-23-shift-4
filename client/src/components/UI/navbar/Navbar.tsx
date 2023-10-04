@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Layout, Input } from "antd";
-import { DropdownComponent } from "../dropdown/Dropdown";
+import Overlay from "../overlay/Overlay";
+import Avatar from "../avatar/Avatar";
 import {
   IconBookmark,
-  IconBell,
   IconUser,
   IconLogout,
   IconMenu2,
@@ -40,6 +40,31 @@ const Navbar = () => {
       });
   };
 
+  const profileOverlay = (
+    <>
+      <div className="options">
+        <IconUser color="var(--color-1)" /> Profile
+      </div>
+      <div className="options" onClick={logout}>
+        <IconLogout color="var(--color-1)" /> Logout
+      </div>
+    </>
+  );
+
+  const mobileProfileOverlay = (
+    <>
+      <div className="options">
+        <IconUser color="var(--color-1)" /> Profile
+      </div>
+      <div className="options">
+        <IconBookmark color="var(--color-1)" /> Short List
+      </div>
+      <div className="options" onClick={logout}>
+        <IconLogout color="var(--color-1)" /> Logout
+      </div>
+    </>
+  );
+
   return (
     <nav className="navbar">
       <Layout>
@@ -60,73 +85,21 @@ const Navbar = () => {
             </div>
 
             <div className="rightMenu">
-              <IconBell color="#696969" />
-              <IconBookmark color="#696969" />
-              <DropdownComponent
-                icon={<IconUser color="#696969" />}
-                items={[
-                  {
-                    key: "1",
-                    label: (
-                      <>
-                        <IconUser color="#696969" /> Profile
-                      </>
-                    ),
-                  },
-                  {
-                    key: "2",
-                    label: (
-                      <>
-                        <IconLogout color="#696969" /> Logout
-                      </>
-                    ),
-                    onClick: logout,
-                  },
-                ]}
-                placement="bottom"
+              <IconBookmark color="var(--color-1)" />
+              <Overlay
+                icon={
+                  //TODO: update names with login profile
+                  <Avatar firstName="Laura" lastName="Purcaro" size="large" />
+                }
+                content={profileOverlay}
               />
             </div>
           </div>
 
           <div className="mobileMenu">
-            <DropdownComponent
-              icon={<IconMenu2 color="#696969" />}
-              items={[
-                {
-                  key: "1",
-                  label: (
-                    <>
-                      <IconUser color="#696969" /> Profile
-                    </>
-                  ),
-                },
-                {
-                  key: "2",
-                  label: (
-                    <>
-                      <IconBookmark color="#696969" /> Saved
-                    </>
-                  ),
-                },
-                {
-                  key: "3",
-                  label: (
-                    <>
-                      <IconBell color="#696969" /> Notifications
-                    </>
-                  ),
-                },
-                {
-                  key: "4",
-                  label: (
-                    <>
-                      <IconLogout color="#696969" /> Logout
-                    </>
-                  ),
-                  onClick: logout,
-                },
-              ]}
-              placement="bottom"
+            <Overlay
+              icon={<IconMenu2 color="var(--color-1)" />}
+              content={mobileProfileOverlay}
             />
           </div>
         </Layout.Header>
