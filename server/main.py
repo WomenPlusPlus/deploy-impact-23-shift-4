@@ -127,8 +127,9 @@ def register():
             db.session.commit()
         else:
             return jsonify({"message": "Invalid user type"}), 400
-
-        return jsonify({"message": "User registered successfully"})
+        
+        login_user(new_user)
+        return jsonify({"message": "User registered successfully", "user_type": user_type})
 
 
 @app.route("/api/find_user", methods=["POST"])
@@ -161,7 +162,7 @@ def find_user_type():
         pass
 
 
-@app.route("/api/login", methods=["POST"])
+@app.route("/api/login", methods=["GET","POST"])
 def login():
     """
     Authenticate and log in a user.
