@@ -1,16 +1,9 @@
-from flask import app, request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint
 from passlib.hash import bcrypt
-from db_model.user import init_user_model
-from db_model.company import init_company_model
-from db_model.candidate import init_candidate_model
-from flask_sqlalchemy import SQLAlchemy
-from extensions import db
+from db_model import User,Candidate, Company, db
 
-register_bp = Blueprint("register", __name__,)
+register_bp = Blueprint("register", __name__)
 
-User = init_user_model(db)
-Candidate=init_candidate_model(db)
-Company=init_company_model(db)
 
 @register_bp.route("/api/register", methods=["POST"])
 def register():

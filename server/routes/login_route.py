@@ -1,19 +1,12 @@
-from db_model.user import User
-from flask import app, request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint
 from passlib.hash import bcrypt
-from db_model.user import init_user_model
-from db_model.company import init_company_model
-from db_model.candidate import init_candidate_model
-from flask_sqlalchemy import SQLAlchemy
-from extensions import db
-from flask_login import login_user
+from flask_login import (current_user, login_user)
+from datetime import timedelta
+from db_model import User
 
 
 
-login_bp = Blueprint("login", __name__,)
-
-
-
+login_bp = Blueprint("login", __name__)
 
 @login_bp.route("/api/login", methods=["POST"])
 def login():
@@ -53,17 +46,23 @@ def login():
         if user:
             # Find the user
             user_type = user.user_type
-            if user_type == "candidate":
-                existing_user = Candidate.query.filter_by(username=username).first()
-            elif user_type == "company":
-                existing_user = Company.query.filter_by(username=username).first()
-
             # Verify the password using passlib
-            if bcrypt.verify(password, existing_user.password):
+            if bcrypt.verify(password, user.password):
                 # If the password is valid, mark the user as authenticated
-                login_user(user)
-                return jsonify({"message": "Login successful"}), 200
+                is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
+                if is_logged:
+                    return jsonify({"message": "Login successful", "user_type": user_type}), 200
+                else:
+                    return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
             return jsonify({"message": "User is not registered"}), 401
+    
+    if request.method == "GET":
+        if current_user.is_authenticated:
+            return jsonify({"message": "Logged in"}), 200
+        else:
+            return jsonify({"message": "Not logged in"}), 200
+
+    return jsonify({"message": "Method Not Allowed"}), 405

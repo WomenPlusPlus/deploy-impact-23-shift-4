@@ -1,7 +1,7 @@
-from flask import request, jsonify, Blueprint
+from flask import jsonify, Blueprint
 from flask_login import current_user, login_required
 
-protected_bp = Blueprint("protected", __name__,)
+protected_bp = Blueprint("protected", __name__)
 
 
 @protected_bp.route("/api/protected")
