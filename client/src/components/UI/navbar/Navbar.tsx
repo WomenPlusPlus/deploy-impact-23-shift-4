@@ -50,13 +50,13 @@ const Navbar = () => {
 
             <div className="rightMenu">
               <Menu mode={"horizontal"}>
-                <Menu.Item>
+                <Menu.Item key="notifications">
                   <IconBell color="#696969" />
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item key="save">
                   <IconBookmark color="#696969" />
                 </Menu.Item>
-                <Menu.SubMenu title={<IconUser color="#696969" />}>
+                <Menu.SubMenu key="profile" title={<IconUser color="#696969" />}>
                   <Menu.Item key="about-us">
                     <IconUser /> Profile
                   </Menu.Item>
@@ -76,7 +76,7 @@ const Navbar = () => {
               placement="right"
               closable={true}
               onClose={showDrawer}
-              visible={visible}
+              open={visible}
               style={{ zIndex: 99999 }}
             >
               <Menu mode={"inline"}>

@@ -1,0 +1,23 @@
+.custom-menu .ant-menu-item {
+  margin-bottom: 20px;
+}
+
+/* Set the background color for the selected (clicked) item */
+.custom-menu .ant-menu-item-selected,
+.custom-menu .ant-menu-item-selected:focus,
+.custom-menu .ant-menu-item-selected:active {
+  background-color: #dbdcdf !important;
+  color: #000;
+}
+
+/* Color when hovering on items */
+.custom-menu .ant-menu-item-active {
+    background-color: #f4f4f4 !important;
+    color: #000;
+}
+
+.custom-menu {
+  margin-top: 3rem;
+  height: 100vh;
+  width: 25.6rem;
+}
