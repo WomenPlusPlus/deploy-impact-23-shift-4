@@ -12,6 +12,7 @@ from passlib.hash import bcrypt
 from db_model.user import init_user_model
 from db_model.company import init_company_model
 from db_model.candidate import init_candidate_model
+from datetime import timedelta
 from dotenv import load_dotenv
 from routes.protected_route import protected_bp
 from routes.register_route import register_bp
@@ -32,13 +33,14 @@ app.config[
 ] = True  # Keep the server reloading on changes
 app.config["SECRET_KEY"] = secret_key
 # Initialize CORS with your Flask app
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 # Database
 db = SQLAlchemy(app)
 
 # Login manager
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+login_manager.init_app(app)
 
 # Models
 User = init_user_model(db)
@@ -63,6 +65,70 @@ def load_user(user_id):
         User: The User object associated with the provided user ID.
     """
     return User.query.get(int(user_id))
+
+
+@app.route("/api/register", methods=["POST"])
+def register():
+    """
+    Register a new user.
+
+    This route handles user registration by accepting a POST request with JSON data.
+    It validates the data, checks if the username already exists, and saves the
+    user information in the appropriate table based on the provided user_type.
+
+    Parameters (POST JSON data):
+        - username (str): The username for the new user.
+        - password (str): The password for the new user (will be hashed).
+        - email (str): The email address of the new user.
+        - user_type (str): The type of user (e.g., "candidate" or "company").
+
+    Returns:
+        - 200 OK: If the registration is successful.
+        - 400 Bad Request: If the provided username already exists or if the
+          user_type is invalid.
+    """
+    if request.method == "POST":
+        data = request.get_json()
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
+        user_type = data.get("user_type")  # Get user type from the request
+
+        # Hash the password before saving it to the appropriate table
+        hashed_password = bcrypt.hash(password)
+
+        # Check if the username already exists in the appropriate table
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return jsonify({"message": "Username already exists"}), 400
+
+        # Save the new user in the "user" table
+        new_user = User(
+            username=username,
+            password=hashed_password,
+            email=email,
+            user_type=user_type,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        # Create a new user and save it to the appropriate table
+        if user_type == "candidate":
+            # Save the user also in the "candidate" table
+            new_user = Candidate(
+                username=username, password=hashed_password, email=email
+            )
+            db.session.add(new_user)
+            db.session.commit()
+        elif user_type == "company":
+            # Save the user also in the "company" table
+            new_user = Company(username=username, password=hashed_password, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+        else:
+            return jsonify({"message": "Invalid user type"}), 400
+
+        return jsonify({"message": "User registered successfully"})
 
 
 @app.route("/api/find_user", methods=["POST"])
@@ -95,8 +161,8 @@ def find_user_type():
         pass
 
 
-# @app.route("/api/login", methods=["POST"])
-# def login():
+@app.route("/api/login", methods=["POST"])
+def login():
     """
     Authenticate and log in a user.
 
@@ -133,20 +199,26 @@ def find_user_type():
         if user:
             # Find the user
             user_type = user.user_type
-            if user_type == "candidate":
-                existing_user = Candidate.query.filter_by(username=username).first()
-            elif user_type == "company":
-                existing_user = Company.query.filter_by(username=username).first()
-
             # Verify the password using passlib
-            if bcrypt.verify(password, existing_user.password):
+            if bcrypt.verify(password, user.password):
                 # If the password is valid, mark the user as authenticated
-                login_user(user)
-                return jsonify({"message": "Login successful"}), 200
+                is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
+                if is_logged:
+                    return jsonify({"message": "Login successful", "user_type": user_type}), 200
+                else:
+                    return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         else:
             return jsonify({"message": "User is not registered"}), 401
+    
+    if request.method == "GET":
+        if current_user.is_authenticated:
+            return jsonify({"message": "Logged in"}), 200
+        else:
+            return jsonify({"message": "Not logged in"}), 200
+
+    return jsonify({"message": "Method Not Allowed"}), 405
 
 
 @app.route("/api/delete_user", methods=["POST"])
