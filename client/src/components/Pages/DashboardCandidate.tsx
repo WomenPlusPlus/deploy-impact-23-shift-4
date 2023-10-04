@@ -6,11 +6,11 @@ const DashboardCandidate = () => {
     <div className="main-container">
       <h1 className="welcome-text">Hi, Laura!</h1>
       <div className="first-container">
-        <div className="section">
+        <div className="grid">
           <div className="section-element"></div>
           <ProgressBar progress={80} />
         </div>
-        <div className="section"></div>
+        <div className="grid"></div>
       </div>
     </div>
   );
