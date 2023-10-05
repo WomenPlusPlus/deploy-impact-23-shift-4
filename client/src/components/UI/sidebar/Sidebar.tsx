@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-  HeartOutlined,
-} from "@ant-design/icons";
+  IconLogout2,
+  IconDashboard,
+  IconDeviceLaptop,
+  IconBuildingSkyscraper,
+  IconBookmark,
+} from "@tabler/icons-react";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
-import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -29,10 +29,11 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Dashboard", "dashboard", <MailOutlined />),
-  getItem("Jobs", "jobs", <AppstoreOutlined />),
-  getItem("Companies", "companies", <SettingOutlined />),
-  getItem("Saved", "saved", <HeartOutlined />),
+  getItem("Dashboard", "dashboard", <IconDashboard />),
+  getItem("Jobs", "jobs", <IconDeviceLaptop />),
+  getItem("Companies", "companies", <IconBuildingSkyscraper />),
+  getItem("Saved", "saved", <IconBookmark />),
+  getItem("Logout", "logout", <IconLogout2 />),
 ];
 
 interface SidebarProps {
@@ -41,22 +42,19 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
-  // state
-  const navigate = useNavigate();
-
   return (
-    // <div className="sidebar">
-    <Menu
-      className="custom-menu"
-      mode="inline"
-      items={items}
-      onSelect={(item) => {
-        console.log(item.key);
-        setSelectedKey(item.key);
-        return item.key;
-      }}
-    />
-    // </div>
+    <>
+      <Menu
+        className="custom-menu"
+        mode="inline"
+        items={items}
+        onSelect={(item) => {
+          console.log(item.key);
+          setSelectedKey(item.key);
+          return item.key;
+        }}
+      />
+    </>
   );
 };
 
