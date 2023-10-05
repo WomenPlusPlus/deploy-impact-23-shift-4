@@ -34,7 +34,8 @@ def register_route(User, Candidate, Company, db):
             user_type = data.get("user_type")  # Get user type from the request
 
             # Hash the password before saving it to the appropriate table
-            hashed_password = bcrypt.hash(password)
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = hashed_password.decode('utf-8')
 
             # Check if the username already exists in the appropriate table
             existing_user = User.query.filter_by(username=username).first()

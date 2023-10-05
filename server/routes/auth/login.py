@@ -45,7 +45,7 @@ def login_route(User):
                 # Find the user
                 user_type = user.user_type
                 # Verify the password using passlib
-                if bcrypt.verify(password, user.password):
+                if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                     # If the password is valid, mark the user as authenticated
                     is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
                     if is_logged:
