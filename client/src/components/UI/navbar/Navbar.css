@@ -45,27 +45,9 @@
   gap: 2rem;
 }
 
-.options {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin: 0 1rem 2rem 1rem;
-  cursor: pointer;
-}
-
-.mobileMenu {
-  display: block;
-  padding-top: 1rem;
-  margin-right: 3rem;
-}
-
 @media (min-width: 768px) {
   .navbar-menu .rightMenu,
   .navbar-menu .leftMenu {
     display: flex;
-  }
-
-  .mobileMenu {
-    display: none;
   }
 }
