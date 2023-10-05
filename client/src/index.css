@@ -6,6 +6,12 @@
   --border-color-light: #D9D9D9;
   --border-thickness: 0.1rem;
   --section-padding: 2rem;
+  --color-1: #696969;
+  --white: #ffffff;
+}
+
+html {
+  font-size: 62.5%;
 }
 
 body {
