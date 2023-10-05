@@ -119,8 +119,9 @@ def register():
             db.session.commit()
         else:
             return jsonify({"message": "Invalid user type"}), 400
-
-        return jsonify({"message": "User registered successfully"})
+        
+        login_user(new_user)
+        return jsonify({"message": "User registered successfully", "user_type": user_type})
 
 
 @app.route("/api/find_user", methods=["POST"])
