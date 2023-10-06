@@ -12,5 +12,8 @@ def logout():
     Returns:
         str: JSON response indicating successful logout.
     """
-    logout_user()
-    return jsonify({"message": "Logged out successfully"})
+    try:
+        logout_user()
+        return jsonify({"message": "Logged out successfully"})
+    except:
+        return jsonify({"message": "Error logging out"}), 500

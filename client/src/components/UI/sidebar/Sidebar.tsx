@@ -39,9 +39,14 @@ const items: MenuItem[] = [
 interface SidebarProps {
   selectedKey: string;
   setSelectedKey: (key: string) => void;
+  onLogoutClick?: () => void; // Add onLogoutClick prop
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  selectedKey,
+  setSelectedKey,
+  onLogoutClick,
+}) => {
   return (
     <>
       <Menu
@@ -52,6 +57,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
           console.log(item.key);
           setSelectedKey(item.key);
           return item.key;
+        }}
+        onClick={(item) => {
+          if (item.key === "logout" && onLogoutClick) {
+            onLogoutClick();
+          }
         }}
       />
     </>
