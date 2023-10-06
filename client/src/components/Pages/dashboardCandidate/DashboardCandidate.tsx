@@ -1,5 +1,5 @@
 import "./DashboardCandidate.css";
-import { ProgressBar } from "../UI/progressbar/ProgressBar";
+import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 
 const DashboardCandidate = () => {
   return (
