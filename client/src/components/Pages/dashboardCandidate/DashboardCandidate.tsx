@@ -43,10 +43,8 @@ const DashboardCandidate = () => {
           {/* Find Jobs */}
           <div className="findjobs-component">
             <div className="section-element findjobs-element">
-              <div className="findjobs-element-div">
-                <h1 className="top-left">Hello, React!</h1>
-                <button className="bottom-right">Click me</button>
-              </div>
+              <h1 className="top-left">Hello, React!</h1>
+              <button className="bottom-right">Click me</button>
             </div>
             <div className="section-element findjobs-element"></div>
           </div>

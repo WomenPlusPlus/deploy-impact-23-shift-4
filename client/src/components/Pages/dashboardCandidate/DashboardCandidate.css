@@ -52,7 +52,7 @@
 .avatar {
   margin-right: 1rem;
   margin-top: 0.5rem;
-  height: 8rem; 
+  height: 8rem;
   width: 8rem;
 }
 
@@ -80,7 +80,7 @@
   display: flex;
   align-items: flex-start;
   /* padding: 2rem; */
-  height: var(--secton-height)/2;
+  height: var(--secton-height) / 2;
 }
 
 .progressbar-element {
@@ -102,14 +102,11 @@
 }
 
 .findjobs-element {
+  position: relative;
+  /* border: 1px solid #ccc; */
+  padding: 3rem;
   height: var(--secton-height);
   width: 44rem;
-}
-
-.findjobs-element-div {
-  position: relative;
-  border: 1px solid #ccc;
-  height: var(--secton-height);
 }
 
 .top-left {
