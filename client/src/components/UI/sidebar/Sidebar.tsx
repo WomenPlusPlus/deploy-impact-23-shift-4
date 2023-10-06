@@ -5,6 +5,7 @@ import {
   IconDeviceLaptop,
   IconBuildingSkyscraper,
   IconBookmark,
+  IconStar,
 } from "@tabler/icons-react";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -32,6 +33,7 @@ const items: MenuItem[] = [
   getItem("Dashboard", "dashboard", <IconDashboard />),
   getItem("Jobs", "jobs", <IconDeviceLaptop />),
   getItem("Companies", "companies", <IconBuildingSkyscraper />),
+  getItem("Talent", "candidates", <IconStar />),
   getItem("Saved", "saved", <IconBookmark />),
   getItem("Logout", "logout", <IconLogout2 />),
 ];
@@ -53,6 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
           setSelectedKey(item.key);
           return item.key;
         }}
+        selectedKeys={[selectedKey]}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import "./DashboardCandidate.css";
-import { ProgressBar } from "../UI/progressbar/ProgressBar";
+import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
-import greyImage from "../../media/gray_square.jpeg";
+import greyImage from "../../../media/gray_square.jpeg";
 
 const DashboardCandidate = () => {
   const name = "John Doe";
