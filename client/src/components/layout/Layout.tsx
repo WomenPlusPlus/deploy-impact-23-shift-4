@@ -7,6 +7,10 @@ import { Companies } from "../pages/Companies";
 import Candidates from "../pages/candidates/Candidates";
 import { Jobs } from "../pages/Jobs";
 import { Saved } from "../pages/Saved";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { Footer, Sider, Content } = AntLayout;
 
@@ -34,6 +38,7 @@ const Layout = () => {
     const storedComponent = window.sessionStorage.getItem("selectedComponent");
     return storedComponent || "dashboard";
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Save the selected component in sessionStorage
@@ -50,6 +55,31 @@ const Layout = () => {
     candidates: <Candidates />,
   };
 
+  const logoutError = () =>
+    toast.error("Logout error", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+  const handleLogout = async () => {
+    try {
+      // Send logout request to the backend (you'll need to replace the URL and method)
+      await axios.get("/api/logout", { withCredentials: true });
+      console.log("Logout Successful");
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout Error:", error);
+      logoutError();
+      // Handle logout error here
+    }
+  };
+
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
       <AntLayout>
@@ -59,8 +89,13 @@ const Layout = () => {
             <Sidebar
               selectedKey={selectedComponent}
               setSelectedKey={setSelectedComponent}
+              onLogoutClick={() => {
+                setSelectedComponent("logout");
+                handleLogout();
+              }}
             />
           </Sider>
+          <ToastContainer theme="light" />
           <Content style={contentStyle}>
             {components[selectedComponent]}
           </Content>
