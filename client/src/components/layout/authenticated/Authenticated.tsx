@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
+import { Header } from "antd/es/layout/layout";
 
 const { Footer, Content } = AntLayout;
 
@@ -11,6 +12,9 @@ const contentStyle: React.CSSProperties = {
   minHeight: 120,
   color: "#fff",
   backgroundColor: "#fff",
+  marginLeft: 240,
+  paddingTop: 64,
+  overflow: "initial",
 };
 
 const footerStyle: React.CSSProperties = {

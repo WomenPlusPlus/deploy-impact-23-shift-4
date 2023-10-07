@@ -57,6 +57,8 @@ const DashboardCandidate = () => {
           <div className="section-element matches-component">
             <h2 className="top-left matches-title">Your matches</h2>
             <MatchesCard />
+            <MatchesCard />
+            <MatchesCard />
           </div>
         </div>
         {/* <div className="grid"></div> */}
