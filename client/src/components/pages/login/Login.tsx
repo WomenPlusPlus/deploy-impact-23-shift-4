@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
-import "./Login.css";
-import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
+import { Button, Checkbox, Form, Input } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import backgroundLogin from "../../../media/login-background.jpg";
+import axios from "axios"; // Import Axios for making HTTP requests
+
+import "./Login.css";
 
 const Login: React.FC = () => {
   // state
@@ -30,7 +32,7 @@ const Login: React.FC = () => {
         // Handle the backend response here
         console.log("Backend Response:", response.data);
         console.log("Response", response.status);
-        navigate("/");
+        navigate("/dashboard");
       })
       .catch((error) => {
         // Handle any errors here
@@ -45,6 +47,12 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-container">
+      <img
+        className="backgroud-image"
+        alt="background"
+        // style={{ width: 160 }}
+        src={String(backgroundLogin)}
+      />
       <div className="login-box">
         <h1>Welcome to Shift4</h1>
         <Form

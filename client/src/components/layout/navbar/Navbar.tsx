@@ -1,7 +1,7 @@
 import { Layout, Input } from "antd";
 import { IconBookmark } from "@tabler/icons-react";
 
-import Avatar from "../avatar/Avatar";
+import Avatar from "../../UI/avatar/Avatar";
 
 import logo from "../../../media/shift-logo-morado.png";
 

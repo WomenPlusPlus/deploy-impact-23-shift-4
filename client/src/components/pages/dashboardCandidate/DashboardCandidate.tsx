@@ -55,4 +55,4 @@ const DashboardCandidate = () => {
   );
 };
 
-export { DashboardCandidate };
+export default DashboardCandidate;
