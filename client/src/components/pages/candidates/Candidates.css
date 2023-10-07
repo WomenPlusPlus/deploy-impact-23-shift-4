@@ -6,6 +6,13 @@
   color: black;
 }
 
+.filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  padding: 0 8rem 2rem 8rem;
+}
+
 .cards {
   display: flex;
   flex-wrap: wrap;
