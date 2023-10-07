@@ -2,4 +2,4 @@ const Jobs = () => {
   return <>Jobs</>;
 };
 
-export { Jobs };
+export default Jobs;

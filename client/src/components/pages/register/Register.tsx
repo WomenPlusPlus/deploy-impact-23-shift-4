@@ -34,7 +34,7 @@ const Register: React.FC = () => {
         // Handle the backend response here (e.g., show a success message)
         console.log("Registration Successful!");
         console.log(`${response.data}`);
-        navigate("/"); // Redirect to the login page after successful registration
+        navigate("/login"); // Redirect to the login page after successful registration
       })
       .catch((error) => {
         // Handle any errors here (e.g., display error messages)
