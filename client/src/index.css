@@ -1,4 +1,11 @@
+/* Variables */
 :root {
+  --secton-height: 20rem;
+  --secton-width: 100%;
+  --border-radius: 1.6rem;
+  --border-color-light: #d9d9d9;
+  --border-thickness: 0.1rem;
+  --section-padding: 2rem;
   --color-1: #696969;
   --white: #ffffff;
 }
