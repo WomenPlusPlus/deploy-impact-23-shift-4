@@ -49,13 +49,6 @@ interface SidebarProps {
   setSelectedKey: (key: string) => void;
 }
 
-const siderStyle: React.CSSProperties = {
-  textAlign: "center",
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#fff",
-};
-
 const logoutError = () =>
   toast.error("Logout error", {
     position: "top-right",
@@ -96,7 +89,19 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
 
   return (
     <>
-      <Sider width={256} style={siderStyle}>
+      <Sider
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          paddingTop: 64,
+          left: 0,
+          top: 0,
+          bottom: 0,
+          backgroundColor: "#fff",
+        }}
+        width={240}
+      >
         <Menu
           className="custom-menu"
           mode="inline"

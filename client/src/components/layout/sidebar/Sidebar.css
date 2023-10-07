@@ -1,4 +1,14 @@
 /* dashboard items */
+.sider-component {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  background-color: #fff;
+  z-index: 1;
+  width: var(--sidebar-width);
+}
+
 .custom-menu .ant-menu-item {
   text-align: left;
   margin-bottom: 2rem;
@@ -29,6 +39,8 @@
 
 .custom-menu {
   height: 100vh;
-  width: 24rem;
+  /* width: 24rem; */
+  max-height: fit-content;
+  width: var(--sidebar-width);
   padding-top: 3rem;
 }
