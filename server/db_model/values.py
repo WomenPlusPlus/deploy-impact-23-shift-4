@@ -1,32 +1,21 @@
 def init_values_model(db):
     class Values(db.Model):
         """
-        Postgres table schema
+        Postgres table schema for values
         """
 
         id = db.Column(db.Integer, primary_key=True)
-        username = db.Column(db.String(80), unique=True, nullable=False)
-        password = db.Column(
-            db.String(128), nullable=False
-        )  # Store the hashed password
-        email = db.Column(db.String(120), unique=True, nullable=False)
+        name = db.Column(
+            db.String(1000), nullable=False
+        )  # Name of the value as a string (maximum length 1000 characters)
 
-        def __init__(
-            self,
-            username,
-            password,
-            email,
-        ):
+        def __init__(self, name):
             """
-            Initialize a new user object.
+            Initialize a new value object.
 
             Args:
-                username (str): The user's username.
-                email (str): The user's email address.
-                password (str): The user's password (plaintext).
+                name (str): Name of the value.
             """
-            self.username = username
-            self.password = password
-            self.email = email
+            self.name = name
 
     return Values

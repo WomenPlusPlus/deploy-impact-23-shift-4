@@ -18,7 +18,7 @@ def init_candidate_model(db):
         preferred_name = db.Column(db.String(80))  # Preferred name as a string
         cv_reference = db.Column(db.String(256))  # CV reference as a string
         values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
-        type_of_job_searching = db.Column(db.JSONB)  # Type of job searching as JSONB
+        type_of_job_searching = db.Column(db.JSON)  # Type of job searching as JSON
         address = db.Column(db.String(256))  # Address as a string
         phone_number = db.Column(db.String(20))  # Phone number as a string
         birth_date = db.Column(db.Date)  # Birth date as a date
@@ -40,21 +40,21 @@ def init_candidate_model(db):
             username,
             password,
             email,
-            first_name,
-            last_name,
-            preferred_name,
-            cv_reference,
-            values,
-            type_of_job_searching,
-            address,
-            phone_number,
-            birth_date,
-            work_permit,
-            notice_period,
-            job_status,
-            type_of_company,
-            matching_jobs,
-            matching_companies,
+            first_name=None,
+            last_name=None,
+            preferred_name=None,
+            cv_reference=None,
+            values=None,
+            type_of_job_searching=None,
+            address=None,
+            phone_number=None,
+            birth_date=None,
+            work_permit=None,
+            notice_period=None,
+            job_status=None,
+            type_of_company=None,
+            matching_jobs=None,
+            matching_companies=None,
         ):
             """
             Initialize a new candidate object.

@@ -22,7 +22,7 @@ def init_company_model(db):
         job_offerings = db.Column(
             db.ARRAY(db.String)
         )  # Types of jobs offered as an array of strings
-        contact_details = db.Column(db.JSONB)  # Contact details as a JSONB object
+        contact_details = db.Column(db.JSON)  # Contact details as a JSON object
         kununu_url = db.Column(db.String(256))  # Kununu URL as a string
         positions_job_lists = db.Column(
             db.ARRAY(db.Integer)
@@ -33,14 +33,14 @@ def init_company_model(db):
             username,
             password,
             email,
-            company_name,
-            address,
-            linkedin_url,
-            company_values,
-            job_offerings,
-            contact_details,
-            kununu_url,
-            positions_job_lists,
+            company_name=None,
+            address=None,
+            linkedin_url=None,
+            company_values=None,
+            job_offerings=None,
+            contact_details=None,
+            kununu_url=None,
+            positions_job_lists=None,
         ):
             """
             Initialize a new company object.

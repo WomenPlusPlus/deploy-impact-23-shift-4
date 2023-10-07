@@ -1,28 +1,19 @@
-from flask_login import UserMixin
-
 def init_skills_model(db):
-    class Skills(db.Model, UserMixin):
+    class Skills(db.Model):
         """
-        Postgres table schema
+        Postgres table schema for skills
         """
 
         id = db.Column(db.Integer, primary_key=True)
-        username = db.Column(db.String(80), unique=True, nullable=False)
+        name = db.Column(db.String(256), nullable=False)  # Name of the skill as a string
 
-        def __init__(
-            self,
-            username,
-            password,
-        ):
+        def __init__(self, name):
             """
-            Initialize a new user object.
+            Initialize a new skill object.
 
             Args:
-                username (str): The user's username.
-                email (str): The user's email address.
-                password (str): The user's password (plaintext).
+                name (str): Name of the skill.
             """
-            self.username = username
-            self.password = password
+            self.name = name
 
     return Skills
