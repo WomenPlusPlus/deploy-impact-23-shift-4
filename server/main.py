@@ -68,6 +68,7 @@ app.register_blueprint(load_user.load_user_route(User, login_manager))
 
 
 if __name__ == "__main__":
-    # Start the server
+    # Make sure the tables exist
     db.create_all()
+    # Start the server
     app.run(port=5001, debug=True)
