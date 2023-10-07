@@ -17,7 +17,6 @@ def init_candidate_model(db):
         last_name = db.Column(db.String(80))  # Last name as a string
         preferred_name = db.Column(db.String(80))  # Preferred name as a string
         cv_reference = db.Column(db.String(256))  # CV reference as a string
-        values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
         type_of_job_searching = db.Column(db.JSON)  # Type of job searching as JSON
         address = db.Column(db.String(256))  # Address as a string
         phone_number = db.Column(db.String(20))  # Phone number as a string
@@ -34,6 +33,9 @@ def init_candidate_model(db):
         matching_companies = db.Column(
             db.ARRAY(db.Integer)
         )  # Matching companies as an array of foreign keys (integer)
+        values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
+        skills = db.Column(db.JSON)  # Skills as a JSON array of objects
+        languages = db.Column(db.JSON)  # Languages as a JSON array of objects
 
         def __init__(
             self,
@@ -55,6 +57,8 @@ def init_candidate_model(db):
             type_of_company=None,
             matching_jobs=None,
             matching_companies=None,
+            skills=None,
+            languages=None,
         ):
             """
             Initialize a new candidate object.
@@ -80,5 +84,7 @@ def init_candidate_model(db):
             self.type_of_company = type_of_company
             self.matching_jobs = matching_jobs
             self.matching_companies = matching_companies
+            self.skills = skills
+            self.languages = languages
 
     return Candidate
