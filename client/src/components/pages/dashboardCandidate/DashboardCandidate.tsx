@@ -1,6 +1,8 @@
 import "./DashboardCandidate.css";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
+import { Button } from "../../UI/button/Button";
+import { MatchesCard } from "../../UI/card/MatchesCard";
 import greyImage from "../../../media/gray_square.jpeg";
 
 const DashboardCandidate = () => {
@@ -36,20 +38,28 @@ const DashboardCandidate = () => {
                 <ProgressBar progress={progress} />
               </div>
               <div className="progressbar-button">
-                <button>Complete your profile</button>
+                <Button>Complete your profile</Button>
               </div>
             </div>
           </div>
           {/* Find Jobs */}
           <div className="findjobs-component">
             <div className="section-element findjobs-element">
-              <h1 className="top-left">Hello, React!</h1>
-              <button className="bottom-right">Click me</button>
+              <h1 className="top-left">Find your next job</h1>
+              <Button className="bottom-right">Jobs</Button>
             </div>
-            <div className="section-element findjobs-element"></div>
+            <div className="section-element findjobs-element">
+              <h1 className="top-left">Explore Companies</h1>
+              <Button className="bottom-right">Companies</Button>
+            </div>
+          </div>
+          {/* Matches */}
+          <div className="section-element matches-component">
+            <h2 className="top-left matches-title">Your matches</h2>
+            <MatchesCard />
           </div>
         </div>
-        <div className="grid"></div>
+        {/* <div className="grid"></div> */}
       </div>
     </div>
   );

@@ -78,8 +78,7 @@
 
 .progressbar-component-element {
   display: flex;
-  align-items: flex-start;
-  /* padding: 2rem; */
+  align-items: center;
   height: var(--secton-height) / 2;
 }
 
@@ -99,25 +98,39 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .findjobs-element {
-  position: relative;
-  /* border: 1px solid #ccc; */
   padding: 3rem;
   height: var(--secton-height);
-  width: 44rem;
+}
+
+.findjobs-element:nth-child(2) {
+  margin-left: 2rem;
 }
 
 .top-left {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  margin-top: 1rem;
   color: var(--font-color);
 }
 
 .bottom-right {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+  float: right;
+  /* bottom */
+  margin-top: 5rem;
+}
+
+/* Matches */
+.matches-component {
+  display: flex;
+  /* align-items: flex-start; */
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+.matches-title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
