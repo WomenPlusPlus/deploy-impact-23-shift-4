@@ -19,7 +19,7 @@
 
 h2 {
   font-size: 2.4rem;
-  color: black;
+  color: var(--gray-dark);
   margin: 0;
 }
 

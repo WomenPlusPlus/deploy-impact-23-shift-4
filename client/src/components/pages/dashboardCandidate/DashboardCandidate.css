@@ -1,18 +1,9 @@
-.main-container {
-  height: 100vh;
-  padding: 3rem;
-}
-
 .first-container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
-}
-
-.welcome-text {
-  color: black;
-  font-size: 2.4rem;
-  margin-bottom: 2rem;
+  min-height: 100vh;
+  padding: 3rem;
+  background-color: var(--background-color);
 }
 
 .grid {
@@ -52,10 +43,15 @@
   max-height: 100%;
 }
 
-.text {
+.header {
   flex-grow: 1; /* Allow the text to take up remaining space */
   text-align: left;
-  color: black;
+  padding-left: 2rem;
+  color: var(--gray-dark);
+}
+
+.header-title {
+  font-size: 3.5rem;
 }
 
 .open-icon {

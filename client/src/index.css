@@ -5,14 +5,12 @@
   --border-radius: 1.6rem;
   --border-thickness: 0.1rem;
   --section-padding: 2rem;
-  --border-color-light: #d9d9d9;
-  --color-1: #696969;
-  --white: #ffffff;
-  --font-color: #000000;
   --sidebar-width: 24rem;
+  /* Color Palette */
+  --white: #ffff;
   --background-color: #f0f5ff;
   --background-hover: #597ef7;
-  --backgroun-button: #10239e;
+  --color-button: #10239e;
   --background-avatar: #030852;
   --gray-bright: #d9d9d9;
   --gray-medium: #595959;

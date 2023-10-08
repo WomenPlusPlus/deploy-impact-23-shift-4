@@ -1,6 +1,6 @@
 import "./MatchesCard.css";
-import greyImage from "../../../media/gray_square.jpeg";
 import { Button } from "../button/Button";
+import Avatar from "./../avatar/Avatar";
 
 const MatchesCard = () => {
   const positionTitle = "Developer europe remote";
@@ -11,15 +11,13 @@ const MatchesCard = () => {
   ];
   return (
     <div className="matches-element">
-      <div className="avatar-matches">
-        <img src={greyImage} alt="Avatarr" />
-      </div>
+      <Avatar firstName="Company" size={70} />
+
       <div className="text-matches">
-        <div>
-          <h2>{positionTitle}</h2>
-          <p>{matchingText[0]}</p>
-        </div>
+        <h2>{positionTitle}</h2>
+        <p>{matchingText[0]}</p>
       </div>
+
       <Button className="button-style">Go to description</Button>
     </div>
   );
