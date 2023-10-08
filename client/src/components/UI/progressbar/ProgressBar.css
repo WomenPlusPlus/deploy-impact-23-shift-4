@@ -1,14 +1,14 @@
 .progress-bar {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white);
   border-radius: var(--border-radius);
-  border: 1px solid var(--border-color-light);
+  border: 1px solid var(--gray-bright);
   overflow: hidden;
   text-align: center;
 }
 
 .progress-completed {
   height: 100%;
-  background-color: var(--border-color-light); /* Completion color */
+  background-color: var(--color-button); /* Completion color */
   border-radius: var(--border-radius);
 }

@@ -15,7 +15,7 @@ const Labels: React.FC<LabelProps> = ({ icon, labelName, onCloseIcon }) => {
         {icon} {labelName}
       </div>
       <div className="label-close-icon" onClick={onCloseIcon}>
-        <IconX color={`var(--color-1)`} style={{ cursor: "pointer" }} />
+        <IconX color={`var(--gray-medium)`} style={{ cursor: "pointer" }} />
       </div>
     </div>
   );

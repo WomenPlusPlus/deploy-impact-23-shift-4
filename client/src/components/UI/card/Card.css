@@ -19,13 +19,13 @@
 
 h2 {
   font-size: 2.4rem;
-  color: black;
+  color: var(--gray-dark);
   margin: 0;
 }
 
 h3 {
   font-size: 18px;
-  color: var(--color-1);
+  color: var(--gray-medium);
   margin: 0;
 }
 

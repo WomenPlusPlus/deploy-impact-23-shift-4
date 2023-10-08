@@ -4,7 +4,7 @@
   padding: 3rem;
   margin-bottom: 2rem;
   width: var(--secton-width);
-  border: 1px solid var(--border-color-light);
+  border: 1px solid var(--gray-bright);
   border-radius: var(--border-radius);
   box-sizing: border-box;
 }
@@ -20,13 +20,17 @@
 }
 
 .text-matches {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
   flex-grow: 1; /* Allow the text to take up remaining space */
   text-align: left;
-  color: black;
+  padding-left: 2rem;
+  color: var(--gray-dark);
 }
 
 .button-style {
   margin-left: auto; /* Push the icon to the right */
   /* bigger */
-    height: 5rem;
+  height: 5rem;
 }

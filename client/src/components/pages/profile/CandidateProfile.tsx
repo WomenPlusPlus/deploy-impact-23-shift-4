@@ -36,99 +36,99 @@ const CandidateProfile = () => {
 
   // Function to handle label deletion
   const handleLabelDelete = (labelToRemove: string) => {
-    const updatedLabels = associationLabels.filter((label) => label !== labelToRemove);
+    const updatedLabels = associationLabels.filter(
+      (label) => label !== labelToRemove
+    );
     setAssociationLabels(updatedLabels);
   };
 
   return (
-    <div className="main-containerr">
-      <div className="first-containerr">
-        {/* Profile text */}
-        <CardContainer className="profile-section-element profilee-component">
-          <div className="avatar">
-            <img src={greyImage} alt="Avatar" />
+    <div className="first-containerr">
+      {/* Profile text */}
+      <CardContainer className="profile-section-element profilee-component">
+        <div className="avatar">
+          <img src={greyImage} alt="Avatar" />
+        </div>
+
+        <div>
+          <div className="user-name">
+            <h3>{name}</h3>
+            <h4>{status}</h4>
           </div>
-          <div>
-            <div className="user-name">
-              <h3>{name}</h3>
-              <h4>{status}</h4>
-            </div>
-            <div className="location">
-              <IconMapPin color="black" />
-              <p>
-                {city}, {country}
-              </p>
-              <p>|</p>
-              <IconBrandLinkedin color="black" />
-              <IconWorldWww color="black" />
-            </div>
+
+          <div className="location">
+            <IconMapPin color="black" />
+            <p>
+              {city}, {country}
+            </p>
+            <p>|</p>
+            <IconBrandLinkedin color="black" />
+            <IconWorldWww color="black" />
           </div>
-          <div className="open-icon">
-            <div className="icon">
-              <IconEdit color="black" style={{ cursor: "pointer" }} />
+        </div>
+
+        <div className="open-icon">
+          <IconEdit color="black" style={{ cursor: "pointer" }} />
+        </div>
+      </CardContainer>
+
+      {/* Profile completed */}
+      <div className="profile-completed-component">
+        <CardContainer className="profile-completed-element">
+          <div className="profile-completed-edit-icon">
+            <h3>Your profile is {progress} complete.</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+
+          <ProgressBar progress={progress} height="1.5rem" />
+
+          {/* Fields completed */}
+          <div className="profile-completed-fields-component">
+            <div className="column">
+              {list.slice(0, Math.ceil(list.length / 2)).map((field, index) => (
+                <div key={index} className="profile-completed-fields-element">
+                  <ProfileCompletedFields isCompleted={false} field={field} />
+                </div>
+              ))}
+            </div>
+
+            <div className="column">
+              {list.slice(Math.ceil(list.length / 2)).map((field, index) => (
+                <div key={index} className="profile-completed-fields-element">
+                  <ProfileCompletedFields isCompleted={true} field={field} />
+                </div>
+              ))}
             </div>
           </div>
         </CardContainer>
-        {/* Profile completed */}
-        <div className="profile-completed-component">
-          <CardContainer className="profile-completed-element">
-            <div className="profile-completed-edit-icon">
-              <h3>Your profile is {progress} complete.</h3>
-              <IconEdit color="black" style={{ cursor: "pointer" }} />
-            </div>
-            <ProgressBar progress={progress} height="1.5rem" />
-            {/* Fields completed */}
-            <div className="profile-completed-fields-component">
-              <div className="column">
-                {list
-                  .slice(0, Math.ceil(list.length / 2))
-                  .map((field, index) => (
-                    <div
-                      key={index}
-                      className="profile-completed-fields-element"
-                    >
-                      <ProfileCompletedFields
-                        isCompleted={false}
-                        field={field}
-                      />
-                    </div>
-                  ))}
-              </div>
-              <div className="column">
-                {list.slice(Math.ceil(list.length / 2)).map((field, index) => (
-                  <div key={index} className="profile-completed-fields-element">
-                    <ProfileCompletedFields isCompleted={true} field={field} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContainer>
-          <CardContainer className="profile-completed-element">
-            <div className="profile-completed-edit-icon">
-              <h2>Anonymous profile</h2>
-              <IconEdit color="black" style={{ cursor: "pointer" }} />
-            </div>
-          </CardContainer>
-        </div>
-        {/* Associations */}
-        <div>
-          <CardContainer className="association-container">
-            <div className="profile-completed-edit-icon">
-              <h2>Associations</h2>
-              <IconEdit color="black" style={{ cursor: "pointer" }} />
-            </div>
-            <div className="association-container-labels">
-              {associationLabels.map((label, index) => (
-                <Labels
-                  key={index}
-                  icon={<IconAffiliate />}
-                  labelName={label}
-                  onCloseIcon={() => handleLabelDelete(label)}
-                />
-              ))}
-            </div>
-          </CardContainer>
-        </div>
+
+        {/* Anonymous profile */}
+        <CardContainer className="profile-completed-element">
+          <div className="profile-completed-edit-icon">
+            <h3>Anonymous profile</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+        </CardContainer>
+      </div>
+      
+      {/* Associations */}
+      <div>
+        <CardContainer className="association-container">
+          <div className="profile-completed-edit-icon">
+            <h2>Associations</h2>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          <div className="association-container-labels">
+            {associationLabels.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconAffiliate />}
+                labelName={label}
+                onCloseIcon={() => handleLabelDelete(label)}
+              />
+            ))}
+          </div>
+        </CardContainer>
       </div>
     </div>
   );

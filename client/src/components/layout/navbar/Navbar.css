@@ -13,7 +13,7 @@
 .nav-header {
   background-color: var(--white);
   border-bottom: 0;
-  padding: 0 0.4rem 0 24px;
+  padding: 0 4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,7 +24,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 5rem;
 }
 
 .navbar-menu .ant-menu-item,
