@@ -22,6 +22,7 @@ const Button = ({
       disabled={disabled}
       type={type}
       className={className + " button"}
+      style={{ height: "3.5rem" }}
     >
       {children}
     </button>

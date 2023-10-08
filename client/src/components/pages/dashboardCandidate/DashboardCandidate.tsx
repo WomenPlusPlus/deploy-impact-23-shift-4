@@ -3,6 +3,7 @@ import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
 import { MatchesCard } from "../../UI/card/MatchesCard";
+import { CardContainer } from "../../UI/container/CardContainer";
 import greyImage from "../../../media/gray_square.jpeg";
 
 const DashboardCandidate = () => {
@@ -14,7 +15,7 @@ const DashboardCandidate = () => {
       <div className="first-container">
         <div className="grid">
           {/* Profile component */}
-          <div className="section-element profile-component">
+          <CardContainer className="section-element profile-component">
             <div className="avatar">
               <img src={greyImage} alt="Avatar" />
             </div>
@@ -27,9 +28,9 @@ const DashboardCandidate = () => {
                 <IconExternalLink color="black" />
               </div>
             </div>
-          </div>
+          </CardContainer>
           {/* Progress bar */}
-          <div className="section-element progressbar-completion-component">
+          <CardContainer className="section-element progressbar-completion-component">
             <div className="progressbar-text-element">
               <p className="paragraph">You've completed {progress}% </p>
             </div>
@@ -41,26 +42,27 @@ const DashboardCandidate = () => {
                 <Button>Complete your profile</Button>
               </div>
             </div>
-          </div>
+          </CardContainer>
           {/* Find Jobs */}
           <div className="findjobs-component">
-            <div className="section-element findjobs-element">
+            <CardContainer className="section-element findjobs-element">
               <h1 className="top-left">Find your next job</h1>
               <Button className="bottom-right">Jobs</Button>
-            </div>
-            <div className="section-element findjobs-element">
+            </CardContainer>
+            <CardContainer className="section-element findjobs-element">
               <h1 className="top-left">Explore Companies</h1>
               <Button className="bottom-right">Companies</Button>
-            </div>
+            </CardContainer>
           </div>
           {/* Matches */}
-          <div className="section-element matches-component">
+          <CardContainer className="section-element matches-component">
             <h2 className="top-left matches-title">Your matches</h2>
             <MatchesCard />
             <MatchesCard />
             <MatchesCard />
-          </div>
+          </CardContainer>
         </div>
+        {/* Right sidebar */}
         {/* <div className="grid"></div> */}
       </div>
     </div>

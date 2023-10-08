@@ -1,0 +1,18 @@
+.profile-completed-icon {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: var(--primary-color);
+}
+
+.profile-completed-text {
+  color: var(--primary-color);
+  margin: 0.5rem 0;
+}
+
+.profile-uncompleted-button {
+  background-color: transparent;
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
