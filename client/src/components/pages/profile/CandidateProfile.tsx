@@ -3,6 +3,7 @@ import greyImage from "../../../media/gray_square.jpeg";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
+import { Labels } from "../../UI/labels/Label";
 import {
   IconEdit,
   IconMapPin,
@@ -96,9 +97,16 @@ const CandidateProfile = () => {
             </div>
           </CardContainer>
         </div>
+        {/* Associations */}
         <div>
-          <CardContainer>
-            <h3>Anonymous profile</h3>
+          <CardContainer className="main-containerr">
+            <div className="profile-completed-edit-icon">
+              <h3>Associations</h3>
+              <IconEdit color="black" style={{ cursor: "pointer" }} />
+            </div>
+            <div>
+              <Labels />
+            </div>
           </CardContainer>
         </div>
       </div>
