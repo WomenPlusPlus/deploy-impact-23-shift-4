@@ -4,9 +4,13 @@
   height: 100vh;
   position: fixed;
   left: 0;
-  background-color: #fff;
+  background-color: var(--background-color);
   z-index: 1;
   width: var(--sidebar-width);
+}
+
+.custom-menu {
+  background-color: var(--background-color);
 }
 
 .custom-menu .ant-menu-item {
@@ -25,15 +29,15 @@
 .custom-menu .ant-menu-item-selected,
 .custom-menu .ant-menu-item-selected:focus,
 .custom-menu .ant-menu-item-selected:active {
-  background-color: #dbdcdf !important;
-  color: #000;
+  background-color: var(--backgroun-button) !important;
+  color: var(--white);
   width: 80%;
 }
 
 /* Color when hovering on items */
 .custom-menu .ant-menu-item-active {
-  background-color: #f4f4f4 !important;
-  color: #000;
+  background-color: var(--background-hover) !important;
+  color: var(--white);
   width: 80%;
 }
 

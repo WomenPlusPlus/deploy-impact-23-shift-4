@@ -91,7 +91,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
     <>
       <Sider
         style={{
-          overflow: "auto",
           height: "100vh",
           position: "fixed",
           paddingTop: 64,

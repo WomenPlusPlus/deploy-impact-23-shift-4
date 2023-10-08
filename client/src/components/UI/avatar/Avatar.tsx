@@ -11,12 +11,13 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({ firstName, lastName, size, url }) => {
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
-  const backgroundColor = `rgb(96, 90, 140)`;
-
   return (
     <>
       <AntAvatar
-        style={{ backgroundColor: backgroundColor, verticalAlign: "middle" }}
+        style={{
+          backgroundColor: `var(--background-avatar)`,
+          verticalAlign: "middle",
+        }}
         size={size}
       >
         {initials}
