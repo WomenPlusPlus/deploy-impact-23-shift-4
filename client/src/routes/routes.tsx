@@ -20,7 +20,7 @@ const Routes: React.FC<IApplicationProps> = (props) => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={<Authenticated content={<DashboardCandidate />} />}
         />
         <Route path="/jobs" element={<Authenticated content={<Jobs />} />} />

@@ -36,7 +36,7 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Dashboard", "dashboard", <IconDashboard />),
+  getItem("Dashboard", "", <IconDashboard />),
   getItem("Jobs", "jobs", <IconDeviceLaptop />),
   getItem("Companies", "companies", <IconBuildingSkyscraper />),
   getItem("Talent", "candidates", <IconStar />),

@@ -1,4 +1,6 @@
 from flask_login import UserMixin
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 
 def init_company_model(db):
@@ -7,12 +9,24 @@ def init_company_model(db):
         Postgres table schema
         """
 
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(
+            db.String(80),
+            primary_key=True,
+            default=str(uuid.uuid4()),
+            unique=True,
+            nullable=False,
+        )
+        user_id = db.Column(
+            db.String(80),
+            db.ForeignKey("user.id"),
+            nullable=False,
+        )
         username = db.Column(db.String(80), unique=True, nullable=False)
         password = db.Column(
             db.String(128), nullable=False
         )  # Store the hashed password
         email = db.Column(db.String(120), unique=True, nullable=False)
+        associations = db.Column(db.ARRAY(db.String), nullable=False)
         company_name = db.Column(db.String(80))  # Company name as a string
         address = db.Column(db.String(256))  # Address as a string
         linkedin_url = db.Column(db.String(256))  # URL to LinkedIn page as a string
@@ -25,14 +39,16 @@ def init_company_model(db):
         contact_details = db.Column(db.JSON)  # Contact details as a JSON object
         kununu_url = db.Column(db.String(256))  # Kununu URL as a string
         positions_job_lists = db.Column(
-            db.ARRAY(db.Integer)
+            db.ARRAY(db.String)
         )  # Positions/job lists as an array of foreign keys (integer)
 
         def __init__(
             self,
+            user_id,
             username,
             password,
             email,
+            associations,
             company_name=None,
             address=None,
             linkedin_url=None,
@@ -48,9 +64,11 @@ def init_company_model(db):
             Args:
                 # Your additional fields here
             """
+            self.user_id = user_id
             self.username = username
             self.password = password
             self.email = email
+            self.associations = associations
             self.company_name = company_name
             self.address = address
             self.linkedin_url = linkedin_url
