@@ -9,6 +9,7 @@ import DashboardCandidate from "../components/pages/dashboardCandidate/Dashboard
 import Jobs from "../components/pages/jobs/Jobs";
 import Companies from "../components/pages/companies/Companies";
 import Shortlist from "../components/pages/shortlist/Shortlist";
+import CandidateProfile from "../components/pages/profile/CandidateProfile";
 
 export interface IApplicationProps {}
 
@@ -34,6 +35,10 @@ const Routes: React.FC<IApplicationProps> = (props) => {
         <Route
           path="/candidates"
           element={<Authenticated content={<Candidates />} />}
+        />
+        <Route
+          path="/candidate-profile"
+          element={<Authenticated content={<CandidateProfile />} />}
         />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routing>

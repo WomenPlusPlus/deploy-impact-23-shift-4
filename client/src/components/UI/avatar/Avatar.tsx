@@ -5,10 +5,15 @@ interface AvatarProps {
   firstName: string;
   lastName: string;
   size: "large" | "small" | "default" | number;
-  url?: string;
+  handleProfileClick: () => void;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ firstName, lastName, size, url }) => {
+const Avatar: React.FC<AvatarProps> = ({
+  firstName,
+  lastName,
+  size,
+  handleProfileClick,
+}) => {
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
   const backgroundColor = `rgb(96, 90, 140)`;
@@ -16,7 +21,8 @@ const Avatar: React.FC<AvatarProps> = ({ firstName, lastName, size, url }) => {
   return (
     <>
       <AntAvatar
-        style={{ backgroundColor: backgroundColor, verticalAlign: "middle" }}
+        onClick={handleProfileClick}
+        style={{ backgroundColor: backgroundColor, verticalAlign: "middle", cursor: "pointer" }}
         size={size}
       >
         {initials}

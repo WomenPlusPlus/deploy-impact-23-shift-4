@@ -2,8 +2,6 @@
   display: flex;
   align-items: center;
   padding: 3rem;
-  border: 0.1rem solid #ccc;
-  border-radius: var(--border-radius);
   margin-bottom: 2rem;
   width: var(--secton-width);
   border: 1px solid var(--border-color-light);
