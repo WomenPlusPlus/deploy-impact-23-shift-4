@@ -2,12 +2,16 @@ import "./ProgressBar.css";
 
 interface ProgressBarProps {
   progress: number;
+  height?: string;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  progress,
+  height = "2rem",
+}) => {
   return (
-    <div className="progress">
-      <div className="progress-bar">
+    <div>
+      <div className="progress-bar" style={{ height: height }}>
         <div
           className="progress-completed"
           style={{ width: `${progress}%` }}
