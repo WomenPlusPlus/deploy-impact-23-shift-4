@@ -15,8 +15,10 @@ def get_all_candidates_route(Candidate):
             for candidate in candidates:
                 candidate_data = {
                     "id": candidate.id,
+                    "user.id": candidate.user_id,
                     "username": candidate.username,
                     "email": candidate.email,
+                    "associations": candidate.associations,
                     "first.name": candidate.first_name,
                     "last.name": candidate.last_name,
                     "preferred.name": candidate.preferred_name,

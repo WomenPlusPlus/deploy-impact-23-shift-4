@@ -16,7 +16,9 @@ def init_jobs_model(db):
             nullable=False,
         )
         associations = db.Column(db.ARRAY(db.String), nullable=False)
-        company_id = db.Column(db.String(80), nullable=False)  # Company ID as a string
+        company_id = db.Column(
+            db.String(80), db.ForeignKey("company.id"), nullable=False
+        )  # Company ID as a string
         title = db.Column(db.String(256))  # Title as a string
         description = db.Column(db.String(1000))  # Description as a string
         values = db.Column(

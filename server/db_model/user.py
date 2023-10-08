@@ -22,9 +22,8 @@ def init_user_model(db):
         )  # Store the hashed password
         email = db.Column(db.String(120), unique=True, nullable=False)
         user_type = db.Column(db.String(120), unique=False, nullable=False)
-        associations = db.Column(db.ARRAY(db.String), nullable=False)
 
-        def __init__(self, username, password, email, user_type, associations):
+        def __init__(self, username, password, email, user_type):
             """
             Initialize a new user object.
 
@@ -37,6 +36,5 @@ def init_user_model(db):
             self.password = password
             self.email = email
             self.user_type = user_type
-            self.associations = associations
 
     return User

@@ -18,6 +18,7 @@ from routes.auth import load_user
 from routes.auth.logout import logout_bp
 from routes.auth.protected import protected_bp
 from routes.auth.check_auth import check_auth_bp
+from routes.users import get_users
 from routes.users import delete_user
 from routes.users import find_user_type
 from routes.candidates import get_candidates
@@ -51,6 +52,7 @@ CORS(
 # Database
 db = SQLAlchemy(app)
 from sqlalchemy.dialects.postgresql import UUID
+
 db.Column(UUID(as_uuid=True))
 
 
@@ -75,6 +77,7 @@ app.register_blueprint(check_auth_bp)
 app.register_blueprint(protected_bp)
 app.register_blueprint(delete_user.delete_user_route(User, Candidate, Company, db))
 app.register_blueprint(find_user_type.find_user_type_route(User))
+app.register_blueprint(get_users.get_all_users_route(User))
 app.register_blueprint(load_user.load_user_route(User, login_manager))
 app.register_blueprint(get_candidates.get_all_candidates_route(Candidate))
 app.register_blueprint(update_candidate.update_candidate_route(Candidate, db))

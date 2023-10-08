@@ -16,6 +16,11 @@ def init_candidate_model(db):
             unique=True,
             nullable=False,
         )
+        user_id = db.Column(
+            db.String(80),
+            db.ForeignKey("user.id"),
+            nullable=False,
+        )
         username = db.Column(db.String(80), unique=True, nullable=False)
         password = db.Column(
             db.String(128), nullable=False
@@ -32,15 +37,15 @@ def init_candidate_model(db):
         birth_date = db.Column(db.Date)  # Birth date as a date
         work_permit = db.Column(db.String(80))  # Work permit as a string
         notice_period = db.Column(db.String(80))  # Notice period as a string
-        job_status = db.Column(db.String)  # Job status as an integer
+        job_status = db.Column(db.String(256))  # Job status as an integer
         company_type = db.Column(
             db.ARRAY(db.String)
         )  # Type of company as an array of strings
         matching_jobs = db.Column(
-            db.ARRAY(db.String)
+            db.ARRAY(db.Integer)
         )  # Matching jobs as an array of foreign keys (integer)
         matching_companies = db.Column(
-            db.ARRAY(db.String)
+            db.ARRAY(db.Integer)
         )  # Matching companies as an array of foreign keys (integer)
         values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
         skills = db.Column(db.JSON)  # Skills as a JSON array of objects
@@ -48,6 +53,7 @@ def init_candidate_model(db):
 
         def __init__(
             self,
+            user_id,
             username,
             password,
             email,
@@ -76,6 +82,7 @@ def init_candidate_model(db):
             Args:
                 # Your additional fields here
             """
+            self.user_id = user_id
             self.username = username
             self.password = password
             self.email = email

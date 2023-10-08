@@ -16,6 +16,11 @@ def init_company_model(db):
             unique=True,
             nullable=False,
         )
+        user_id = db.Column(
+            db.String(80),
+            db.ForeignKey("user.id"),
+            nullable=False,
+        )
         username = db.Column(db.String(80), unique=True, nullable=False)
         password = db.Column(
             db.String(128), nullable=False
@@ -39,6 +44,7 @@ def init_company_model(db):
 
         def __init__(
             self,
+            user_id,
             username,
             password,
             email,
@@ -58,6 +64,7 @@ def init_company_model(db):
             Args:
                 # Your additional fields here
             """
+            self.user_id = user_id
             self.username = username
             self.password = password
             self.email = email
