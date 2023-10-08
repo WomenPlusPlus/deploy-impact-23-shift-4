@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import "./CandidateProfile.css";
 import greyImage from "../../../media/gray_square.jpeg";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
@@ -9,6 +10,7 @@ import {
   IconMapPin,
   IconBrandLinkedin,
   IconWorldWww,
+  IconAffiliate,
 } from "@tabler/icons-react";
 
 const CandidateProfile = () => {
@@ -26,6 +28,17 @@ const CandidateProfile = () => {
     "Type of Jobs",
     "Langiages",
   ];
+
+  const associations = ["Woman++", "proFemmes", "Coders", "Kpi"];
+
+  // State to manage the list of labels
+  const [associationLabels, setAssociationLabels] = useState(associations);
+
+  // Function to handle label deletion
+  const handleLabelDelete = (labelToRemove: string) => {
+    const updatedLabels = associationLabels.filter((label) => label !== labelToRemove);
+    setAssociationLabels(updatedLabels);
+  };
 
   return (
     <div className="main-containerr">
@@ -92,20 +105,27 @@ const CandidateProfile = () => {
           </CardContainer>
           <CardContainer className="profile-completed-element">
             <div className="profile-completed-edit-icon">
-              <h3>Anonymous profile</h3>
+              <h2>Anonymous profile</h2>
               <IconEdit color="black" style={{ cursor: "pointer" }} />
             </div>
           </CardContainer>
         </div>
         {/* Associations */}
         <div>
-          <CardContainer className="main-containerr">
+          <CardContainer className="association-container">
             <div className="profile-completed-edit-icon">
-              <h3>Associations</h3>
+              <h2>Associations</h2>
               <IconEdit color="black" style={{ cursor: "pointer" }} />
             </div>
-            <div>
-              <Labels />
+            <div className="association-container-labels">
+              {associationLabels.map((label, index) => (
+                <Labels
+                  key={index}
+                  icon={<IconAffiliate />}
+                  labelName={label}
+                  onCloseIcon={() => handleLabelDelete(label)}
+                />
+              ))}
             </div>
           </CardContainer>
         </div>

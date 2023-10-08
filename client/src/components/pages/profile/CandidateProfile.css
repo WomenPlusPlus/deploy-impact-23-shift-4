@@ -97,3 +97,20 @@
   color: black;
 }
 
+/* Assosiations */
+.association-container {
+  padding: 3rem;
+}
+
+.profile-completed-edit-icon h2 {
+  margin-bottom: 1rem;
+}
+
+.association-container-labels {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
