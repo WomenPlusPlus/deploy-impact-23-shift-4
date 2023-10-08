@@ -2,8 +2,8 @@ import bcrypt
 from flask import Blueprint, jsonify, request
 from flask_login import login_user
 
-def register_route(User, Candidate, Company, db):
 
+def register_route(User, Candidate, Company, db):
     register_bp = Blueprint("register", __name__)
 
     @register_bp.route("/api/register", methods=["POST"])
@@ -32,10 +32,12 @@ def register_route(User, Candidate, Company, db):
             password = data.get("password")
             email = data.get("email")
             user_type = data.get("user_type")  # Get user type from the request
+            associations = data.get("associations")
+            print(associations)
 
             # Hash the password before saving it to the appropriate table
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            hashed_password = hashed_password.decode('utf-8')
+            hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+            hashed_password = hashed_password.decode("utf-8")
 
             # Check if the username already exists in the appropriate table
             existing_user = User.query.filter_by(username=username).first()
@@ -48,6 +50,7 @@ def register_route(User, Candidate, Company, db):
                 password=hashed_password,
                 email=email,
                 user_type=user_type,
+                associations=associations,
             )
             db.session.add(new_user)
             db.session.commit()
@@ -56,19 +59,29 @@ def register_route(User, Candidate, Company, db):
             if user_type == "candidate":
                 # Save the user also in the "candidate" table
                 new_user = Candidate(
-                    username=username, password=hashed_password, email=email
+                    username=username,
+                    password=hashed_password,
+                    email=email,
+                    associations=associations,
                 )
                 db.session.add(new_user)
                 db.session.commit()
             elif user_type == "company":
                 # Save the user also in the "company" table
-                new_user = Company(username=username, password=hashed_password, email=email)
+                new_user = Company(
+                    username=username,
+                    password=hashed_password,
+                    email=email,
+                    associations=associations,
+                )
                 db.session.add(new_user)
                 db.session.commit()
             else:
                 return jsonify({"message": "Invalid user type"}), 400
-            
+
             login_user(new_user)
-            return jsonify({"message": "User registered successfully", "user_type": user_type})
-        
+            return jsonify(
+                {"message": "User registered successfully", "user_type": user_type}
+            )
+
     return register_bp
