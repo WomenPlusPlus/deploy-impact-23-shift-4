@@ -1,5 +1,6 @@
 import { Layout, Input } from "antd";
 import { IconBookmark } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../UI/avatar/Avatar";
 
@@ -8,7 +9,12 @@ import logo from "../../../media/shift-logo-morado.png";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { Search } = Input;
+
+  const handleProfileClick = () => {
+    navigate("/candidate-profile");
+  };
 
   return (
     <nav className="navbar">
@@ -32,7 +38,12 @@ const Navbar = () => {
             <div className="rightMenu">
               <IconBookmark color="var(--color-1)" />
               {/* TODO: update names with login profile */}
-              <Avatar firstName="Laura" lastName="Purcaro" size="large" />
+              <Avatar
+                firstName="Laura"
+                lastName="Purcaro"
+                size="large"
+                handleProfileClick={handleProfileClick}
+              />
             </div>
           </div>
         </Layout.Header>
