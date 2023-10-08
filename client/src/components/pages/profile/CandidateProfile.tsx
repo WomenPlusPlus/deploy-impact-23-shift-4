@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./CandidateProfile.css";
-import greyImage from "../../../media/gray_square.jpeg";
+import Avatar from "../../UI/avatar/Avatar";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
@@ -46,9 +46,7 @@ const CandidateProfile = () => {
     <div className="first-containerr">
       {/* Profile text */}
       <CardContainer className="profile-section-element profilee-component">
-        <div className="avatar">
-          <img src={greyImage} alt="Avatar" />
-        </div>
+        <Avatar size={80} firstName="John" lastName="Doe"/>
 
         <div>
           <div className="user-name">
@@ -110,7 +108,7 @@ const CandidateProfile = () => {
           </div>
         </CardContainer>
       </div>
-      
+
       {/* Associations */}
       <div>
         <CardContainer className="association-container">
