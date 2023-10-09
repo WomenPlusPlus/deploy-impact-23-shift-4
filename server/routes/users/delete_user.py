@@ -10,7 +10,7 @@ def delete_user_route(User, Candidate, Company, db):
     # @login_required
     def delete_user():
         """
-        Delete the currently authenticated user.
+        Delete the user matching the given user_id.
 
         Returns:
             str: JSON response indicating successful user deletion.

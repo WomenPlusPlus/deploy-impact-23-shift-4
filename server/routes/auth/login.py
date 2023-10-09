@@ -49,7 +49,7 @@ def login_route(User):
                     # If the password is valid, mark the user as authenticated
                     is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
                     if is_logged:
-                        return jsonify({"message": "Login successful", "user_type": user_type}), 200
+                        return jsonify({"message": "Login successful", "user": {user}}), 200
                     else:
                         return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
                 else:

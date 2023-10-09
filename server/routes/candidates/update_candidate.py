@@ -6,6 +6,13 @@ def update_candidate_route(Candidate, db):
 
     @update_candidate_bp.route("/api/update_candidate/", methods=["PUT"])
     def update_candidate():
+        """
+        Update the candidate matching the given user_id. The request body must
+        contain a JSON object with the fields to be updated.
+
+        Returns:
+            str: JSON response indicating successful candidate update.
+        """
         try:
             if request.method == "PUT":
                 data = request.get_json()
