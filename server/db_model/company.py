@@ -18,7 +18,7 @@ def init_company_model(db):
         )
         user_id = db.Column(
             db.String(80),
-            db.ForeignKey("user.id"),
+            db.ForeignKey("user_id"),
             nullable=False,
         )
         password = db.Column(
@@ -29,9 +29,7 @@ def init_company_model(db):
         company_name = db.Column(db.String(80))  # Company name as a string
         address = db.Column(db.String(256))  # Address as a string
         linkedin_url = db.Column(db.String(256))  # URL to LinkedIn page as a string
-        values = db.Column(
-            db.ARRAY(db.String)
-        )  # Company values as an array of strings
+        values = db.Column(db.ARRAY(db.String))  # Company values as an array of strings
         job_offerings = db.Column(
             db.ARRAY(db.String)
         )  # Types of jobs offered as an array of strings

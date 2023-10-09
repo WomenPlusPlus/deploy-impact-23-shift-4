@@ -18,7 +18,7 @@ def init_association_model(db):
         )
         user_id = db.Column(
             db.String(80),
-            db.ForeignKey("user.id"),
+            db.ForeignKey("user_id"),
             nullable=False,
         )
         password = db.Column(db.String(128), nullable=False)

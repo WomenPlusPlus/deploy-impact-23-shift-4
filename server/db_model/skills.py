@@ -16,19 +16,19 @@ def init_skills_model(db):
             nullable=False,
         )
         name = db.Column(db.String(256), nullable=False)
-        field = db.Column(
+        category = db.Column(
             db.String(256), nullable=False
-        )  # Fields: UX/UI, Backend, Frontend, Fullstack, Data, DevOps, QA, Product Manager
+        )  # categorys: UX/UI, Backend, Frontend, Fullstack, Data, DevOps, QA, Product Manager
 
-        def __init__(self, name, field):
+        def __init__(self, name, category):
             """
             Initialize a new skill object.
 
             Args:
                 name (str): Name of the skill.
-                field (str): Field of the skill.
+                category (str): category of the skill.
             """
             self.name = name
-            self.field = field
+            self.category = category
 
     return Skills

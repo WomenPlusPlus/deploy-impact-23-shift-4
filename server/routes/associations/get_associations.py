@@ -20,11 +20,11 @@ def get_all_associations_route(Association):
             for association in associations:
                 association_data = {
                     "id": association.id,
-                    "user.id": association.user_id,
+                    "user_id": association.user_id,
                     "email": association.email,
                     "address": association.address,
-                    "contact.details": association.contact_details,
-                    "association.name": association.association_name,
+                    "contact_details": association.contact_details,
+                    "association_name": association.association_name,
                     "url": association.url,
                 }
                 result.append(association_data)

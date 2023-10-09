@@ -20,17 +20,17 @@ def get_all_companies_route(Company):
             for company in companies:
                 company_data = {
                     "id": company.id,
-                    "user.id": company.user_id,
+                    "user_id": company.user_id,
                     "email": company.email,
                     "associations": company.associations,
                     "address": company.address,
                     "values": company.values,
-                    "job.offerings": company.job_offerings,
-                    "contact.details": company.contact_details,
-                    "company.name": company.company_name,
-                    "linkedin.url": company.linkedin_url,
-                    "kununu.url": company.kununu_url,
-                    "positions.job.list": company.positions_job_list,
+                    "job_offerings": company.job_offerings,
+                    "contact_details": company.contact_details,
+                    "company_name": company.company_name,
+                    "linkedin_url": company.linkedin_url,
+                    "kununu_url": company.kununu_url,
+                    "positions_job_list": company.positions_job_list,
                 }
                 result.append(company_data)
 

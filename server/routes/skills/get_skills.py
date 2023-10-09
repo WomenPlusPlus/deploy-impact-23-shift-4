@@ -21,7 +21,7 @@ def get_all_skills_route(Skills):
                 skill_data = {
                     "id": skill.id,
                     "name": skill.name,
-                    "field": skill.field,
+                    "category": skill.category,
                 }
                 result.append(skill_data)
 
