@@ -10,7 +10,6 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    username: "",
     password: "",
     email: "",
     user_type: "candidate",
@@ -72,6 +71,7 @@ const Register: React.FC = () => {
               onChange={handleInputChange}
             />
           </Form.Item>
+
           <Form.Item
             name="last_name"
             rules={[
@@ -87,32 +87,7 @@ const Register: React.FC = () => {
               onChange={handleInputChange}
             />
           </Form.Item>
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your Username!" }]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              type="text"
-              name="username"
-              value={formData.username}
-              placeholder="Username"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              name="password"
-              value={formData.password}
-              placeholder="Password"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+
           <Form.Item
             name="email"
             rules={[{ required: true, message: "Please input your Email!" }]}
@@ -126,6 +101,21 @@ const Register: React.FC = () => {
               onChange={handleInputChange}
             />
           </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your Password!" }]}
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              name="password"
+              value={formData.password}
+              placeholder="Password"
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>

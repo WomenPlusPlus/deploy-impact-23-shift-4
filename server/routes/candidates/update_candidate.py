@@ -12,14 +12,11 @@ def update_candidate_route(Candidate, db):
                 id = data.get("user_id")
 
                 candidate = Candidate.query.filter_by(user_id=id).first()
-                print(candidate)
 
                 if not candidate:
                     return jsonify({"message": "Candidate not found"}), 404
 
                 # Update the candidate's fields based on the data provided
-                if "username" in data:
-                    candidate.username = data["username"]
                 if "email" in data:
                     candidate.email = data["email"]
                 if "first_name" in data:

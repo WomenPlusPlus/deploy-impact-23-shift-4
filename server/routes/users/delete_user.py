@@ -24,13 +24,11 @@ def delete_user_route(User, Candidate, Company, db):
             if user:
                 # Determine user_type and delete the corresponding record
                 if user.user_type == "candidate":
-                    candidate = Candidate.query.filter_by(
-                        username=user.username
-                    ).first()
+                    candidate = Candidate.query.filter_by(user_id=user.id).first()
                     if candidate:
                         db.session.delete(candidate)
                 elif user.user_type == "company":
-                    company = Company.query.filter_by(username=user.username).first()
+                    company = Company.query.filter_by(user_id=user.id).first()
                     if company:
                         db.session.delete(company)
 

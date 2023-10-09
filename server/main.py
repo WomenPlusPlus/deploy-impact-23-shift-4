@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from db_model.user import init_user_model
 from db_model.company import init_company_model
 from db_model.candidate import init_candidate_model
+from db_model.association import init_association_model
 from db_model.jobs import init_jobs_model
 from db_model.skills import init_skills_model
 from db_model.values import init_values_model
@@ -65,12 +66,15 @@ login_manager.init_app(app)
 User = init_user_model(db)
 Candidate = init_candidate_model(db)
 Company = init_company_model(db)
+Association = init_association_model(db)
 Jobs = init_jobs_model(db)
 Skills = init_skills_model(db)
 Values = init_values_model(db)
 
 # Blueprints
-app.register_blueprint(register.register_route(User, Candidate, Company, db))
+app.register_blueprint(
+    register.register_route(User, Candidate, Company, Association, db)
+)
 app.register_blueprint(login.login_route(User))
 app.register_blueprint(logout_bp)
 app.register_blueprint(check_auth_bp)

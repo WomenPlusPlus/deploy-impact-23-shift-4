@@ -12,18 +12,18 @@ def login_route(User):
         Authenticate and log in a user.
 
         This route handles user authentication and login by accepting a POST request with
-        JSON data containing the username and password. It verifies the provided
+        JSON data containing the email and password. It verifies the provided
         credentials, and if they are correct, marks the user as authenticated using the
         `login_user` function.
 
         Parameters (POST JSON data):
-            - username (str): The username of the user trying to log in.
+            - email (str): The email of the user trying to log in.
             - password (str): The password provided by the user.
 
         Returns:
             - 200 OK: If the login is successful.
-            - 400 Bad Request: If either the username or password is missing.
-            - 401 Unauthorized: If the provided username is not registered or if the
+            - 400 Bad Request: If either the email or password is missing.
+            - 401 Unauthorized: If the provided email is not registered or if the
             password is incorrect.
 
         Note:
@@ -33,13 +33,13 @@ def login_route(User):
         """
         if request.method == "POST":
             data = request.get_json()
-            username = data.get("username")
+            email = data.get("email")
             password = data.get("password")
 
-            if not username or not password:
-                return jsonify({"message": "Username and password are required"}), 400
-            # Retrieve the user from the database based on the provided username
-            user = User.query.filter_by(username=username).first()
+            if not email or not password:
+                return jsonify({"message": "email and password are required"}), 400
+            # Retrieve the user from the database based on the provided email
+            user = User.query.filter_by(email=email).first()
 
             if user:
                 # Find the user
@@ -53,7 +53,7 @@ def login_route(User):
                     else:
                         return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
                 else:
-                    return jsonify({"message": "Invalid username or password"}), 401
+                    return jsonify({"message": "Invalid email or password"}), 401
             else:
                 return jsonify({"message": "User is not registered"}), 401
         

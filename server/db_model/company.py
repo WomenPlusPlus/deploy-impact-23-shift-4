@@ -21,7 +21,6 @@ def init_company_model(db):
             db.ForeignKey("user.id"),
             nullable=False,
         )
-        username = db.Column(db.String(80), unique=True, nullable=False)
         password = db.Column(
             db.String(128), nullable=False
         )  # Store the hashed password
@@ -45,7 +44,6 @@ def init_company_model(db):
         def __init__(
             self,
             user_id,
-            username,
             password,
             email,
             associations,
@@ -65,7 +63,6 @@ def init_company_model(db):
                 # Your additional fields here
             """
             self.user_id = user_id
-            self.username = username
             self.password = password
             self.email = email
             self.associations = associations

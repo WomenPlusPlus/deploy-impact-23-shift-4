@@ -15,7 +15,6 @@ def get_all_users_route(User):
             for user in users:
                 user_data = {
                     "id": user.id,
-                    "username": user.username,
                     "email": user.email,
                     "password": user.password,
                     "user.type": user.user_type,

@@ -10,7 +10,7 @@ import "./Login.css";
 const Login: React.FC = () => {
   // state
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -62,15 +62,15 @@ const Login: React.FC = () => {
           onFinish={onFinish}
         >
           <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your Username!" }]}
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               type="text"
-              name="username"
-              value={formData.username}
-              placeholder="Username"
+              name="email"
+              value={formData.email}
+              placeholder="email"
               onChange={handleInputChange}
             />
           </Form.Item>
