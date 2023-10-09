@@ -11,6 +11,9 @@ def get_candidate_by_id_route(Candidate):
                 data = request.get_json()
                 id = data.get("user_id")
 
+                if not id:
+                    return jsonify({"message": "Missing 'id' in JSON data"}), 400
+
                 candidate = Candidate.query.filter_by(user_id=id).first()
                 if not candidate:
                     return jsonify({"message": "Candidate not found"}), 404

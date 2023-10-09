@@ -54,7 +54,6 @@ def update_candidate_route(Candidate, db):
                 if "languages" in data:
                     candidate.languages = data["languages"]
 
-                # Commit the changes to the database
                 db.session.commit()
 
                 return jsonify({"message": "Candidate updated successfully"}), 200

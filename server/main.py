@@ -15,7 +15,7 @@ from db_model.values import init_values_model
 # Blueprints
 from routes.auth import login
 from routes.auth import register
-from routes.auth import load_user
+from routes.users import load_user
 from routes.auth.logout import logout_bp
 from routes.auth.protected import protected_bp
 from routes.auth.check_auth import check_auth_bp
