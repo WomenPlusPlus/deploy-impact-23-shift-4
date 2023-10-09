@@ -24,6 +24,13 @@ from routes.users import delete_user
 from routes.users import find_user_type
 from routes.candidates import get_candidates
 from routes.candidates import update_candidate
+from routes.candidates import get_candidate_by_id
+from routes.companies import get_companies
+from routes.companies import update_company
+from routes.companies import get_company_by_id
+from routes.associations import get_associations
+from routes.associations import update_association
+from routes.associations import get_association_by_id
 
 # Env
 from dotenv import load_dotenv
@@ -85,6 +92,13 @@ app.register_blueprint(get_users.get_all_users_route(User))
 app.register_blueprint(load_user.load_user_route(User, login_manager))
 app.register_blueprint(get_candidates.get_all_candidates_route(Candidate))
 app.register_blueprint(update_candidate.update_candidate_route(Candidate, db))
+app.register_blueprint(get_candidate_by_id.get_candidate_by_id_route(Candidate))
+app.register_blueprint(get_companies.get_all_companies_route(Company))
+app.register_blueprint(update_company.update_company_route(Company, db))
+app.register_blueprint(get_company_by_id.get_company_by_id_route(Company))
+app.register_blueprint(get_associations.get_all_associations_route(Association))
+app.register_blueprint(update_association.update_association_route(Association, db))
+app.register_blueprint(get_association_by_id.get_association_by_id_route(Association))
 
 if __name__ == "__main__":
     # Make sure the tables exist
