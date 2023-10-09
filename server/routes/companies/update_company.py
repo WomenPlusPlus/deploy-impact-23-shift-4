@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 def update_company_route(Company, db):
     update_company_bp = Blueprint("update_company", __name__)
 
-    @update_company_bp.route("/api/update_company/", methods=["PUT"])
+    @update_company_bp.route("/api/update_company", methods=["PUT"])
     def update_company():
         try:
             if request.method == "PUT":

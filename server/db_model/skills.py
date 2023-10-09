@@ -20,7 +20,7 @@ def init_skills_model(db):
             db.String(256), nullable=False
         )  # Fields: UX/UI, Backend, Frontend, Fullstack, Data, DevOps, QA, Product Manager
 
-        def __init__(self, name):
+        def __init__(self, name, field):
             """
             Initialize a new skill object.
 
@@ -29,5 +29,6 @@ def init_skills_model(db):
                 field (str): Field of the skill.
             """
             self.name = name
+            self.field = field
 
     return Skills

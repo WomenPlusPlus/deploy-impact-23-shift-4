@@ -31,7 +31,9 @@ from routes.associations import get_associations
 from routes.associations import update_association
 from routes.associations import get_association_by_id
 from routes.skills import get_skills
+from routes.skills import add_skill
 from routes.values import get_values
+from routes.values import add_value
 
 # Env
 from dotenv import load_dotenv
@@ -100,7 +102,9 @@ app.register_blueprint(get_associations.get_all_associations_route(Association))
 app.register_blueprint(update_association.update_association_route(Association, db))
 app.register_blueprint(get_association_by_id.get_association_by_id_route(Association))
 app.register_blueprint(get_skills.get_all_skills_route(Skills))
+app.register_blueprint(add_skill.add_skill_route(Skills, db))
 app.register_blueprint(get_values.get_all_values_route(Values))
+app.register_blueprint(add_value.add_value_route(Values, db))
 
 if __name__ == "__main__":
     # Make sure the tables exist

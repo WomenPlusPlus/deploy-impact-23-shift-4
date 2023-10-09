@@ -1,4 +1,4 @@
-from flask_login import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request
 
 
 def get_association_by_id_route(Association):

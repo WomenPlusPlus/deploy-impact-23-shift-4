@@ -33,6 +33,7 @@ def register_route(User, Candidate, Company, Association, db):
             user_type = data.get("user_type")  # Get user type from the request
             associations = data.get("associations")
             association_name = data.get("association_name")
+            company_name = data.get("company_name")
 
             # Hash the password before saving it to the appropriate table
             hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
@@ -66,6 +67,7 @@ def register_route(User, Candidate, Company, Association, db):
                     user_id=user_id,
                     password=hashed_password,
                     email=email,
+                    company_name=company_name,
                     associations=associations,
                 )
                 db.session.add(new_user)

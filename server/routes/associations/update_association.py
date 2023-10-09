@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 def update_association_route(Association, db):
     update_association_bp = Blueprint("update_association", __name__)
 
-    @update_association_bp.route("/api/update_association/", methods=["PUT"])
+    @update_association_bp.route("/api/update_association", methods=["PUT"])
     def update_association():
         try:
             if request.method == "PUT":

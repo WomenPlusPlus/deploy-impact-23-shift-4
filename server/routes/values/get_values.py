@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 
-def get_all_values_route(values):
+def get_all_values_route(Values):
     get_all_values_bp = Blueprint("get_values", __name__)
 
     @get_all_values_bp.route("/api/get_all_values", methods=["GET"])
@@ -14,7 +14,7 @@ def get_all_values_route(values):
         """
         try:
             if request.method == "GET":
-                values = values.query.all()
+                values = Values.query.all()
                 result = []
 
             for value in values:

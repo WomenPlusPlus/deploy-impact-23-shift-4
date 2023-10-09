@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 def update_candidate_route(Candidate, db):
     update_candidate_bp = Blueprint("update_candidate", __name__)
 
-    @update_candidate_bp.route("/api/update_candidate/", methods=["PUT"])
+    @update_candidate_bp.route("/api/update_candidate", methods=["PUT"])
     def update_candidate():
         """
         Update the candidate matching the given user_id. The request body must
