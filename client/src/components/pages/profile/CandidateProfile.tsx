@@ -30,23 +30,43 @@ const CandidateProfile = () => {
   ];
 
   const associations = ["Woman++", "proFemmes", "Coders", "Kpi"];
+  const typeOfJobs = ["Full-time", "Part-time", "Internship", "Freelance"];
+  const skills = ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"];
+  const values = ["Teamwork", "Diversity", "Inclusion", "Equality"];
 
-  // State to manage the list of labels
+  // State
   const [associationLabels, setAssociationLabels] = useState(associations);
+  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
+  const [skillsLabels, setSkillsLabels] = useState(skills);
+  const [valuesLabels, setValuesLabels] = useState(values);
 
-  // Function to handle label deletion
-  const handleLabelDelete = (labelToRemove: string) => {
-    const updatedLabels = associationLabels.filter(
+  // Functions
+  const handleTypeOfJobsLabelDelete = (labelToRemove: string) => {
+    const updatedJobs = typeOfJobsLabels.filter(
       (label) => label !== labelToRemove
     );
-    setAssociationLabels(updatedLabels);
+    setTypeOfJobsLabels(updatedJobs);
+  };
+
+  const handleSkillsDelete = (labelToRemove: string) => {
+    const updatedSkills = skillsLabels.filter(
+      (label) => label !== labelToRemove
+    );
+    setSkillsLabels(updatedSkills);
+  };
+
+  const handleValuesDelete = (labelToRemove: string) => {
+    const updatedValues = valuesLabels.filter(
+      (label) => label !== labelToRemove
+    );
+    setValuesLabels(updatedValues);
   };
 
   return (
-    <div className="first-containerr">
+    <div className="content-div">
       {/* Profile text */}
       <CardContainer className="profile-section-element profilee-component">
-        <Avatar size={80} firstName="John" lastName="Doe"/>
+        <Avatar size={80} firstName="John" lastName="Doe" />
 
         <div>
           <div className="user-name">
@@ -70,8 +90,8 @@ const CandidateProfile = () => {
         </div>
       </CardContainer>
 
-      {/* Profile completed */}
       <div className="profile-completed-component">
+        {/* Profile completed */}
         <CardContainer className="profile-completed-element">
           <div className="profile-completed-edit-icon">
             <h3>Your profile is {progress} complete.</h3>
@@ -103,17 +123,17 @@ const CandidateProfile = () => {
         {/* Anonymous profile */}
         <CardContainer className="profile-completed-element">
           <div className="profile-completed-edit-icon">
-            <h3>Anonymous profile</h3>
+            <h3>Visible Information</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
         </CardContainer>
       </div>
 
-      {/* Associations */}
-      <div>
+      {/* Associations & Type of jobs  */}
+      <div className="associations-type-of-jobs">
         <CardContainer className="association-container">
           <div className="profile-completed-edit-icon">
-            <h2>Associations</h2>
+            <h3>Associations</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
           <div className="association-container-labels">
@@ -122,10 +142,90 @@ const CandidateProfile = () => {
                 key={index}
                 icon={<IconAffiliate />}
                 labelName={label}
-                onCloseIcon={() => handleLabelDelete(label)}
+                disableCloseIcon={true}
               />
             ))}
           </div>
+        </CardContainer>
+        <CardContainer className="type-of-jobs-container">
+          <div className="profile-completed-edit-icon">
+            <h3>Type of jobs you're looking for</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          <div className="association-container-labels">
+            {typeOfJobsLabels.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconAffiliate />}
+                labelName={label}
+                onCloseIcon={() => handleTypeOfJobsLabelDelete(label)}
+                disableCloseIcon={false}
+              />
+            ))}
+          </div>
+        </CardContainer>
+      </div>
+
+      {/* Skills */}
+      <CardContainer className="skills-container">
+        <div className="profile-completed-edit-icon">
+          <h3>Skills</h3>
+          <IconEdit color="black" style={{ cursor: "pointer" }} />
+        </div>
+        <div className="skills-container-labels">
+          {skillsLabels.map((label, index) => (
+            <Labels
+              key={index}
+              icon={<IconAffiliate />}
+              labelName={label}
+              onCloseIcon={() => handleSkillsDelete(label)}
+              disableCloseIcon={false}
+            />
+          ))}
+        </div>
+      </CardContainer>
+
+      {/* Values */}
+      <CardContainer className="values-container">
+        <div className="profile-completed-edit-icon">
+          <h3>Values</h3>
+          <IconEdit color="black" style={{ cursor: "pointer" }} />
+        </div>
+        <div className="values-container-labels">
+          {valuesLabels.map((label, index) => (
+            <Labels
+              key={index}
+              icon={<IconAffiliate />}
+              labelName={label}
+              onCloseIcon={() => handleValuesDelete(label)}
+              disableCloseIcon={false}
+            />
+          ))}
+        </div>
+      </CardContainer>
+
+      {/* Contact info, languages, experience */}
+      <div className="associations-type-of-jobs">
+        <CardContainer className="association-container">
+          <div className="profile-completed-edit-icon">
+            <h3>Contact info</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          
+        </CardContainer>
+        <CardContainer className="type-of-jobs-container">
+          <div className="profile-completed-edit-icon">
+            <h3>Languages</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          
+        </CardContainer>
+        <CardContainer className="type-of-jobs-container">
+          <div className="profile-completed-edit-icon">
+            <h3>Experience</h3>
+            <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          
         </CardContainer>
       </div>
     </div>

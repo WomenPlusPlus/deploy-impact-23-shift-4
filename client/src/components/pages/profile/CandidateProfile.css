@@ -1,9 +1,4 @@
-.main-containerr {
-  min-height: 100vh;
-  padding: 3rem;
-}
-
-.first-containerr {
+.content-div {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -97,9 +92,11 @@
   color: black;
 }
 
-/* Assosiations */
+/* Associations */
 .association-container {
   padding: 3rem;
+  /* Adjust the layout */
+  width: 70%;
 }
 
 .profile-completed-edit-icon h2 {
@@ -107,6 +104,49 @@
 }
 
 .association-container-labels {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+/* Type of jobs */
+.associations-type-of-jobs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.type-of-jobs-container {
+  padding: 3rem;
+  width: 100%;
+}
+
+/* Skills */
+.skills-container {
+  padding: 3rem;
+  margin-bottom: 2rem;
+}
+
+.skills-container-labels {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+/* Values */
+.values-container {
+  padding: 3rem;
+  margin-bottom: 2rem;
+}
+
+.values-container-labels {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   align-items: center;
