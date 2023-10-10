@@ -4,22 +4,26 @@ from flask import Blueprint, jsonify, request
 def update_candidate_route(Candidate, db):
     update_candidate_bp = Blueprint("update_candidate", __name__)
 
-    @update_candidate_bp.route("/api/update_candidate/", methods=["PUT"])
+    @update_candidate_bp.route("/api/update_candidate", methods=["PUT"])
     def update_candidate():
+        """
+        Update the candidate matching the given user_id. The request body must
+        contain a JSON object with the fields to be updated.
+
+        Returns:
+            str: JSON response indicating successful candidate update.
+        """
         try:
             if request.method == "PUT":
                 data = request.get_json()
                 id = data.get("user_id")
 
                 candidate = Candidate.query.filter_by(user_id=id).first()
-                print(candidate)
 
                 if not candidate:
                     return jsonify({"message": "Candidate not found"}), 404
 
                 # Update the candidate's fields based on the data provided
-                if "username" in data:
-                    candidate.username = data["username"]
                 if "email" in data:
                     candidate.email = data["email"]
                 if "first_name" in data:
@@ -57,7 +61,6 @@ def update_candidate_route(Candidate, db):
                 if "languages" in data:
                     candidate.languages = data["languages"]
 
-                # Commit the changes to the database
                 db.session.commit()
 
                 return jsonify({"message": "Candidate updated successfully"}), 200

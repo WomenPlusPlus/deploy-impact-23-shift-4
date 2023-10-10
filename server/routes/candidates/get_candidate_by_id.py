@@ -1,18 +1,23 @@
 from flask import Blueprint, jsonify, request
 
 
-def get_all_candidates_route(Candidate):
-    get_all_candidates_bp = Blueprint("get_candidates", __name__)
+def get_candidate_by_id_route(Candidate):
+    get_candidate_by_id_bp = Blueprint("get_candidate_by_id", __name__)
 
-    @get_all_candidates_bp.route("/api/get_all_candidates", methods=["GET"])
-    def get_all_candidates():
-        """ """
+    @get_candidate_by_id_bp.route("/api/get_candidate_by_id", methods=["GET"])
+    def get_candidate_by_id():
         try:
             if request.method == "GET":
-                candidates = Candidate.query.all()
-                result = []
+                data = request.get_json()
+                id = data.get("user_id")
 
-            for candidate in candidates:
+                if not id:
+                    return jsonify({"message": "Missing 'id' in JSON data"}), 400
+
+                candidate = Candidate.query.filter_by(user_id=id).first()
+                if not candidate:
+                    return jsonify({"message": "Candidate not found"}), 404
+
                 candidate_data = {
                     "id": candidate.id,
                     "user_id": candidate.user_id,
@@ -36,12 +41,12 @@ def get_all_candidates_route(Candidate):
                     "skills": candidate.skills,
                     "languages": candidate.languages,
                 }
-                result.append(candidate_data)
 
-            return jsonify({"candidates": result}), 200
+                return jsonify({"candidates": candidate_data}), 200
+
         except Exception as e:
-            jsonify({"message": f"Error getting candidates: {e}"}), 500
+            jsonify({"message": f"Error getting candidate data: {e}"}), 500
 
-        return jsonify({"candidates": []})
+        return jsonify({"candidate": []})
 
-    return get_all_candidates_bp
+    return get_candidate_by_id_bp
