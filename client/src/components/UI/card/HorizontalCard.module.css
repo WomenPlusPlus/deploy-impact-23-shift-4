@@ -1,4 +1,4 @@
-.matches-element {
+.container {
   display: flex;
   align-items: center;
   padding: 3rem;
@@ -9,17 +9,7 @@
   box-sizing: border-box;
 }
 
-.avatar-matches {
-  margin-right: 3rem;
-  height: 8rem;
-  width: 8rem;
-}
-
-.avatar-matches img {
-  max-height: 100%;
-}
-
-.text-matches {
+.text {
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -29,8 +19,7 @@
   color: var(--gray-dark);
 }
 
-.button-style {
+.button {
   margin-left: auto; /* Push the icon to the right */
-  /* bigger */
   height: 5rem;
 }
