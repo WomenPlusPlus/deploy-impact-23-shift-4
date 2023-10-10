@@ -158,3 +158,31 @@
   gap: 1rem;
   margin-left: 1rem;
 }
+
+/* Visible info */
+.containerVisibleInfo {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.horizontalLine {
+  border-top: 1px solid #ccc;
+  margin: 2rem 0;
+}
+
+.sectionVisibleInfo {
+  padding: 2rem;
+}
+
+
+.elementInOneRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}

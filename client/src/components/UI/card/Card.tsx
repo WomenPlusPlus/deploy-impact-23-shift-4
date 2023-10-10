@@ -1,6 +1,5 @@
 import React from "react";
-
-import "./Card.css";
+import styling from "./Card.module.css";
 import { IconExternalLink } from "@tabler/icons-react";
 
 interface CardProps {
@@ -21,24 +20,26 @@ const Card: React.FC<CardProps> = ({
   bordered = false,
   loading = false,
 }) => (
-  <div className="candidate-card">
-    <div className="card-header">
+  <div className={styling.candidateCard}>
+    <div className={styling.cardHeader}>
       <h2>{name}</h2>
-      <div className="top-right-icon">{<IconExternalLink color="black" />}</div>
+      <div className={styling.topRightIcon}>
+        <IconExternalLink color="black" />
+      </div>
     </div>
     <h3>{profession}</h3>
 
-    <div className="association-tags">
+    <div className={styling.associationTags}>
       {associations?.map((association, index) => (
-        <div key={index} className="small-tag">
+        <div key={index} className={styling.smallTag}>
           {association}
         </div>
       ))}
     </div>
 
-    <div className="skill-tags">
+    <div className={styling.skillTags}>
       {skills?.map((skill, index) => (
-        <div key={index} className="medium-tag">
+        <div key={index} className={styling.mediumTag}>
           {skill}
         </div>
       ))}

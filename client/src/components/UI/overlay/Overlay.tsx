@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Drawer as OverlayComponent } from "antd";
 
-import "./Overlay.css";
+import styling from "./Overlay.module.css";
 
 interface OverlayProps {
   icon: any;
@@ -21,7 +21,7 @@ const Overlay: React.FC<OverlayProps> = ({ icon, content }) => {
 
   return (
     <>
-      <div className="button" onClick={showDrawer}>
+      <div className={styling.button} onClick={showDrawer}>
         {icon}
       </div>
       <OverlayComponent

@@ -11,7 +11,7 @@ import {
   IconMapPin,
   IconBrandLinkedin,
   IconWorldWww,
-  IconAffiliate,
+  IconTags
 } from "@tabler/icons-react";
 
 const CandidateProfile = () => {
@@ -34,6 +34,7 @@ const CandidateProfile = () => {
   const typeOfJobs = ["Full-time", "Part-time", "Internship", "Freelance"];
   const skills = ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"];
   const values = ["Teamwork", "Diversity", "Inclusion", "Equality"];
+  const progressLanguage = 30;
 
   // State
   const [associationLabels] = useState(associations);
@@ -135,6 +136,23 @@ const CandidateProfile = () => {
             <h3>Visible Information</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
+          <p>Initially employees will only see skills and values</p>
+          <div className={styling.containerVisibleInfo}>
+            <div className={styling.sectionVisibleInfo}>
+              <h2>Section 1</h2>
+              <p>This is the text inside Section 1.</p>
+            </div>
+            <hr className={styling.horizontalLine} />
+            <div className={styling.sectionVisibleInfo}>
+              <h2>Section 2</h2>
+              <p>This is the text inside Section 2.</p>
+            </div>
+            <hr className={styling.horizontalLine} />
+            <div className={styling.sectionVisibleInfo}>
+              <h2>Section 3</h2>
+              <p>This is the text inside Section 3.</p>
+            </div>
+          </div>
         </CardContainer>
       </div>
 
@@ -148,7 +166,7 @@ const CandidateProfile = () => {
             {associationLabels.map((label, index) => (
               <Labels
                 key={index}
-                icon={<IconAffiliate />}
+                icon={<IconTags />}
                 labelName={label}
                 disableCloseIcon={true}
                 backgroundColor="var(--label-color)"
@@ -162,7 +180,7 @@ const CandidateProfile = () => {
             <EditModal
               labelsList={typeOfJobsLabels}
               setLabelsList={setTypeOfJobsLabels}
-              icon={<IconAffiliate />}
+              icon={<IconTags />}
               titleName="jobs"
             />
           </div>
@@ -171,7 +189,7 @@ const CandidateProfile = () => {
             {typeOfJobsLabels.map((label, index) => (
               <Labels
                 key={index}
-                icon={<IconAffiliate />}
+                icon={<IconTags />}
                 labelName={label}
                 disableCloseIcon={true}
                 backgroundColor="var(--label-color)"
@@ -191,7 +209,7 @@ const CandidateProfile = () => {
           {skillsLabels.map((label, index) => (
             <Labels
               key={index}
-              icon={<IconAffiliate />}
+              icon={<IconTags />}
               labelName={label}
               onCloseIcon={() => handleSkillsDelete(label)}
               disableCloseIcon={true}
@@ -211,7 +229,7 @@ const CandidateProfile = () => {
           {valuesLabels.map((label, index) => (
             <Labels
               key={index}
-              icon={<IconAffiliate />}
+              icon={<IconTags />}
               labelName={label}
               onCloseIcon={() => handleValuesDelete(label)}
               disableCloseIcon={true}
@@ -228,11 +246,23 @@ const CandidateProfile = () => {
             <h3>Contact info</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
+          <div>
+            <p>Phone number</p>
+            <p>Email</p>
+            <p>Address</p>
+          </div>
         </CardContainer>
         <CardContainer className={styling.typeOfJobsContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
+          </div>
+          <div>
+            <div className={styling.elementInOneRow}>
+              <p>Language</p>
+              <p>Level</p>
+            </div>
+            <ProgressBar progress={progressLanguage} height="1.5rem" />
           </div>
         </CardContainer>
         <CardContainer className={styling.typeOfJobsContainer}>
@@ -240,8 +270,43 @@ const CandidateProfile = () => {
             <h3>Experience</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
+          <div className={styling.containerVisibleInfo}>
+            <div className={styling.sectionVisibleInfo}>
+              <h2>Section 1</h2>
+              <p>This is the text inside Section 1.</p>
+            </div>
+            <hr className={styling.horizontalLine} />
+            <div className={styling.sectionVisibleInfo}>
+              <h2>Section 2</h2>
+              <p>This is the text inside Section 2.</p>
+            </div>
+          </div>
         </CardContainer>
       </div>
+
+      {/* Uploaded documents */}
+      <CardContainer className={styling.valuesContainer}>
+        <div className={styling.profileCompletedEditIcon}>
+          <h3>Uploaded documents</h3>
+          <IconEdit color="black" style={{ cursor: "pointer" }} />
+        </div>
+        <div className={styling.containerVisibleInfo}>
+          <div className={styling.sectionVisibleInfo}>
+            <h2>Section 1</h2>
+            <p>This is the text inside Section 1.</p>
+          </div>
+          <hr className={styling.horizontalLine} />
+          <div className={styling.sectionVisibleInfo}>
+            <h2>Section 2</h2>
+            <p>This is the text inside Section 2.</p>
+          </div>
+          <hr className={styling.horizontalLine} />
+          <div className={styling.sectionVisibleInfo}>
+            <h2>Section 3</h2>
+            <p>This is the text inside Section 3.</p>
+          </div>
+        </div>
+      </CardContainer>
     </div>
   );
 };
