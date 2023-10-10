@@ -2,7 +2,7 @@ import "./DashboardCandidate.css";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
-import { MatchesCard } from "../../UI/card/MatchesCard";
+import { HorizontalCard } from "../../UI/card/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 
@@ -60,9 +60,24 @@ const DashboardCandidate = () => {
         {/* Matches */}
         <CardContainer className="section-element matches-component">
           <h2 className="top-left matches-title">Your matches</h2>
-          <MatchesCard />
-          <MatchesCard />
-          <MatchesCard />
+          <HorizontalCard
+            avatar={true}
+            button="Go to description"
+            firstName="Laura"
+            lastName="Purcaro"
+          />
+          <HorizontalCard
+            avatar={true}
+            button="Go to description"
+            firstName="Laura"
+            lastName="Purcaro"
+          />
+          <HorizontalCard
+            avatar={true}
+            button="Go to description"
+            firstName="Laura"
+            lastName="Purcaro"
+          />
         </CardContainer>
       </div>
 
