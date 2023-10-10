@@ -1,5 +1,5 @@
 import React from "react";
-import "./Label.css";
+import styling from "./Label.module.css";
 import { IconX } from "@tabler/icons-react";
 
 interface LabelProps {
@@ -7,6 +7,8 @@ interface LabelProps {
   labelName: string;
   onCloseIcon?: () => void;
   disableCloseIcon?: boolean;
+  backgroundColor?: string;
+  borderRadius?: string;
 }
 
 const Labels: React.FC<LabelProps> = ({
@@ -14,15 +16,19 @@ const Labels: React.FC<LabelProps> = ({
   labelName,
   onCloseIcon,
   disableCloseIcon,
+  backgroundColor = "var(--white)",
+  borderRadius = "var(--tag-radius)",
 }) => {
-
   return (
-    <div className="label-container">
-      <div className="label-icon">
+    <div
+      className={styling.labelContainer}
+      style={{ backgroundColor: backgroundColor, borderRadius: borderRadius }}
+    >
+      <div className={styling.labelIcon}>
         {icon} {labelName}
       </div>
       <div
-        className="label-close-icon"
+        className={styling.labelCloseIcon}
         onClick={disableCloseIcon ? undefined : onCloseIcon}
       >
         <IconX

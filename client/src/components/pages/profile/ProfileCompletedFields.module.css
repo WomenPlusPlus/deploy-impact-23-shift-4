@@ -1,16 +1,16 @@
-.profile-completed-icon {
+.profileCompletedIcon {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   color: var(--primary-color);
 }
 
-.profile-completed-text {
+.profileCompletedText {
   color: var(--primary-color);
   margin: 0.5rem 0;
 }
 
-.profile-uncompleted-button {
+.profileUncompletedButton {
   color: var(--color-button);
   background-color: var(--white);
   border: 1px solid var(--color-button);

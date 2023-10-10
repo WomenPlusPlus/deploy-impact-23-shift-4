@@ -1,16 +1,17 @@
-.content-div {
+/* CandidateProfile.module.css */
+.main {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding: 3rem;
 }
 
-.profile-section-element {
+.profileSectionElement {
   width: var(--secton-width);
   box-sizing: border-box;
 }
 
-.profilee-component {
+.profileComponent {
   display: flex;
   align-items: flex-start;
   padding: 2rem;
@@ -18,11 +19,11 @@
   /* height: 30rem; */
 }
 
-.profilee-component p {
+.profileComponent p {
   margin: 0;
 }
 
-.user-name {
+.userName {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,7 +32,7 @@
   /* background-color: #f5f5f5; */
 }
 
-.user-name h3 {
+.userName h3 {
   font-size: 3.5rem;
   color: black;
 }
@@ -48,7 +49,7 @@
 }
 
 /* Profile completed */
-.profile-completed-component {
+.profileCompletedComponent {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,19 +57,19 @@
   margin-bottom: 2rem;
 }
 
-.profile-completed-fields-component {
+.profileCompletedFieldsComponent {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
   gap: 5rem;
 }
 
-.profile-completed-element {
+.profileCompletedElement {
   padding: 3rem;
   width: 100%;
 }
 
-.profile-completed-fields-element {
+.profileCompletedFieldsElement {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -80,7 +81,7 @@
   flex: 1;
 }
 
-.profile-completed-edit-icon {
+.profileCompletedEditIcon {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -88,22 +89,26 @@
   margin-bottom: 1rem;
 }
 
-.profile-completed-edit-icon h3 {
+.profileCompletedEditIcon h3 {
   color: black;
 }
 
+.editIcon {
+  margin-left: auto;
+}
+
 /* Associations */
-.association-container {
+.associationContainer {
   padding: 3rem;
   /* Adjust the layout */
   width: 70%;
 }
 
-.profile-completed-edit-icon h2 {
+.profileCompletedEditIcon h2 {
   margin-bottom: 1rem;
 }
 
-.association-container-labels {
+.associationContainerLabels {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   align-items: center;
@@ -112,7 +117,7 @@
 }
 
 /* Type of jobs */
-.associations-type-of-jobs {
+.associationsTypeOfJobs {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -121,18 +126,18 @@
   margin-bottom: 2rem;
 }
 
-.type-of-jobs-container {
+.typeOfJobsContainer {
   padding: 3rem;
   width: 100%;
 }
 
 /* Skills */
-.skills-container {
+.skillsContainer {
   padding: 3rem;
   margin-bottom: 2rem;
 }
 
-.skills-container-labels {
+.skillsContainerLabels {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   align-items: center;
@@ -141,12 +146,12 @@
 }
 
 /* Values */
-.values-container {
+.valuesContainer {
   padding: 3rem;
   margin-bottom: 2rem;
 }
 
-.values-container-labels {
+.valuesContainerLabels {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   align-items: center;

@@ -1,5 +1,5 @@
 import { IconCircleCheck, IconProgressAlert } from "@tabler/icons-react";
-import "./ProfileCompletedFields.css";
+import styling from "./ProfileCompletedFields.module.css";
 
 interface ProfileCompletedFieldsProps {
   isCompleted: boolean;
@@ -12,16 +12,16 @@ const ProfileCompletedFields = ({
 }: ProfileCompletedFieldsProps) => {
   return (
     <>
-      <div className="profile-completed-icon">
+      <div className={styling.profileCompletedIcon}>
         {isCompleted ? (
           <IconCircleCheck color="green" />
         ) : (
           <IconProgressAlert color="#FAAD14" />
         )}
-        <p className="profile-completed-text">{field}</p>
+        <p className={styling.profileCompletedText}>{field}</p>
       </div>
       <div hidden={isCompleted}>
-        <button className="profile-uncompleted-button">Add</button>
+        <button className={styling.profileUncompletedButton}>Add</button>
       </div>
     </>
   );

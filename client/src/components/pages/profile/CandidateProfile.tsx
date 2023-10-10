@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import "./CandidateProfile.css";
+import styling from "./CandidateProfile.module.css";
 import Avatar from "../../UI/avatar/Avatar";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { Labels } from "../../UI/labels/Label";
+import { EditModal } from "../../UI/modal/EditModal";
 import {
   IconEdit,
   IconMapPin,
@@ -20,13 +21,13 @@ const CandidateProfile = () => {
   const country = "CH";
   const progress = 80;
   const list = [
-    "Personal details",
+    "PersonalDetails",
     "Skills",
     "Values",
     "Documents",
     "Privacy",
-    "Type of Jobs",
-    "Langiages",
+    "TypeOfJobs",
+    "Languages",
   ];
 
   const associations = ["Woman++", "proFemmes", "Coders", "Kpi"];
@@ -35,17 +36,17 @@ const CandidateProfile = () => {
   const values = ["Teamwork", "Diversity", "Inclusion", "Equality"];
 
   // State
-  const [associationLabels, setAssociationLabels] = useState(associations);
+  const [associationLabels] = useState(associations);
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
   const [skillsLabels, setSkillsLabels] = useState(skills);
   const [valuesLabels, setValuesLabels] = useState(values);
 
   // Functions
+  const [labelsToDelete, setLabelsToDelete] = useState<string[]>([]);
+
   const handleTypeOfJobsLabelDelete = (labelToRemove: string) => {
-    const updatedJobs = typeOfJobsLabels.filter(
-      (label) => label !== labelToRemove
-    );
-    setTypeOfJobsLabels(updatedJobs);
+    // Add the label to the list of labels to be deleted
+    setLabelsToDelete((prevLabels) => [...prevLabels, labelToRemove]);
   };
 
   const handleSkillsDelete = (labelToRemove: string) => {
@@ -63,18 +64,20 @@ const CandidateProfile = () => {
   };
 
   return (
-    <div className="content-div">
+    <div className={styling.main}>
       {/* Profile text */}
-      <CardContainer className="profile-section-element profilee-component">
+      <CardContainer
+        className={`${styling.profileSectionElement} ${styling.profileComponent}`}
+      >
         <Avatar size={80} firstName="John" lastName="Doe" />
 
         <div>
-          <div className="user-name">
+          <div className={styling.userName}>
             <h3>{name}</h3>
             <h4>{status}</h4>
           </div>
 
-          <div className="location">
+          <div className={styling.location}>
             <IconMapPin color="black" />
             <p>
               {city}, {country}
@@ -85,15 +88,15 @@ const CandidateProfile = () => {
           </div>
         </div>
 
-        <div className="open-icon">
+        <div className={styling.editIcon}>
           <IconEdit color="black" style={{ cursor: "pointer" }} />
         </div>
       </CardContainer>
 
-      <div className="profile-completed-component">
+      <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
-        <CardContainer className="profile-completed-element">
-          <div className="profile-completed-edit-icon">
+        <CardContainer className={styling.profileCompletedElement}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Your profile is {progress} complete.</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
@@ -101,18 +104,24 @@ const CandidateProfile = () => {
           <ProgressBar progress={progress} height="1.5rem" />
 
           {/* Fields completed */}
-          <div className="profile-completed-fields-component">
-            <div className="column">
+          <div className={styling.profileCompletedFieldsComponent}>
+            <div className={styling.column}>
               {list.slice(0, Math.ceil(list.length / 2)).map((field, index) => (
-                <div key={index} className="profile-completed-fields-element">
+                <div
+                  key={index}
+                  className={styling.profileCompletedFieldsElement}
+                >
                   <ProfileCompletedFields isCompleted={false} field={field} />
                 </div>
               ))}
             </div>
 
-            <div className="column">
+            <div className={styling.column}>
               {list.slice(Math.ceil(list.length / 2)).map((field, index) => (
-                <div key={index} className="profile-completed-fields-element">
+                <div
+                  key={index}
+                  className={styling.profileCompletedFieldsElement}
+                >
                   <ProfileCompletedFields isCompleted={true} field={field} />
                 </div>
               ))}
@@ -121,8 +130,8 @@ const CandidateProfile = () => {
         </CardContainer>
 
         {/* Anonymous profile */}
-        <CardContainer className="profile-completed-element">
-          <div className="profile-completed-edit-icon">
+        <CardContainer className={styling.profileCompletedElement}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Visible Information</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
@@ -130,36 +139,42 @@ const CandidateProfile = () => {
       </div>
 
       {/* Associations & Type of jobs  */}
-      <div className="associations-type-of-jobs">
-        <CardContainer className="association-container">
-          <div className="profile-completed-edit-icon">
+      <div className={styling.associationsTypeOfJobs}>
+        <CardContainer className={styling.associationContainer}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Associations</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          <div className="association-container-labels">
+          <div className={styling.associationContainerLabels}>
             {associationLabels.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconAffiliate />}
                 labelName={label}
                 disableCloseIcon={true}
+                backgroundColor="var(--label-color)"
               />
             ))}
           </div>
         </CardContainer>
-        <CardContainer className="type-of-jobs-container">
-          <div className="profile-completed-edit-icon">
+        <CardContainer className={styling.typeOfJobsContainer}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <EditModal
+              labelsList={typeOfJobsLabels}
+              setLabelsList={setTypeOfJobsLabels}
+              icon={<IconAffiliate />}
+              titleName="jobs"
+            />
           </div>
-          <div className="association-container-labels">
+
+          <div className={styling.associationContainerLabels}>
             {typeOfJobsLabels.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconAffiliate />}
                 labelName={label}
-                onCloseIcon={() => handleTypeOfJobsLabelDelete(label)}
-                disableCloseIcon={false}
+                disableCloseIcon={true}
+                backgroundColor="var(--label-color)"
               />
             ))}
           </div>
@@ -167,65 +182,64 @@ const CandidateProfile = () => {
       </div>
 
       {/* Skills */}
-      <CardContainer className="skills-container">
-        <div className="profile-completed-edit-icon">
+      <CardContainer className={styling.skillsContainer}>
+        <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
           <IconEdit color="black" style={{ cursor: "pointer" }} />
         </div>
-        <div className="skills-container-labels">
+        <div className={styling.skillsContainerLabels}>
           {skillsLabels.map((label, index) => (
             <Labels
               key={index}
               icon={<IconAffiliate />}
               labelName={label}
               onCloseIcon={() => handleSkillsDelete(label)}
-              disableCloseIcon={false}
+              disableCloseIcon={true}
+              backgroundColor="var(--label-color)"
             />
           ))}
         </div>
       </CardContainer>
 
       {/* Values */}
-      <CardContainer className="values-container">
-        <div className="profile-completed-edit-icon">
+      <CardContainer className={styling.valuesContainer}>
+        <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
           <IconEdit color="black" style={{ cursor: "pointer" }} />
         </div>
-        <div className="values-container-labels">
+        <div className={styling.valuesContainerLabels}>
           {valuesLabels.map((label, index) => (
             <Labels
               key={index}
               icon={<IconAffiliate />}
               labelName={label}
               onCloseIcon={() => handleValuesDelete(label)}
-              disableCloseIcon={false}
+              disableCloseIcon={true}
+              backgroundColor="var(--label-color)"
             />
           ))}
         </div>
       </CardContainer>
 
       {/* Contact info, languages, experience */}
-      <div className="associations-type-of-jobs">
-        <CardContainer className="association-container">
-          <div className="profile-completed-edit-icon">
+      <div className={styling.associationsTypeOfJobs}>
+        <CardContainer className={styling.associationContainer}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          
         </CardContainer>
-        <CardContainer className="type-of-jobs-container">
-          <div className="profile-completed-edit-icon">
+        <CardContainer className={styling.typeOfJobsContainer}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          
         </CardContainer>
-        <CardContainer className="type-of-jobs-container">
-          <div className="profile-completed-edit-icon">
+        <CardContainer className={styling.typeOfJobsContainer}>
+          <div className={styling.profileCompletedEditIcon}>
             <h3>Experience</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          
         </CardContainer>
       </div>
     </div>
