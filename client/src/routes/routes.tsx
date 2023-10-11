@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes as Routing, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Routes as Routing, Route, Navigate } from "react-router-dom";
 
 import Login from "../components/pages/login/Login";
 import Register from "../components/pages/register/Register";
@@ -16,18 +16,25 @@ import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 export interface IApplicationProps {}
 
 const Routes: React.FC<IApplicationProps> = (props) => {
+  const [userType, setUserType] = useState<string | null>("");
+  console.log("User type:", userType);
+
   return (
     <BrowserRouter>
       <Routing>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setUser={setUserType} />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/"
-          element={<Authenticated content={<DashboardCandidate />} />}
-        />
-        <Route
-          path="/dashboard-company"
-          element={<Authenticated content={<DashboardCompany />} />}
+          element={
+            userType === "candidate" ? (
+              <Authenticated content={<DashboardCandidate />} />
+            ) : userType === "company" ? (
+              <Authenticated content={<DashboardCompany />} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
         />
         <Route path="/jobs" element={<Authenticated content={<Jobs />} />} />
         <Route

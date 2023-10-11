@@ -42,16 +42,14 @@ def login_route(User):
             user = User.query.filter_by(email=email).first()
 
             if user:
-                # Find the user
-                user_type = user.user_type
                 # Verify the password using passlib
                 if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                     # If the password is valid, mark the user as authenticated
                     is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
                     if is_logged:
-                        return jsonify({"message": "Login successful", "user": {user}}), 200
+                        return jsonify({"message": "Login successful", "user": user.to_dict()}), 200
                     else:
-                        return jsonify({"message": "Login unsuccessful", "user_type": user_type}), 417
+                        return jsonify({"message": "Login unsuccessful", "user": user}), 417
                 else:
                     return jsonify({"message": "Invalid email or password"}), 401
             else:

@@ -28,4 +28,10 @@ def init_values_model(db):
             """
             self.name = name
 
+        def to_dict(self):
+            """
+            Convert the value object to a dictionary.
+            """
+            return {"id": self.id, "name": self.name}
+
     return Values
