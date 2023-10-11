@@ -8,13 +8,12 @@ expiration_time = int(time.time()) + 60  # 1 minute in seconds (for testing)
 
 
 # Function to generate a temporary link with expiration
-def generate_temporary_link(expiration_time):
+def generate_temporary_link(expiration_time, user_type):
     # Generate a random token
     token = secrets.token_urlsafe(32)
 
     # Combine the token and expiration time in a structured format
-    # TODO: add user_type to the link
-    temporary_link = f"{localhost}/{route}?token={token}&expires={expiration_time}"
+    temporary_link = f"{localhost}/{route}?token={token}&expires={expiration_time}&user_type={user_type}"
 
     return temporary_link
 
