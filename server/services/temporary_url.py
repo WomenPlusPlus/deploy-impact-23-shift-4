@@ -3,12 +3,13 @@ import time
 import hashlib
 import hmac
 import base64
+import os
 
 localhost = "http://localhost:3000"
 route = "register"
 # expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
 expiration_time = int(time.time()) + 80  # 1 minute in seconds (for testing)
-secret_key = "your_secret_key_here"
+secret_key = os.environ.get("SECRET_KEY")
 
 
 # Function to generate a temporary link with expiration
@@ -57,7 +58,8 @@ user_type = "candidate"
 
 
 # Function to generate a temporary signed URL
-def generate_temporary_link_signed(secret_key, route, user_type, expiration_time):
+def generate_temporary_link_signed(user_type, expiration_time):
+    secret_key = os.environ.get("SECRET_KEY")
     # Create the token
     token_data = (
         f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}"
@@ -119,9 +121,9 @@ def verify_temporary_link(temp_link, secret_key):
     return computed_signature == signature
 
 
-# Example usage:
-temporary_link = generate_temporary_link_signed(secret_key, route, user_type, expiration_time)
-if verify_temporary_link(temporary_link, secret_key):
-    print("Temporary link is valid.")
-else:
-    print("Temporary link is not valid.")
+# # Example usage:
+# temporary_link = generate_temporary_link_signed(secret_key, route, user_type, expiration_time)
+# if verify_temporary_link(temporary_link, secret_key):
+#     print("Temporary link is valid.")
+# else:
+#     print("Temporary link is not valid.")

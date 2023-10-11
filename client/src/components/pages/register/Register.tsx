@@ -9,10 +9,11 @@ interface RegisterProps {
   token: string;
   expires: string;
   user_type: string;
+  signature: string;
 }
 
-const Register: React.FC<RegisterProps> = ({ token, expires, user_type }) => {
-  console.log("Token:", token, "Expires:", expires, "User type:", user_type);
+const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signature }) => {
+  console.log("Token:", token, "Expires:", expires, "User type:", user_type, "Signature:", signature);
   // state
   const [formData, setFormData] = useState({
     first_name: "",

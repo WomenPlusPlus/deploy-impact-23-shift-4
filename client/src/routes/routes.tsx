@@ -23,17 +23,25 @@ export interface IApplicationProps {}
 
 const RegisterRoute: React.FC = () => {
   const location = useLocation();
-
+  // TODO: api call to "verify_invite"
   if (
     window.location.href ===
-    "http://localhost:3000/register?token=0cAt3vFa_zYUoW1Ah8RkBXoJCGIy8frDjNyr3lErQAo&expires=1697144982&user_type=candidate"
+    "http://localhost:3000/register?token=cmVnaXN0ZXI_dG9rZW49c2VlZWNyZXRLRVkmZXhwaXJlcz0xNjk3MTQ4MzM3JnVzZXJfdHlwZT1jYW5kaWRhdGU=&expires=1697148337&user_type=candidate&signature=bNPSNl6394nhbbHTUQ82maDVgUYXS2RRjpEi-m9eYy0="
   ) {
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token") || "";
     const expires = searchParams.get("expires") || "";
     const user_type = searchParams.get("user_type") || "";
+    const signature = searchParams.get("signature") || "";
 
-    return <Register token={token} expires={expires} user_type={user_type} />;
+    return (
+      <Register
+        token={token}
+        expires={expires}
+        user_type={user_type}
+        signature={signature}
+      />
+    );
   } else {
     return <Navigate to="/not-found" />;
   }

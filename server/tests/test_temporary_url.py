@@ -10,7 +10,7 @@ from services.temporary_url import (
     expiration_time,
     generate_temporary_link_signed,
     verify_temporary_link,
-    secret_key
+    secret_key,
 )
 
 
@@ -33,9 +33,7 @@ def test_signed_url():
     # Test the signed token validity
     # secret_key = os.environ.get("SECRET_KEY")
     user_type = "candidate"
-    temporary_link = generate_temporary_link_signed(
-        secret_key, route, user_type, expiration_time
-    )
+    temporary_link = generate_temporary_link_signed(user_type, expiration_time)
 
     if verify_temporary_link(temporary_link, secret_key):
         print("Temporary link is valid.")
