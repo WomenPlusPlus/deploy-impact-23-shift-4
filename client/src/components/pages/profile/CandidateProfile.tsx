@@ -7,11 +7,15 @@ import { CardContainer } from "../../UI/container/CardContainer";
 import { Labels } from "../../UI/labels/Label";
 import { EditModal } from "../../UI/modal/EditModal";
 import {
+  ContentBlock,
+  HorizontalLine,
+} from "../../UI/container/SectionContainer";
+import {
   IconEdit,
   IconMapPin,
   IconBrandLinkedin,
   IconWorldWww,
-  IconTags
+  IconTags,
 } from "@tabler/icons-react";
 
 const CandidateProfile = () => {
@@ -138,20 +142,20 @@ const CandidateProfile = () => {
           </div>
           <p>Initially employees will only see skills and values</p>
           <div className={styling.containerVisibleInfo}>
-            <div className={styling.sectionVisibleInfo}>
-              <h2>Section 1</h2>
-              <p>This is the text inside Section 1.</p>
-            </div>
-            <hr className={styling.horizontalLine} />
-            <div className={styling.sectionVisibleInfo}>
-              <h2>Section 2</h2>
-              <p>This is the text inside Section 2.</p>
-            </div>
-            <hr className={styling.horizontalLine} />
-            <div className={styling.sectionVisibleInfo}>
-              <h2>Section 3</h2>
-              <p>This is the text inside Section 3.</p>
-            </div>
+            <ContentBlock
+              title="Section 1"
+              text="This is the text inside Section 1."
+            />
+            <HorizontalLine />
+            <ContentBlock
+              title="Section 2"
+              text="This is the text inside Section 2."
+            />
+            <HorizontalLine />
+            <ContentBlock
+              title="Section 3"
+              text="This is the text inside Section 3."
+            />
           </div>
         </CardContainer>
       </div>
@@ -271,15 +275,15 @@ const CandidateProfile = () => {
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
           <div className={styling.containerVisibleInfo}>
-            <div className={styling.sectionVisibleInfo}>
-              <h2>Section 1</h2>
-              <p>This is the text inside Section 1.</p>
-            </div>
-            <hr className={styling.horizontalLine} />
-            <div className={styling.sectionVisibleInfo}>
-              <h2>Section 2</h2>
-              <p>This is the text inside Section 2.</p>
-            </div>
+            <ContentBlock
+              title="Section 1"
+              text="This is the text inside Section 1."
+            />
+            <HorizontalLine />
+            <ContentBlock
+              title="Section 2"
+              text="This is the text inside Section 2."
+            />
           </div>
         </CardContainer>
       </div>
@@ -291,20 +295,20 @@ const CandidateProfile = () => {
           <IconEdit color="black" style={{ cursor: "pointer" }} />
         </div>
         <div className={styling.containerVisibleInfo}>
-          <div className={styling.sectionVisibleInfo}>
-            <h2>Section 1</h2>
-            <p>This is the text inside Section 1.</p>
-          </div>
-          <hr className={styling.horizontalLine} />
-          <div className={styling.sectionVisibleInfo}>
-            <h2>Section 2</h2>
-            <p>This is the text inside Section 2.</p>
-          </div>
-          <hr className={styling.horizontalLine} />
-          <div className={styling.sectionVisibleInfo}>
-            <h2>Section 3</h2>
-            <p>This is the text inside Section 3.</p>
-          </div>
+          <ContentBlock
+            title="Section 1"
+            text="This is the text inside Section 1."
+          />
+          <HorizontalLine />
+          <ContentBlock
+            title="Section 2"
+            text="This is the text inside Section 2."
+          />
+          <HorizontalLine />
+          <ContentBlock
+            title="Section 3"
+            text="This is the text inside Section 3."
+          />
         </div>
       </CardContainer>
     </div>
