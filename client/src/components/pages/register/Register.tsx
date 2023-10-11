@@ -5,7 +5,14 @@ import "./Register.css"; // You can create a separate CSS file for styling
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
 
-const Register: React.FC = () => {
+interface RegisterProps {
+  token: string;
+  expires: string;
+  user_type: string;
+}
+
+const Register: React.FC<RegisterProps> = ({ token, expires, user_type }) => {
+  console.log("Token:", token, "Expires:", expires, "User type:", user_type);
   // state
   const [formData, setFormData] = useState({
     first_name: "",
