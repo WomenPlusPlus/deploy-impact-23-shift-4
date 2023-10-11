@@ -13,6 +13,7 @@ def generate_temporary_link(expiration_time):
     token = secrets.token_urlsafe(32)
 
     # Combine the token and expiration time in a structured format
+    # TODO: add user_type to the link
     temporary_link = f"{localhost}/{route}?token={token}&expires={expiration_time}"
 
     return temporary_link
