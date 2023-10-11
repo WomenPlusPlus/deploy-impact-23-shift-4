@@ -169,10 +169,7 @@
   background-color: #f9f9f9;
 }
 
-.elementInOneRow {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+.labelClass {
+  background-color: var(--label-color);
+  border-radius: var(--tag-radius);
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styling from "./CandidateProfile.module.css";
 import Avatar from "../../UI/avatar/Avatar";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
@@ -17,56 +17,56 @@ import {
   IconWorldWww,
   IconTags,
 } from "@tabler/icons-react";
+import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 
 const CandidateProfile = () => {
-  const name = "John Doe";
-  const status = "Looking for a job";
-  const city = "Zurich";
-  const country = "CH";
-  const progress = 80;
-  const list = [
-    "PersonalDetails",
-    "Skills",
-    "Values",
-    "Documents",
-    "Privacy",
-    "TypeOfJobs",
-    "Languages",
-  ];
+  const user = {
+    name: "John Doe",
+    status: "Looking for a job",
+    city: "Zurich",
+    country: "CH",
+    progress: 80,
+    list: [
+      "PersonalDetails",
+      "Skills",
+      "Values",
+      "Documents",
+      "Privacy",
+      "TypeOfJobs",
+      "Languages",
+    ],
+    associations: ["Woman++", "proFemmes", "Coders", "Kpi"],
+    typeOfJobs: ["Full-time", "Part-time", "Internship", "Freelance"],
+    skills: ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"],
+    values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
+    languages: [
+      { name: "English", levelName: "Fluent", score: 70 },
+      { name: "Italian", levelName: "Native", score: 100 },
+    ],
+  };
 
-  const associations = ["Woman++", "proFemmes", "Coders", "Kpi"];
-  const typeOfJobs = ["Full-time", "Part-time", "Internship", "Freelance"];
-  const skills = ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"];
-  const values = ["Teamwork", "Diversity", "Inclusion", "Equality"];
-  const progressLanguage = 30;
+  const allLabelsSkills = ["Vue", "Express.js", "Bash", "R", "C++", "Java"];
+
+  const {
+    name,
+    status,
+    city,
+    country,
+    progress,
+    list,
+    associations,
+    typeOfJobs,
+    skills,
+    values,
+    languages,
+  } = user;
 
   // State
   const [associationLabels] = useState(associations);
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
   const [skillsLabels, setSkillsLabels] = useState(skills);
   const [valuesLabels, setValuesLabels] = useState(values);
-
-  // Functions
-  const [labelsToDelete, setLabelsToDelete] = useState<string[]>([]);
-
-  const handleTypeOfJobsLabelDelete = (labelToRemove: string) => {
-    // Add the label to the list of labels to be deleted
-    setLabelsToDelete((prevLabels) => [...prevLabels, labelToRemove]);
-  };
-
-  const handleSkillsDelete = (labelToRemove: string) => {
-    const updatedSkills = skillsLabels.filter(
-      (label) => label !== labelToRemove
-    );
-    setSkillsLabels(updatedSkills);
-  };
-
-  const handleValuesDelete = (labelToRemove: string) => {
-    const updatedValues = valuesLabels.filter(
-      (label) => label !== labelToRemove
-    );
-    setValuesLabels(updatedValues);
-  };
+  const [allSkillsLabels] = useState(allLabelsSkills);
 
   return (
     <div className={styling.main}>
@@ -173,7 +173,7 @@ const CandidateProfile = () => {
                 icon={<IconTags />}
                 labelName={label}
                 disableCloseIcon={true}
-                backgroundColor="var(--label-color)"
+                customClass={styling.labelClass}
               />
             ))}
           </div>
@@ -185,7 +185,7 @@ const CandidateProfile = () => {
               labelsList={typeOfJobsLabels}
               setLabelsList={setTypeOfJobsLabels}
               icon={<IconTags />}
-              titleName="jobs"
+              titleName="Edit your jobs"
             />
           </div>
 
@@ -196,7 +196,7 @@ const CandidateProfile = () => {
                 icon={<IconTags />}
                 labelName={label}
                 disableCloseIcon={true}
-                backgroundColor="var(--label-color)"
+                customClass={styling.labelClass}
               />
             ))}
           </div>
@@ -207,7 +207,13 @@ const CandidateProfile = () => {
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
+          <EditModal
+            labelsList={skillsLabels}
+            setLabelsList={setSkillsLabels}
+            icon={<IconTags />}
+            titleName="Choose your skills"
+            allLabelsList={allSkillsLabels}
+          />
         </div>
         <div className={styling.skillsContainerLabels}>
           {skillsLabels.map((label, index) => (
@@ -215,9 +221,8 @@ const CandidateProfile = () => {
               key={index}
               icon={<IconTags />}
               labelName={label}
-              onCloseIcon={() => handleSkillsDelete(label)}
               disableCloseIcon={true}
-              backgroundColor="var(--label-color)"
+              customClass={styling.labelClass}
             />
           ))}
         </div>
@@ -227,7 +232,12 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
+          <EditModal
+            labelsList={valuesLabels}
+            setLabelsList={setValuesLabels}
+            icon={<IconTags />}
+            titleName="Choose your values"
+          />
         </div>
         <div className={styling.valuesContainerLabels}>
           {valuesLabels.map((label, index) => (
@@ -235,15 +245,15 @@ const CandidateProfile = () => {
               key={index}
               icon={<IconTags />}
               labelName={label}
-              onCloseIcon={() => handleValuesDelete(label)}
               disableCloseIcon={true}
-              backgroundColor="var(--label-color)"
+              customClass={styling.labelClass}
             />
           ))}
         </div>
       </CardContainer>
 
       {/* Contact info, languages, experience */}
+      {/* Contact info */}
       <div className={styling.associationsTypeOfJobs}>
         <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
@@ -256,19 +266,17 @@ const CandidateProfile = () => {
             <p>Address</p>
           </div>
         </CardContainer>
+
+        {/* Laguages */}
         <CardContainer className={styling.typeOfJobsContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          <div>
-            <div className={styling.elementInOneRow}>
-              <p>Language</p>
-              <p>Level</p>
-            </div>
-            <ProgressBar progress={progressLanguage} height="1.5rem" />
-          </div>
+          <ProgressBarComponent languages={languages} />
         </CardContainer>
+
+        {/* Experience */}
         <CardContainer className={styling.typeOfJobsContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Experience</h3>

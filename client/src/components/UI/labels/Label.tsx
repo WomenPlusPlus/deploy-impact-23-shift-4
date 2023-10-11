@@ -7,8 +7,8 @@ interface LabelProps {
   labelName: string;
   onCloseIcon?: () => void;
   disableCloseIcon?: boolean;
-  backgroundColor?: string;
-  borderRadius?: string;
+  customClass?: string;
+  onClickHandle?: () => void;
 }
 
 const Labels: React.FC<LabelProps> = ({
@@ -16,13 +16,13 @@ const Labels: React.FC<LabelProps> = ({
   labelName,
   onCloseIcon,
   disableCloseIcon,
-  backgroundColor = "var(--white)",
-  borderRadius = "var(--tag-radius)",
+  customClass = "",
+  onClickHandle,
 }) => {
   return (
     <div
-      className={styling.labelContainer}
-      style={{ backgroundColor: backgroundColor, borderRadius: borderRadius }}
+      className={`${styling.labelContainer} ${customClass}`}
+      onClick={onClickHandle}
     >
       <div className={styling.labelIcon}>
         {icon} {labelName}
