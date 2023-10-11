@@ -1,4 +1,4 @@
-import "./ProgressBar.css";
+import styling from "./ProgressBar.module.css";
 
 interface ProgressBarProps {
   progress: number;
@@ -11,9 +11,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
   return (
     <div>
-      <div className="progress-bar" style={{ height: height }}>
+      <div className={styling.progressBar} style={{ height: height }}>
         <div
-          className="progress-completed"
+          className={styling.progressCompleted}
           style={{ width: `${progress}%` }}
         ></div>
       </div>

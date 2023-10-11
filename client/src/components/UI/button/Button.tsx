@@ -1,4 +1,4 @@
-import "./Button.css";
+import styling from "./Button.module.css";
 // ButtonProps
 export interface ButtonProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       type={type}
-      className={className + " button"}
+      className={className + ` ${styling.button}`}
       style={{ height: "3.5rem" }}
     >
       {children}

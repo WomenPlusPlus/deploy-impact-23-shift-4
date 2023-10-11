@@ -1,4 +1,4 @@
-.progress-bar {
+.progressBar {
   width: 100%;
   background-color: var(--white);
   border-radius: var(--border-radius);
@@ -7,7 +7,7 @@
   text-align: center;
 }
 
-.progress-completed {
+.progressCompleted {
   height: 100%;
   background-color: var(--color-button); /* Completion color */
   border-radius: var(--border-radius);

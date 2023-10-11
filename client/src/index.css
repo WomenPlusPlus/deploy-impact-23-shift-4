@@ -6,6 +6,7 @@
   --border-thickness: 0.1rem;
   --section-padding: 2rem;
   --sidebar-width: 24rem;
+  --tag-radius: 1rem;
   /* Color Palette */
   --white: #ffff;
   --background-color: #f0f5ff;
@@ -15,6 +16,7 @@
   --gray-bright: #d9d9d9;
   --gray-medium: #595959;
   --gray-dark: #141414;
+  --label-color: #e4e4e4;
 }
 
 html {
