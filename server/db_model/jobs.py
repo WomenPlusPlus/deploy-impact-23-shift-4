@@ -68,5 +68,24 @@ def init_jobs_model(db):
             self.matching_candidates = matching_candidates
             self.salary = salary
             self.location = location
+        
+        def to_dict(self):
+            """
+            Convert the job object to a dictionary.
+            """
+            return {
+                "id": self.id,
+                "associations": self.associations,
+                "company_id": self.company_id,
+                "title": self.title,
+                "description": self.description,
+                "values": self.values,
+                "skills": self.skills,
+                "hiring_process_duration": self.hiring_process_duration,
+                "posting_date": self.posting_date.isoformat() if self.posting_date else None,
+                "matching_candidates": self.matching_candidates,
+                "salary": float(self.salary) if self.salary is not None else None,
+                "location": self.location,
+            }
 
     return Jobs

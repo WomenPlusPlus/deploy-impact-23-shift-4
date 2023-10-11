@@ -7,7 +7,11 @@ import axios from "axios"; // Import Axios for making HTTP requests
 
 import "./Login.css";
 
-const Login: React.FC = () => {
+interface ILoginProps {
+  setUser: (userType: string) => void;
+}
+
+const Login: React.FC<ILoginProps> = ({ setUser }) => {
   // state
   const [formData, setFormData] = useState({
     email: "",
@@ -30,9 +34,12 @@ const Login: React.FC = () => {
       .post("/api/login", formData, { withCredentials: true })
       .then((response) => {
         // Handle the backend response here
-        console.log("Backend Response:", response.data);
+        const { user } = response.data;
         console.log("Response", response.status);
-        navigate("/dashboard");
+        // Set user_type in local storage
+        setUser(user.user_type);
+        // Navigate to the dashboard
+        navigate("/");
       })
       .catch((error) => {
         // Handle any errors here

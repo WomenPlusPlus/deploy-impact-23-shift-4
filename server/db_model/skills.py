@@ -30,5 +30,15 @@ def init_skills_model(db):
             """
             self.name = name
             self.category = category
+    
+        def to_dict(self):
+            """
+            Convert the skill object to a dictionary.
+            """
+            return {
+                "id": self.id,
+                "name": self.name,
+                "category": self.category,
+            }
 
     return Skills

@@ -34,5 +34,16 @@ def init_user_model(db):
             self.password = password
             self.email = email
             self.user_type = user_type
+        
+        def to_dict(self):
+            """
+            Convert the user object to a dictionary.
+            """
+            return {
+                "id": self.id,
+                "password": self.password,
+                "email": self.email,
+                "user_type": self.user_type,
+            }
 
     return User

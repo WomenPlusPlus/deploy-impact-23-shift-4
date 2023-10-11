@@ -18,7 +18,7 @@ def init_candidate_model(db):
         )
         user_id = db.Column(
             db.String(80),
-            db.ForeignKey("user_id"),
+            db.ForeignKey("user.id"),
             nullable=False,
         )
         password = db.Column(
@@ -101,5 +101,33 @@ def init_candidate_model(db):
             self.matching_companies = matching_companies
             self.skills = skills
             self.languages = languages
+
+        def to_dict(self):
+            """
+            Convert the candidate object to a dictionary.
+            """
+            return {
+                "id": self.id,
+                "user_id": self.user_id,
+                "email": self.email,
+                "associations": self.associations,
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+                "preferred_name": self.preferred_name,
+                "cv_reference": self.cv_reference,
+                "values": self.values,
+                "searched_job": self.searched_job,
+                "address": self.address,
+                "phone_number": self.phone_number,
+                "birth_date": self.birth_date.isoformat() if self.birth_date else None,
+                "work_permit": self.work_permit,
+                "notice_period": self.notice_period,
+                "job_status": self.job_status,
+                "company_type": self.company_type,
+                "matching_jobs": self.matching_jobs,
+                "matching_companies": self.matching_companies,
+                "skills": self.skills,
+                "languages": self.languages,
+            }
 
     return Candidate

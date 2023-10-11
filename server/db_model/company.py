@@ -18,7 +18,7 @@ def init_company_model(db):
         )
         user_id = db.Column(
             db.String(80),
-            db.ForeignKey("user_id"),
+            db.ForeignKey("user.id"),
             nullable=False,
         )
         password = db.Column(
@@ -72,5 +72,25 @@ def init_company_model(db):
             self.contact_details = contact_details
             self.kununu_url = kununu_url
             self.positions_job_list = positions_job_list
+
+        def to_dict(self):
+            """
+            Convert the company object to a dictionary.
+            """
+            return {
+                "id": self.id,
+                "user_id": self.user_id,
+                "password": self.password,
+                "email": self.email,
+                "associations": self.associations,
+                "company_name": self.company_name,
+                "address": self.address,
+                "linkedin_url": self.linkedin_url,
+                "values": self.values,
+                "job_offerings": self.job_offerings,
+                "contact_details": self.contact_details,
+                "kununu_url": self.kununu_url,
+                "positions_job_list": self.positions_job_list,
+            }
 
     return Company
