@@ -29,11 +29,16 @@ def extract_expiration_timestamp(link):
     try:
         query_params = link.split("?")[1].split("&")
         for param in query_params:
-            key, value = param.split("=")
-            if key == "expires":
-                return int(value)
+            key_value = param.split("=")
+            if len(key_value) == 2:  # Check if there are two elements (key and value)
+                key, value = key_value
+                if key == "expires":
+                    return int(value)
+        # If "expires" parameter is not found, return None
+        return None
     except Exception as e:
-        # Handle parsing errors here
+        # Handle parsing errors here (e.g., log the error)
+        print("Error:", e)
         return None
 
 
@@ -43,6 +48,8 @@ def is_token_expired(temporary_link):
 
     # Get the current timestamp
     current_time = int(time.time())
+    print(f"current_time: {current_time}")
+    print(f"expiration_timestamp: {expiration_timestamp}")
 
     # Check if the token is expired
     if expiration_timestamp and current_time <= expiration_timestamp:
@@ -51,10 +58,6 @@ def is_token_expired(temporary_link):
     else:
         print("Link has expired.")
         return False
-
-
-expiration_time = int(time.time()) + 3600  # 1 hour from now
-user_type = "candidate"
 
 
 # Function to generate a temporary signed URL
@@ -77,7 +80,7 @@ def generate_temporary_link_signed(user_type, expiration_time):
 
 
 # Function to verify a temporary signed URL
-def verify_temporary_link(temp_link, secret_key):
+def verify_temporary_link_signed(temp_link, secret_key, user_type):
     parts = temp_link.split("?")
     if len(parts) != 2:
         return False
@@ -100,12 +103,12 @@ def verify_temporary_link(temp_link, secret_key):
         elif key == "expires":
             expiration_time = int(value)
 
-    print(
-        f"token: {token}",
-        f"signature: {signature}",
-        f"expiration_time: {expiration_time}",
-        sep="\n",
-    )
+    # print(
+    #     f"token: {token}",
+    #     f"signature: {signature}",
+    #     f"expiration_time: {expiration_time}",
+    #     sep="\n",
+    # )
     if not token or not signature or expiration_time is None:
         return False
 
