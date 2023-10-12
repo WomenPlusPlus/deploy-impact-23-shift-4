@@ -13,9 +13,13 @@ def verify_invite():
         data = request.get_json()
         temporary_link = data.get("link")
         user_type = data.get("user_type")
+        association = data.get("association")
 
-        print(is_token_expired(temporary_link))
-        if verify_temporary_link_signed(temporary_link, secret_key, user_type) and is_token_expired(temporary_link):
-            return jsonify({"success": 200, "message": "Temporary link is valid."})
+        is_not_expired = is_token_expired(temporary_link)
+        print("IS NOT EXPIRED", is_not_expired)
+        is_valid = verify_temporary_link_signed(temporary_link, secret_key, user_type, association)
+        print("IS_VALID", is_valid)
+        if is_valid and is_not_expired:
+            return jsonify({"response": 200, "message": "Temporary link is valid."})
         else:
-            return jsonify({"error": 400, "message": "Temporary link is not valid."})
+            return jsonify({"response": 403, "message": "Temporary link is not valid."})

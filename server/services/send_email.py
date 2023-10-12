@@ -3,7 +3,7 @@ from sendgrid.helpers.mail import Mail, From, To, Subject, PlainTextContent, Htm
 import sys, os
 
 sys.path.append(os.path.abspath(__file__).split("services")[0])
-from services.temporary_url import generate_temporary_link, generate_temporary_link_signed
+from services.temporary_url import generate_temporary_link_signed
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,15 +15,15 @@ password_from = os.environ.get("SMTPLIB_PASSWORD")
 api_key = os.environ.get("SENDGRID_API_KEY")
 
 
-def func_send_email(recipient_email, user_type):
+def func_send_email(recipient_email, user_type, association):
     # Initialize the SendGrid client
     sg = sendgrid.SendGridAPIClient(api_key=api_key)
     
-    # expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
-    # 2 minutes in seconds
-    expiration_time = int(time.time()) + 2 * 60
+    expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
     
-    temporary_link = generate_temporary_link_signed(user_type, expiration_time)
+    # expiration_time = int(time.time()) + 2 * 60 # 2 minutes in seconds
+    
+    temporary_link = generate_temporary_link_signed(user_type, expiration_time, association)
 
     subject = "Invitation to Join Shift Software - Empowering Refugees in Switzerland"
     body = f"""

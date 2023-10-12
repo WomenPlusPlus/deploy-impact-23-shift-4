@@ -1,26 +1,44 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
-import "./Register.css"; // You can create a separate CSS file for styling
+import styling from "./RegisterCandidate.module.css"; // You can create a separate CSS file for styling
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
+import { GoogleButton } from "../../UI/oauth/GoogleButton";
 
-interface RegisterProps {
+interface RegisterCandidateProps {
   token: string;
   expires: string;
   user_type: string;
   signature: string;
+  associations: string[];
 }
 
-const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signature }) => {
-  console.log("Token:", token, "Expires:", expires, "User type:", user_type, "Signature:", signature);
+const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
+  token,
+  expires,
+  user_type,
+  signature,
+  associations,
+}) => {
+  console.log(
+    "Token:",
+    token,
+    "Expires:",
+    expires,
+    "User type:",
+    user_type,
+    "Signature:",
+    signature
+  );
   // state
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     password: "",
     email: "",
-    user_type: "candidate",
+    user_type: user_type,
+    associations: associations,
   });
 
   const handleInputChange = (e: any) => {
@@ -36,7 +54,7 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
   const onFinish = (values: any) => {
     // Send registration data to the backend (you'll need to replace the URL and method)
     axios
-      .post("/api/register", formData) // Replace with your registration endpoint
+      .post("/api/register", formData, { withCredentials: true }) // Replace with your registration endpoint
       .then((response) => {
         // Handle the backend response here (e.g., show a success message)
         console.log("Registration Successful!");
@@ -55,12 +73,12 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
   };
 
   return (
-    <div className="register-container">
-      <div className="register-box">
-        <h1>Register for Shift4</h1>
+    <div className={styling.registerContainer}>
+      <div className={styling.registerBox}>
+        <h1>Candidate registration for Shift4</h1>
         <Form
           name="register_form"
-          className="register-form"
+          className={styling.registerForm}
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >
@@ -72,6 +90,7 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
+              className={styling.antInput}
               type="text"
               name="first_name"
               value={formData.first_name}
@@ -88,6 +107,7 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
+              className={styling.antInput}
               type="text"
               name="last_name"
               value={formData.last_name}
@@ -102,6 +122,7 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
           >
             <Input
               prefix={<MailOutlined className="site-form-item-icon" />}
+              className={styling.antInput}
               type="email"
               name="email"
               value={formData.email}
@@ -116,6 +137,7 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
           >
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
+              className={styling.antInput}
               type="password"
               name="password"
               value={formData.password}
@@ -134,15 +156,22 @@ const Register: React.FC<RegisterProps> = ({ token, expires, user_type, signatur
             <Button
               type="primary"
               htmlType="submit"
-              className="register-form-button"
+              className={styling.registerFormButton}
             >
               Register
             </Button>
           </Form.Item>
+
+          {/* OAuth */}
+          <div className={styling.oauth}>
+            <hr className={styling.horizontalLine} />
+            <p>or register with</p>
+            <GoogleButton />
+          </div>
         </Form>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default RegisterCandidate;

@@ -1,32 +1,32 @@
-.register-form {
-  max-width: 600px;
-  height: 500px;
-  width: 400px;
+.registerForm {
+  max-width: 60rem;
+  height: 100%;
+  width: 40rem;
 }
 
-.register-form-forgot {
+.registerFormForgot {
   float: right;
 }
 
-.ant-col-rtl .register-form-forgot {
+.ant-col-rtl .registerFormForgot {
   float: left;
 }
 
-.register-form-button {
+.registerFormButton {
   width: 100%;
 }
 
 /* Increase the height of input fields */
-.register-form .ant-input {
-  height: 30px; /* Adjust the height as needed */
-}
-
-/* Increase the height of the button */
-.register-form .register-form-button {
+.antInput {
   height: 40px; /* Adjust the height as needed */
 }
 
-.register-container {
+/* Increase the height of the button */
+.registerForm .registerFormButton {
+  height: 40px; /* Adjust the height as needed */
+}
+
+.registerContainer {
   display: flex;
   justify-content: center;
   /* Horizontally center */
@@ -36,9 +36,23 @@
   /* Make the container take up the full viewport height */
 }
 
-.register-box {
+.registerBox {
   padding: 30px; /* Add padding around the register form */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a box shadow */
   background-color: #fff; /* Optional: Set a background color */
   border-radius: 8px; /* Optional: Add border radius for rounded corners */
+}
+
+.oauth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontalLine {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 80%;
+  margin-bottom: 1rem;
 }

@@ -60,13 +60,18 @@ def is_token_expired(temporary_link):
         return False
 
 
+def get_token_data(user_type, association):
+    token_data = (
+        f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}&association={association}"
+    )
+    return token_data
+
 # Function to generate a temporary signed URL
-def generate_temporary_link_signed(user_type, expiration_time):
+def generate_temporary_link_signed(user_type, expiration_time, association):
     secret_key = os.environ.get("SECRET_KEY")
     # Create the token
-    token_data = (
-        f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}"
-    )
+    token_data = get_token_data(user_type, association)
+
     token = base64.urlsafe_b64encode(token_data.encode()).decode()
 
     # Create the signature
@@ -74,13 +79,13 @@ def generate_temporary_link_signed(user_type, expiration_time):
     signature_base64 = base64.urlsafe_b64encode(signature).decode()
 
     # Create the temporary link
-    temporary_link = f"{localhost}/{route}?token={token}&expires={expiration_time}&user_type={user_type}&signature={signature_base64}"
+    temporary_link = f"{localhost}/{token_data}&signature={signature_base64}"
 
     return temporary_link
 
 
 # Function to verify a temporary signed URL
-def verify_temporary_link_signed(temp_link, secret_key, user_type):
+def verify_temporary_link_signed(temp_link, secret_key, user_type, association):
     parts = temp_link.split("?")
     if len(parts) != 2:
         return False
@@ -95,26 +100,30 @@ def verify_temporary_link_signed(temp_link, secret_key, user_type):
     for param in query_params:
         key, *value = param.split("=")
         value = "=".join(value)
-
         if key == "token":
             token = value
         elif key == "signature":
             signature = value
         elif key == "expires":
             expiration_time = int(value)
+        elif key == "user_type":
+            user_type = value
+        elif key == "association":
+            association = value
 
     # print(
     #     f"token: {token}",
     #     f"signature: {signature}",
     #     f"expiration_time: {expiration_time}",
+    #     f"user_type: {user_type}",
+    #     f"association: {association}",
     #     sep="\n",
     # )
     if not token or not signature or expiration_time is None:
         return False
 
-    token_data = (
-        f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}"
-    )
+    token_data = get_token_data(user_type, association)
+
     token = base64.urlsafe_b64encode(token_data.encode()).decode()
 
     computed_signature = base64.urlsafe_b64encode(
@@ -122,11 +131,3 @@ def verify_temporary_link_signed(temp_link, secret_key, user_type):
     ).decode()
 
     return computed_signature == signature
-
-
-# # Example usage:
-# temporary_link = generate_temporary_link_signed(secret_key, route, user_type, expiration_time)
-# if verify_temporary_link(temporary_link, secret_key):
-#     print("Temporary link is valid.")
-# else:
-#     print("Temporary link is not valid.")
