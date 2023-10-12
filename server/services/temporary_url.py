@@ -8,7 +8,6 @@ import os
 localhost = "http://localhost:3000"
 route = "register"
 # expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
-expiration_time = int(time.time()) + 80  # 1 minute in seconds (for testing)
 secret_key = os.environ.get("SECRET_KEY")
 
 
@@ -60,7 +59,7 @@ def is_token_expired(temporary_link):
         return False
 
 
-def get_token_data(user_type, association):
+def get_token_data(user_type, association, expiration_time):
     token_data = (
         f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}&association={association}"
     )
@@ -70,7 +69,7 @@ def get_token_data(user_type, association):
 def generate_temporary_link_signed(user_type, expiration_time, association):
     secret_key = os.environ.get("SECRET_KEY")
     # Create the token
-    token_data = get_token_data(user_type, association)
+    token_data = get_token_data(user_type, association, expiration_time)
 
     token = base64.urlsafe_b64encode(token_data.encode()).decode()
 
@@ -122,7 +121,7 @@ def verify_temporary_link_signed(temp_link, secret_key, user_type, association):
     if not token or not signature or expiration_time is None:
         return False
 
-    token_data = get_token_data(user_type, association)
+    token_data = get_token_data(user_type, association, expiration_time)
 
     token = base64.urlsafe_b64encode(token_data.encode()).decode()
 
