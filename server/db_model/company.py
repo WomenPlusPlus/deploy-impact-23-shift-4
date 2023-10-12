@@ -87,7 +87,6 @@ def init_company_model(db):
                 "email": self.email,
                 "associations": self.associations,
                 "company_name": self.company_name,
-                "logo": self.logo,
                 "address": self.address,
                 "linkedin_url": self.linkedin_url,
                 "values": self.values,

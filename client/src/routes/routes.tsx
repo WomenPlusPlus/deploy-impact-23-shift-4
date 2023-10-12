@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BrowserRouter, Routes as Routing, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes as Routing,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Login from "../components/pages/login/Login";
 import Register from "../components/pages/register/Register";
@@ -12,6 +17,7 @@ import Shortlist from "../components/pages/shortlist/Shortlist";
 import CandidateProfile from "../components/pages/profile/CandidateProfile";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
+import YourFrontendComponent from "../components/shared/testApi";
 
 export interface IApplicationProps {}
 
@@ -58,6 +64,7 @@ const Routes: React.FC<IApplicationProps> = (props) => {
           element={<Authenticated content={<CompanyProfile />} />}
         />
         <Route path="*" element={<h1>Not Found</h1>} />
+        <Route path="/test" element={<YourFrontendComponent />} />
       </Routing>
     </BrowserRouter>
   );

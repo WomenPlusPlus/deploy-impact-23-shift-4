@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 def get_user_by_id_route(User):
     get_user_by_id_bp = Blueprint("get_user_by_id", __name__)
 
-    @get_user_by_id_bp.route("/api/get_user_by_id", methods=["GET"])
+    @get_user_by_id_bp.route("/api/get_user_by_id", methods=["POST"])
     def get_user_by_id():
         """
         Get a user by id.
@@ -13,7 +13,7 @@ def get_user_by_id_route(User):
             A JSON object containing the user data.
         """
         try:
-            if request.method == "GET":
+            if request.method == "POST":
                 data = request.get_json()
                 id = data.get("user_id")
 

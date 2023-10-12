@@ -4,10 +4,10 @@ from flask import Blueprint, jsonify, request
 def get_association_by_id_route(Association):
     get_association_by_id_bp = Blueprint("get_association_by_id", __name__)
 
-    @get_association_by_id_bp.route("/api/get_association_by_id", methods=["GET"])
+    @get_association_by_id_bp.route("/api/get_association_by_id", methods=["POST"])
     def get_association_by_id():
         try:
-            if request.method == "GET":
+            if request.method == "POST":
                 data = request.get_json()
                 id = data.get("user_id")
 

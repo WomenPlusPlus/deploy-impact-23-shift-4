@@ -1,13 +1,14 @@
+import axios from "axios";
+
 /**
  * Fetches all associations from the database
  * @returns all associations data object
  */
 export async function getAllAssociations() {
   try {
-    const response = await fetch("/api/get_all_associations");
-    if (response.ok) {
-      const data = await response.json();
-      return data.associations;
+    const response = await axios.get("/api/get_all_associations");
+    if (response.status === 200) {
+      return response.data.associations;
     } else {
       throw new Error("Failed to fetch associations");
     }
@@ -23,12 +24,13 @@ export async function getAllAssociations() {
  */
 export async function getAssociationById(userId: string) {
   try {
-    const response = await fetch(
-      `/api/get_association_by_id?user_id=${userId}`
+    const response = await axios.post(
+      "/api/get_association_by_id",
+      { user_id: userId },
+      { withCredentials: true }
     );
-    if (response.ok) {
-      const data = await response.json();
-      return data.associations;
+    if (response.status === 200) {
+      return response.data.associations;
     } else if (response.status === 404) {
       throw new Error("Association not found");
     } else {
@@ -50,15 +52,16 @@ export async function updateAssociationById(
   updateData: object
 ) {
   try {
-    const response = await fetch("/api/update_association", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await axios.put(
+      "/api/update_association",
+      {
+        user_id: userId,
+        ...updateData,
       },
-      body: JSON.stringify({ user_id: userId, ...updateData }),
-    });
+      { withCredentials: true }
+    );
 
-    if (response.ok) {
+    if (response.status === 200) {
       return { message: "Association updated successfully" };
     } else if (response.status === 404) {
       throw new Error("Association not found");
