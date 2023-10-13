@@ -5,7 +5,8 @@ import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { Labels } from "../../UI/labels/Label";
-import { EditModal } from "../../UI/modal/EditModal";
+import { EditTag } from "../../UI/modal/EditTag";
+import EditInput from "../../UI/modal/EditInput";
 import {
   ContentBlock,
   HorizontalLine,
@@ -37,15 +38,47 @@ const CandidateProfile = () => {
     ],
     associations: ["Woman++", "proFemmes", "Coders", "Kpi"],
     typeOfJobs: ["Full-time", "Part-time", "Internship", "Freelance"],
-    skills: ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"],
+    skills: [
+      "React",
+      "Node.js",
+      "TypeScript",
+      "JavaScript",
+      "HTML/CSS",
+      "Python",
+    ],
     values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
     languages: [
       { name: "English", levelName: "Fluent", score: 70 },
       { name: "Italian", levelName: "Native", score: 100 },
     ],
+    contactInfo: {
+      phoneNumber: "123-456-7890",
+      email: "laura@gmail.com",
+      address: "123 Street Name, City, Country",
+    },
   };
 
-  const allLabelsSkills = ["Vue", "Express.js", "Bash", "R", "C++", "Java"];
+  // Filter out the labels that are already the candidate's labels
+  const allLabelsSkills = () => {
+    const allSkill = [
+      "Vue",
+      "Express.js",
+      "Bash",
+      "R",
+      "C++",
+      "Java",
+      "Python",
+    ];
+    return allSkill.filter((label) => !skillsLabels.includes(label));
+  };
+  const allLabelsValues = () => {
+    const allValue = ["Cheer up", "Social", "Awareness", "Respect"];
+    return allValue.filter((label) => !valuesLabels.includes(label));
+  };
+  const allTypeOfJobs = () => {
+    const allTypeOfJob = ["Full-time", "Part-time", "Internship", "Freelance"];
+    return allTypeOfJob.filter((label) => !typeOfJobsLabels.includes(label));
+  };
 
   const {
     name,
@@ -66,7 +99,12 @@ const CandidateProfile = () => {
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
   const [skillsLabels, setSkillsLabels] = useState(skills);
   const [valuesLabels, setValuesLabels] = useState(values);
-  const [allSkillsLabels] = useState(allLabelsSkills);
+  const [isEditContactInfo, setIsEditContactInfo] = useState(false);
+  const [contactInfo, setContactInfo] = useState(user.contactInfo);
+
+  const editHandlerContactInfo = () => {
+    setIsEditContactInfo(true);
+  };
 
   return (
     <div className={styling.main}>
@@ -181,11 +219,12 @@ const CandidateProfile = () => {
         <CardContainer className={styling.typeOfJobsContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            <EditModal
+            <EditTag
               labelsList={typeOfJobsLabels}
               setLabelsList={setTypeOfJobsLabels}
               icon={<IconTags />}
               titleName="Edit your jobs"
+              allLabelsList={allTypeOfJobs()}
             />
           </div>
 
@@ -207,12 +246,12 @@ const CandidateProfile = () => {
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
-          <EditModal
+          <EditTag
             labelsList={skillsLabels}
             setLabelsList={setSkillsLabels}
             icon={<IconTags />}
             titleName="Choose your skills"
-            allLabelsList={allSkillsLabels}
+            allLabelsList={allLabelsSkills()}
           />
         </div>
         <div className={styling.skillsContainerLabels}>
@@ -232,11 +271,12 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
-          <EditModal
+          <EditTag
             labelsList={valuesLabels}
             setLabelsList={setValuesLabels}
             icon={<IconTags />}
             titleName="Choose your values"
+            allLabelsList={allLabelsValues()}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
@@ -258,12 +298,22 @@ const CandidateProfile = () => {
         <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={editHandlerContactInfo}
+            />
           </div>
+          <EditInput
+            visible={isEditContactInfo}
+            setVisible={setIsEditContactInfo}
+            contactInfo={contactInfo}
+            setContactInfo={setContactInfo}
+          />
           <div>
-            <p>Phone number</p>
-            <p>Email</p>
-            <p>Address</p>
+            <p>Phone number: {contactInfo.phoneNumber}</p>
+            <p>Email: {contactInfo.email}</p>
+            <p>Address: {contactInfo.address}</p>
           </div>
         </CardContainer>
 
