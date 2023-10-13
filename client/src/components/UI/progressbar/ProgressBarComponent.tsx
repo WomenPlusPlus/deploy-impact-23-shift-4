@@ -1,6 +1,16 @@
 import { ProgressBar } from "./ProgressBar";
 import styling from "./ProgressBarComponent.module.css";
 
+enum LanguageLevel {
+  Elementary = "Elementary",
+  Beginner = "Beginner",
+  Intermediate = "Intermediate",
+  Advanced = "Advanced",
+  Professional = "Professional",
+  Expert = "Expert",
+  Native = "Native",
+}
+
 interface Language {
   name: string;
   levelName: string;
@@ -21,11 +31,11 @@ function LanguageItem({ language }: { language: Language }) {
 }
 
 const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
-  languages
+  languages,
 }) => {
   return (
     <div>
-      {languages.map((language, index) => (
+      {languages.map((language: any, index: any) => (
         <>
           <LanguageItem key={index} language={language} />
           <ProgressBar progress={language.score} height="1.5rem" />

@@ -6,7 +6,8 @@ import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { Labels } from "../../UI/labels/Label";
 import { EditTag } from "../../UI/modal/EditTag";
-import EditInput from "../../UI/modal/EditInput";
+import { EditInput } from "../../UI/modal/EditInput";
+import { EditLanguages } from "../../UI/modal/EditLanguages";
 import {
   ContentBlock,
   HorizontalLine,
@@ -19,6 +20,26 @@ import {
   IconTags,
 } from "@tabler/icons-react";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
+
+enum LanguageLevelText {
+  Elementary = "Elementary",
+  Beginner = "Beginner",
+  Intermediate = "Intermediate",
+  Advanced = "Advanced",
+  Professional = "Professional",
+  Expert = "Expert",
+  Native = "Native",
+}
+
+enum LanguageLevelNumber {
+  Elementary = 10,
+  Beginner = 20,
+  Intermediate = 30,
+  Advanced = 40,
+  Professional = 60,
+  Expert = 80,
+  Native = 100,
+}
 
 const CandidateProfile = () => {
   const user = {
@@ -48,8 +69,9 @@ const CandidateProfile = () => {
     ],
     values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
     languages: [
-      { name: "English", levelName: "Fluent", score: 70 },
-      { name: "Italian", levelName: "Native", score: 100 },
+      { name: "English", levelName: LanguageLevelText.Beginner, score: null },
+      { name: "Italian", levelName: LanguageLevelText.Native, score: null },
+      // Add more languages as needed
     ],
     contactInfo: {
       phoneNumber: "123-456-7890",
@@ -99,11 +121,42 @@ const CandidateProfile = () => {
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
   const [skillsLabels, setSkillsLabels] = useState(skills);
   const [valuesLabels, setValuesLabels] = useState(values);
+  // Contact info
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [contactInfo, setContactInfo] = useState(user.contactInfo);
+  // Languages
+  const levelToNumber: Record<keyof typeof LanguageLevelText, keyof typeof LanguageLevelNumber> = {
+    Elementary: "Elementary",
+    Beginner: "Beginner",
+    Intermediate: "Intermediate",
+    Advanced: "Advanced",
+    Professional: "Professional",
+    Expert: "Expert",
+    Native: "Native",
+  };
+
+  interface Language {
+    name: string;
+    levelName: string;
+    score: number; // Allow null for initial values
+  }
+  
+  const langs: Language[] = languages.map((lang) => ({
+    name: lang.name,
+    levelName: lang.levelName,
+    score: LanguageLevelNumber[levelToNumber[lang.levelName]],
+  }));
+
+  const [isEditLanguages, setIsEditLanguages] = useState(false);
+  const [languagesToEdit, setLanguagesToEdit] = useState(langs)
+  console.log("LANG",languagesToEdit);
 
   const editHandlerContactInfo = () => {
     setIsEditContactInfo(true);
+  };
+
+  const editHandlerLanguages = () => {
+    setIsEditLanguages(true);
   };
 
   return (
@@ -307,8 +360,8 @@ const CandidateProfile = () => {
           <EditInput
             visible={isEditContactInfo}
             setVisible={setIsEditContactInfo}
-            contactInfo={contactInfo}
-            setContactInfo={setContactInfo}
+            valuesToEdit={contactInfo}
+            setValuesToEdit={setContactInfo}
           />
           <div>
             <p>Phone number: {contactInfo.phoneNumber}</p>
@@ -321,9 +374,19 @@ const CandidateProfile = () => {
         <CardContainer className={styling.typeOfJobsContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={editHandlerLanguages}
+            />
           </div>
-          <ProgressBarComponent languages={languages} />
+          <EditLanguages
+            visible={isEditLanguages}
+            setVisible={setIsEditLanguages}
+            languages={languagesToEdit}
+            setLanguages={setLanguagesToEdit}
+          />
+          <ProgressBarComponent languages={languagesToEdit} />
         </CardContainer>
 
         {/* Experience */}

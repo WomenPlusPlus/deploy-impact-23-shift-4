@@ -1,29 +1,22 @@
 import React, { useState } from "react";
 import { Modal, Input } from "antd";
 
-interface EditInputProps {
+interface EditInputProps<T> {
   visible: boolean;
   setVisible: (arg: boolean) => void;
-  contactInfo: {
-    phoneNumber: string;
-    email: string;
-    address: string;
-  };
-  setContactInfo: (arg: {
-    phoneNumber: string;
-    email: string;
-    address: string;
-  }) => void;
+  // Accept generic object
+  valuesToEdit: T;
+  setValuesToEdit: (arg: T) => void;
 }
 
-const EditInput: React.FC<EditInputProps> = ({
+const EditInput = <T extends Record<string, string>>({
   visible,
   setVisible,
-  contactInfo,
-  setContactInfo,
-}) => {
+  valuesToEdit,
+  setValuesToEdit,
+}: EditInputProps<T>) => {
   const [editing, setEditing] = useState(false);
-  const [values, setValues] = useState(contactInfo);
+  const [values, setValues] = useState(valuesToEdit);
 
   const handleEdit = () => {
     setEditing(true);
@@ -31,7 +24,7 @@ const EditInput: React.FC<EditInputProps> = ({
 
   const handleSave = () => {
     setEditing(false);
-    setContactInfo(values);
+    setValuesToEdit(values);
     setVisible(false);
   };
 
@@ -78,4 +71,4 @@ const EditInput: React.FC<EditInputProps> = ({
   );
 };
 
-export default EditInput;
+export { EditInput };
