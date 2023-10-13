@@ -16,21 +16,21 @@ def init_skills_model(db):
             nullable=False,
         )
         name = db.Column(db.String(256), nullable=False)
-        category = db.Column(
+        field = db.Column(
             db.String(256), nullable=False
-        )  # categorys: UX/UI, Backend, Frontend, Fullstack, Data, DevOps, QA, Product Manager
+        )  # fields: UX/UI, Backend, Frontend, Fullstack, Data, DevOps, QA, Product Manager
 
-        def __init__(self, name, category):
+        def __init__(self, name, field):
             """
             Initialize a new skill object.
 
             Args:
                 name (str): Name of the skill.
-                category (str): category of the skill.
+                field (str): field of the skill.
             """
             self.name = name
-            self.category = category
-    
+            self.field = field
+
         def to_dict(self):
             """
             Convert the skill object to a dictionary.
@@ -38,7 +38,7 @@ def init_skills_model(db):
             return {
                 "id": self.id,
                 "name": self.name,
-                "category": self.category,
+                "field": self.field,
             }
 
     return Skills

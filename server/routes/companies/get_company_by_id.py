@@ -4,10 +4,10 @@ from flask import Blueprint, jsonify, request
 def get_company_by_id_route(Company):
     get_company_by_id_bp = Blueprint("get_company_by_id", __name__)
 
-    @get_company_by_id_bp.route("/api/get_company_by_id", methods=["GET"])
+    @get_company_by_id_bp.route("/api/get_company_by_id", methods=["POST"])
     def get_company_by_id():
         try:
-            if request.method == "GET":
+            if request.method == "POST":
                 data = request.get_json()
                 id = data.get("user_id")
 
@@ -25,15 +25,15 @@ def get_company_by_id_route(Company):
                     "associations": company.associations,
                     "address": company.address,
                     "values": company.values,
-                    "job_offerings": company.job_offerings,
+                    "job_types": company.job_types,
                     "contact_details": company.contact_details,
                     "company_name": company.company_name,
                     "linkedin_url": company.linkedin_url,
                     "kununu_url": company.kununu_url,
-                    "positions_job_list": company.positions_job_list,
+                    "open_positions": company.open_positions,
                 }
 
-                return jsonify({"companys": company_data}), 200
+                return jsonify({"companies": company_data}), 200
 
         except Exception as e:
             jsonify({"message": f"Error getting company data: {e}"}), 500

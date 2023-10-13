@@ -23,14 +23,15 @@ def get_all_companies_route(Company):
                     "user_id": company.user_id,
                     "email": company.email,
                     "associations": company.associations,
+                    "logo": company.logo,
                     "address": company.address,
                     "values": company.values,
-                    "job_offerings": company.job_offerings,
+                    "job_types": company.job_types,
                     "contact_details": company.contact_details,
                     "company_name": company.company_name,
                     "linkedin_url": company.linkedin_url,
                     "kununu_url": company.kununu_url,
-                    "positions_job_list": company.positions_job_list,
+                    "open_positions": company.open_positions,
                 }
                 result.append(company_data)
 

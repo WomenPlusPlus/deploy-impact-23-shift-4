@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { BrowserRouter, Routes as Routing, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes as Routing,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Login from "../components/pages/login/Login";
-import Register from "../components/pages/register/Register";
+import RegisterRoute from "./redirect";
 import Candidates from "../components/pages/candidates/Candidates";
 import Authenticated from "../components/layout/authenticated/Authenticated";
 import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
@@ -12,18 +17,18 @@ import Shortlist from "../components/pages/shortlist/Shortlist";
 import CandidateProfile from "../components/pages/profile/CandidateProfile";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
+import NotFound from "../components/pages/notfound/NotFound";
 
 export interface IApplicationProps {}
 
 const Routes: React.FC<IApplicationProps> = (props) => {
   const [userType, setUserType] = useState<string | null>("");
-  console.log("User type:", userType);
 
   return (
     <BrowserRouter>
       <Routing>
         <Route path="/login" element={<Login setUser={setUserType} />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterRoute />} />
         <Route
           path="/"
           element={
@@ -57,7 +62,7 @@ const Routes: React.FC<IApplicationProps> = (props) => {
           path="/company-profile"
           element={<Authenticated content={<CompanyProfile />} />}
         />
-        <Route path="*" element={<h1>Not Found</h1>} />
+        <Route path="*" element={<NotFound />} />
       </Routing>
     </BrowserRouter>
   );

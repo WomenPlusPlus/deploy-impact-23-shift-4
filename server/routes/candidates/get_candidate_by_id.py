@@ -4,13 +4,13 @@ from flask import Blueprint, jsonify, request
 def get_candidate_by_id_route(Candidate):
     get_candidate_by_id_bp = Blueprint("get_candidate_by_id", __name__)
 
-    @get_candidate_by_id_bp.route("/api/get_candidate_by_id", methods=["GET"])
+    @get_candidate_by_id_bp.route("/api/get_candidate_by_id", methods=["POST"])
     def get_candidate_by_id():
         try:
-            if request.method == "GET":
+            if request.method == "POST":
                 data = request.get_json()
                 id = data.get("user_id")
-
+                print("ID",id)
                 if not id:
                     return jsonify({"message": "Missing 'id' in JSON data"}), 400
 
