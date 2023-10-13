@@ -126,7 +126,6 @@ const CandidateProfile = () => {
     city: user.city,
     country: user.country,
   });
-  console.log("LANG", languagesToEdit);
   // handlers
   const editHandlerContactInfo = () => {
     setIsEditContactInfo(true);

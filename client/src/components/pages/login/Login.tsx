@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
 import axios from "axios"; // Import Axios for making HTTP requests
+import { useAuth } from "../../../context/auth";
 
 import "./Login.css";
 
@@ -13,6 +14,8 @@ interface ILoginProps {
 
 const Login: React.FC<ILoginProps> = ({ setUser }) => {
   // state
+  const { auth, setAuth } = useAuth();
+  console.log("auth", auth);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -38,6 +41,9 @@ const Login: React.FC<ILoginProps> = ({ setUser }) => {
         console.log("Response", response.status);
         // Set user_type in local storage
         setUser(user.user_type);
+        // Set auth in context
+        setAuth({ user });
+        localStorage.setItem("auth", JSON.stringify(user));
         // Navigate to the dashboard
         navigate("/");
       })

@@ -36,10 +36,10 @@ const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
   return (
     <div>
       {languages.map((language: any, index: any) => (
-        <>
-          <LanguageItem key={index} language={language} />
+        <div key={index}>
+          <LanguageItem language={language} />
           <ProgressBar progress={language.score} height="1.5rem" />
-        </>
+        </div>
       ))}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes as Routing,
@@ -14,7 +14,7 @@ import DashboardCandidate from "../components/pages/dashboardCandidate/Dashboard
 import Jobs from "../components/pages/jobs/Jobs";
 import Companies from "../components/pages/companies/Companies";
 import Shortlist from "../components/pages/shortlist/Shortlist";
-import CandidateProfile from "../components/pages/profile/CandidateProfile";
+import CandidateProfile from "../components/pages/candidateProfile/CandidateProfile";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 import NotFound from "../components/pages/notfound/NotFound";
@@ -22,7 +22,18 @@ import NotFound from "../components/pages/notfound/NotFound";
 export interface IApplicationProps {}
 
 const Routes: React.FC<IApplicationProps> = (props) => {
-  const [userType, setUserType] = useState<string | null>("");
+  const [userType, setUserType] = useState<string>("");
+  
+  useEffect(() => {
+    const authString = localStorage.getItem("auth");
+    if (authString) {
+      const auth = JSON.parse(authString);
+      if (auth && auth.user && auth.user.user_type) {
+        const userTypeFetched = auth.user.user_type;
+        setUserType(userTypeFetched);
+      }
+    }
+  }, []);
 
   return (
     <BrowserRouter>

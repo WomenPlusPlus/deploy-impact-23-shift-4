@@ -1,13 +1,15 @@
 import "./App.css";
 import Routes from "./routes/routes";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import "./config";
+import { AuthProvider } from "./context/auth";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="<your_client_id>">
-      <Routes />
-    </GoogleOAuthProvider>
+    <AuthProvider>
+      <GoogleOAuthProvider clientId="<your_client_id>">
+        <Routes />
+      </GoogleOAuthProvider>
+    </AuthProvider>
   );
 }
 
