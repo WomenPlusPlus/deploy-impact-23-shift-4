@@ -1,8 +1,6 @@
 import React from "react";
-import { Card, Row, Col, Avatar } from "antd";
 import JobCard from "../../UI/card/JobCard";
-import "./Jobs.css";
-
+import styles from "./Jobs.module.css";
 
 const jobsData = [
   {
@@ -65,10 +63,10 @@ const jobsData = [
 
 const Jobs: React.FC = () => {
   return (
-    <div className="mainContainer">
-      <h1 className="header">Hi UBS!</h1>
+    <div className={styles.mainContainer}>
+      <h1 className={styles.header}>Hi UBS!</h1>
       <h2>Your jobs.</h2>
-      <div className="cards">
+      <div className={styles.cards}>
         {jobsData.map((job) => (
           <JobCard
             name={job.name}
@@ -89,4 +87,3 @@ const Jobs: React.FC = () => {
 };
 
 export default Jobs;
-
