@@ -49,6 +49,7 @@ def init_candidate_model(db):
         values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
         skills = db.Column(db.JSON)  # Skills as a JSON array of objects
         languages = db.Column(db.JSON)  # Languages as a JSON array of objects
+        links = db.Column(db.JSON)  # Links as a JSON array of objects
 
         def __init__(
             self,
@@ -73,6 +74,7 @@ def init_candidate_model(db):
             matching_companies=None,
             skills=None,
             languages=None,
+            links=None,
         ):
             """
             Initialize a new candidate object.
@@ -101,6 +103,7 @@ def init_candidate_model(db):
             self.matching_companies = matching_companies
             self.skills = skills
             self.languages = languages
+            self.links = links
 
         def to_dict(self):
             """
@@ -128,6 +131,7 @@ def init_candidate_model(db):
                 "matching_companies": self.matching_companies,
                 "skills": self.skills,
                 "languages": self.languages,
+                "links": self.links,
             }
 
     return Candidate

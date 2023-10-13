@@ -29,7 +29,8 @@ interface Language {
 
 const CandidateProfile = () => {
   const user = {
-    name: "John Doe",
+    first_name: "John",
+    last_name: "Doe",
     status: "Looking for a job",
     city: "Zurich",
     country: "CH",
@@ -64,6 +65,7 @@ const CandidateProfile = () => {
       email: "laura@gmail.com",
       address: "123 Street Name, City, Country",
     },
+    job_status: "Looking for a job",
   };
 
   // Filter out the labels that are already the candidate's labels
@@ -88,45 +90,54 @@ const CandidateProfile = () => {
     return allTypeOfJob.filter((label) => !typeOfJobsLabels.includes(label));
   };
 
-  const {
-    name,
-    status,
-    city,
-    country,
-    progress,
-    list,
-    associations,
-    typeOfJobs,
-    skills,
-    values,
-    languages,
-  } = user;
+
+
+  const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address", "me"];
+  const fieldsToDisplayProfile = [
+    "First name",
+    "Last name",
+    "Job status",
+    "City",
+    "Country",
+  ];
 
   // State
-  const [associationLabels] = useState(associations);
-  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
-  const [skillsLabels, setSkillsLabels] = useState(skills);
-  const [valuesLabels, setValuesLabels] = useState(values);
+  const [associationLabels] = useState(user.associations);
+  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(user.typeOfJobs);
+  const [skillsLabels, setSkillsLabels] = useState(user.skills);
+  const [valuesLabels, setValuesLabels] = useState(user.values);
   // Contact info
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [contactInfo, setContactInfo] = useState(user.contactInfo);
   // Languages
-  const langs: Language[] = languages.map((lang) => ({
+  const langs: Language[] = user.languages.map((lang) => ({
     name: lang.name,
     levelName: lang.levelName,
     score: lang.score,
   }));
 
   const [isEditLanguages, setIsEditLanguages] = useState(false);
-  const [languagesToEdit, setLanguagesToEdit] = useState(langs)
-  console.log("LANG",languagesToEdit);
-
+  const [languagesToEdit, setLanguagesToEdit] = useState(langs);
+  const [isProfileEdit, setIsProfileEdit] = useState(false);
+  const [profile, setProfile] = useState({
+    first_name: user.first_name,
+    last_name: user.last_name,
+    job_status: user.job_status,
+    city: user.city,
+    country: user.country,
+  });
+  console.log("LANG", languagesToEdit);
+  // handlers
   const editHandlerContactInfo = () => {
     setIsEditContactInfo(true);
   };
 
   const editHandlerLanguages = () => {
     setIsEditLanguages(true);
+  };
+
+  const editHandlerProfile = () => {
+    setIsProfileEdit(true);
   };
 
   return (
@@ -139,14 +150,16 @@ const CandidateProfile = () => {
 
         <div>
           <div className={styling.userName}>
-            <h3>{name}</h3>
-            <h4>{status}</h4>
+            <h3>
+              {profile?.first_name} {profile?.last_name}
+            </h3>
+            <h4>{profile?.job_status}</h4>
           </div>
 
-          <div className={styling.location}>
+          <div className={styling?.location}>
             <IconMapPin color="black" />
             <p>
-              {city}, {country}
+              {profile?.city}, {profile?.country}
             </p>
             <p>|</p>
             <IconBrandLinkedin color="black" />
@@ -155,7 +168,14 @@ const CandidateProfile = () => {
         </div>
 
         <div className={styling.editIcon}>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
+          <EditInput
+            visible={isProfileEdit}
+            setVisible={setIsProfileEdit}
+            valuesToEdit={profile}
+            setValuesToEdit={setProfile}
+            fieldsToDisplay={fieldsToDisplayProfile}
+            onClick={editHandlerProfile}
+          />
         </div>
       </CardContainer>
 
@@ -163,16 +183,16 @@ const CandidateProfile = () => {
         {/* Profile completed */}
         <CardContainer className={styling.profileCompletedElement}>
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Your profile is {progress} complete.</h3>
+            <h3>Your profile is {user?.progress} complete.</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
 
-          <ProgressBar progress={progress} height="1.5rem" />
+          <ProgressBar progress={user?.progress} height="1.5rem" />
 
           {/* Fields completed */}
           <div className={styling.profileCompletedFieldsComponent}>
             <div className={styling.column}>
-              {list.slice(0, Math.ceil(list.length / 2)).map((field, index) => (
+              {user?.list.slice(0, Math.ceil(user?.list.length / 2)).map((field, index) => (
                 <div
                   key={index}
                   className={styling.profileCompletedFieldsElement}
@@ -183,7 +203,7 @@ const CandidateProfile = () => {
             </div>
 
             <div className={styling.column}>
-              {list.slice(Math.ceil(list.length / 2)).map((field, index) => (
+              {user?.list.slice(Math.ceil(user?.list.length / 2)).map((field, index) => (
                 <div
                   key={index}
                   className={styling.profileCompletedFieldsElement}
@@ -321,22 +341,25 @@ const CandidateProfile = () => {
         <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
-            <IconEdit
-              color="black"
-              style={{ cursor: "pointer" }}
+            <EditInput
+              visible={isEditContactInfo}
+              setVisible={setIsEditContactInfo}
+              valuesToEdit={contactInfo}
+              setValuesToEdit={setContactInfo}
+              fieldsToDisplay={fieldsToDisplayContactInfo}
               onClick={editHandlerContactInfo}
             />
           </div>
-          <EditInput
-            visible={isEditContactInfo}
-            setVisible={setIsEditContactInfo}
-            valuesToEdit={contactInfo}
-            setValuesToEdit={setContactInfo}
-          />
           <div>
-            <p>Phone number: {contactInfo.phoneNumber}</p>
-            <p>Email: {contactInfo.email}</p>
-            <p>Address: {contactInfo.address}</p>
+            <p>
+              <strong>Phone number:</strong> {contactInfo.phoneNumber}
+            </p>
+            <p>
+              <strong>Email:</strong> {contactInfo.email}
+            </p>
+            <p>
+              <strong>Address:</strong> {contactInfo.address}
+            </p>
           </div>
         </CardContainer>
 

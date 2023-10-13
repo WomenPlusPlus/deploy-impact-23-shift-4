@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Input, Select, Space } from "antd";
+import { Button } from "../button/Button";
+import styling from "./EditLanguages.module.css";
 
 const { Option } = Select;
 
@@ -26,7 +28,7 @@ enum LanguageLevelText {
 interface Language {
   name: string;
   levelName: string;
-  score: number
+  score: number;
 }
 
 interface EditLanguagesProps {
@@ -42,15 +44,9 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
   languages,
   setLanguages,
 }) => {
-  const [editing, setEditing] = useState(false);
   const [values, setValues] = useState(languages || []);
 
-  const handleEdit = () => {
-    setEditing(true);
-  };
-
   const handleSave = () => {
-    setEditing(false);
     if (setLanguages) {
       setLanguages(values);
     }
@@ -66,7 +62,11 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
       const updatedValues = [...prevValues];
       if (key === "levelName") {
         const levelName = value as keyof typeof LanguageLevelText;
-        updatedValues[index] = { ...updatedValues[index], [key]: levelName, score: LanguageLevelNumber[levelName] };
+        updatedValues[index] = {
+          ...updatedValues[index],
+          [key]: levelName,
+          score: LanguageLevelNumber[levelName],
+        };
       } else {
         updatedValues[index] = { ...updatedValues[index], [key]: value };
       }
@@ -80,47 +80,42 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
       title="Edit Languages"
       onCancel={onCancel}
       footer={[
-        !editing ? (
-          <button key="edit" onClick={handleEdit}>
-            Edit
-          </button>
-        ) : (
-          <button key="save" onClick={handleSave}>
-            Save
-          </button>
-        ),
+        <Button
+          key="cancel"
+          onClick={onCancel}
+          className={styling.buttonCancel}
+        >
+          Cancel
+        </Button>,
+        <Button key="save" onClick={handleSave} className={styling.buttonSave}>
+          Save
+        </Button>,
       ]}
+      className={styling.modal}
     >
       {values.map((language, index) => (
-        <Space key={index} direction="vertical">
+        <Space key={index} direction="horizontal" className={styling.content}>
           <div>
             <label>Name:</label>
-            {editing ? (
-              <Input
-                value={language.name}
-                onChange={(e) => handleChange(index, "name", e.target.value)}
-              />
-            ) : (
-              <span>{language.name}</span>
-            )}
+            <Input
+              value={language.name}
+              onChange={(e) => handleChange(index, "name", e.target.value)}
+            />
           </div>
+
           <div>
-            <label>Level Name:</label>
-            {editing ? (
-              <Select
-                style={{ width: "100%" }}
-                value={language.levelName}
-                onChange={(value) => handleChange(index, "levelName", value)}
-              >
-                {Object.keys(LanguageLevelText).map((level) => (
-                  <Option key={level} value={level}>
-                    {level}
-                  </Option>
-                ))}
-              </Select>
-            ) : (
-              <span>{language.levelName}</span>
-            )}
+            <label>Level:</label>
+            <Select
+              style={{ width: "100%" }}
+              value={language.levelName}
+              onChange={(value) => handleChange(index, "levelName", value)}
+            >
+              {Object.keys(LanguageLevelText).map((level) => (
+                <Option key={level} value={level}>
+                  {level}
+                </Option>
+              ))}
+            </Select>
           </div>
         </Space>
       ))}
@@ -128,4 +123,4 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
   );
 };
 
-export {EditLanguages};
+export { EditLanguages };
