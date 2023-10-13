@@ -28,14 +28,15 @@ def init_company_model(db):
         associations = db.Column(db.ARRAY(db.String), nullable=False)
         company_name = db.Column(db.String(80))  # Company name as a string
         address = db.Column(db.String(256))  # Address as a string
+        logo = db.Column(db.String(256))  # Logo as a string
         linkedin_url = db.Column(db.String(256))  # URL to LinkedIn page as a string
         values = db.Column(db.ARRAY(db.String))  # Company values as an array of strings
-        job_offerings = db.Column(
+        job_types = db.Column(
             db.ARRAY(db.String)
         )  # Types of jobs offered as an array of strings
         contact_details = db.Column(db.JSON)  # Contact details as a JSON object
         kununu_url = db.Column(db.String(256))  # Kununu URL as a string
-        positions_job_list = db.Column(
+        open_positions = db.Column(
             db.ARRAY(db.String)
         )  # Positions/job lists as an array of foreign keys (integer)
 
@@ -45,14 +46,15 @@ def init_company_model(db):
             password,
             email,
             associations,
-            company_name=None,
+            company_name,
+            logo=None,
             address=None,
             linkedin_url=None,
             values=None,
-            job_offerings=None,
+            job_types=None,
             contact_details=None,
             kununu_url=None,
-            positions_job_list=None,
+            open_positions=None,
         ):
             """
             Initialize a new company object.
@@ -65,13 +67,14 @@ def init_company_model(db):
             self.email = email
             self.associations = associations
             self.company_name = company_name
+            self.logo = logo
             self.address = address
             self.linkedin_url = linkedin_url
             self.values = values
-            self.job_offerings = job_offerings
+            self.job_types = job_types
             self.contact_details = contact_details
             self.kununu_url = kununu_url
-            self.positions_job_list = positions_job_list
+            self.open_positions = open_positions
 
         def to_dict(self):
             """
@@ -87,10 +90,10 @@ def init_company_model(db):
                 "address": self.address,
                 "linkedin_url": self.linkedin_url,
                 "values": self.values,
-                "job_offerings": self.job_offerings,
+                "job_types": self.job_types,
                 "contact_details": self.contact_details,
                 "kununu_url": self.kununu_url,
-                "positions_job_list": self.positions_job_list,
+                "open_positions": self.open_positions,
             }
 
     return Company

@@ -12,23 +12,23 @@ def get_all_skills_route(Skills):
            Returns:
                A JSON object containing all skills in the database.
         """
-        try:
-            if request.method == "GET":
+        if request.method == "GET":
+            try:
                 skills = Skills.query.all()
                 result = []
 
-            for skill in skills:
-                skill_data = {
-                    "id": skill.id,
-                    "name": skill.name,
-                    "category": skill.category,
-                }
-                result.append(skill_data)
+                for skill in skills:
+                    print(skill)
+                    skill_data = {
+                        "id": skill.id,
+                        "name": skill.name,
+                        "field": skill.field,
+                    }
+                    result.append(skill_data)
 
-            return jsonify({"skills": result}), 200
-        except Exception as e:
-            jsonify({"message": f"Error getting skills: {e}"}), 500
-
-        return jsonify({"skills": []})
+                return jsonify({"skills": result}), 200
+            except Exception as e:
+                jsonify({"message": f"Error getting skills: {e}"}), 500
+                return jsonify({"error": e})
 
     return get_all_skills_bp

@@ -27,16 +27,16 @@ def update_company_route(Company, db):
                     company.address = data["address"]
                 if "values" in data:
                     company.values = data["values"]
-                if "job_offerings" in data:
-                    company.job_offerings = data["job_offerings"]
+                if "job_types" in data:
+                    company.job_types = data["job_types"]
                 if "contact_details" in data:
                     company.contact_details = data["contact_details"]
                 if "linkedin_url" in data:
                     company.linkedin_url = data["linkedin_url"]
                 if "kununu_url" in data:
                     company.kununu_url = data["kununu_url"]
-                if "positions_job_list" in data:
-                    company.positions_job_list = data["positions_job_list"]
+                if "open_positions" in data:
+                    company.open_positions = data["open_positions"]
 
                 db.session.commit()
 
