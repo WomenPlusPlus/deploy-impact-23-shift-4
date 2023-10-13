@@ -1,0 +1,153 @@
+.matches-tag {
+  background-color: rgb(53, 188, 50);
+  color: #fff;
+  font-size: 1.4rem;
+  border-radius: 1.5rem;
+  margin-bottom: 5.5rem;
+  margin-left: 2rem;
+  text-align: center;
+  max-width: 10rem;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 3px 8px;
+  font-weight: bold;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 0.6rem;
+  transform: translateX(0);
+  transform: translateY(0);
+  width: 100%;
+}
+
+.company-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.go-to-talents {
+  width: 35rem;
+  height: 40px;
+  padding: 0px, 0px, 3px, 0px;
+  border-radius: 1.2rem;
+  border: 20px;
+  border-color: rgba(89, 89, 89, 1);
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  margin-right: 16px;
+}
+
+.card-content div:nth-child(2) {
+  flex: 1;
+}
+
+.job-info {
+  display: flex;
+}
+
+.card {
+  box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+  width: 40rem;
+  margin: 2rem 4rem 2rem 0;
+}
+
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
+
+.go-talents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.employee {
+  font-size: 1rem;
+  position: relative;
+  top: -1rem;
+}
+
+.job-level {
+  font-size: 1.3rem;
+}
+
+.company-name,
+company-location {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    margin-bottom: 0.05rem;
+  }
+
+  .matches-tag {
+    position: relative;
+    transform: translate(-15rem, -7rem);
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 100%;
+    height: fit-content;
+    margin: auto;
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 2rem;
+  }
+
+  .company-info {
+    text-align: center;
+  }
+
+  .employee {
+    top: 0;
+  }
+
+  .go-talents {
+    margin-top: 10px;
+  }
+
+  .job-level {
+    font-size: 1.3rem;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-content {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+  }
+  .job-title {
+    padding-top: 2rem;
+  }
+}
