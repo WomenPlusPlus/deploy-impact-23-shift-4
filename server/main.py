@@ -36,6 +36,11 @@ from routes.skills import get_skills
 from routes.skills import add_skill
 from routes.values import get_values
 from routes.values import add_value
+from routes.jobs import get_jobs
+from routes.jobs import get_job_by_id
+from routes.jobs import add_job
+from routes.jobs import delete_job
+from routes.jobs import update_job
 
 # Env
 from dotenv import load_dotenv
@@ -109,6 +114,11 @@ app.register_blueprint(get_skills.get_all_skills_route(Skills))
 app.register_blueprint(add_skill.add_skill_route(Skills, db))
 app.register_blueprint(get_values.get_all_values_route(Values))
 app.register_blueprint(add_value.add_value_route(Values, db))
+app.register_blueprint(get_jobs.get_all_jobs_route(Jobs))
+app.register_blueprint(get_job_by_id.get_job_by_id_route(Jobs))
+app.register_blueprint(add_job.add_job_route(Jobs, db))
+app.register_blueprint(delete_job.delete_job_route(Jobs, db))
+app.register_blueprint(update_job.update_job_route(Jobs, db))
 
 if __name__ == "__main__":
     # Make sure the tables exist
