@@ -35,59 +35,63 @@ def register_route(User, Candidate, Company, Association, db):
             association_name = data.get("association_name")
             company_name = data.get("company_name")
 
-            # Hash the password before saving it to the appropriate table
-            hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-            hashed_password = hashed_password.decode("utf-8")
+            try:
+                # Hash the password before saving it to the appropriate table
+                hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+                hashed_password = hashed_password.decode("utf-8")
 
-            # Save the new user in the "user" table
-            new_user = User(
-                password=hashed_password,
-                email=email,
-                user_type=user_type,
-            )
-            db.session.add(new_user)
-            db.session.commit()
-
-            user_id = new_user.id
-
-            # Create a new user and save it to the appropriate table
-            if user_type == "candidate":
-                # Save the user also in the "candidate" table
-                new_user = Candidate(
-                    user_id=user_id,
+                # Save the new user in the "user" table
+                new_user = User(
                     password=hashed_password,
                     email=email,
-                    associations=associations,
+                    user_type=user_type,
                 )
                 db.session.add(new_user)
                 db.session.commit()
-            elif user_type == "company":
-                # Save the user also in the "company" table
-                new_user = Company(
-                    user_id=user_id,
-                    password=hashed_password,
-                    email=email,
-                    company_name=company_name,
-                    associations=associations,
-                )
-                db.session.add(new_user)
-                db.session.commit()
-            elif user_type == "association":
-                # Save the user also in the "association" table
-                new_user = Association(
-                    user_id=user_id,
-                    password=hashed_password,
-                    email=email,
-                    association_name=association_name,
-                )
-                db.session.add(new_user)
-                db.session.commit()
-            else:
-                return jsonify({"message": "Invalid user type"}), 400
 
-            login_user(new_user)
-            return jsonify(
-                {"message": "User registered successfully", "user_type": user_type}
-            )
+                user_id = new_user.id
+
+                # Create a new user and save it to the appropriate table
+                if user_type == "candidate":
+                    # Save the user also in the "candidate" table
+                    new_candidate = Candidate(
+                        user_id=user_id,
+                        password=hashed_password,
+                        email=email,
+                        associations=associations,
+                    )
+                    db.session.add(new_candidate)
+                    db.session.commit()
+                elif user_type == "company":
+                    # Save the user also in the "company" table
+                    new_company = Company(
+                        user_id=user_id,
+                        password=hashed_password,
+                        email=email,
+                        company_name=company_name,
+                        associations=associations,
+                    )
+                    db.session.add(new_company)
+                    db.session.commit()
+                elif user_type == "association":
+                    # Save the user also in the "association" table
+                    new_association = Association(
+                        user_id=user_id,
+                        password=hashed_password,
+                        email=email,
+                        association_name=association_name,
+                    )
+                    db.session.add(new_association)
+                    db.session.commit()
+                else:
+                    return jsonify({"message": "Invalid user type"}), 400
+
+                login_user(new_user)
+                return jsonify(
+                    {"message": "User registered successfully", "user_type": user_type}
+                )
+            except Exception as e:
+                print(e)
+                return jsonify({"message": "Error registering user"}), 500
 
     return register_bp
