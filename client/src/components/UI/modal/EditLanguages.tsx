@@ -23,16 +23,6 @@ enum LanguageLevelText {
   Native = "Native",
 }
 
-const levelToNumber: Record<keyof typeof LanguageLevelText, keyof typeof LanguageLevelNumber> = {
-  Elementary: "Elementary",
-  Beginner: "Beginner",
-  Intermediate: "Intermediate",
-  Advanced: "Advanced",
-  Professional: "Professional",
-  Expert: "Expert",
-  Native: "Native",
-};
-
 interface Language {
   name: string;
   levelName: string;
@@ -83,7 +73,7 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
       return updatedValues;
     });
   };
-  
+
   return (
     <Modal
       open={visible}

@@ -21,24 +21,10 @@ import {
 } from "@tabler/icons-react";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 
-enum LanguageLevelText {
-  Elementary = "Elementary",
-  Beginner = "Beginner",
-  Intermediate = "Intermediate",
-  Advanced = "Advanced",
-  Professional = "Professional",
-  Expert = "Expert",
-  Native = "Native",
-}
-
-enum LanguageLevelNumber {
-  Elementary = 10,
-  Beginner = 20,
-  Intermediate = 30,
-  Advanced = 40,
-  Professional = 60,
-  Expert = 80,
-  Native = 100,
+interface Language {
+  name: string;
+  levelName: string;
+  score: number; // Allow null for initial values
 }
 
 const CandidateProfile = () => {
@@ -69,8 +55,8 @@ const CandidateProfile = () => {
     ],
     values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
     languages: [
-      { name: "English", levelName: LanguageLevelText.Beginner, score: null },
-      { name: "Italian", levelName: LanguageLevelText.Native, score: null },
+      { name: "English", levelName: "Beginner", score: 20 },
+      { name: "Italian", levelName: "Native", score: 100 },
       // Add more languages as needed
     ],
     contactInfo: {
@@ -125,26 +111,10 @@ const CandidateProfile = () => {
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [contactInfo, setContactInfo] = useState(user.contactInfo);
   // Languages
-  const levelToNumber: Record<keyof typeof LanguageLevelText, keyof typeof LanguageLevelNumber> = {
-    Elementary: "Elementary",
-    Beginner: "Beginner",
-    Intermediate: "Intermediate",
-    Advanced: "Advanced",
-    Professional: "Professional",
-    Expert: "Expert",
-    Native: "Native",
-  };
-
-  interface Language {
-    name: string;
-    levelName: string;
-    score: number; // Allow null for initial values
-  }
-  
   const langs: Language[] = languages.map((lang) => ({
     name: lang.name,
     levelName: lang.levelName,
-    score: LanguageLevelNumber[levelToNumber[lang.levelName]],
+    score: lang.score,
   }));
 
   const [isEditLanguages, setIsEditLanguages] = useState(false);
