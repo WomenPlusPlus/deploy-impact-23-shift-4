@@ -41,7 +41,7 @@ const EditInput: React.FC<EditInputProps> = ({
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       title="Contact Info"
       onCancel={onCancel}
       footer={[
