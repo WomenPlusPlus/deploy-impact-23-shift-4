@@ -1,5 +1,10 @@
 import axios from "axios";
 
+/**
+ * Fetches all the users
+ * @param userId the id of the user
+ * @returns
+ */
 export async function deleteUser(userId: string): Promise<string> {
   try {
     const response = await axios.post(
