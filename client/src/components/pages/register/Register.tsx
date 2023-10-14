@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
-import "./Register.css"; // You can create a separate CSS file for styling
-import axios from "axios"; // Import Axios for making HTTP requests
+import "./Register.css"; 
+import axios from "axios"; 
 import { useNavigate } from "react-router-dom";
+import TermsAndConditions from "./TermsAndConditions";
 
 const Register: React.FC = () => {
   // state
@@ -16,7 +17,9 @@ const Register: React.FC = () => {
     user_type: "candidate",
   });
 
-  const handleInputChange = (e: any) => {
+  const [agree, setAgree] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -26,25 +29,26 @@ const Register: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
-    // Send registration data to the backend (you'll need to replace the URL and method)
-    axios
-      .post("/api/register", formData) // Replace with your registration endpoint
-      .then((response) => {
-        // Handle the backend response here (e.g., show a success message)
-        console.log("Registration Successful!");
-        console.log(`${response.data}`);
-        navigate("/login"); // Redirect to the login page after successful registration
-      })
-      .catch((error) => {
-        // Handle any errors here (e.g., display error messages)
-        if (error.response) {
-          console.error("HTTP Status Code:", error.response.status);
-          console.error("Response Data:", error.response.data);
-        } else {
-          console.error("Network Error:", error.message);
-        }
-      });
+  const onFinish = () => {
+    if (agree) {
+      axios
+        .post("/api/register", formData)
+        .then((response) => {
+          console.log("Registration Successful!");
+          console.log(response.data);
+          navigate("/login");
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error("HTTP Status Code:", error.response.status);
+            console.error("Response Data:", error.response.data);
+          } else {
+            console.error("Network Error:", error.message);
+          }
+        });
+    } else {
+      alert("Please agree to the terms and conditions.");
+    }
   };
 
   return (
@@ -133,10 +137,15 @@ const Register: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
+            <TermsAndConditions onAgreeChange={(value) => setAgree(value)} />
+          </Form.Item>
+
+          <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               className="register-form-button"
+              disabled={!agree}
             >
               Register
             </Button>
