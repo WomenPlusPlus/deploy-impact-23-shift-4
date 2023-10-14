@@ -122,7 +122,7 @@ const CandidateProfile = () => {
             <h4>{candidate?.job_status}</h4>
           </div>
 
-          <div className={styling?.location}>
+          <div className={styling.location}>
             <IconMapPin color="black" />
             <p>
               {candidate?.city}, {candidate?.country}
