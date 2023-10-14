@@ -31,7 +31,7 @@ export async function getCandidateById(userId: string) {
       { user_id: userId },
       { withCredentials: true }
     );
-
+    console.log("response", response);
     if (response.status === 200) {
       return response.data.candidates;
     } else if (response.status === 404) {

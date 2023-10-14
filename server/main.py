@@ -120,9 +120,18 @@ app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
 
-# add user loader
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Load a user by their user ID.
+    Necessary for logout.
+
+    Args:
+        user_id (int): The user's ID.
+
+    Returns:
+        User: The User object associated with the provided user ID.
+    """
     return User.query.get(user_id)
 
 if __name__ == "__main__":

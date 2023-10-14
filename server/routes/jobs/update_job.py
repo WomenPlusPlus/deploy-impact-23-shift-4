@@ -16,26 +16,11 @@ def update_job_route(Job, db):
                 if not job:
                     return jsonify({"message": "job not found"}), 404
 
-                if "company_id" in data:
-                    job.company_id = data["company_id"]
-                if "title" in data:
-                    job.title = data["title"]
-                if "description" in data:
-                    job.description = data["description"]
-                if "values" in data:
-                    job.values = data["values"]
-                if "skills" in data:
-                    job.skills = data["skills"]
-                if "hiring_process_duration" in data:
-                    job.hiring_process_duration = data["hiring_process_duration"]
-                if "posting_date" in data:
-                    job.posting_date = data["posting_date"]
-                if "matching_candidates" in data:
-                    job.matching_candidates = data["matching_candidates"]
-                if "salary" in data:
-                    job.salary = data["salary"]
-                if "location" in data:
-                    job.location = data["location"]
+                # Update the job's fields based on the data provided
+                job_dict = job.to_dict()
+                for key, _ in job_dict.items():
+                    if key in data:
+                        setattr(job, key, data[key])
 
                 db.session.commit()
 

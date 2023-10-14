@@ -13,29 +13,7 @@ def get_all_candidates_route(Candidate):
                 result = []
 
             for candidate in candidates:
-                candidate_data = {
-                    "id": candidate.id,
-                    "user_id": candidate.user_id,
-                    "email": candidate.email,
-                    "associations": candidate.associations,
-                    "first_name": candidate.first_name,
-                    "last_name": candidate.last_name,
-                    "preferred_name": candidate.preferred_name,
-                    "cv_reference": candidate.cv_reference,
-                    "searched_job": candidate.searched_job,
-                    "address": candidate.address,
-                    "phone_number": candidate.phone_number,
-                    "birth_date": candidate.birth_date,
-                    "work_permit": candidate.work_permit,
-                    "notice_period": candidate.notice_period,
-                    "job_status": candidate.job_status,
-                    "company_type": candidate.company_type,
-                    "matching_jobs": candidate.matching_jobs,
-                    "matching_companies": candidate.matching_companies,
-                    "values": candidate.values,
-                    "skills": candidate.skills,
-                    "languages": candidate.languages,
-                }
+                candidate_data = candidate.to_dict()
                 result.append(candidate_data)
 
             return jsonify({"candidates": result}), 200
