@@ -5,8 +5,14 @@ import { Button } from "../../UI/button/Button";
 import { HorizontalCard } from "../../UI/card/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
+import React from "react";
 
-const DashboardCandidate = () => {
+interface DashboardProps {
+  userT: string | null;
+}
+
+const DashboardCandidate: React.FC<DashboardProps> = ({userT}) => {
+  console.log("Can: ",userT);
   const name = "John Doe";
   const profession = "Frontend Developer";
   const progress = 80;

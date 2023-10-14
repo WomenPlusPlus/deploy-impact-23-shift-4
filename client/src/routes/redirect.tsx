@@ -3,6 +3,8 @@ import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 import Register from "../components/pages/register/RegisterCandidate";
+import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
+import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
 
 const RegisterRoute: React.FC = () => {
   const location = useLocation();
@@ -64,4 +66,15 @@ const RegisterRoute: React.FC = () => {
   }
 };
 
-export default RegisterRoute;
+const DashboardRoute: React.FC = () => {
+  const userType = localStorage.getItem("user_type");
+  if (userType === "candidate") {
+    return <DashboardCandidate userT={userType} />;
+  } else if (userType === "company") {
+    return <DashboardCompany />;
+  } else {
+    return <Navigate to="/login" replace />;
+  }
+};
+
+export { RegisterRoute, DashboardRoute };

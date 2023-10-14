@@ -120,6 +120,11 @@ app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
 
+# add user loader
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()

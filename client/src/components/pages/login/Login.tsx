@@ -7,11 +7,7 @@ import axios from "axios"; // Import Axios for making HTTP requests
 
 import "./Login.css";
 
-interface ILoginProps {
-  setUser: (userType: string) => void;
-}
-
-const Login: React.FC<ILoginProps> = ({ setUser }) => {
+const Login = () => {
   // state
   const [formData, setFormData] = useState({
     email: "",
@@ -37,7 +33,10 @@ const Login: React.FC<ILoginProps> = ({ setUser }) => {
         const { user } = response.data;
         console.log("Response", response.status);
         // Set user_type in local storage
-        setUser(user.user_type);
+        // setUser(user.user_type);
+        localStorage.setItem("user_type", user.user_type);
+        const t = localStorage.getItem("user_type");
+        console.log("Storage: ", t);
         // Navigate to the dashboard
         navigate("/");
       })

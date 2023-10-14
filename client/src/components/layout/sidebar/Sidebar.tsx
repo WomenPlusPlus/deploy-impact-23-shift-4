@@ -71,6 +71,10 @@ const handleButtonClick = async (
         // Send logout request to the backend (you'll need to replace the URL and method)
         await axios.get("/api/logout", { withCredentials: true });
         console.log("Logout Successful");
+        // Remove user_type, auth from local storage
+        localStorage.removeItem("user_type");
+        localStorage.removeItem("auth");
+        // Navigate to the login page
         navigate("/login");
       } catch (error) {
         logoutError();
@@ -108,6 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
           onClick={(item) => {
             setSelectedKey(item.key.toString());
             handleButtonClick(item.key.toString(), navigate);
+            console.log("Item: ", item.key.toString());
             return item.key.toString();
           }}
           selectedKeys={[selectedKey]}
