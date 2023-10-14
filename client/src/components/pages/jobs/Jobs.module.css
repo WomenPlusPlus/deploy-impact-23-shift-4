@@ -1,11 +1,10 @@
 .mainContainer {
-    padding: 2rem;
-  }
-    .header {
-    color: black;
-  }
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
+  padding: 2rem;
+}
+  .header {
+  color: black;
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}
