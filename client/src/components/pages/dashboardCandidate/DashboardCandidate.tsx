@@ -6,11 +6,12 @@ import { HorizontalCard } from "../../UI/card/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import { useAuth } from "../../../context/auth";
-import { useEffect } from "react";
-import axios from "axios";
 import { getCandidateById } from "../../../api/candidates";
 
-const DashboardCandidate = () => {
+import React from "react";
+
+
+const DashboardCandidate: React.FC = () => {
   // state
   const { auth, setAuth } = useAuth();
   console.log("auth dashboard", auth);
@@ -19,11 +20,10 @@ const DashboardCandidate = () => {
     const candidates = getCandidateById(user_id);
     console.log("candidates", candidates);
   };
-  
+
   if (auth?.user?.id) {
     fetchCandidate(auth.user.id);
   }
-
   const name = "John Doe";
   const profession = "Frontend Developer";
   const progress = 80;

@@ -8,11 +8,7 @@ import { useAuth } from "../../../context/auth";
 
 import "./Login.css";
 
-interface ILoginProps {
-  setUser: (userType: string) => void;
-}
-
-const Login: React.FC<ILoginProps> = ({ setUser }) => {
+const Login = () => {
   // state
   const { auth, setAuth } = useAuth();
   console.log("auth", auth);
@@ -40,10 +36,10 @@ const Login: React.FC<ILoginProps> = ({ setUser }) => {
         const { user } = response.data;
         console.log("Response", response.status);
         // Set user_type in local storage
-        setUser(user.user_type);
-        // Set auth in context
-        setAuth({ user });
-        localStorage.setItem("auth", JSON.stringify(user));
+        // setUser(user.user_type);
+        localStorage.setItem("user_type", user.user_type);
+        const t = localStorage.getItem("user_type");
+        console.log("Storage: ", t);
         // Navigate to the dashboard
         navigate("/");
       })
