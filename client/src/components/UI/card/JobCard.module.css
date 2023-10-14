@@ -1,4 +1,4 @@
-.matches-tag {
+.matchesTag {
   background-color: rgb(53, 188, 50);
   color: #fff;
   font-size: 1.4rem;
@@ -21,22 +21,22 @@
   width: 100%;
 }
 
-.company-info {
+.companyInfo {
   display: flex;
   flex-direction: column;
 }
 
-.job-header {
+.jobHeader {
   display: flex;
   justify-content: space-between;
 }
 
-.card-content {
+.cardContent {
   display: flex;
   flex-direction: column;
 }
 
-.go-to-talents {
+.goToTalents {
   width: 35rem;
   height: 40px;
   padding: 0px, 0px, 3px, 0px;
@@ -55,11 +55,11 @@
   margin-right: 16px;
 }
 
-.card-content div:nth-child(2) {
+.cardContent div:nth-child(2) {
   flex: 1;
 }
 
-.job-info {
+.jobInfo {
   display: flex;
 }
 
@@ -69,14 +69,7 @@
   margin: 2rem 4rem 2rem 0;
 }
 
-h2,
-h3,
-h4,
-h5 {
-  margin: 0;
-}
-
-.go-talents {
+.goTalents {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,13 +82,14 @@ h5 {
   top: -1rem;
 }
 
-.job-level {
+.jobLevel {
   font-size: 1.3rem;
+  margin: 0;
 }
 
-.company-name,
-company-location {
-  margin-top: 1rem;
+.companyName,
+.companyLocation {
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -104,7 +98,7 @@ company-location {
     margin-bottom: 0.05rem;
   }
 
-  .matches-tag {
+  .matchesTag {
     position: relative;
     transform: translate(-11rem, -7rem);
     white-space: normal;
@@ -115,13 +109,13 @@ company-location {
     margin: auto;
   }
 
-  .job-header {
+  .jobHeader {
     display: flex;
     justify-content: space-between;
     margin-right: 2rem;
   }
 
-  .company-info {
+  .companyInfo {
     text-align: center;
   }
 
@@ -129,25 +123,25 @@ company-location {
     top: 0;
   }
 
-  .go-talents {
+  .goTalents {
     margin-top: 10px;
   }
 
-  .job-level {
+  .jobLevel {
     font-size: 1.3rem;
 
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .card-content {
+  .cardContent {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     display: flex;
     flex-direction: column;
   }
-  .job-title {
+  .jobTitle {
     padding-top: 2rem;
   }
 }

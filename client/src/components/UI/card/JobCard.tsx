@@ -35,30 +35,30 @@ const JobCard: React.FC<JobCardProps> = ({
 
   return (
     <Card className={styling.card}>
-      <div className={styling["card-content"]}>
-        <div className={styling["job-header"]}>
+      <div className={styling.cardContent}>
+        <div className={styling.jobHeader}>
           <Avatar className={styling.avatar} src={avatarUrl} />
-          <div className={styling["company-info"]}>
-            <h4 className={styling["company-name"]}>{company_name}</h4>
-            <h5 className={styling["company-location"]}>{company_location}</h5>
+          <div className={styling.companyInfo}>
+            <h4 className={styling.companyName}>{company_name}</h4>
+            <h5 className={styling.companyLocation}>{company_location}</h5>
             <h6 className={styling.employee}>{employees} employees</h6>
           </div>
-          <div className={styling["top-right-icon"]}>
+          <div className={styling.topRightIcon}>
             {<IconExternalLink color="black" />}
           </div>
         </div>
-        <div className={styling["job-info"]}>
+        <div className={styling.jobInfo}>
           <div>
-            <h2 className={styling["job-title"]}>{name}</h2>
-            <h3 className={styling["job-level"]}>
-            {level} | {location} | {department}{" "}
+            <h2 className={styling.jobTitle}>{name}</h2>
+            <h3 className={styling.jobLevel}>
+              {level} | {location} | {department}
             </h3>
           </div>
-          <div className={styling["matches-tag"]}>{match} matches</div>
+          <div className={styling.matchesTag}>{match} matches</div>
         </div>
-        <div className={styling["job-description"]}>{truncatedDescription}</div>
-        <div className={styling["go-talents"]}>
-          <Button className={styling["go-to-talents"]}>Go to talents</Button>
+        <div className={styling.jobDescription}>{truncatedDescription}</div>
+        <div className={styling.goTalents}>
+          <Button className={styling.goToTalents}>Go to talents</Button>
         </div>
       </div>
     </Card>
