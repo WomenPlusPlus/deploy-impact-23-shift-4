@@ -18,11 +18,7 @@ def get_all_values_route(Values):
                 result = []
 
                 for value in values:
-                    value_data = {
-                        "id": value.id,
-                        "name": value.name,
-                    }
-                    result.append(value_data)
+                    result.append(value.to_dict())
 
                 return jsonify({"values": result}), 200
         except Exception as e:

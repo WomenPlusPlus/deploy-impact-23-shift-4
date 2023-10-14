@@ -18,17 +18,7 @@ def get_association_by_id_route(Association):
                 if not association:
                     return jsonify({"message": "association not found"}), 404
 
-                association_data = {
-                    "id": association.id,
-                    "user_id": association.user_id,
-                    "email": association.email,
-                    "address": association.address,
-                    "contact_details": association.contact_details,
-                    "association_name": association.association_name,
-                    "url": association.url,
-                }
-
-                return jsonify({"associations": association_data}), 200
+                return jsonify({"associations": association.to_dict()}), 200
 
         except Exception as e:
             jsonify({"message": f"Error getting association data: {e}"}), 500

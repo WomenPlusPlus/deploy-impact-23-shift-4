@@ -17,26 +17,10 @@ def update_company_route(Company, db):
                     return jsonify({"message": "company not found"}), 404
 
                 # Update the company's fields based on the data provided
-                if "email" in data:
-                    company.email = data["email"]
-                if "associations" in data:
-                    company.associations = data["associations"]
-                if "company_name" in data:
-                    company.company_name = data["company_name"]
-                if "address" in data:
-                    company.address = data["address"]
-                if "values" in data:
-                    company.values = data["values"]
-                if "job_types" in data:
-                    company.job_types = data["job_types"]
-                if "contact_details" in data:
-                    company.contact_details = data["contact_details"]
-                if "linkedin_url" in data:
-                    company.linkedin_url = data["linkedin_url"]
-                if "kununu_url" in data:
-                    company.kununu_url = data["kununu_url"]
-                if "open_positions" in data:
-                    company.open_positions = data["open_positions"]
+                company_dict = company.to_dict()
+                for key, _ in company_dict.items():
+                    if key in data:
+                        setattr(company, key, data[key])
 
                 db.session.commit()
 

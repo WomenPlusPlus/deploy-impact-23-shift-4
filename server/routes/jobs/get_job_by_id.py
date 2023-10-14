@@ -24,22 +24,7 @@ def get_job_by_id_route(Jobs):
                 if not job:
                     return jsonify({"message": "job not found"}), 404
 
-                job_data = {
-                    "id": job.id,
-                    "associations": job.associations,
-                    "company_id": job.company_id,
-                    "title": job.title,
-                    "description": job.description,
-                    "values": job.values,
-                    "skills": job.skills,
-                    "hiring_process_duration": job.hiring_process_duration,
-                    "posting_date": job.posting_date,
-                    "matching_candidates": job.matching_candidates,
-                    "salary": job.salary,
-                    "location": job.location,
-                }
-
-                return jsonify({"jobs": job_data}), 200
+                return jsonify({"jobs": job.to_dict()}), 200
 
         except Exception as e:
             jsonify({"message": f"Error getting job data: {e}"}), 500

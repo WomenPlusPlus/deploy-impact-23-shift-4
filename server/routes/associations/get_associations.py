@@ -18,16 +18,7 @@ def get_all_associations_route(Association):
                 result = []
 
             for association in associations:
-                association_data = {
-                    "id": association.id,
-                    "user_id": association.user_id,
-                    "email": association.email,
-                    "address": association.address,
-                    "contact_details": association.contact_details,
-                    "association_name": association.association_name,
-                    "url": association.url,
-                }
-                result.append(association_data)
+                result.append(association.to_dict())
 
             return jsonify({"associations": result}), 200
         except Exception as e:

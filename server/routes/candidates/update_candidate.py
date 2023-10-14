@@ -25,7 +25,7 @@ def update_candidate_route(Candidate, db):
 
                 # Update the candidate's fields based on the data provided
                 candidate_dict = candidate.to_dict()
-                for key, value in candidate_dict.items():
+                for key, _ in candidate_dict.items():
                     if key in data:
                         setattr(candidate, key, data[key])
                 print(candidate.to_dict())
