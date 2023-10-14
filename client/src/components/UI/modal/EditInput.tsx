@@ -1,62 +1,60 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Input, Select } from "antd";
 import { Button } from "../button/Button";
 import { IconEdit } from "@tabler/icons-react";
+import { Candidate, EditInputProps } from "../../pages/types/types";
 const { Option } = Select;
-
 enum LanguageLevelText {
   Look = "Looking for a job",
   NotLook = "Not looking for a job",
 }
 
-interface EditInputProps<T> {
-  visible: boolean;
-  setVisible: (arg: boolean) => void;
-  // Accept generic object
-  valuesToEdit: T;
-  setValuesToEdit: (arg: T) => void;
-  fieldsToDisplay: string[];
-  onClick: () => void;
-}
-
-/**
- * Modal to edits inputs
- * @param visible status of the modal visibility
- * @param setVisible to set the visibility of the modal
- * @param valuesToEdit the values to edit
- * @param setValuesToEdit the function to set the values to edit
- * @param fieldsToDisplay the fields to display
- * @param onClick the function to call when the edit icon is clicked
- * @returns Modal to edit inputs
- */
-const EditInput = <T extends Record<string, string>>({
-  visible,
-  setVisible,
-  valuesToEdit,
-  setValuesToEdit,
-  fieldsToDisplay,
+const EditInput: React.FC<EditInputProps<Candidate>> = ({
+  onSave,
   onClick,
-}: EditInputProps<T>) => {
-  const [values, setValues] = useState(valuesToEdit);
+  setVisible,
+  setValuesToEdit,
+  visible,
+  candidate,
+  fieldsToDisplay, // Array of nicely formatted fields to display
+  fieldKeysToEdit, // Array of keys of the fields to edit
+}) => {
+  // State
+  const [values, setValues] = useState({} as Candidate);
 
+  /**
+   * Save the values to edit
+   */
   const handleSave = () => {
     setValuesToEdit(values);
+    onSave && onSave(values);
     setVisible(false);
   };
 
+  /**
+   * Close the modal
+   */
   const onCancel = () => {
     setVisible(false);
   };
 
+  /**
+   * Set the values to edit when the modal is opened
+   */
+  useEffect(() => {
+    setValues(candidate);
+  }, [candidate]);
+
   return (
     <>
       <IconEdit color="black" style={{ cursor: "pointer" }} onClick={onClick} />
+
       <Modal
         open={visible}
-        title="Contact Info"
+        title="Edit Information"
         onCancel={onCancel}
         footer={[
-          <Button key="save" onClick={onCancel}>
+          <Button key="cancel" onClick={onCancel}>
             Cancel
           </Button>,
           <Button key="save" onClick={handleSave}>
@@ -64,29 +62,30 @@ const EditInput = <T extends Record<string, string>>({
           </Button>,
         ]}
       >
-        {Object.entries(values).map(([field, value], index) => (
-          <div key={field}>
+        {fieldKeysToEdit.map((field: string, index) => (
+          <div key={index}>
             <p>{fieldsToDisplay[index]}:</p>
+
             {field === "job_status" ? (
               <Select
                 style={{ width: "100%" }}
-                value={value}
-                onChange={(value) =>
+                value={values[field] || ""}
+                onChange={(value) => {
                   setValues((prevValues) => ({
                     ...prevValues,
                     [field]: value,
-                  }))
-                }
+                  }));
+                }}
               >
-                {Object.keys(LanguageLevelText).map((level) => (
-                  <Option key={level} value={level}>
-                    {level}
+                {Object.entries(LanguageLevelText).map(([level, text]) => (
+                  <Option key={level} value={text}>
+                    {text}
                   </Option>
                 ))}
               </Select>
             ) : (
               <Input
-                value={value}
+                value={(values[field as keyof Candidate] as string) || ""}
                 onChange={(e) => {
                   setValues((prevValues) => ({
                     ...prevValues,

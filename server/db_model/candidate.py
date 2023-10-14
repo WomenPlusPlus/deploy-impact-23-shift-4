@@ -29,27 +29,29 @@ def init_candidate_model(db):
         first_name = db.Column(db.String(80))  # First name as a string
         last_name = db.Column(db.String(80))  # Last name as a string
         preferred_name = db.Column(db.String(80))  # Preferred name as a string
+        city = db.Column(db.String(80))  # City as a string
+        country = db.Column(db.String(80))  # Country as a string
         cv_reference = db.Column(db.String(256))  # CV reference as a string
-        searched_job = db.Column(db.JSON)  # Type of job searching as JSON
         address = db.Column(db.String(256))  # Address as a string
         phone_number = db.Column(db.String(20))  # Phone number as a string
         birth_date = db.Column(db.Date)  # Birth date as a date
         work_permit = db.Column(db.String(80))  # Work permit as a string
         notice_period = db.Column(db.String(80))  # Notice period as a string
         job_status = db.Column(db.String(256))  # Job status as an integer
+        preferred_jobs = db.Column(db.JSON)  # Type of job you're looking for as JSON
         company_type = db.Column(
             db.ARRAY(db.String)
-        )  # Type of company as an array of strings
-        matching_jobs = db.Column(
-            db.ARRAY(db.Integer)
-        )  # Matching jobs as an array of foreign keys (integer)
-        matching_companies = db.Column(
-            db.ARRAY(db.Integer)
-        )  # Matching companies as an array of foreign keys (integer)
+        )  # Type of company as an JSN of strings
+        matching_jobs = db.Column(db.JSON)  # Matching jobs as an JSON of foreign keys (integer)
+        matching_companies = db.Column(db.JSON)  # Matching companies as an array of foreign keys (integer)
         values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
         skills = db.Column(db.JSON)  # Skills as a JSON array of objects
         languages = db.Column(db.JSON)  # Languages as a JSON array of objects
         links = db.Column(db.JSON)  # Links as a JSON array of objects
+        certificates = db.Column(db.JSON)  # Certificates as a JSON array of objects
+        visible_information = db.Column(db.JSON)
+        experience = db.Column(db.JSON)
+        other_information = db.Column(db.JSON)
 
         def __init__(
             self,
@@ -59,10 +61,12 @@ def init_candidate_model(db):
             associations,
             first_name=None,
             last_name=None,
+            city=None,
+            country=None,
             preferred_name=None,
             cv_reference=None,
             values=None,
-            searched_job=None,
+            preferred_jobs=None,
             address=None,
             phone_number=None,
             birth_date=None,
@@ -75,6 +79,10 @@ def init_candidate_model(db):
             skills=None,
             languages=None,
             links=None,
+            certificates=None,
+            visible_information=None,
+            experience=None,
+            other_information=None,
         ):
             """
             Initialize a new candidate object.
@@ -88,10 +96,12 @@ def init_candidate_model(db):
             self.associations = associations
             self.first_name = first_name
             self.last_name = last_name
+            self.city = city
+            self.country = country
             self.preferred_name = preferred_name
             self.cv_reference = cv_reference
             self.values = values
-            self.searched_job = searched_job
+            self.preferred_jobs = preferred_jobs
             self.address = address
             self.phone_number = phone_number
             self.birth_date = birth_date
@@ -104,6 +114,10 @@ def init_candidate_model(db):
             self.skills = skills
             self.languages = languages
             self.links = links
+            self.certificates = certificates
+            self.visible_information = visible_information
+            self.experience = experience
+            self.other_information = other_information
 
         def to_dict(self):
             """
@@ -116,10 +130,12 @@ def init_candidate_model(db):
                 "associations": self.associations,
                 "first_name": self.first_name,
                 "last_name": self.last_name,
+                "city": self.city,
+                "country": self.country,
                 "preferred_name": self.preferred_name,
                 "cv_reference": self.cv_reference,
                 "values": self.values,
-                "searched_job": self.searched_job,
+                "preferred_jobs": self.preferred_jobs,
                 "address": self.address,
                 "phone_number": self.phone_number,
                 "birth_date": self.birth_date.isoformat() if self.birth_date else None,
@@ -132,6 +148,10 @@ def init_candidate_model(db):
                 "skills": self.skills,
                 "languages": self.languages,
                 "links": self.links,
+                "certificates": self.certificates,
+                "visible_information": self.visible_information,
+                "experience": self.experience,
+                "other_information": self.other_information,
             }
 
     return Candidate

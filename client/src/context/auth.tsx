@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 import axios from "axios";
 
@@ -28,6 +29,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   console.log("AuthProvider initialized.");
   // Auth state
   const [auth, setAuth] = useState<object>({});
+
+  useEffect(() => {
+    localStorage.getItem("auth") &&
+      setAuth(JSON.parse(localStorage.getItem("auth") || "{}"));
+  }, []);
   // axios config for all requests
   if (window.location.hostname === "localhost") {
     // Local environment
