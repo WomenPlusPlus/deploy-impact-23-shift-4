@@ -3,7 +3,7 @@ import { Candidate } from "../../types/types";
 import { updateCandidateById } from "../../../../api/candidates";
 
 const getFakeData = () => {
-  const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address", "me"];
+  const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
   const fieldsToDisplayProfile = [
     "First name",
     "Last name",

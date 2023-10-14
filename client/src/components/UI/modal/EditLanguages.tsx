@@ -2,18 +2,9 @@ import React, { useState } from "react";
 import { Modal, Input, Select, Space } from "antd";
 import { Button } from "../button/Button";
 import styling from "./EditLanguages.module.css";
+import { Candidate } from "../../pages/types/types";
 
 const { Option } = Select;
-
-enum LanguageLevelNumber {
-  Elementary = 10,
-  Beginner = 20,
-  Intermediate = 30,
-  Advanced = 40,
-  Professional = 60,
-  Expert = 80,
-  Native = 100,
-}
 
 enum LanguageLevelText {
   Elementary = "Elementary",
@@ -25,31 +16,36 @@ enum LanguageLevelText {
   Native = "Native",
 }
 
-interface Language {
-  name: string;
-  levelName: string;
-  score: number;
+enum LanguageLevelNumber {
+  Elementary = 10,
+  Beginner = 20,
+  Intermediate = 30,
+  Advanced = 40,
+  Professional = 60,
+  Expert = 80,
+  Native = 100,
 }
 
 interface EditLanguagesProps {
   visible: boolean;
   setVisible: (arg: boolean) => void;
-  languages?: Language[];
-  setLanguages?: (arg: Language[]) => void;
+  values: Candidate;
+  setValues: (arg: Candidate) => void;
+  onSave?: (arg: Candidate) => void;
 }
 
 const EditLanguages: React.FC<EditLanguagesProps> = ({
   visible,
   setVisible,
-  languages,
-  setLanguages,
+  values,
+  setValues,
+  onSave,
 }) => {
-  const [values, setValues] = useState(languages || []);
+  const [candidateValues, setCandidateValues] = useState(values);
 
   const handleSave = () => {
-    if (setLanguages) {
-      setLanguages(values);
-    }
+    setValues(candidateValues);
+    onSave && onSave(candidateValues);
     setVisible(false);
   };
 
@@ -57,20 +53,26 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
     setVisible(false);
   };
 
+  const addLanguage = () => {
+    setCandidateValues((prevCandidate) => ({
+      ...prevCandidate,
+      languages: [
+        ...(prevCandidate.languages || []),
+        { name: "", level: "", score: 0 },
+      ],
+    }));
+  };
+
   const handleChange = (index: number, key: string, value: string) => {
-    setValues((prevValues) => {
-      const updatedValues = [...prevValues];
-      if (key === "levelName") {
-        const levelName = value as keyof typeof LanguageLevelText;
-        updatedValues[index] = {
-          ...updatedValues[index],
-          [key]: levelName,
-          score: LanguageLevelNumber[levelName],
-        };
-      } else {
-        updatedValues[index] = { ...updatedValues[index], [key]: value };
+    setCandidateValues((prevCandidate) => {
+      const updatedCandidate = { ...prevCandidate };
+      if (key === "level") {
+        (updatedCandidate.languages as any)[index][key] = value;
+        (updatedCandidate.languages as any)[index]["score"] =
+          LanguageLevelNumber[value as keyof typeof LanguageLevelText];
       }
-      return updatedValues;
+      (updatedCandidate.languages as any)[index][key] = value;
+      return updatedCandidate;
     });
   };
 
@@ -93,13 +95,15 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
       ]}
       className={styling.modal}
     >
-      {values.map((language, index) => (
+      {candidateValues?.languages?.map((language, index) => (
         <Space key={index} direction="horizontal" className={styling.content}>
           <div>
             <label>Name:</label>
             <Input
-              value={language.name}
-              onChange={(e) => handleChange(index, "name", e.target.value)}
+              value={language.name || ""}
+              onChange={(e) => {
+                handleChange(index, "name", e.target.value);
+              }}
             />
           </div>
 
@@ -107,8 +111,8 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
             <label>Level:</label>
             <Select
               style={{ width: "100%" }}
-              value={language.levelName}
-              onChange={(value) => handleChange(index, "levelName", value)}
+              value={language.level || ""}
+              onChange={(value) => handleChange(index, "level", value)}
             >
               {Object.keys(LanguageLevelText).map((level) => (
                 <Option key={level} value={level}>
@@ -119,6 +123,10 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
           </div>
         </Space>
       ))}
+
+      <Button key="addLanguage" onClick={addLanguage}>
+        Add Language
+      </Button>
     </Modal>
   );
 };

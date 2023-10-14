@@ -51,24 +51,12 @@ const CandidateProfile = () => {
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(
     getFakeData().user.typeOfJobs
   );
+  const associationLabels = getFakeData().user.associations;
   const [skillsLabels, setSkillsLabels] = useState(getFakeData().user.skills);
   const [valuesLabels, setValuesLabels] = useState(getFakeData().user.values);
-  // Contact info
+  // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
-  const [contactInfo, setContactInfo] = useState(
-    getFakeData().user.contactInfo
-  );
-
-  // Languages
-  const langs: Language[] = getFakeData().user.languages.map((lang) => ({
-    name: lang.name,
-    levelName: lang.levelName,
-    score: lang.score,
-  }));
-
-  const associationLabels = getFakeData().user.associations;
   const [isEditLanguages, setIsEditLanguages] = useState(false);
-  const [languagesToEdit, setLanguagesToEdit] = useState(langs);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
 
   const fetchCandidate = async () => {
@@ -103,7 +91,7 @@ const CandidateProfile = () => {
    * Handle the save of the profile info
    * @param valuesToAdd the values to add to the candidate object
    */
-  const handleSaveProfileInfo = async (valuesToAdd: object) => {
+  const handleSaveEdit = async (valuesToAdd: object) => {
     // Add the values to the candidate object
     const candidateUpdated = { ...candidate, ...valuesToAdd };
     // Update the state
@@ -128,7 +116,7 @@ const CandidateProfile = () => {
         <div>
           <div className={styling.userName}>
             <h3>
-              Welcome, {candidate?.first_name} {candidate?.last_name} !
+              {candidate?.first_name} {candidate?.last_name}
             </h3>
 
             <h4>{candidate?.job_status}</h4>
@@ -153,13 +141,14 @@ const CandidateProfile = () => {
             setValuesToEdit={setCandidate}
             fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
             onClick={editHandlerProfile}
-            onSave={handleSaveProfileInfo}
+            onSave={handleSaveEdit}
             fieldKeysToEdit={[
               "first_name",
               "last_name",
               "job_status",
               "city",
               "country",
+              // add links here. Remember: Links are an array of objects [{name: "", url: ""}]
             ]}
           />
         </div>
@@ -339,24 +328,26 @@ const CandidateProfile = () => {
         <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
-            {/* <EditInput
+            <EditInput
               visible={isEditContactInfo}
               setVisible={setIsEditContactInfo}
-              valuesToEdit={contactInfo}
-              setValuesToEdit={setContactInfo}
+              candidate={candidate}
+              setValuesToEdit={setCandidate}
               fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
               onClick={editHandlerContactInfo}
-            /> */}
+              onSave={handleSaveEdit}
+              fieldKeysToEdit={["phone_number", "email", "address"]}
+            />
           </div>
           <div>
             <p>
-              <strong>Phone number:</strong> {contactInfo.phoneNumber}
+              <strong>Phone number:</strong> {candidate?.phone_number}
             </p>
             <p>
-              <strong>Email:</strong> {contactInfo.email}
+              <strong>Email:</strong> {candidate?.email}
             </p>
             <p>
-              <strong>Address:</strong> {contactInfo.address}
+              <strong>Address:</strong> {candidate?.address}
             </p>
           </div>
         </CardContainer>
@@ -374,10 +365,11 @@ const CandidateProfile = () => {
           <EditLanguages
             visible={isEditLanguages}
             setVisible={setIsEditLanguages}
-            languages={languagesToEdit}
-            setLanguages={setLanguagesToEdit}
+            values={candidate}
+            setValues={setCandidate}
+            onSave={handleSaveEdit}
           />
-          <ProgressBarComponent languages={languagesToEdit} />
+          <ProgressBarComponent candidate={candidate} />
         </CardContainer>
 
         {/* Experience */}
