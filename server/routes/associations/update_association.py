@@ -16,17 +16,11 @@ def update_association_route(Association, db):
                 if not association:
                     return jsonify({"message": "association not found"}), 404
 
-                # Update the association's fields based on the data provided
-                if "email" in data:
-                    association.email = data["email"]
-                if "association_name" in data:
-                    association.association_name = data["association_name"]
-                if "address" in data:
-                    association.address = data["address"]
-                if "contact_details" in data:
-                    association.contact_details = data["contact_details"]
-                if "url" in data:
-                    association.url = data["url"]
+                # Update the association's fields based on the data provided               
+                association_dict = association.to_dict()
+                for key, _ in association_dict.items():
+                    if key in data:
+                        setattr(association, key, data[key])
 
                 db.session.commit()
 

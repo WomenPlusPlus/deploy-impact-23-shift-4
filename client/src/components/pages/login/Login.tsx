@@ -4,11 +4,14 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
 import axios from "axios"; // Import Axios for making HTTP requests
+import { useAuth } from "../../../context/auth";
 
 import "./Login.css";
 
 const Login = () => {
   // state
+  const { auth, setAuth } = useAuth();
+  console.log("auth", auth);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,11 +35,10 @@ const Login = () => {
         // Handle the backend response here
         const { user } = response.data;
         console.log("Response", response.status);
-        // Set user_type in local storage
-        // setUser(user.user_type);
+        // Set auth, user_type in local storage
         localStorage.setItem("user_type", user.user_type);
-        const t = localStorage.getItem("user_type");
-        console.log("Storage: ", t);
+        localStorage.setItem("auth", JSON.stringify({user: user}));
+        setAuth({user: user});
         // Navigate to the dashboard
         navigate("/");
       })

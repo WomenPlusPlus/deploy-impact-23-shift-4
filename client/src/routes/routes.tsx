@@ -8,7 +8,7 @@ import Authenticated from "../components/layout/authenticated/Authenticated";
 import Jobs from "../components/pages/jobs/Jobs";
 import Companies from "../components/pages/companies/Companies";
 import Shortlist from "../components/pages/shortlist/Shortlist";
-import CandidateProfile from "../components/pages/profile/CandidateProfile";
+import CandidateProfile from "../components/pages/candidateProfile/CandidateProfile";
 
 import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 import NotFound from "../components/pages/notfound/NotFound";

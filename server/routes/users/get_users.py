@@ -13,13 +13,7 @@ def get_all_users_route(User):
                 result = []
 
             for user in users:
-                user_data = {
-                    "id": user.id,
-                    "email": user.email,
-                    "password": user.password,
-                    "user.type": user.user_type,
-                }
-                result.append(user_data)
+                result.append(user.to_dict())
 
             return jsonify({"users": result}), 200
         except Exception as e:

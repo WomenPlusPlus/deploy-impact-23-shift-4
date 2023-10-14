@@ -1,11 +1,15 @@
-import { useState } from "react";
-import styling from "./CandidateProfile.module.css";
+import { useEffect, useState } from "react";
+
 import Avatar from "../../UI/avatar/Avatar";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
-import { CardContainer } from "../../UI/container/CardContainer";
 import { Labels } from "../../UI/labels/Label";
-import { EditModal } from "../../UI/modal/EditModal";
+import { EditTag } from "../../UI/modal/EditTag";
+import { EditInput } from "../../UI/modal/EditInput";
+import { getFakeData } from "./helpers/helper";
+import { ProgressBar } from "../../UI/progressbar/ProgressBar";
+import { CardContainer } from "../../UI/container/CardContainer";
+import { EditLanguages } from "../../UI/modal/EditLanguages";
+import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import {
   ContentBlock,
   HorizontalLine,
@@ -17,57 +21,90 @@ import {
   IconWorldWww,
   IconTags,
 } from "@tabler/icons-react";
-import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
+
+import { getCandidateById, updateCandidateById } from "../../../api/candidates";
+
+import { Language, Candidate } from "../types/types";
+
+import styling from "./CandidateProfile.module.css";
 
 const CandidateProfile = () => {
-  const user = {
-    name: "John Doe",
-    status: "Looking for a job",
-    city: "Zurich",
-    country: "CH",
-    progress: 80,
-    list: [
-      "PersonalDetails",
-      "Skills",
-      "Values",
-      "Documents",
-      "Privacy",
-      "TypeOfJobs",
-      "Languages",
-    ],
-    associations: ["Woman++", "proFemmes", "Coders", "Kpi"],
-    typeOfJobs: ["Full-time", "Part-time", "Internship", "Freelance"],
-    skills: ["React", "Node.js", "TypeScript", "JavaScript", "HTML/CSS"],
-    values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
-    languages: [
-      { name: "English", levelName: "Fluent", score: 70 },
-      { name: "Italian", levelName: "Native", score: 100 },
-    ],
+  // Filter out the labels that are already the candidate's labels
+  const allLabelsSkills = () => {
+    return getFakeData().allSkill.filter(
+      (label) => !skillsLabels.includes(label)
+    );
+  };
+  const allLabelsValues = () => {
+    return getFakeData().allValue.filter(
+      (label) => !valuesLabels.includes(label)
+    );
+  };
+  const allTypeOfJobs = () => {
+    return getFakeData().allTypeOfJob.filter(
+      (label) => !typeOfJobsLabels.includes(label)
+    );
   };
 
-  const allLabelsSkills = ["Vue", "Express.js", "Bash", "R", "C++", "Java"];
-
-  const {
-    name,
-    status,
-    city,
-    country,
-    progress,
-    list,
-    associations,
-    typeOfJobs,
-    skills,
-    values,
-    languages,
-  } = user;
-
   // State
-  const [associationLabels] = useState(associations);
-  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(typeOfJobs);
-  const [skillsLabels, setSkillsLabels] = useState(skills);
-  const [valuesLabels, setValuesLabels] = useState(values);
-  const [allSkillsLabels] = useState(allLabelsSkills);
+  const [candidate, setCandidate] = useState({} as Candidate);
+  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(
+    getFakeData().user.typeOfJobs
+  );
+  const associationLabels = getFakeData().user.associations;
+  const [skillsLabels, setSkillsLabels] = useState(getFakeData().user.skills);
+  const [valuesLabels, setValuesLabels] = useState(getFakeData().user.values);
+  // Is edit
+  const [isEditContactInfo, setIsEditContactInfo] = useState(false);
+  const [isEditLanguages, setIsEditLanguages] = useState(false);
+  const [isProfileEdit, setIsProfileEdit] = useState(false);
 
+  const fetchCandidate = async () => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    console.log("user_id", auth.user.id);
+    try {
+      const candidateFetched = await getCandidateById(auth.user.id);
+      setCandidate(candidateFetched);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCandidate();
+  }, []);
+
+  // handlers
+  const editHandlerContactInfo = () => {
+    setIsEditContactInfo(true);
+  };
+
+  const editHandlerLanguages = () => {
+    setIsEditLanguages(true);
+  };
+
+  const editHandlerProfile = () => {
+    setIsProfileEdit(true);
+  };
+
+  /**
+   * Handle the save of the profile info
+   * @param valuesToAdd the values to add to the candidate object
+   */
+  const handleSaveEdit = async (valuesToAdd: object) => {
+    // Add the values to the candidate object
+    const candidateUpdated = { ...candidate, ...valuesToAdd };
+    // Update the state
+    setCandidate(candidateUpdated);
+    // Send request to update the candidate
+    const is_updated = await updateCandidateById(
+      candidate?.user_id,
+      candidateUpdated
+    );
+    console.log("is_updated", is_updated);
+  };
+
+  console.log("candidate profile", candidate);
   return (
     <div className={styling.main}>
       {/* Profile text */}
@@ -78,14 +115,17 @@ const CandidateProfile = () => {
 
         <div>
           <div className={styling.userName}>
-            <h3>{name}</h3>
-            <h4>{status}</h4>
+            <h3>
+              {candidate?.first_name} {candidate?.last_name}
+            </h3>
+
+            <h4>{candidate?.job_status}</h4>
           </div>
 
           <div className={styling.location}>
             <IconMapPin color="black" />
             <p>
-              {city}, {country}
+              {candidate?.city}, {candidate?.country}
             </p>
             <p>|</p>
             <IconBrandLinkedin color="black" />
@@ -94,7 +134,23 @@ const CandidateProfile = () => {
         </div>
 
         <div className={styling.editIcon}>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
+          <EditInput
+            visible={isProfileEdit}
+            setVisible={setIsProfileEdit}
+            candidate={candidate}
+            setValuesToEdit={setCandidate}
+            fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
+            onClick={editHandlerProfile}
+            onSave={handleSaveEdit}
+            fieldKeysToEdit={[
+              "first_name",
+              "last_name",
+              "job_status",
+              "city",
+              "country",
+              // add links here. Remember: Links are an array of objects [{name: "", url: ""}]
+            ]}
+          />
         </div>
       </CardContainer>
 
@@ -102,34 +158,46 @@ const CandidateProfile = () => {
         {/* Profile completed */}
         <CardContainer className={styling.profileCompletedElement}>
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Your profile is {progress} complete.</h3>
+            <h3>Your profile is {getFakeData().user?.progress} complete.</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
 
-          <ProgressBar progress={progress} height="1.5rem" />
+          <ProgressBar
+            progress={getFakeData().user?.progress}
+            height="1.5rem"
+          />
 
           {/* Fields completed */}
           <div className={styling.profileCompletedFieldsComponent}>
             <div className={styling.column}>
-              {list.slice(0, Math.ceil(list.length / 2)).map((field, index) => (
-                <div
-                  key={index}
-                  className={styling.profileCompletedFieldsElement}
-                >
-                  <ProfileCompletedFields isCompleted={false} field={field} />
-                </div>
-              ))}
+              {getFakeData()
+                .user?.list.slice(
+                  0,
+                  Math.ceil(getFakeData().user?.list.length / 2)
+                )
+                .map((field, index) => (
+                  <div
+                    key={index}
+                    className={styling.profileCompletedFieldsElement}
+                  >
+                    <ProfileCompletedFields isCompleted={false} field={field} />
+                  </div>
+                ))}
             </div>
 
             <div className={styling.column}>
-              {list.slice(Math.ceil(list.length / 2)).map((field, index) => (
-                <div
-                  key={index}
-                  className={styling.profileCompletedFieldsElement}
-                >
-                  <ProfileCompletedFields isCompleted={true} field={field} />
-                </div>
-              ))}
+              {getFakeData()
+                .user?.list.slice(
+                  Math.ceil(getFakeData().user?.list.length / 2)
+                )
+                .map((field, index) => (
+                  <div
+                    key={index}
+                    className={styling.profileCompletedFieldsElement}
+                  >
+                    <ProfileCompletedFields isCompleted={true} field={field} />
+                  </div>
+                ))}
             </div>
           </div>
         </CardContainer>
@@ -162,7 +230,7 @@ const CandidateProfile = () => {
 
       {/* Associations & Type of jobs  */}
       <div className={styling.associationsTypeOfJobs}>
-        <CardContainer className={styling.associationContainer}>
+        <CardContainer className={styling.secondContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Associations</h3>
           </div>
@@ -178,14 +246,15 @@ const CandidateProfile = () => {
             ))}
           </div>
         </CardContainer>
-        <CardContainer className={styling.typeOfJobsContainer}>
+        <CardContainer className={styling.secondContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            <EditModal
+            <EditTag
               labelsList={typeOfJobsLabels}
               setLabelsList={setTypeOfJobsLabels}
               icon={<IconTags />}
               titleName="Edit your jobs"
+              allLabelsList={allTypeOfJobs()}
             />
           </div>
 
@@ -207,12 +276,12 @@ const CandidateProfile = () => {
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
-          <EditModal
+          <EditTag
             labelsList={skillsLabels}
             setLabelsList={setSkillsLabels}
             icon={<IconTags />}
             titleName="Choose your skills"
-            allLabelsList={allSkillsLabels}
+            allLabelsList={allLabelsSkills()}
           />
         </div>
         <div className={styling.skillsContainerLabels}>
@@ -232,11 +301,12 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
-          <EditModal
+          <EditTag
             labelsList={valuesLabels}
             setLabelsList={setValuesLabels}
             icon={<IconTags />}
             titleName="Choose your values"
+            allLabelsList={allLabelsValues()}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
@@ -255,29 +325,55 @@ const CandidateProfile = () => {
       {/* Contact info, languages, experience */}
       {/* Contact info */}
       <div className={styling.associationsTypeOfJobs}>
-        <CardContainer className={styling.associationContainer}>
+        <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <EditInput
+              visible={isEditContactInfo}
+              setVisible={setIsEditContactInfo}
+              candidate={candidate}
+              setValuesToEdit={setCandidate}
+              fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
+              onClick={editHandlerContactInfo}
+              onSave={handleSaveEdit}
+              fieldKeysToEdit={["phone_number", "email", "address"]}
+            />
           </div>
           <div>
-            <p>Phone number</p>
-            <p>Email</p>
-            <p>Address</p>
+            <p>
+              <strong>Phone number:</strong> {candidate?.phone_number}
+            </p>
+            <p>
+              <strong>Email:</strong> {candidate?.email}
+            </p>
+            <p>
+              <strong>Address:</strong> {candidate?.address}
+            </p>
           </div>
         </CardContainer>
 
         {/* Laguages */}
-        <CardContainer className={styling.typeOfJobsContainer}>
+        <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={editHandlerLanguages}
+            />
           </div>
-          <ProgressBarComponent languages={languages} />
+          <EditLanguages
+            visible={isEditLanguages}
+            setVisible={setIsEditLanguages}
+            values={candidate}
+            setValues={setCandidate}
+            onSave={handleSaveEdit}
+          />
+          <ProgressBarComponent candidate={candidate} />
         </CardContainer>
 
         {/* Experience */}
-        <CardContainer className={styling.typeOfJobsContainer}>
+        <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Experience</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />

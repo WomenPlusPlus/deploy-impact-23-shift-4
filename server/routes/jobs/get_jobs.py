@@ -18,21 +18,7 @@ def get_all_jobs_route(Jobs):
                 result = []
 
                 for job in jobs:
-                    job_data = {
-                        "id": job.id,
-                        "associations": job.associations,
-                        "company_id": job.company_id,
-                        "title": job.title,
-                        "description": job.description,
-                        "values": job.values,
-                        "skills": job.skills,
-                        "hiring_process_duration": job.hiring_process_duration,
-                        "posting_date": job.posting_date,
-                        "matching_candidates": job.matching_candidates,
-                        "salary": job.salary,
-                        "location": job.location,
-                    }
-                    result.append(job_data)
+                    result.append(job.to_dict())
 
             return jsonify({"jobs": result}), 200
         except Exception as e:

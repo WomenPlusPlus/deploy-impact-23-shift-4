@@ -49,7 +49,7 @@ def login_route(User):
                     if is_logged:
                         return jsonify({"message": "Login successful", "user": user.to_dict()}), 200
                     else:
-                        return jsonify({"message": "Login unsuccessful", "user": user}), 417
+                        return jsonify({"message": "Login unsuccessful", "user": user.to_dict()}), 417
                 else:
                     return jsonify({"message": "Invalid email or password"}), 401
             else:

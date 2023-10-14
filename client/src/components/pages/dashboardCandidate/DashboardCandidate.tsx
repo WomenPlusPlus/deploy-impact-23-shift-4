@@ -1,21 +1,43 @@
 import "./DashboardCandidate.css";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
 import { HorizontalCard } from "../../UI/card/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
+import { getCandidateById } from "../../../api/candidates";
+import { Candidate } from "../../../components/pages/types/types";
+
 import React from "react";
 
-interface DashboardProps {
-  userT: string | null;
-}
+const DashboardCandidate: React.FC = () => {
+  // state
+  const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
+  const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+  console.log("auth dashboard", auth);
+  const navigate = useNavigate();
 
-const DashboardCandidate: React.FC<DashboardProps> = ({userT}) => {
-  console.log("Can: ",userT);
+  const fetchCandidate = async (user_id: string) => {
+    console.log("user_id", user_id);
+    try {
+      const candidateFetched = await getCandidateById(user_id);
+      console.log("candidateFetched", candidateFetched);
+      setCandidate(candidateFetched);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCandidate(auth.user?.id);
+  }, [auth.user?.id]);
+
   const name = "John Doe";
   const profession = "Frontend Developer";
   const progress = 80;
+  console.log("candidate", candidate?.email);
   return (
     <div className="first-container">
       <div className="grid">
@@ -24,12 +46,18 @@ const DashboardCandidate: React.FC<DashboardProps> = ({userT}) => {
           <Avatar firstName="Company" size={80} />
 
           <div className="header">
-            <h2 className="header-title">Welcome back, {name}</h2>
+            <h2 className="header-title">
+              Welcome back, {candidate?.first_name}
+            </h2>
             <p>{profession}</p>
           </div>
 
           <div className="open-icon">
-            <IconExternalLink color="black" />
+            <IconExternalLink
+              color="black"
+              onClick={() => navigate("/candidate-profile")}
+              style={{ cursor: "pointer" }}
+            />
           </div>
         </CardContainer>
 

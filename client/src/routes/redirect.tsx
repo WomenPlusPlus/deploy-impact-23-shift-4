@@ -70,7 +70,7 @@ const RegisterRoute: React.FC = () => {
 const DashboardRoute: React.FC = () => {
   const userType = localStorage.getItem("user_type");
   if (userType === "candidate") {
-    return <DashboardCandidate userT={userType} />;
+    return <DashboardCandidate />;
   } else if (userType === "company") {
     return <DashboardCompany />;
   } else if (userType === "association") {

@@ -21,3 +21,8 @@
   margin-bottom: 1rem;
   gap: 1rem;
 }
+
+.searchInput {
+  margin: 2rem 0;
+  width: 80%;
+}

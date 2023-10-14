@@ -1,12 +1,18 @@
 import styling from "./DashboardAssociations.module.scss";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
-import { IconBrandLinkedin, IconExternalLink } from "@tabler/icons-react";
+import {
+  IconBrandLinkedin,
+  IconExternalLink,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import Table from "../../UI/table/Table";
 import { Space } from "antd";
 import { useState } from "react";
+import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
 
 const DashboardAssociations = () => {
   const association_name = "Woman++";
@@ -14,7 +20,7 @@ const DashboardAssociations = () => {
 
   const progress = 80;
 
-  const header = [
+  const headerRequests = [
     {
       title: "Candidate",
       dataIndex: "candidate",
@@ -47,6 +53,29 @@ const DashboardAssociations = () => {
     },
   ];
 
+  const headerInvited = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "User type",
+      dataIndex: "userType",
+      key: "userType",
+    },
+    {
+      title: "Expires in",
+      dataIndex: "expiresIn",
+      key: "expiresIn",
+    },
+  ];
+
   const data = [
     {
       key: "1",
@@ -65,7 +94,55 @@ const DashboardAssociations = () => {
     },
   ];
 
+  const dataInvite = [
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+    {
+      key: "1",
+      name: "John Brown",
+      email: "john.brown@gmail.com",
+      userType: "Candidate",
+      expiresIn: "7 days",
+    },
+  ];
+
   const [tableData, setTableData] = useState(data);
+  const [isSendInviteCandidateOpen, setSendInviteCandidateOpen] =
+    useState(false);
+  const [isSendInviteCompanyOpen, setSendInviteCompanyOpen] = useState(false);
 
   const handleAccept = (record: any) => {
     console.log(`Accepted: ${record.candidate}`);
@@ -81,6 +158,16 @@ const DashboardAssociations = () => {
     setTableData(updatedData);
   };
 
+  const handleSendCompanyInvite = (email: any) => {
+    console.log(`Sending invite to company${email}`);
+    setSendInviteCompanyOpen(false);
+  };
+
+  const handleSendCandidateInvite = (email: any) => {
+    console.log(`Sending invite to candidate ${email}`);
+    setSendInviteCandidateOpen(false);
+  };
+
   return (
     <div className={styling.main}>
       {/* Profile component */}
@@ -89,9 +176,13 @@ const DashboardAssociations = () => {
 
         <div className={styling.header}>
           <h2>Welcome back, {association_name}</h2>
-          <p className={styling.subtitle}>
-            {location} | <IconBrandLinkedin />
-          </p>
+          <div className={styling.location}>
+            <IconMapPin color="var(--gray-dark)" />
+            <p>{location}</p>
+            <p>|</p>
+            <IconBrandLinkedin color="var(--gray-dark)" />
+            <IconWorldWww color="var(--gray-dark)" />
+          </div>
         </div>
 
         <IconExternalLink color="var(--gray-dark)" />
@@ -117,7 +208,17 @@ const DashboardAssociations = () => {
             Share your unique invitation link with potential candidates and
             let's connect them with their dream jobs.
           </p>
-          <Button className={styling.inviteButton}>Invite</Button>
+          <Button
+            className={styling.inviteButton}
+            onClick={() => setSendInviteCandidateOpen(true)}
+          >
+            Invite
+          </Button>
+          <SendInviteModal
+            isOpen={isSendInviteCandidateOpen}
+            onClose={() => setSendInviteCandidateOpen(false)}
+            handleSend={handleSendCandidateInvite}
+          />
         </CardContainer>
 
         <CardContainer className={styling.inviteSection}>
@@ -128,13 +229,31 @@ const DashboardAssociations = () => {
             skilled professionals, and let's help them find their ideal
             candidates.
           </p>
-          <Button className={styling.inviteButton}>Invite</Button>
+          <Button
+            className={styling.inviteButton}
+            onClick={() => setSendInviteCompanyOpen(true)}
+          >
+            Invite
+          </Button>
+          <SendInviteModal
+            isOpen={isSendInviteCompanyOpen}
+            onClose={() => setSendInviteCompanyOpen(false)}
+            handleSend={handleSendCompanyInvite}
+          />
         </CardContainer>
       </div>
 
-      <CardContainer className={styling.requests}>
-        <Table columns={header} data={tableData} />
-      </CardContainer>
+      <div className={styling.tables}>
+        <CardContainer className={styling.requests}>
+          <h2 className={styling.titleTables}>Already invited</h2>
+          <Table columns={headerInvited} data={dataInvite} />
+        </CardContainer>
+
+        <CardContainer className={styling.requests}>
+          <h2 className={styling.titleTables}>Approval requests</h2>
+          <Table columns={headerRequests} data={tableData} />
+        </CardContainer>
+      </div>
     </div>
   );
 };

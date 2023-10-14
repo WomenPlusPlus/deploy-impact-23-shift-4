@@ -19,12 +19,7 @@ def get_all_skills_route(Skills):
 
                 for skill in skills:
                     print(skill)
-                    skill_data = {
-                        "id": skill.id,
-                        "name": skill.name,
-                        "field": skill.field,
-                    }
-                    result.append(skill_data)
+                    result.append(skill.to_dict())
 
                 return jsonify({"skills": result}), 200
             except Exception as e:

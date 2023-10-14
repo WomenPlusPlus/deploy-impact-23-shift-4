@@ -24,14 +24,7 @@ def get_user_by_id_route(User):
                 if not user:
                     return jsonify({"message": "user not found"}), 404
 
-                user_data = {
-                    "id": user.id,
-                    "email": user.email,
-                    "password": user.password,
-                    "user_type": user.user_type,
-                }
-
-                return jsonify({"users": user_data}), 200
+                return jsonify({"users": user.to_dict()}), 200
 
         except Exception as e:
             jsonify({"message": f"Error getting user data: {e}"}), 500
