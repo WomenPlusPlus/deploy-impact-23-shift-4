@@ -3,13 +3,14 @@ import styling from "./ProfileCompletedFields.module.css";
 
 interface ProfileCompletedFieldsProps {
   isCompleted: boolean;
-  field: string;
+  category: string;
 }
 
 const ProfileCompletedFields = ({
   isCompleted,
-  field,
+  category,
 }: ProfileCompletedFieldsProps) => {
+
   return (
     <>
       <div className={styling.profileCompletedIcon}>
@@ -18,7 +19,7 @@ const ProfileCompletedFields = ({
         ) : (
           <IconProgressAlert color="#FAAD14" />
         )}
-        <p className={styling.profileCompletedText}>{field}</p>
+        <p className={styling.profileCompletedText}>{category}</p>
       </div>
       <div hidden={isCompleted}>
         <button className={styling.profileUncompletedButton}>Add</button>

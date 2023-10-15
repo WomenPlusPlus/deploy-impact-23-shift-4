@@ -58,13 +58,13 @@ const Candidates = () => {
       <div className="filters">
         <Filter
           options={skillsOptions}
-          candidates={candidates}
+          data={candidates}
           criteria="skills"
           onFilterChange={handleFilterChange}
         />
         <Filter
           options={associationsOptions}
-          candidates={candidates}
+          data={candidates}
           criteria="associations"
           onFilterChange={handleFilterChange}
         />
@@ -72,8 +72,8 @@ const Candidates = () => {
       <div className="cards">
         {filteredCandidates.map((candidate) => (
           <Card
-            name={candidate.name}
-            profession={candidate.profession}
+            header={candidate.name}
+            subheader={candidate.profession}
             associations={candidate.associations}
             skills={candidate.skills}
           />

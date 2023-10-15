@@ -1,25 +1,32 @@
-import { IconEdit } from "@tabler/icons-react";
 import { CardContainer } from "../../UI/container/CardContainer";
-import styling from "./CompanyProfile.module.css";
+import styling from "./CompanyPublicProfile.module.css";
 import Tabs from "../../UI/tabs/Tabs";
 import { HorizontalCard } from "../../UI/card/HorizontalCard";
-import { Button } from "../../UI/button/Button";
+import { useParams } from "react-router-dom";
+import { getCompanyById } from "../../../api/companies";
+import { useCallback, useEffect, useState } from "react";
+import { Company } from "../types/types";
 
-const CompanyProfile = () => {
-  const company = {
-    logo: "https://via.placeholder.com/150",
-    name: "Dream Company",
-    location: "New York, NY",
-    size: "1000+ employees",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-  };
+const CompanyPublicProfile = () => {
+  const { id } = useParams();
+
+  const [company, setCompany] = useState<Company>();
+
+  const fetchCompany = useCallback(async () => {
+    if (id) {
+      const company = await getCompanyById(id);
+      setCompany(company);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchCompany();
+  }, [fetchCompany]);
 
   const jobs = (
     <div className={styling.mainSection}>
       <div className={styling.sectionHeader}>
         <h2 className={styling.titles}>Published jobs</h2>
-        <Button className={styling.button}>Create new job</Button>
       </div>
       <HorizontalCard
         avatar={true}
@@ -44,7 +51,7 @@ const CompanyProfile = () => {
 
   const about = (
     <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company jobs</h2>
+      <h2 className={styling.titles}>About the company</h2>
 
       <p>This is about the company</p>
     </div>
@@ -80,18 +87,14 @@ const CompanyProfile = () => {
     <div className={styling.main}>
       <CardContainer className={styling.container}>
         <div className={styling.header}>
-          <img className={styling.logo} src={company.logo} alt="Avatar" />
+          <img className={styling.logo} src={company?.logo} alt="Avatar" />
 
           <div>
-            <h1>{company.name}</h1>
+            <h1>{company?.company_name}</h1>
 
             <p>
-              {company.location} | {company.size}
+              {company?.address} | {"> 500 employees"}
             </p>
-          </div>
-
-          <div className={styling.icon}>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
         </div>
       </CardContainer>
@@ -103,4 +106,4 @@ const CompanyProfile = () => {
   );
 };
 
-export default CompanyProfile;
+export default CompanyPublicProfile;
