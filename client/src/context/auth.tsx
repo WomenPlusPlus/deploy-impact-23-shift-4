@@ -37,10 +37,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // axios config for all requests
   if (window.location.hostname === "localhost") {
     // Local environment
-    axios.defaults.baseURL = process.env.REACT_APP_API;
+    axios.defaults.baseURL = process.env.REACT_APP_API_DEV;
   } else {
     // App Engine environment or other deployment
-    axios.defaults.baseURL = process.env.REACT_APP_URL;
+    axios.defaults.baseURL = process.env.REACT_APP_API_PROD;
   }
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

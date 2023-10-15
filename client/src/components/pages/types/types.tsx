@@ -22,11 +22,11 @@ export interface Candidate {
   work_permit: string;
   notice_period?: string;
   job_status?: string;
-  preferred_jobs?: { [key: string]: any };
+  preferred_jobs?: { [key: string]: any }[];
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };
-  values?: string[];
+  values?: { [key: string]: any }[];
   skills?: { [key: string]: any }[];
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
@@ -45,4 +45,14 @@ export interface EditInputProps<Candidate> {
   onSave?: (arg: Candidate) => void;
   candidate: Candidate;
   fieldKeysToEdit: string[];
+}
+
+export interface Company {
+  user_id: string;
+  company_name: string;
+  address: string;
+  description: string;
+  associations: string[];
+  values: string[];
+  logo: string;
 }

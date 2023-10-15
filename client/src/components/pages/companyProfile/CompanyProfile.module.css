@@ -6,7 +6,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -33,4 +32,24 @@
   font-size: 16px;
   text-align: left;
   border-top: 0.1rem solid var(--gray-bright);
+}
+
+.mainSection {
+  padding: 0 3rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.titles {
+  font-size: 3rem;
+}
+
+.button {
+  color: var(--white);
+  background-color: var(--color-button);
 }

@@ -14,6 +14,7 @@ from db_model.skills import init_skills_model
 from db_model.values import init_values_model
 
 # Blueprints
+from routes.home import home_bp
 from routes.auth import login
 from routes.auth import register
 from routes.auth.logout import logout_bp
@@ -65,9 +66,12 @@ app.config["SECRET_KEY"] = secret_key
 # Initialize CORS with your Flask app
 CORS(
     app,
-    resources={
-        r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}
-    },
+    origins=[
+        "http://localhost:3000",
+        "https://banana-builders-client.vercel.app",
+        "https://banana-builders-client*.vercel.app",
+    ],
+    supports_credentials=True,
 )
 
 # Database
@@ -92,6 +96,7 @@ Skills = init_skills_model(db)
 Values = init_values_model(db)
 
 # Blueprints
+app.register_blueprint(home_bp)
 app.register_blueprint(
     register.register_route(User, Candidate, Company, Association, db)
 )
@@ -125,6 +130,7 @@ app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
 app.register_blueprint(match_candidates.match_candidates_route())
 
+
 @login_manager.user_loader
 def load_user(user_id):
     """
@@ -138,6 +144,25 @@ def load_user(user_id):
         User: The User object associated with the provided user ID.
     """
     return User.query.get(user_id)
+
+
+@app.after_request
+def after_request(response):
+    if os.environ.get("FLASK_ENV") == "production":
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "https://banana-builders-client.vercel.app",
+        )
+    else:
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "http://localhost:3000",
+        )
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+    return response
+
 
 if __name__ == "__main__":
     # Make sure the tables exist

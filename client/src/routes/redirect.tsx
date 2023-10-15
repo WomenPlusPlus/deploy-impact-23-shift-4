@@ -5,6 +5,7 @@ import axios from "axios";
 import Register from "../components/pages/register/RegisterCandidate";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
+import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
 
 const RegisterRoute: React.FC = () => {
   const location = useLocation();
@@ -72,6 +73,8 @@ const DashboardRoute: React.FC = () => {
     return <DashboardCandidate />;
   } else if (userType === "company") {
     return <DashboardCompany />;
+  } else if (userType === "association") {
+    return <DashboardAssociations />;
   } else {
     return <Navigate to="/login" replace />;
   }

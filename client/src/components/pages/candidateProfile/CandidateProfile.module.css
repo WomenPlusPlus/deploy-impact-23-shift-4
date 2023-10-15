@@ -67,7 +67,7 @@
 .profileCompletedElement {
   padding: 3rem;
   width: 100%;
-  height: 30rem;
+  height: 35rem;
 }
 
 .profileCompletedFieldsElement {
@@ -159,16 +159,6 @@
   align-items: center;
   gap: 1rem;
   margin-left: 1rem;
-}
-
-/* Visible info */
-.containerVisibleInfo {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
 }
 
 .labelClass {
