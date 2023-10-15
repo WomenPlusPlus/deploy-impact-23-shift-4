@@ -1,6 +1,7 @@
 import { Card, Avatar, Button } from "antd";
 import { IconExternalLink } from "@tabler/icons-react";
 import styling from "./JobCard.module.css";
+import { Labels } from "../labels/Label";
 
 interface JobCardProps {
   name?: string;
@@ -13,6 +14,7 @@ interface JobCardProps {
   match?: string;
   location?: string;
   department?: string;
+  skills?: string[];
 }
 
 const JobCard: React.FC<JobCardProps> = ({
@@ -26,10 +28,11 @@ const JobCard: React.FC<JobCardProps> = ({
   match,
   location,
   department,
+  skills,
 }) => {
   const truncatedDescription: string | undefined = description
-    ? typeof description === "string" && description.length > 370
-      ? `${description.slice(0, 370)}...`
+    ? typeof description === "string" && description.length > 150
+      ? `${description.slice(0, 150)}...`
       : description
     : undefined;
 
@@ -49,14 +52,24 @@ const JobCard: React.FC<JobCardProps> = ({
         </div>
         <div className={styling.jobInfo}>
           <div>
-            <h2 className={styling.jobTitle}>{name}</h2>
-            <h3 className={styling.jobLevel}>
+            <p className={styling.jobTitle}>{name}</p>
+            <p className={styling.jobLevel}>
               {level} | {location} | {department}
-            </h3>
+            </p>
           </div>
           <div className={styling.matchesTag}>{match} matches</div>
         </div>
-        <div className={styling.jobDescription}>{truncatedDescription}</div>
+        <p className={styling.jobDescription}>{truncatedDescription}</p>
+
+        <div className={styling.labelContainer}>
+          {skills?.map((skill) => (
+            <Labels
+              labelName={skill}
+              customClass={styling.label}
+              disableCloseIcon
+            />
+          ))}
+        </div>
         <div className={styling.goTalents}>
           <Button className={styling.goToTalents}>Go to talents</Button>
         </div>

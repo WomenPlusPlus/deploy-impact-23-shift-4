@@ -1,6 +1,9 @@
 import { IconEdit } from "@tabler/icons-react";
 import { CardContainer } from "../../UI/container/CardContainer";
 import styling from "./CompanyProfile.module.css";
+import Tabs from "../../UI/tabs/Tabs";
+import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { Button } from "../../UI/button/Button";
 
 const CompanyProfile = () => {
   const company = {
@@ -11,6 +14,67 @@ const CompanyProfile = () => {
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
   };
+
+  const jobs = (
+    <div className={styling.mainSection}>
+      <div className={styling.sectionHeader}>
+        <h2 className={styling.titles}>Published jobs</h2>
+        <Button className={styling.button}>Create new job</Button>
+      </div>
+      <HorizontalCard
+        avatar={true}
+        button="Go to description"
+        firstName="Laura"
+        lastName="Purcaro"
+      />
+      <HorizontalCard
+        avatar={true}
+        button="Go to description"
+        firstName="Laura"
+        lastName="Purcaro"
+      />
+      <HorizontalCard
+        avatar={true}
+        button="Go to description"
+        firstName="Laura"
+        lastName="Purcaro"
+      />
+    </div>
+  );
+
+  const about = (
+    <div className={styling.mainSection}>
+      <h2 className={styling.titles}>Company jobs</h2>
+
+      <p>This is about the company</p>
+    </div>
+  );
+
+  const culture = (
+    <div className={styling.mainSection}>
+      <h2 className={styling.titles}>Company culture</h2>
+
+      <p>This is about the culture</p>
+    </div>
+  );
+
+  const tabs = [
+    {
+      label: "Company jobs",
+      key: "1",
+      children: jobs,
+    },
+    {
+      label: "About the company",
+      key: "2",
+      children: about,
+    },
+    {
+      label: "Company culture",
+      key: "3",
+      children: culture,
+    },
+  ];
 
   return (
     <div className={styling.main}>
@@ -30,15 +94,10 @@ const CompanyProfile = () => {
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
         </div>
-        <div className={styling.description}>{company.description}</div>
       </CardContainer>
 
       <CardContainer className={styling.container}>
-        <h2>Values</h2>
-      </CardContainer>
-
-      <CardContainer className={styling.container}>
-        <h2>Our job listings</h2>
+        <Tabs defaultActiveKey={"1"} centered items={tabs} />
       </CardContainer>
     </div>
   );
