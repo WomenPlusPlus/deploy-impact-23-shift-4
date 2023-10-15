@@ -63,16 +63,12 @@ app.config["SECRET_KEY"] = secret_key
 # Initialize CORS with your Flask app
 CORS(
     app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "http://localhost:3000",
-                "https://banana-builders-client.vercel.app/",
-                "https://banana-builders-client-*.vercel.app"
-            ],
-            "supports_credentials": True,
-        }
-    },
+    origins=[
+        "http://localhost:3000",
+        "https://banana-builders-client.vercel.app",
+        "https://banana-builders-client-*.vercel.app",
+    ],
+    supports_credentials=True,
 )
 
 # Database
