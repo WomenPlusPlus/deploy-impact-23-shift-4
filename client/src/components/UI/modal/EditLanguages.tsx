@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, Space } from "antd";
 import { Button } from "../button/Button";
 import styling from "./EditLanguages.module.css";
@@ -41,7 +41,11 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
   setValues,
   onSave,
 }) => {
-  const [candidateValues, setCandidateValues] = useState(values);
+  const [candidateValues, setCandidateValues] = useState({} as Candidate);
+
+  useEffect(() => {
+    setCandidateValues(values);
+  }, [values]);
 
   const handleSave = () => {
     setValues(candidateValues);
