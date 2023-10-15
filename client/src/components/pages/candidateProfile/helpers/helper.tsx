@@ -13,8 +13,15 @@ const getFakeData = () => {
   ];
   const allTypeOfJob = ["Full-time", "Part-time", "Internship", "Freelance"];
   const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
-  const allValue = ["Cheer up", "Social", "Awareness", "Respect"];
-  const allSkill = ["Vue", "Express.js", "Bash", "R", "C++", "Java", "Python"];
+  const allValue = [{ value_name: "Teamwork", value_id: "Teamwork", score: 20 }];
+  const allSkill = [
+    { skill_name: "React", skill_id: "React", score: 20 },
+    { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
+    { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
+    { skill_name: "JavaScript", skill_id: "424qwrq3r3rr3", score: 20 },
+    { skill_name: "HTML/CSS", skill_id: "424qwrq3r3rr3", score: 20 },
+    { skill_name: "Python", skill_id: "424qwrq3r3rr3", score: 20 },
+  ];
   const user = {
     first_name: "John",
     last_name: "Doe",
@@ -34,14 +41,11 @@ const getFakeData = () => {
     associations: ["Woman++", "proFemmes", "Coders", "Kpi"],
     typeOfJobs: ["Full-time", "Part-time", "Internship", "Freelance"],
     skills: [
-      "React",
-      "Node.js",
-      "TypeScript",
-      "JavaScript",
-      "HTML/CSS",
-      "Python",
+      { skill_name: "React", skill_id: "React", score: 20 },
+      { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
+      { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
     ],
-    values: ["Teamwork", "Diversity", "Inclusion", "Equality"],
+    values: [{ value_name: "Teamwork", value_id: "Teamwork", score: 20 }],
     languages: [
       { name: "English", levelName: "Beginner", score: 20 },
       { name: "Italian", levelName: "Native", score: 100 },
@@ -64,6 +68,5 @@ const getFakeData = () => {
     allSkill,
   };
 };
-
 
 export { getFakeData };

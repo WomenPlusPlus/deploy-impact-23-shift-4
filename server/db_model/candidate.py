@@ -44,7 +44,7 @@ def init_candidate_model(db):
         )  # Type of company as an JSN of strings
         matching_jobs = db.Column(db.JSON)  # Matching jobs as an JSON of foreign keys (integer)
         matching_companies = db.Column(db.JSON)  # Matching companies as an array of foreign keys (integer)
-        values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
+        values = db.Column(db.JSON)  # Values as an array of strings
         skills = db.Column(db.JSON)  # Skills as a JSON array of objects
         languages = db.Column(db.JSON)  # Languages as a JSON array of objects
         links = db.Column(db.JSON)  # Links as a JSON array of objects

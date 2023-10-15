@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Avatar from "../../UI/avatar/Avatar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { Labels } from "../../UI/labels/Label";
-import { EditTag } from "../../UI/modal/EditTag";
+import { EditSkills } from "../../UI/modal/EditSkills";
+import { EditValues } from "../../UI/modal/EditValues";
 import { EditInput } from "../../UI/modal/EditInput";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { VisibleSection } from "../../UI/modal/VisibleSection";
@@ -281,13 +282,13 @@ const CandidateProfile = () => {
         <CardContainer className={styling.secondContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            <EditTag
+            {/* <EditTag
               labelsList={typeOfJobsLabels}
               setLabelsList={setTypeOfJobsLabels}
               icon={<IconTags />}
               titleName="Edit your jobs"
               allLabelsList={allTypeOfJobs()}
-            />
+            /> */}
           </div>
 
           <div className={styling.associationContainerLabels}>
@@ -308,20 +309,21 @@ const CandidateProfile = () => {
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
-          <EditTag
-            labelsList={skillsLabels}
-            setLabelsList={setSkillsLabels}
+          <EditSkills
+            candidate={candidate}
+            setCandidate={setCandidate}
+            allLabels={skillsLabels}
             icon={<IconTags />}
             titleName="Choose your skills"
-            allLabelsList={allLabelsSkills()}
+            onSave={handleSaveEdit}
           />
         </div>
         <div className={styling.skillsContainerLabels}>
-          {skillsLabels.map((label, index) => (
+          {candidate.skills && candidate.skills.map((label, index) => (
             <Labels
               key={index}
               icon={<IconTags />}
-              labelName={label}
+              labelName={label.skill_name}
               disableCloseIcon={true}
               customClass={styling.labelClass}
             />
@@ -333,20 +335,21 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
-          <EditTag
-            labelsList={valuesLabels}
-            setLabelsList={setValuesLabels}
+          <EditValues
+            candidate={candidate}
+            setCandidate={setCandidate}
+            allLabels={valuesLabels}
             icon={<IconTags />}
-            titleName="Choose your values"
-            allLabelsList={allLabelsValues()}
+            titleName="Choose your skills"
+            onSave={handleSaveEdit}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
-          {valuesLabels.map((label, index) => (
+          {candidate.values && candidate.values.map((label, index) => (
             <Labels
               key={index}
               icon={<IconTags />}
-              labelName={label}
+              labelName={label.value_name}
               disableCloseIcon={true}
               customClass={styling.labelClass}
             />
