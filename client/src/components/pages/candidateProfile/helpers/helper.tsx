@@ -11,9 +11,19 @@ const getFakeData = () => {
     "City",
     "Country",
   ];
-  const allTypeOfJob = ["Full-time", "Part-time", "Internship", "Freelance"];
+  const allTypeOfJob = [
+    { job_name: "Full-time", job_id: "Full-time" },
+    { job_name: "Part-time", job_id: "Part-time" },
+    { job_name: "Internship", job_id: "Internship" },
+    { job_name: "Freelance", job_id: "Freelance" },
+    { job_name: "Remote", job_id: "Remote" },
+  ];
   const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
-  const allValue = [{ value_name: "Teamwork", value_id: "Teamwork", score: 20 }];
+  const allValue = [
+    { value_name: "Teamwork", value_id: "Teamwork", score: 20 },
+    { value_name: "Communication", value_id: "Communication", score: 20 },
+    { value_name: "Problem solving", value_id: "Problem solving", score: 20 },
+  ];
   const allSkill = [
     { skill_name: "React", skill_id: "React", score: 20 },
     { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
@@ -57,6 +67,7 @@ const getFakeData = () => {
       address: "123 Street Name, City, Country",
     },
     job_status: "Looking for a job",
+    preferred_jobs: [{ job_name: "Full-time", job_id: "Full-time" }],
   };
   return {
     user,

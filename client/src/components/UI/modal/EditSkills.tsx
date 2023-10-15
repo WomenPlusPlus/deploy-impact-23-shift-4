@@ -38,9 +38,15 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     setLabelsToDeleteState(candidate.skills as Skill[]);
   }, [candidate.skills]);
 
-  const filteredSkills = allLabels.filter((skill) =>
-    skill.skill_name.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredSkills = allLabels.filter((skill) => {
+    // Filter out the values that are already in the candidate's values
+    const isValueInCandidate = candidate?.skills?.every(
+      (candidateValue) => candidateValue.skill_id !== skill.skill_id
+    );
+    // Include the skill in filteredValues if it's not in the candidate
+    return isValueInCandidate && skill.skill_name.toLowerCase().includes(searchText.toLowerCase());
+  });
+
 
   const handleCloseSkill = (skillToRemove: Skill) => {
     const updatedSkills = labelsToDeleteState.filter(

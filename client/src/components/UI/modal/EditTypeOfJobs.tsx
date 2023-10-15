@@ -2,25 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Input } from "antd";
 import { IconEdit } from "@tabler/icons-react";
 import { Labels } from "../labels/Label";
-import styling from "./EditValues.module.css";
+import styling from "./EditTypeOfJobs.module.css";
 import { Candidate } from "../../pages/types/types";
 
-interface Value {
-  value_name: string;
-  value_id: string;
-  score: number;
+interface TypeOfJobs {
+  job_name: string;
+  job_id: string;
 }
 
-interface EditValuesProps {
+interface EditTypeOfJobsProps {
   candidate: Candidate;
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: Value[];
+  allLabels: TypeOfJobs[];
   onSave?: (arg: Candidate) => void;
 }
 
-const EditValues: React.FC<EditValuesProps> = ({
+const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   candidate,
   icon,
   titleName,
@@ -32,37 +31,36 @@ const EditValues: React.FC<EditValuesProps> = ({
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<Value[]>([]);
+  const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.values as Value[]);
-  }, [candidate.values]);
+    setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
+  }, [candidate.preferred_jobs]);
 
-  const filteredValues = allLabels.filter((value) => {
-    // Check if the value is not present in the candidate's values
-    const isValueInCandidate = candidate?.values?.every(
-      (candidateValue) => candidateValue.value_id !== value.value_id
+  const filteredTypeOfJobss = allLabels.filter((job) => {
+    // Filter out the values that are already in the candidate's values
+    const isValueInCandidate = candidate?.preferred_jobs?.every(
+      (candidateValue) => candidateValue.job_id !== job.job_id
     );
-  
-    // Include the value in filteredValues if it's not in the candidate
-    return isValueInCandidate && value.value_name.toLowerCase().includes(searchText.toLowerCase());
+    // Include the job in filteredValues if it's not in the candidate
+    return isValueInCandidate && job.job_name.toLowerCase().includes(searchText.toLowerCase());
   });
 
-  const handleCloseValue = (valueToRemove: Value) => {
-    const updatedValues = labelsToDeleteState.filter(
-      (value) => value.value_id !== String(valueToRemove.value_id)
+  const handleCloseTypeOfJobs = (valueToRemove: TypeOfJobs) => {
+    const updatedTypeOfJobss = labelsToDeleteState.filter(
+      (job) => job.job_id !== String(valueToRemove.job_id)
     );
-    setLabelsToDeleteState(updatedValues as Value[]);
+    setLabelsToDeleteState(updatedTypeOfJobss as TypeOfJobs[]);
   };
 
-  const addSkillToDeleteState = (skillToAdd: Value) => {
+  const addSkillToDeleteState = (jobToAdd: TypeOfJobs) => {
     // Check if labelsToDeleteState is not empty
     if (labelsToDeleteState) {
-      const updatedValues = [...labelsToDeleteState, skillToAdd];
-      setLabelsToDeleteState(updatedValues);
+      const updatedTypeOfJobss = [...labelsToDeleteState, jobToAdd];
+      setLabelsToDeleteState(updatedTypeOfJobss);
     } else {
       // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
-      setLabelsToDeleteState([skillToAdd]);
+      setLabelsToDeleteState([jobToAdd]);
     }
   };
 
@@ -75,16 +73,16 @@ const EditValues: React.FC<EditValuesProps> = ({
     setTimeout(() => {
       setLoading(false);
       setOpen(false);
-      setCandidate({ ...candidate, values: labelsToDeleteState });
+      setCandidate({ ...candidate, preferred_jobs: labelsToDeleteState });
       onSave &&
-        onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
+        onSave({ ...candidate, preferred_jobs: labelsToDeleteState } as Candidate);
       setSearchText("");
     }, 300);
   };
 
   const handleCancel = () => {
     setOpen(false);
-    setLabelsToDeleteState(candidate.values as Value[]);
+    setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
     setSearchText("");
   };
 
@@ -117,12 +115,12 @@ const EditValues: React.FC<EditValuesProps> = ({
         {/* Candidates values */}
         <div className={styling.elementInOneRow}>
           {labelsToDeleteState &&
-            labelsToDeleteState?.map((value, index) => (
+            labelsToDeleteState?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value.value_name}
-                onCloseIcon={() => handleCloseValue(value)}
+                labelName={job.job_name}
+                onCloseIcon={() => handleCloseTypeOfJobs(job)}
                 disableCloseIcon={false}
                 customClass={styling.labelClassSelected}
               />
@@ -134,17 +132,16 @@ const EditValues: React.FC<EditValuesProps> = ({
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        {/* All values */}
         <div className={styling.elementInOneRow}>
-          {filteredValues &&
-            filteredValues.map((value, index) => (
+          {filteredTypeOfJobss &&
+            filteredTypeOfJobss.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value.value_name}
+                labelName={job.job_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
-                onClickHandle={() => addSkillToDeleteState(value)}
+                onClickHandle={() => addSkillToDeleteState(job)}
               />
             ))}
         </div>
@@ -153,4 +150,4 @@ const EditValues: React.FC<EditValuesProps> = ({
   );
 };
 
-export { EditValues };
+export { EditTypeOfJobs };

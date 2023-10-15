@@ -22,7 +22,7 @@ export interface Candidate {
   work_permit: string;
   notice_period?: string;
   job_status?: string;
-  preferred_jobs?: { [key: string]: any };
+  preferred_jobs?: { [key: string]: any }[];
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };

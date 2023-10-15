@@ -7,6 +7,7 @@ import { EditSkills } from "../../UI/modal/EditSkills";
 import { EditValues } from "../../UI/modal/EditValues";
 import { EditInput } from "../../UI/modal/EditInput";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
+import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
 import { VisibleSection } from "../../UI/modal/VisibleSection";
 import { getFakeData } from "./helpers/helper";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
@@ -65,23 +66,6 @@ const CandidateProfile = () => {
     "Industries",
     "Documents",
   ];
-  // Filter out the labels that are already the candidate's labels
-  const allLabelsSkills = () => {
-    return getFakeData().allSkill.filter(
-      (label) => !skillsLabels.includes(label)
-    );
-  };
-  const allLabelsValues = () => {
-    return getFakeData().allValue.filter(
-      (label) => !valuesLabels.includes(label)
-    );
-  };
-  const allTypeOfJobs = () => {
-    return getFakeData().allTypeOfJob.filter(
-      (label) => !typeOfJobsLabels.includes(label)
-    );
-  };
-
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
   const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(
@@ -89,7 +73,6 @@ const CandidateProfile = () => {
   );
   const associationLabels = getFakeData().user.associations;
   const [skillsLabels, setSkillsLabels] = useState(getFakeData().user.skills);
-  const [valuesLabels, setValuesLabels] = useState(getFakeData().user.values);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
@@ -268,7 +251,7 @@ const CandidateProfile = () => {
             <h3>Associations</h3>
           </div>
           <div className={styling.associationContainerLabels}>
-            {associationLabels.map((label, index) => (
+            {candidate?.associations?.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconTags />}
@@ -282,21 +265,22 @@ const CandidateProfile = () => {
         <CardContainer className={styling.secondContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            {/* <EditTag
-              labelsList={typeOfJobsLabels}
-              setLabelsList={setTypeOfJobsLabels}
+            <EditTypeOfJobs
+              candidate={candidate}
+              setCandidate={setCandidate}
+              allLabels={getFakeData().allTypeOfJob}
               icon={<IconTags />}
-              titleName="Edit your jobs"
-              allLabelsList={allTypeOfJobs()}
-            /> */}
+              titleName="Choose your type of jobs"
+              onSave={handleSaveEdit}
+            />
           </div>
 
           <div className={styling.associationContainerLabels}>
-            {typeOfJobsLabels.map((label, index) => (
+            {candidate?.preferred_jobs?.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconTags />}
-                labelName={label}
+                labelName={label.job_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
               />
@@ -319,15 +303,16 @@ const CandidateProfile = () => {
           />
         </div>
         <div className={styling.skillsContainerLabels}>
-          {candidate.skills && candidate.skills.map((label, index) => (
-            <Labels
-              key={index}
-              icon={<IconTags />}
-              labelName={label.skill_name}
-              disableCloseIcon={true}
-              customClass={styling.labelClass}
-            />
-          ))}
+          {candidate.skills &&
+            candidate.skills.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconTags />}
+                labelName={label.skill_name}
+                disableCloseIcon={true}
+                customClass={styling.labelClass}
+              />
+            ))}
         </div>
       </CardContainer>
 
@@ -338,22 +323,23 @@ const CandidateProfile = () => {
           <EditValues
             candidate={candidate}
             setCandidate={setCandidate}
-            allLabels={valuesLabels}
+            allLabels={getFakeData().allValue}
             icon={<IconTags />}
             titleName="Choose your skills"
             onSave={handleSaveEdit}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
-          {candidate.values && candidate.values.map((label, index) => (
-            <Labels
-              key={index}
-              icon={<IconTags />}
-              labelName={label.value_name}
-              disableCloseIcon={true}
-              customClass={styling.labelClass}
-            />
-          ))}
+          {candidate.values &&
+            candidate.values.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconTags />}
+                labelName={label.value_name}
+                disableCloseIcon={true}
+                customClass={styling.labelClass}
+              />
+            ))}
         </div>
       </CardContainer>
 
