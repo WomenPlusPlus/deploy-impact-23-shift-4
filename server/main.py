@@ -66,7 +66,7 @@ CORS(
     origins=[
         "http://localhost:3000",
         "https://banana-builders-client.vercel.app",
-        "https://banana-builders-client-*.vercel.app",
+        "https://banana-builders-client*.vercel.app",
     ],
     supports_credentials=True,
 )
@@ -143,9 +143,16 @@ def load_user(user_id):
 
 @app.after_request
 def after_request(response):
-    response.headers.add(
-        "Access-Control-Allow-Origin", "https://banana-builders-client.vercel.app"
-    )
+    if os.environ.get("FLASK_ENV") == "production":
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "https://banana-builders-client.vercel.app",
+        )
+    else:
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "http://localhost:3000",
+        )
     response.headers.add("Access-Control-Allow-Credentials", "true")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
