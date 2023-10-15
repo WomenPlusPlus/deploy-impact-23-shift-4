@@ -15,6 +15,7 @@ interface CardProps {
   bordered?: boolean;
   style?: React.CSSProperties;
   loading?: boolean;
+  onClickRedirect?: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -27,6 +28,7 @@ const Card: React.FC<CardProps> = ({
   values,
   bordered = false,
   loading = false,
+  onClickRedirect,
 }) => (
   <div className={styling.candidateCard}>
     <div className={styling.cardHeader}>
@@ -35,7 +37,7 @@ const Card: React.FC<CardProps> = ({
         <h2 className={styling.header}>{header}</h2>
         <p className={styling.subheader}>{subheader}</p>
       </div>
-      <div className={styling.topRightIcon}>
+      <div className={styling.topRightIcon} onClick={onClickRedirect}>
         <IconExternalLink color="black" />
       </div>
     </div>
