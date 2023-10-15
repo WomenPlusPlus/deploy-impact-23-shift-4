@@ -1,9 +1,11 @@
 .mainContainer {
   padding: 2rem;
 }
-  .header {
+
+.header {
   color: black;
 }
+
 .cards {
   display: flex;
   flex-wrap: wrap;
