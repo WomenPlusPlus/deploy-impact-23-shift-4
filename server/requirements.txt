@@ -10,3 +10,4 @@ flask-cors==4.0.0
 Werkzeug==2.0.2
 SQLAlchemy==1.4.26
 bcrypt==4.0.1
+sendgrid==6.10.0

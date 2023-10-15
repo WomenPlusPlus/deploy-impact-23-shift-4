@@ -10,8 +10,8 @@ const { Footer, Content } = AntLayout;
 
 const contentStyle: React.CSSProperties = {
   minHeight: 120,
-  color: "#fff",
-  backgroundColor: "#fff",
+  color: "black",
+  backgroundColor: "var(--background-color)",
   marginLeft: 240,
   paddingTop: 64,
   overflow: "initial",
