@@ -19,6 +19,15 @@
   color: var(--gray-dark);
 }
 
+.title {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 2rem;
+}
+
 .button {
   margin-left: auto; /* Push the icon to the right */
   height: 5rem;
