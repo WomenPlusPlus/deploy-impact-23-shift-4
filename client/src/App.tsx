@@ -3,6 +3,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider } from "antd";
 import Routes from "./routes/routes";
 import { AuthProvider } from "./context/auth";
+import "./config";
 
 function App() {
   return (

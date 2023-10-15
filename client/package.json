@@ -2,10 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": [
-    "http://localhost:5001",
-    "https://banana-builders.onrender.com"
-  ],
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@babel/plugin-transform-private-property-in-object": "^7.22.11",
