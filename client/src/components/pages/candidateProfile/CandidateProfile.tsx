@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Avatar from "../../UI/avatar/Avatar";
-import ProfileCompletedFields from "./ProfileCompletedFields";
+
 import { Labels } from "../../UI/labels/Label";
 import { EditSkills } from "../../UI/modal/EditSkills";
 import { EditValues } from "../../UI/modal/EditValues";
@@ -10,10 +10,11 @@ import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
 import { VisibleSection } from "../../UI/modal/VisibleSection";
 import { getFakeData } from "./helpers/helper";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
+
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";
+import { ProfileComplete } from "./ProfileComplete";
 import {
   IconEdit,
   IconMapPin,
@@ -65,14 +66,16 @@ const CandidateProfile = () => {
     "Role",
     "Industries",
     "Documents",
+    "Profile",
+    "Skills",
+    "Values",
+    "Languages",
+    "Experience",
+    "Contact info",
+    "Types of jobs",
   ];
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
-  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(
-    getFakeData().user.typeOfJobs
-  );
-  const associationLabels = getFakeData().user.associations;
-  const [skillsLabels, setSkillsLabels] = useState(getFakeData().user.skills);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
@@ -180,51 +183,11 @@ const CandidateProfile = () => {
 
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
-        <CardContainer className={styling.profileCompletedElement}>
-          <div className={styling.profileCompletedEditIcon}>
-            <h3>Your profile is {getFakeData().user?.progress} complete.</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
-          </div>
-
-          <ProgressBar
-            progress={getFakeData().user?.progress}
-            height="1.5rem"
-          />
-
-          {/* Fields completed */}
-          <div className={styling.profileCompletedFieldsComponent}>
-            <div className={styling.column}>
-              {getFakeData()
-                .user?.list.slice(
-                  0,
-                  Math.ceil(getFakeData().user?.list.length / 2)
-                )
-                .map((field, index) => (
-                  <div
-                    key={index}
-                    className={styling.profileCompletedFieldsElement}
-                  >
-                    <ProfileCompletedFields isCompleted={false} field={field} />
-                  </div>
-                ))}
-            </div>
-
-            <div className={styling.column}>
-              {getFakeData()
-                .user?.list.slice(
-                  Math.ceil(getFakeData().user?.list.length / 2)
-                )
-                .map((field, index) => (
-                  <div
-                    key={index}
-                    className={styling.profileCompletedFieldsElement}
-                  >
-                    <ProfileCompletedFields isCompleted={true} field={field} />
-                  </div>
-                ))}
-            </div>
-          </div>
-        </CardContainer>
+        <ProfileComplete
+          className={styling.profileCompletedElement}
+          candidate={candidate}
+          allCategories={allFields}
+        />
 
         {/* Anonymous profile */}
         <CardContainer className={styling.profileCompletedElement}>

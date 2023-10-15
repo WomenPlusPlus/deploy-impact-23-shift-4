@@ -80,4 +80,90 @@ const getFakeData = () => {
   };
 };
 
-export { getFakeData };
+type FieldCategoryMapping = Record<keyof Candidate, string>;
+const fieldCategoryMapping: FieldCategoryMapping = {
+  id: "Profile",
+  user_id: "Profile",
+  password: "Profile",
+  email: "Contact info",
+  associations: "Profile",
+  first_name: "Profile",
+  last_name: "Profile",
+  preferred_name: "Profile",
+  city: "Contact info",
+  country: "Contact info",
+  cv_reference: "Documents",
+  address: "Contact info",
+  phone_number: "Contact info",
+  birth_date: "Profile",
+  work_permit: "Visa Status",
+  notice_period: "Notice",
+  job_status: "Role",
+  preferred_jobs: "Type of jobs you're looking for",
+  company_type: "Industries",
+  matching_jobs: "Role",
+  matching_companies: "Industries",
+  values: "Values",
+  skills: "Skills",
+  languages: "Languages",
+  links: "Profile",
+  certificates: "Documents",
+  visible_information: "Profile",
+  experience: "Experience",
+  other_information: "Profile",
+};
+
+// Now you can create the mapping between categories and fields
+
+const categoryFieldMapping: Record<string, (keyof Candidate)[]> = {};
+
+const categories = [
+  "Salary bracket",
+  "Notice",
+  "Visa Status",
+  "Role",
+  "Industries",
+  "Documents",
+  "Profile",
+  "Skills",
+  "Values",
+  "Languages",
+  "Experience",
+  "Contact info",
+  "Type of jobs you're looking for",
+];
+
+const countFieldsByCategory = (
+  candidate: Candidate,
+  allCategories: string[]
+) => {
+  const categoryFieldMapping: Record<string, number> = {};
+
+  allCategories.forEach((category) => {
+    const fieldsForCategory = Object.keys(fieldCategoryMapping).filter(
+      (field) =>
+        (fieldCategoryMapping as Record<string, string>)[field] === category
+    ) as (keyof Candidate)[];
+
+    const nullOrUndefinedFieldsCount = fieldsForCategory.reduce(
+      (count, field) => {
+        if (candidate[field] === null || candidate[field] === undefined) {
+          return count + 1;
+        }
+        return count;
+      },
+      0
+    );
+
+    categoryFieldMapping[category] = nullOrUndefinedFieldsCount;
+  });
+
+  const result: Record<string, number> = {};
+  allCategories.forEach((category) => {
+    result[category] = categoryFieldMapping[category];
+  });
+
+  return result;
+};
+
+export { getFakeData, countFieldsByCategory };
