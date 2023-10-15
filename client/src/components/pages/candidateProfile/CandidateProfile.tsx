@@ -5,15 +5,13 @@ import ProfileCompletedFields from "./ProfileCompletedFields";
 import { Labels } from "../../UI/labels/Label";
 import { EditTag } from "../../UI/modal/EditTag";
 import { EditInput } from "../../UI/modal/EditInput";
+import { EditLanguages } from "../../UI/modal/EditLanguages";
+import { VisibleSection } from "../../UI/modal/VisibleSection";
 import { getFakeData } from "./helpers/helper";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { CardContainer } from "../../UI/container/CardContainer";
-import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
-import {
-  ContentBlock,
-  HorizontalLine,
-} from "../../UI/container/SectionContainer";
+import { ContentBlock } from "../../UI/container/SectionContainer";
 import {
   IconEdit,
   IconMapPin,
@@ -24,11 +22,48 @@ import {
 
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
-import { Language, Candidate } from "../types/types";
+import { Candidate } from "../types/types";
 
 import styling from "./CandidateProfile.module.css";
 
 const CandidateProfile = () => {
+  const sectionsVisibleInfo = [
+    { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
+    { title: "Notice", subtitle: "Immediately available" },
+    {
+      title: "Visa Status",
+      subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
+    },
+  ];
+  const sectionsExperience = [
+    {
+      title: "Role",
+      text: "5 Years in academia",
+      subtext: "+ 1 year in Product, 3 in Engineering",
+    },
+    {
+      title: "Industries",
+      text: "Entertainment",
+      subtext: "+ Software/Saas, Biotechnology, Medical devices",
+    },
+  ];
+  const sectionsDocuments = [
+    { title: "CV", subtext: "", type: "cv" },
+    { title: "Certificate", subtext: "DAC 2023", type: "certificate" },
+    {
+      title: "Ceritficate",
+      subtext: "Deploy(impact) 2023",
+      type: "certificate",
+    },
+  ];
+  const allFields = [
+    "Salary bracket",
+    "Notice",
+    "Visa Status",
+    "Role",
+    "Industries",
+    "Documents",
+  ];
   // Filter out the labels that are already the candidate's labels
   const allLabelsSkills = () => {
     return getFakeData().allSkill.filter(
@@ -58,6 +93,7 @@ const CandidateProfile = () => {
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
+  const [isAnonymousProfileEdit, setIsAnonymousProfileEdit] = useState(false);
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -85,6 +121,10 @@ const CandidateProfile = () => {
 
   const editHandlerProfile = () => {
     setIsProfileEdit(true);
+  };
+
+  const editHandlerAnonymousProfile = () => {
+    setIsAnonymousProfileEdit(true);
   };
 
   /**
@@ -206,25 +246,17 @@ const CandidateProfile = () => {
         <CardContainer className={styling.profileCompletedElement}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Visible Information</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
+            <VisibleSection
+              candidate={candidate}
+              visible={isAnonymousProfileEdit}
+              setVisible={setIsAnonymousProfileEdit}
+              onClick={editHandlerAnonymousProfile}
+              allFields={allFields}
+            />
           </div>
           <p>Initially employees will only see skills and values</p>
-          <div className={styling.containerVisibleInfo}>
-            <ContentBlock
-              title="Section 1"
-              text="This is the text inside Section 1."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 2"
-              text="This is the text inside Section 2."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 3"
-              text="This is the text inside Section 3."
-            />
-          </div>
+          <ContentBlock sections={sectionsVisibleInfo} />
         </CardContainer>
       </div>
 
@@ -378,17 +410,7 @@ const CandidateProfile = () => {
             <h3>Experience</h3>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
-          <div className={styling.containerVisibleInfo}>
-            <ContentBlock
-              title="Section 1"
-              text="This is the text inside Section 1."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 2"
-              text="This is the text inside Section 2."
-            />
-          </div>
+          <ContentBlock sections={sectionsExperience} />
         </CardContainer>
       </div>
 
@@ -398,22 +420,7 @@ const CandidateProfile = () => {
           <h3>Uploaded documents</h3>
           <IconEdit color="black" style={{ cursor: "pointer" }} />
         </div>
-        <div className={styling.containerVisibleInfo}>
-          <ContentBlock
-            title="Section 1"
-            text="This is the text inside Section 1."
-          />
-          <HorizontalLine />
-          <ContentBlock
-            title="Section 2"
-            text="This is the text inside Section 2."
-          />
-          <HorizontalLine />
-          <ContentBlock
-            title="Section 3"
-            text="This is the text inside Section 3."
-          />
-        </div>
+        <ContentBlock sections={sectionsDocuments} />
       </CardContainer>
     </div>
   );
