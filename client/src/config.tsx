@@ -1,16 +1,18 @@
 import axios from "axios";
-console.log("env production REACT_APP_API", process.env.REACT_APP_API);
 
-axios.defaults.baseURL = process.env.REACT_APP_API;
+const configureAxios = () => {
+  // Conditionally choose the API URL based on the environment.
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_API_PROD
+      : process.env.REACT_APP_API_DEV;
 
-const proxyConfig = {
-  "/api": {
-    target:
-      process.env.REACT_APP_ENV === "production"
-        ? "https://banana-builders.onrender.com"
-        : "http://localhost:5001",
-    changeOrigin: true,
-  },
+  const instance = axios.create({
+    baseURL: apiUrl,
+    withCredentials: true,
+  });
+
+  return instance;
 };
 
-export default proxyConfig;
+export default configureAxios;

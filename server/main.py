@@ -63,16 +63,12 @@ app.config["SECRET_KEY"] = secret_key
 # Initialize CORS with your Flask app
 CORS(
     app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "http://localhost:3000",
-                "https://banana-builders-client.vercel.app/",
-                "https://banana-builders-client-*.vercel.app"
-            ],
-            "supports_credentials": True,
-        }
-    },
+    origins=[
+        "http://localhost:3000",
+        "https://banana-builders-client.vercel.app",
+        "https://banana-builders-client*.vercel.app",
+    ],
+    supports_credentials=True,
 )
 
 # Database
@@ -143,6 +139,24 @@ def load_user(user_id):
         User: The User object associated with the provided user ID.
     """
     return User.query.get(user_id)
+
+
+@app.after_request
+def after_request(response):
+    if os.environ.get("FLASK_ENV") == "production":
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "https://banana-builders-client.vercel.app",
+        )
+    else:
+        response.headers.add(
+            "Access-Control-Allow-Origin",
+            "http://localhost:3000",
+        )
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+    return response
 
 
 if __name__ == "__main__":

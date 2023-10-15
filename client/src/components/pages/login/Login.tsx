@@ -3,10 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
-import axios from "axios"; // Import Axios for making HTTP requests
+// import axios from "axios"; // Import Axios for making HTTP requests
 import { useAuth } from "../../../context/auth";
 
 import "./Login.css";
+
+import configureAxios from "./../../../config";
+
+const axios = configureAxios();
 
 const Login = () => {
   // state
@@ -30,15 +34,17 @@ const Login = () => {
   const onFinish = (values: any) => {
     // Send login data to the backend (you'll need to replace the URL and method)
     axios
-      .post(`${process.env.REACT_APP_API}/api/login`, formData, { withCredentials: true })
+      .post(`/api/login`, formData, {
+        withCredentials: true,
+      })
       .then((response) => {
         // Handle the backend response here
         const { user } = response.data;
         console.log("Response", response.status);
         // Set auth, user_type in local storage
         localStorage.setItem("user_type", user.user_type);
-        localStorage.setItem("auth", JSON.stringify({user: user}));
-        setAuth({user: user});
+        localStorage.setItem("auth", JSON.stringify({ user: user }));
+        setAuth({ user: user });
         // Navigate to the dashboard
         navigate("/");
       })
