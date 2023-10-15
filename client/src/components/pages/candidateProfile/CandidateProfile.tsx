@@ -296,7 +296,7 @@ const CandidateProfile = () => {
           <EditSkills
             candidate={candidate}
             setCandidate={setCandidate}
-            allLabels={skillsLabels}
+            allLabels={getFakeData().allSkill}
             icon={<IconTags />}
             titleName="Choose your skills"
             onSave={handleSaveEdit}

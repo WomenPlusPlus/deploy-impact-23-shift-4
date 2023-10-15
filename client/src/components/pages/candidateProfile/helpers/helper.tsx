@@ -28,9 +28,9 @@ const getFakeData = () => {
     { skill_name: "React", skill_id: "React", score: 20 },
     { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
     { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
-    { skill_name: "JavaScript", skill_id: "424qwrq3r3rr3", score: 20 },
-    { skill_name: "HTML/CSS", skill_id: "424qwrq3r3rr3", score: 20 },
-    { skill_name: "Python", skill_id: "424qwrq3r3rr3", score: 20 },
+    { skill_name: "JavaScript", skill_id: "JavaScript", score: 20 },
+    { skill_name: "HTML/CSS", skill_id: "HTML/CSS", score: 20 },
+    { skill_name: "Python", skill_id: "Python", score: 20 },
   ];
   const user = {
     first_name: "John",

@@ -32,25 +32,31 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   const [searchText, setSearchText] = useState("");
 
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>([]);
+  const [filteredTypeOfJobs, setFilteredTypeOfJobs] = useState<TypeOfJobs[]>([]);
+
 
   useEffect(() => {
     setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
+    updateFilteredTypeOfJobss(candidate.preferred_jobs as TypeOfJobs[]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [candidate.preferred_jobs]);
 
-  const filteredTypeOfJobss = allLabels.filter((job) => {
-    // Filter out the values that are already in the candidate's values
-    const isValueInCandidate = candidate?.preferred_jobs?.every(
-      (candidateValue) => candidateValue.job_id !== job.job_id
-    );
-    // Include the job in filteredValues if it's not in the candidate
-    return isValueInCandidate && job.job_name.toLowerCase().includes(searchText.toLowerCase());
-  });
+  const updateFilteredTypeOfJobss = (jobsToDelete: TypeOfJobs[]) => {
+    const updatedFilteredTypeOfJobss = allLabels?.filter((job) => {
+      const isValueInCandidate = jobsToDelete?.every(
+        (candidateValue) => candidateValue.job_id !== job.job_id
+      );
+      return isValueInCandidate && job.job_name.toLowerCase().includes(searchText.toLowerCase());
+    });
+    setFilteredTypeOfJobs(updatedFilteredTypeOfJobss);
+  };
 
   const handleCloseTypeOfJobs = (valueToRemove: TypeOfJobs) => {
-    const updatedTypeOfJobss = labelsToDeleteState.filter(
-      (job) => job.job_id !== String(valueToRemove.job_id)
+    const updatedTypeOfJobs = labelsToDeleteState.filter(
+      (job) => job.job_id !== valueToRemove.job_id
     );
-    setLabelsToDeleteState(updatedTypeOfJobss as TypeOfJobs[]);
+    setLabelsToDeleteState(updatedTypeOfJobs);
+    updateFilteredTypeOfJobss(updatedTypeOfJobs); // Update filteredTypeOfJobss
   };
 
   const addSkillToDeleteState = (jobToAdd: TypeOfJobs) => {
@@ -58,9 +64,11 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
     if (labelsToDeleteState) {
       const updatedTypeOfJobss = [...labelsToDeleteState, jobToAdd];
       setLabelsToDeleteState(updatedTypeOfJobss);
+      updateFilteredTypeOfJobss(updatedTypeOfJobss); // Update filteredTypeOfJobss
     } else {
       // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
       setLabelsToDeleteState([jobToAdd]);
+      updateFilteredTypeOfJobss([jobToAdd]); // Update filteredTypeOfJobss
     }
   };
 
@@ -133,8 +141,8 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className={styling.elementInOneRow}>
-          {filteredTypeOfJobss &&
-            filteredTypeOfJobss.map((job, index) => (
+          {filteredTypeOfJobs &&
+            filteredTypeOfJobs.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}

@@ -31,28 +31,33 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<Skill[]>([]);
+  const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     setLabelsToDeleteState(candidate.skills as Skill[]);
+    updateFilteredSkills(candidate.skills as Skill[]);
   }, [candidate.skills]);
 
-  const filteredSkills = allLabels.filter((skill) => {
-    // Filter out the values that are already in the candidate's values
-    const isValueInCandidate = candidate?.skills?.every(
-      (candidateValue) => candidateValue.skill_id !== skill.skill_id
-    );
-    // Include the skill in filteredValues if it's not in the candidate
-    return isValueInCandidate && skill.skill_name.toLowerCase().includes(searchText.toLowerCase());
-  });
-
+  const updateFilteredSkills = (skillsToDelete: Skill[]) => {
+    const updatedFilteredSkills = allLabels?.filter((skill) => {
+      const isSkillInCandidate = skillsToDelete?.every(
+        (candidateSkill) => candidateSkill.skill_id !== skill.skill_id
+      );
+      return (
+        isSkillInCandidate &&
+        skill.skill_name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    });
+    setFilteredSkills(updatedFilteredSkills);
+  };
 
   const handleCloseSkill = (skillToRemove: Skill) => {
     const updatedSkills = labelsToDeleteState.filter(
-      (skill) => skill.skill_id !== String(skillToRemove.skill_id)
+      (skill) => skill.skill_id !== skillToRemove.skill_id
     );
     setLabelsToDeleteState(updatedSkills as Skill[]);
+    updateFilteredSkills(updatedSkills); // Update filteredSkills
   };
 
   const addSkillToDeleteState = (skillToAdd: Skill) => {
@@ -60,9 +65,11 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     if (labelsToDeleteState) {
       const updatedSkills = [...labelsToDeleteState, skillToAdd];
       setLabelsToDeleteState(updatedSkills);
+      updateFilteredSkills(updatedSkills); // Update filteredSkills
     } else {
       // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
       setLabelsToDeleteState([skillToAdd]);
+      updateFilteredSkills([skillToAdd]); // Update filteredSkills
     }
   };
 
