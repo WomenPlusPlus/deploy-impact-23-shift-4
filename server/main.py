@@ -1,3 +1,4 @@
+import string
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -42,6 +43,7 @@ from routes.jobs import get_job_by_id
 from routes.jobs import add_job
 from routes.jobs import delete_job
 from routes.jobs import update_job
+from routes.matching import match_candidates
 
 # Env
 from dotenv import load_dotenv
@@ -121,6 +123,7 @@ app.register_blueprint(get_job_by_id.get_job_by_id_route(Jobs))
 app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
+app.register_blueprint(match_candidates.match_candidates_route())
 
 @login_manager.user_loader
 def load_user(user_id):
