@@ -13,6 +13,7 @@ from db_model.skills import init_skills_model
 from db_model.values import init_values_model
 
 # Blueprints
+from routes.home import home_bp
 from routes.auth import login
 from routes.auth import register
 from routes.auth.logout import logout_bp
@@ -89,6 +90,7 @@ Skills = init_skills_model(db)
 Values = init_values_model(db)
 
 # Blueprints
+app.register_blueprint(home_bp)
 app.register_blueprint(
     register.register_route(User, Candidate, Company, Association, db)
 )
