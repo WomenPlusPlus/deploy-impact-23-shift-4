@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import configureAxios from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Layout as AntLayout, Menu } from "antd";
@@ -14,6 +14,7 @@ import {
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
+const axios = configureAxios();
 
 const { Sider } = AntLayout;
 
