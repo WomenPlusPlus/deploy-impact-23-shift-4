@@ -1,4 +1,6 @@
-import axios from "axios";
+import configureAxios from "./../config";
+
+const axios = configureAxios();
 
 /**
  * Fetches all the candidates

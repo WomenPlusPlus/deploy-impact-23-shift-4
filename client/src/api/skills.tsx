@@ -1,5 +1,6 @@
-import axios from "axios";
+import configureAxios from "./../config";
 
+const axios = configureAxios();
 /**
  * Fetches all skills data from the server
  * @returns all skills data object

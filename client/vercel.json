@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "https://banana-builders-client.vercel.app/api",
-      "destination": "https://banana-builders.onrender.com/api"
-    }
-  ]
-}
