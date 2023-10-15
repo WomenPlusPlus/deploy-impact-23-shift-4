@@ -2,22 +2,24 @@ import { useEffect, useState } from "react";
 import Card from "../../UI/card/Card";
 import styling from "./Companies.module.css";
 import Filter from "../../UI/filter/Filter";
-
+import { useNavigate } from "react-router-dom";
 import { getAllCompanies } from "../../../api/companies";
+import Searchbar from "../../UI/searchbar/Searchbar";
+
+interface Company {
+  user_id: string;
+  company_name: string;
+  address: string;
+  description: string;
+  associations: string[];
+  values: string[];
+}
 
 const Companies = () => {
-  const values = ["All", "Teamwork", "Diversity", "Inclusion"];
+  const values = ["Teamwork", "Diversity", "Inclusion"];
 
   const associationsOptions = ["Woman++", "Power Coders"];
-
-  // Define company interface
-  interface Company {
-    company_name: string;
-    address: string;
-    description: string;
-    associations: string[];
-    values: string[];
-  }
+  const navigate = useNavigate();
 
   // State
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
@@ -32,11 +34,43 @@ const Companies = () => {
   };
 
   /**
+   * Handle the search in the companies
+   * @param searchText - search text
+   */
+  const handleSearch = (searchText: string) => {
+    if (searchText.trim() === "") {
+      setFilteredCompanies(companies);
+    } else {
+      const filteredResults = filteredCompanies.filter(
+        (item) =>
+          (item.company_name &&
+            item.company_name
+              .toLowerCase()
+              .includes(searchText.toLowerCase())) ||
+          (item.address &&
+            item.address.toLowerCase().includes(searchText.toLowerCase())) ||
+          (item.associations &&
+            item.associations
+              .join(" ")
+              .toLowerCase()
+              .includes(searchText.toLowerCase())) ||
+          (item.values &&
+            item.values
+              .join(" ")
+              .toLowerCase()
+              .includes(searchText.toLowerCase()))
+      );
+      setFilteredCompanies(filteredResults);
+    }
+  };
+
+  /**
    * Fetch all companies from the database
    */
   const fetchCompanies = async () => {
     const companies = await getAllCompanies();
-    setCompanies(companies.slice(0, 12));
+    setCompanies(companies);
+    setFilteredCompanies(companies);
   };
 
   useEffect(() => {
@@ -46,24 +80,39 @@ const Companies = () => {
   console.log(filteredCompanies);
   return (
     <div className={styling.mainContainer}>
-      <h1 className={styling.header}>Browse our partner companies</h1>
+      <h1 className={styling.header}>Our partner companies</h1>
       <div className={styling.filters}>
-        <Filter
-          options={values}
-          data={companies}
-          criteria="skills"
-          onFilterChange={handleFilterChange}
+        <Searchbar
+          placeholder="Search..."
+          width={800}
+          onSearch={handleSearch}
         />
-        <Filter
-          options={associationsOptions}
-          data={companies}
-          criteria="associations"
-          onFilterChange={handleFilterChange}
-        />
+        <div className={styling.filterDropdown}>
+          <Filter
+            options={values}
+            data={companies}
+            criteria="values"
+            onFilterChange={handleFilterChange}
+          />
+          <Filter
+            options={associationsOptions}
+            data={companies}
+            criteria="associations"
+            onFilterChange={handleFilterChange}
+          />
+        </div>
       </div>
       <div className={styling.cards}>
         {filteredCompanies.map((company) => (
-          <Card header={company.company_name} subheader={company.address} />
+          <Card
+            header={company.company_name}
+            subheader={company.address}
+            associations={company.associations}
+            values={company.values}
+            onClickRedirect={() => {
+              navigate(`/company/${company.user_id}`);
+            }}
+          />
         ))}
       </div>
     </div>

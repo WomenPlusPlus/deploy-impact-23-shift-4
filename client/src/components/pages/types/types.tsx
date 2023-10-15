@@ -46,3 +46,13 @@ export interface EditInputProps<Candidate> {
   candidate: Candidate;
   fieldKeysToEdit: string[];
 }
+
+export interface Company {
+  user_id: string;
+  company_name: string;
+  address: string;
+  description: string;
+  associations: string[];
+  values: string[];
+  logo: string;
+}

@@ -11,7 +11,7 @@ interface FilterProps {
 }
 
 const Filter = ({ options, data, criteria, onFilterChange }: FilterProps) => {
-  const [selectedCriteria, setSelectedCriteria] = useState(["All"]);
+  const [selectedCriteria, setSelectedCriteria] = useState<string[]>([]);
 
   const handleChange = (value: any) => {
     console.log(value);
@@ -19,13 +19,14 @@ const Filter = ({ options, data, criteria, onFilterChange }: FilterProps) => {
   };
 
   useEffect(() => {
-    const filteredData = selectedCriteria.includes("All")
-      ? data
-      : data.filter((candidate) =>
-          candidate[criteria].some((item: any) =>
-            selectedCriteria.includes(item)
-          )
-        );
+    const filteredData =
+      selectedCriteria.length === 0
+        ? data
+        : data.filter((candidate) =>
+            candidate[criteria]?.some((item: string) =>
+              selectedCriteria.includes(item)
+            )
+          );
     onFilterChange(filteredData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCriteria]);
@@ -35,7 +36,7 @@ const Filter = ({ options, data, criteria, onFilterChange }: FilterProps) => {
       <Select
         id="filter"
         mode="multiple"
-        style={{ minWidth: 150 }}
+        style={{ minWidth: 200 }}
         placeholder={"Select " + criteria}
         value={selectedCriteria}
         onChange={handleChange}

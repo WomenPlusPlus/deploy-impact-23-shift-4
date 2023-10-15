@@ -1,20 +1,24 @@
 .mainContainer {
-  padding: 2rem;
+  padding: 2rem 4rem;
   min-height: 100vh;
   background-color: var(--background-color);
 }
 
 .header {
   text-align: left;
-  padding-left: 2rem;
   color: var(--gray-dark);
 }
 
 .filters {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 2rem;
-  padding: 0 8rem 2rem 8rem;
+  padding: 3rem 0;
+}
+
+.filterDropdown {
+  display: flex;
+  gap: 2rem;
 }
 
 .cards {
