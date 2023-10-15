@@ -30,7 +30,7 @@ const Login = () => {
   const onFinish = (values: any) => {
     // Send login data to the backend (you'll need to replace the URL and method)
     axios
-      .post("/api/login", formData, { withCredentials: true })
+      .post(`${process.env.REACT_APP_API}/api/login`, formData, { withCredentials: true })
       .then((response) => {
         // Handle the backend response here
         const { user } = response.data;
