@@ -25,14 +25,14 @@ def init_jobs_model(db):
             db.ARRAY(db.String)
         )  # Values as an array of foreign keys (integer)
         skills = db.Column(
-            db.ARRAY(db.String)
+            db.JSON
         )  # Skills as an array of foreign keys (integer)
         hiring_process_duration = db.Column(
             db.String(256)
         )  # Interview process duration as a string
         posting_date = db.Column(db.Date)  # Posting date as a date
         matching_candidates = db.Column(
-            db.ARRAY(db.String)
+            db.JSON
         )  # Matching candidates as an array of foreign keys (integer)
         salary = db.Column(
             db.Numeric(10, 2)
@@ -41,6 +41,7 @@ def init_jobs_model(db):
 
         def __init__(
             self,
+            associations,
             company_id,
             title,
             description=None,
@@ -59,6 +60,7 @@ def init_jobs_model(db):
                 # Your additional fields here
             """
             self.company_id = company_id
+            self.associations = associations
             self.title = title
             self.description = description
             self.values = values

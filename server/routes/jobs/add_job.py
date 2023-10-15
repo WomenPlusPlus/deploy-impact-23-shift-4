@@ -9,6 +9,7 @@ def add_job_route(Jobs, db):
         """ """
         if request.method == "POST":
             data = request.get_json()
+            associations = data.get("associations")
             company_id = data.get("company_id")
             title = data.get("title")
             description = data.get("description")
@@ -22,6 +23,7 @@ def add_job_route(Jobs, db):
 
             new_job = Jobs(
                 company_id=company_id,
+                associations=associations,
                 title=title,
                 description=description,
                 values=values,
