@@ -13,9 +13,10 @@ const jobsData = [
       "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
     employees: "50-200",
     level: "Internship",
-    match: "100",
+    match: "10",
     location: "Berlin",
     department: "Hiring Manager",
+    skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
     name: "Cloud Engineer",
@@ -27,9 +28,10 @@ const jobsData = [
       "https://images.unsplash.com/photo-1542361345-89e58247f2d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
     employees: "50-200",
     level: "Internship",
-    match: "100",
+    match: "10",
     location: "Berlin",
     department: "Hiring Manager",
+    skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
     name: "Back-end Developer",
@@ -41,9 +43,10 @@ const jobsData = [
       "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1336&q=80",
     employees: "50-200",
     level: "Internship",
-    match: "600",
+    match: "60",
     location: "Berlin",
     department: "Hiring Manager",
+    skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
     name: "Front-end Developer",
@@ -58,14 +61,14 @@ const jobsData = [
     match: "50",
     location: "Berlin",
     department: "Hiring Manager",
+    skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
 ];
 
 const Jobs: React.FC = () => {
   return (
     <div className={styling.mainContainer}>
-      <h1 className={styling.header}>Hi UBS!</h1>
-      <h2>Your jobs.</h2>
+      <h2>Your jobs</h2>
       <div className={styling.cards}>
         {jobsData.map((job, index) => (
           <JobCard
@@ -80,6 +83,7 @@ const Jobs: React.FC = () => {
             match={job.match}
             department={job.department}
             location={job.location}
+            skills={job.skills}
           ></JobCard>
         ))}
       </div>

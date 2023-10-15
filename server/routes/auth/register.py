@@ -37,7 +37,9 @@ def register_route(User, Candidate, Company, Association, db):
 
             try:
                 # Hash the password before saving it to the appropriate table
-                hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+                hashed_password = bcrypt.hashpw(
+                    password.encode("utf-8"), bcrypt.gensalt()
+                )
                 hashed_password = hashed_password.decode("utf-8")
 
                 # Save the new user in the "user" table
