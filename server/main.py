@@ -67,7 +67,8 @@ CORS(
         r"/api/*": {
             "origins": [
                 "http://localhost:3000",
-                "https://deploy-impact-23-shift-4.vercel.app/",
+                "https://banana-builders-client.vercel.app/",
+                "https://banana-builders-client-*.vercel.app"
             ],
             "supports_credentials": True,
         }
