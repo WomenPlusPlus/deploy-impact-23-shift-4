@@ -144,7 +144,7 @@ def load_user(user_id):
 @app.after_request
 def after_request(response):
     response.headers.add(
-        "Access-Control-Allow-Origin", "https://banana-builders-client.vercel.app/"
+        "Access-Control-Allow-Origin", "https://banana-builders-client.vercel.app"
     )
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
