@@ -3,8 +3,8 @@ import styling from "./Label.module.css";
 import { IconX } from "@tabler/icons-react";
 
 interface LabelProps {
-  icon: React.ReactNode;
   labelName: string;
+  icon?: React.ReactNode;
   onCloseIcon?: () => void;
   disableCloseIcon?: boolean;
   customClass?: string;
@@ -16,7 +16,7 @@ const Labels: React.FC<LabelProps> = ({
   labelName,
   onCloseIcon,
   disableCloseIcon,
-  customClass = "",
+  customClass = "styling.label",
   onClickHandle,
 }) => {
   return (
@@ -27,21 +27,14 @@ const Labels: React.FC<LabelProps> = ({
       <div className={styling.labelIcon}>
         {icon} {labelName}
       </div>
-      <div
-        className={styling.labelCloseIcon}
-        onClick={disableCloseIcon ? undefined : onCloseIcon}
-      >
-        <IconX
-          color={
-            disableCloseIcon ? `var(--gray-disabled)` : `var(--gray-medium)`
-          }
-          style={
-            disableCloseIcon
-              ? {}
-              : { cursor: "pointer", color: "var(--gray-medium)" }
-          }
-        />
-      </div>
+      {!disableCloseIcon && (
+        <div className={styling.labelCloseIcon} onClick={onCloseIcon}>
+          <IconX
+            color={`var(--gray-medium)`}
+            style={{ cursor: "pointer", color: "var(--gray-medium)" }}
+          />
+        </div>
+      )}
     </div>
   );
 };
