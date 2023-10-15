@@ -1,16 +1,8 @@
 {
-  "routes": [
+  "redirects": [
     {
       "source": "https://banana-builders-client-*.vercel.app/(.*)",
       "destination": "https://banana-builders.onrender.com/$1"
-    },
-    {
-      "source": "/api/login",
-      "destination": "https://banana-builders.onrender.com/api/login"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "https://banana-builders.onrender.com/api/$1"
     }
   ]
 }
