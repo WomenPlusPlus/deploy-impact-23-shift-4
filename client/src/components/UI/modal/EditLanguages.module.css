@@ -1,0 +1,22 @@
+.modal {
+  padding: 2rem;
+}
+
+.content {
+  width: fit-content;
+  column-gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.buttonSave {
+  background-color: var(--color-button);
+  border: none;
+  color: var(--white);
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.buttonCancel {
+  margin-right: 1rem;
+}

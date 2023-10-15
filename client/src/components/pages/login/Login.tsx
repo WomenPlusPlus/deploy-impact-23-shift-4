@@ -3,14 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
-import axios from "axios"; // Import Axios for making HTTP requests
+// import axios from "axios"; // Import Axios for making HTTP requests
+import { useAuth } from "../../../context/auth";
 
 import "./Login.css";
 
-const Login: React.FC = () => {
+import configureAxios from "./../../../config";
+
+const axios = configureAxios();
+
+const Login = () => {
   // state
+  const { auth, setAuth } = useAuth();
+  console.log("auth", auth);
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -27,12 +34,19 @@ const Login: React.FC = () => {
   const onFinish = (values: any) => {
     // Send login data to the backend (you'll need to replace the URL and method)
     axios
-      .post("/api/login", formData, { withCredentials: true })
+      .post(`/api/login`, formData, {
+        withCredentials: true,
+      })
       .then((response) => {
         // Handle the backend response here
-        console.log("Backend Response:", response.data);
+        const { user } = response.data;
         console.log("Response", response.status);
-        navigate("/dashboard");
+        // Set auth, user_type in local storage
+        localStorage.setItem("user_type", user.user_type);
+        localStorage.setItem("auth", JSON.stringify({ user: user }));
+        setAuth({ user: user });
+        // Navigate to the dashboard
+        navigate("/");
       })
       .catch((error) => {
         // Handle any errors here
@@ -62,15 +76,15 @@ const Login: React.FC = () => {
           onFinish={onFinish}
         >
           <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your Username!" }]}
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               type="text"
-              name="username"
-              value={formData.username}
-              placeholder="Username"
+              name="email"
+              value={formData.email}
+              placeholder="email"
               onChange={handleInputChange}
             />
           </Form.Item>

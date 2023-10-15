@@ -1,6 +1,6 @@
 import { Card, Avatar, Button } from "antd";
 import { IconExternalLink } from "@tabler/icons-react";
-import styles from "./JobCard.module.css";
+import styling from "./JobCard.module.css";
 
 interface JobCardProps {
   name?: string;
@@ -34,31 +34,31 @@ const JobCard: React.FC<JobCardProps> = ({
     : undefined;
 
   return (
-    <Card className={styles.card}>
-      <div className={styles["card-content"]}>
-        <div className={styles["job-header"]}>
-          <Avatar className={styles.avatar} src={avatarUrl} />
-          <div className={styles["company-info"]}>
-            <h4 className={styles["company-name"]}>{company_name}</h4>
-            <h5 className={styles["company-location"]}>{company_location}</h5>
-            <h6 className={styles.employee}>{employees} employees</h6>
+    <Card className={styling.card}>
+      <div className={styling.cardContent}>
+        <div className={styling.jobHeader}>
+          <Avatar className={styling.avatar} src={avatarUrl} />
+          <div className={styling.companyInfo}>
+            <h4 className={styling.companyName}>{company_name}</h4>
+            <h5 className={styling.companyLocation}>{company_location}</h5>
+            <h6 className={styling.employee}>{employees} employees</h6>
           </div>
-          <div className={styles["top-right-icon"]}>
+          <div className={styling.topRightIcon}>
             {<IconExternalLink color="black" />}
           </div>
         </div>
-        <div className={styles["job-info"]}>
+        <div className={styling.jobInfo}>
           <div>
-            <h2 className={styles["job-title"]}>{name}</h2>
-            <h3 className={styles["job-level"]}>
-              {level}|{location}|{department}{" "}
+            <h2 className={styling.jobTitle}>{name}</h2>
+            <h3 className={styling.jobLevel}>
+              {level} | {location} | {department}
             </h3>
           </div>
-          <div className={styles["matches-tag"]}>{match} matches</div>
+          <div className={styling.matchesTag}>{match} matches</div>
         </div>
-        <div className={styles["job-description"]}>{truncatedDescription}</div>
-        <div className={styles["go-talents"]}>
-          <Button className={styles["go-to-talents"]}>Go to talents</Button>
+        <div className={styling.jobDescription}>{truncatedDescription}</div>
+        <div className={styling.goTalents}>
+          <Button className={styling.goToTalents}>Go to talents</Button>
         </div>
       </div>
     </Card>

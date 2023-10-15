@@ -1,6 +1,6 @@
 import React from "react";
 import JobCard from "../../UI/card/JobCard";
-import styles from "./Jobs.module.css";
+import styling from "./Jobs.module.css";
 
 const jobsData = [
   {
@@ -63,12 +63,13 @@ const jobsData = [
 
 const Jobs: React.FC = () => {
   return (
-    <div className={styles.mainContainer}>
-      <h1 className={styles.header}>Hi UBS!</h1>
+    <div className={styling.mainContainer}>
+      <h1 className={styling.header}>Hi UBS!</h1>
       <h2>Your jobs.</h2>
-      <div className={styles.cards}>
-        {jobsData.map((job) => (
+      <div className={styling.cards}>
+        {jobsData.map((job, index) => (
           <JobCard
+            key={index}
             name={job.name}
             company_name={job.company_name}
             company_location={job.company_location}
