@@ -13,7 +13,10 @@ const Navbar = () => {
   const { Search } = Input;
 
   const handleProfileClick = () => {
-    navigate("/candidate-profile");
+    const userType = localStorage.getItem("user_type");
+    if (userType === "company") navigate("/company-profile");
+    else if (userType === "candidate") navigate("/candidate-profile");
+    else if (userType === "association") navigate("/association-profile");
   };
 
   return (

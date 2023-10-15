@@ -27,8 +27,8 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
       {avatar && <Avatar firstName={firstName} lastName={lastName} size={70} />}
 
       <div className={styling.text}>
-        <h2>{positionTitle}</h2>
-        <p>{matchingText[0]}</p>
+        <h2 className={styling.title}>{positionTitle}</h2>
+        <p className={styling.subtitle}>{matchingText[0]}</p>
       </div>
 
       {button && <Button className={styling.button}>{button}</Button>}
