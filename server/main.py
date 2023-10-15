@@ -64,7 +64,13 @@ app.config["SECRET_KEY"] = secret_key
 CORS(
     app,
     resources={
-        r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}
+        r"/api/*": {
+            "origins": [
+                "http://localhost:3000",
+                "https://deploy-impact-23-shift-4.vercel.app/",
+            ],
+            "supports_credentials": True,
+        }
     },
 )
 
@@ -122,6 +128,7 @@ app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
 
+
 @login_manager.user_loader
 def load_user(user_id):
     """
@@ -135,6 +142,7 @@ def load_user(user_id):
         User: The User object associated with the provided user ID.
     """
     return User.query.get(user_id)
+
 
 if __name__ == "__main__":
     # Make sure the tables exist
