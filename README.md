@@ -15,11 +15,13 @@ To get started with the project, follow these steps:
 `IMPORTANT`
 
 For the first pull run this in the terminal:
-````
-git config pull.rebase false
-``````
+
+```
+git config pull.rebase false --global
+```
 
 1. Clone the repository to your local machine.
+
    ```
    git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
    ```
@@ -30,8 +32,9 @@ git config pull.rebase false
    ```
 
 3. Add and check your changes, and commit them to your branch.
+
    ```
-   git add . 
+   git add .
    git status
    git commit -m "Add your commit message here"
    ```

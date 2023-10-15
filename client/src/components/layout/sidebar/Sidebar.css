@@ -1,0 +1,49 @@
+/* dashboard items */
+.sider-component {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  background-color: var(--background-color);
+  z-index: 1;
+  width: var(--sidebar-width);
+}
+
+.custom-menu {
+  background-color: var(--background-color);
+}
+
+.custom-menu .ant-menu-item {
+  text-align: left;
+  margin-bottom: 2rem;
+  margin-left: 2rem;
+  width: 80%;
+}
+
+.custom-menu .ant-menu-item:last-child {
+  position: absolute;
+  bottom: 0;
+}
+
+/* Set the background color for the selected (clicked) item */
+.custom-menu .ant-menu-item-selected,
+.custom-menu .ant-menu-item-selected:focus,
+.custom-menu .ant-menu-item-selected:active {
+  background-color: var(--color-button) !important;
+  color: var(--white);
+  width: 80%;
+}
+
+/* Color when hovering on items */
+.custom-menu .ant-menu-item-active {
+  background-color: var(--background-hover) !important;
+  color: var(--white);
+  width: 80%;
+}
+
+.custom-menu {
+  height: 100vh;
+  max-height: fit-content;
+  width: var(--sidebar-width);
+  padding-top: 3rem;
+}

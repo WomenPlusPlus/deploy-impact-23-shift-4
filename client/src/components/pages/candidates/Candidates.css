@@ -1,0 +1,21 @@
+.mainContainer {
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.header {
+  color: black;
+}
+
+.filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  padding: 0 8rem 2rem 8rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}

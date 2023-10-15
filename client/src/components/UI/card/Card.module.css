@@ -1,0 +1,64 @@
+.candidateCard {
+  width: 36rem;
+  padding: 2rem;
+  margin: 2rem 4rem 2rem 0;
+  background-color: #fdfdfd;
+  box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topRightIcon {
+  cursor: pointer;
+}
+
+h2 {
+  font-size: 2.4rem;
+  color: var(--grayDark);
+  margin: 0;
+}
+
+h3 {
+  font-size: 18px;
+  color: var(--grayMedium);
+  margin: 0;
+}
+
+.associationTags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-top: 2rem;
+}
+
+.smallTag {
+  display: inline-block;
+  background-color: #f9b3b3;
+  color: #333;
+  font-size: 1.2rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.2rem;
+  margin-right: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.skillTags {
+  margin-top: 2rem;
+}
+
+.mediumTag {
+  display: inline-block;
+  background-color: #6d8b86;
+  color: #fff;
+  font-size: 1.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 1.2rem;
+  margin-right: 0.8rem;
+  margin-bottom: 0.6rem;
+}

@@ -1,0 +1,13 @@
+Flask==2.1.1
+Flask-SQLAlchemy==2.5.0
+Flask-Login==0.6.2
+python-dotenv==1.0.0
+psycopg2-binary==2.9.7
+passlib==1.7.4
+types-passlib==1.7.7.13
+flake8==6.1.0
+flask-cors==4.0.0
+Werkzeug==2.0.2
+SQLAlchemy==1.4.26
+bcrypt==4.0.1
+sendgrid==6.10.0
