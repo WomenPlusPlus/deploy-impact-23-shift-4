@@ -49,7 +49,7 @@ def init_candidate_model(db):
         languages = db.Column(db.JSON)  # Languages as a JSON array of objects
         links = db.Column(db.JSON)  # Links as a JSON array of objects
         certificates = db.Column(db.JSON)  # Certificates as a JSON array of objects
-        visible_information = db.Column(db.JSON)
+        visible_information = db.Column(db.ARRAY(db.String)) 
         experience = db.Column(db.JSON)
         other_information = db.Column(db.JSON)
 
