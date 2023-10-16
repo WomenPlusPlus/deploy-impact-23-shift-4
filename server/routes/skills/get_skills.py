@@ -18,7 +18,6 @@ def get_all_skills_route(Skills):
                 result = []
 
                 for skill in skills:
-                    print(skill)
                     result.append(skill.to_dict())
 
                 return jsonify({"skills": result}), 200
