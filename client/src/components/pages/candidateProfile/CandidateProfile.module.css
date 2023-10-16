@@ -13,10 +13,9 @@
 
 .profileComponent {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 2rem;
   margin-bottom: 2rem;
-  /* height: 30rem; */
 }
 
 .profileComponent p {
@@ -29,12 +28,12 @@
   align-items: center;
   gap: 1rem;
   margin-left: 1rem;
-  /* background-color: #f5f5f5; */
 }
 
 .userName h3 {
   font-size: 3.5rem;
   color: black;
+  margin: 0;
 }
 
 .location {
@@ -45,7 +44,6 @@
   margin-left: 1rem;
   color: black;
   font-size: large;
-  /* background-color: #f5f5f5; */
 }
 
 /* Profile completed */

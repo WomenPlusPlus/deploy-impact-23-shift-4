@@ -17,6 +17,7 @@ interface EditTypeOfJobsProps {
   titleName: string;
   allLabels: TypeOfJobs[];
   onSave?: (arg: Candidate) => void;
+  isOpen?: boolean;
 }
 
 const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
@@ -26,19 +27,26 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   setCandidate,
   allLabels,
   onSave,
+  isOpen,
 }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>([]);
-  const [filteredTypeOfJobs, setFilteredTypeOfJobs] = useState<TypeOfJobs[]>([]);
-
+  const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>(
+    []
+  );
+  const [filteredTypeOfJobs, setFilteredTypeOfJobs] = useState<TypeOfJobs[]>(
+    []
+  );
 
   useEffect(() => {
     setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
     updateFilteredTypeOfJobss(candidate.preferred_jobs as TypeOfJobs[]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (isOpen) {
+      showModal();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [candidate.preferred_jobs]);
 
   const updateFilteredTypeOfJobss = (jobsToDelete: TypeOfJobs[]) => {
@@ -46,7 +54,10 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
       const isValueInCandidate = jobsToDelete?.every(
         (candidateValue) => candidateValue.job_id !== job.job_id
       );
-      return isValueInCandidate && job.job_name.toLowerCase().includes(searchText.toLowerCase());
+      return (
+        isValueInCandidate &&
+        job.job_name.toLowerCase().includes(searchText.toLowerCase())
+      );
     });
     setFilteredTypeOfJobs(updatedFilteredTypeOfJobss);
   };
@@ -83,7 +94,10 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
       setOpen(false);
       setCandidate({ ...candidate, preferred_jobs: labelsToDeleteState });
       onSave &&
-        onSave({ ...candidate, preferred_jobs: labelsToDeleteState } as Candidate);
+        onSave({
+          ...candidate,
+          preferred_jobs: labelsToDeleteState,
+        } as Candidate);
       setSearchText("");
     }, 300);
   };

@@ -98,11 +98,11 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   birth_date: "Profile",
   work_permit: "Visa Status",
   notice_period: "Notice",
-  job_status: "Role",
-  preferred_jobs: "Type of jobs you're looking for",
-  company_type: "Industries",
-  matching_jobs: "Role",
-  matching_companies: "Industries",
+  job_status: "Profile",
+  preferred_jobs: "Type of jobs",
+  company_type: "Experience",
+  matching_jobs: "",
+  matching_companies: "",
   values: "Values",
   skills: "Skills",
   languages: "Languages",
@@ -110,19 +110,15 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   certificates: "Documents",
   visible_information: "Profile",
   experience: "Experience",
+  visa_status: "Visa Status",
+  salary_expectation: "Salary expectation",
   other_information: "Profile",
 };
 
-// Now you can create the mapping between categories and fields
-
-const categoryFieldMapping: Record<string, (keyof Candidate)[]> = {};
-
 const categories = [
-  "Salary bracket",
+  "Salary expectation",
   "Notice",
   "Visa Status",
-  "Role",
-  "Industries",
   "Documents",
   "Profile",
   "Skills",
@@ -133,37 +129,54 @@ const categories = [
   "Type of jobs you're looking for",
 ];
 
-const countFieldsByCategory = (
+const categoryFieldMapping: Record<string, number> = {};
+
+const countNullFieldsByCategory = (
   candidate: Candidate,
   allCategories: string[]
 ) => {
-  const categoryFieldMapping: Record<string, number> = {};
-
+  // Count the number of null fields for each category
   allCategories.forEach((category) => {
     const fieldsForCategory = Object.keys(fieldCategoryMapping).filter(
       (field) =>
         (fieldCategoryMapping as Record<string, string>)[field] === category
     ) as (keyof Candidate)[];
 
-    const nullOrUndefinedFieldsCount = fieldsForCategory.reduce(
-      (count, field) => {
-        if (candidate[field] === null || candidate[field] === undefined) {
-          return count + 1;
-        }
-        return count;
-      },
-      0
-    );
+    const totalFieldsForCategory = fieldsForCategory.length;
 
-    categoryFieldMapping[category] = nullOrUndefinedFieldsCount;
+    const nullFieldsCount = fieldsForCategory.reduce((count, field) => {
+      if (candidate[field] === null) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+    // Assign the number of null fields to the category
+    categoryFieldMapping[category] = totalFieldsForCategory - nullFieldsCount;
   });
 
-  const result: Record<string, number> = {};
-  allCategories.forEach((category) => {
-    result[category] = categoryFieldMapping[category];
-  });
-
-  return result;
+  return categoryFieldMapping;
 };
 
-export { getFakeData, countFieldsByCategory };
+const completedCategories = Object.values(categoryFieldMapping).filter(
+  (fraction) => fraction > 0
+).length;
+
+const percentage = ({
+  completedCategories,
+  totalCategories,
+}: {
+  completedCategories: number;
+  totalCategories: number;
+}) => {
+  const progress = (completedCategories / totalCategories) * 100;
+  return Math.round(progress);
+};
+
+export {
+  getFakeData,
+  countNullFieldsByCategory,
+  percentage,
+  categories,
+  fieldCategoryMapping,
+  completedCategories,
+};

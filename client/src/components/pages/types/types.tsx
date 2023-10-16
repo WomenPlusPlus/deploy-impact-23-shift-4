@@ -33,6 +33,8 @@ export interface Candidate {
   certificates?: { [key: string]: any }[];
   visible_information?: { [key: string]: any };
   experience?: { [key: string]: any };
+  visa_status?: string[];
+  salary_expectation?: string[];
   other_information?: { [key: string]: any };
 }
 

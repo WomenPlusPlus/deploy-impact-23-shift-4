@@ -60,11 +60,9 @@ const CandidateProfile = () => {
     },
   ];
   const allFields = [
-    "Salary bracket",
+    "Salary expectation",
     "Notice",
     "Visa Status",
-    "Role",
-    "Industries",
     "Documents",
     "Profile",
     "Skills",
@@ -72,7 +70,7 @@ const CandidateProfile = () => {
     "Languages",
     "Experience",
     "Contact info",
-    "Types of jobs",
+    "Type of jobs",
   ];
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
@@ -81,6 +79,13 @@ const CandidateProfile = () => {
   const [isEditLanguages, setIsEditLanguages] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [isAnonymousProfileEdit, setIsAnonymousProfileEdit] = useState(false);
+  const [isSkillsEdit, setIsSkillsEdit] = useState(false);
+  const [isValuesEdit, setIsValuesEdit] = useState(false);
+  const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
+
+  const [allSkills, setAllSkills] = useState([]);
+  const [allValues, setAllValues] = useState([]);
+  const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -95,14 +100,17 @@ const CandidateProfile = () => {
 
   useEffect(() => {
     fetchCandidate();
+    setAllSkills(getFakeData().allSkill as []);
+    setAllValues(getFakeData().allValue as []);
+    setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
   }, []);
 
   // handlers
-  const editHandlerContactInfo = () => {
+  const editContactInfo = () => {
     setIsEditContactInfo(true);
   };
 
-  const editHandlerLanguages = () => {
+  const editLanguages = () => {
     setIsEditLanguages(true);
   };
 
@@ -113,6 +121,19 @@ const CandidateProfile = () => {
   const editHandlerAnonymousProfile = () => {
     setIsAnonymousProfileEdit(true);
   };
+
+  const editSkills = () => {
+    setIsSkillsEdit(true);
+  }
+
+  const editValues = () => {
+    setIsValuesEdit(true);
+  }
+
+  const editTypeOfJobs = () => {
+    setIsTypeOfJobsEdit(true);
+  }
+
 
   /**
    * Handle the save of the profile info
@@ -136,16 +157,14 @@ const CandidateProfile = () => {
     <div className={styling.main}>
       {/* Profile text */}
       <CardContainer
-        className={`${styling.profileSectionElement} ${styling.profileComponent}`}
+        className={`${styling.profileComponent}`}
       >
         <Avatar size={80} firstName="John" lastName="Doe" />
-
         <div>
           <div className={styling.userName}>
             <h3>
               {candidate?.first_name} {candidate?.last_name}
             </h3>
-
             <h4>{candidate?.job_status}</h4>
           </div>
 
@@ -187,6 +206,9 @@ const CandidateProfile = () => {
           className={styling.profileCompletedElement}
           candidate={candidate}
           allCategories={allFields}
+          editContactInfo={editContactInfo}
+          editLanguages={editLanguages}
+          editSkills={editSkills}
         />
 
         {/* Anonymous profile */}
@@ -231,7 +253,7 @@ const CandidateProfile = () => {
             <EditTypeOfJobs
               candidate={candidate}
               setCandidate={setCandidate}
-              allLabels={getFakeData().allTypeOfJob}
+              allLabels={allTypeOfJobs}
               icon={<IconTags />}
               titleName="Choose your type of jobs"
               onSave={handleSaveEdit}
@@ -259,10 +281,13 @@ const CandidateProfile = () => {
           <EditSkills
             candidate={candidate}
             setCandidate={setCandidate}
-            allLabels={getFakeData().allSkill}
+            allLabels={allSkills}
             icon={<IconTags />}
             titleName="Choose your skills"
             onSave={handleSaveEdit}
+            visible={isSkillsEdit}
+            setVisible={setIsSkillsEdit}
+            showModal={editSkills}
           />
         </div>
         <div className={styling.skillsContainerLabels}>
@@ -286,7 +311,7 @@ const CandidateProfile = () => {
           <EditValues
             candidate={candidate}
             setCandidate={setCandidate}
-            allLabels={getFakeData().allValue}
+            allLabels={allValues}
             icon={<IconTags />}
             titleName="Choose your skills"
             onSave={handleSaveEdit}
@@ -318,7 +343,7 @@ const CandidateProfile = () => {
               candidate={candidate}
               setValuesToEdit={setCandidate}
               fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
-              onClick={editHandlerContactInfo}
+              onClick={editContactInfo}
               onSave={handleSaveEdit}
               fieldKeysToEdit={["phone_number", "email", "address"]}
             />
@@ -343,7 +368,7 @@ const CandidateProfile = () => {
             <IconEdit
               color="black"
               style={{ cursor: "pointer" }}
-              onClick={editHandlerLanguages}
+              onClick={editLanguages}
             />
           </div>
           <EditLanguages
