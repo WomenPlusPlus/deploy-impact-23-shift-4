@@ -8,9 +8,10 @@ import { EditValues } from "../../UI/modal/EditValues";
 import { EditInput } from "../../UI/modal/EditInput";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
+import { EditExperience } from "../../UI/modal/EditExperience";
 import { VisibleSection } from "../../UI/modal/VisibleSection";
-import { getFakeData } from "./helpers/helper";
-
+import { getFakeData, transformCandidateData } from "./helpers/helper";
+import { FileUploadModal } from "../../UI/modal/EditUploadDocuments";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";
@@ -50,19 +51,8 @@ const CandidateProfile = () => {
       subtext: "+ Software/Saas, Biotechnology, Medical devices",
     },
   ];
-  const sectionsDocuments = [
-    { title: "CV", subtext: "", type: "cv" },
-    { title: "Certificate", subtext: "DAC 2023", type: "certificate" },
-    {
-      title: "Ceritficate",
-      subtext: "Deploy(impact) 2023",
-      type: "certificate",
-    },
-  ];
   const allFields = [
-    "Salary expectation",
-    "Notice",
-    "Visa Status",
+    "Visible Information",
     "Documents",
     "Profile",
     "Skills",
@@ -74,6 +64,7 @@ const CandidateProfile = () => {
   ];
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
+  const [sectionDocuments, setSectionDocuments] = useState([] as any);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
@@ -82,6 +73,8 @@ const CandidateProfile = () => {
   const [isSkillsEdit, setIsSkillsEdit] = useState(false);
   const [isValuesEdit, setIsValuesEdit] = useState(false);
   const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
+  const [isExperienceEdit, setIsExperienceEdit] = useState(false);
+  const [isDocumentsEdit, setIsDocumentsEdit] = useState(false);
 
   const [allSkills, setAllSkills] = useState([]);
   const [allValues, setAllValues] = useState([]);
@@ -93,6 +86,8 @@ const CandidateProfile = () => {
     try {
       const candidateFetched = await getCandidateById(auth.user.id);
       setCandidate(candidateFetched);
+      const transformedData = transformCandidateData(candidateFetched);
+      setSectionDocuments(transformedData);
     } catch (error) {
       console.log("error", error);
     }
@@ -103,6 +98,7 @@ const CandidateProfile = () => {
     setAllSkills(getFakeData().allSkill as []);
     setAllValues(getFakeData().allValue as []);
     setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
+    
   }, []);
 
   // handlers
@@ -124,16 +120,23 @@ const CandidateProfile = () => {
 
   const editSkills = () => {
     setIsSkillsEdit(true);
-  }
+  };
 
   const editValues = () => {
     setIsValuesEdit(true);
-  }
+  };
 
   const editTypeOfJobs = () => {
     setIsTypeOfJobsEdit(true);
-  }
+  };
 
+  const editExperience = () => {
+    setIsExperienceEdit(true);
+  };
+
+  const editDocuments = () => {
+    setIsDocumentsEdit(true);
+  };
 
   /**
    * Handle the save of the profile info
@@ -152,13 +155,30 @@ const CandidateProfile = () => {
     console.log("is_updated", is_updated);
   };
 
+  const handleSaveEditExperience = async (valuesToAdd: { experience: any }) => {
+    // Add the values to the candidate object
+    const candidateUpdated = {
+      ...candidate,
+      experience: valuesToAdd.experience,
+    };
+
+    // Update the state
+    setCandidate(candidateUpdated);
+
+    // Send a request to update the candidate
+    const is_updated = await updateCandidateById(
+      candidate?.user_id,
+      candidateUpdated
+    );
+
+    console.log("is_updated", is_updated);
+  };
+
   console.log("candidate profile", candidate);
   return (
     <div className={styling.main}>
       {/* Profile text */}
-      <CardContainer
-        className={`${styling.profileComponent}`}
-      >
+      <CardContainer className={`${styling.profileComponent}`}>
         <Avatar size={80} firstName="John" lastName="Doe" />
         <div>
           <div className={styling.userName}>
@@ -186,7 +206,7 @@ const CandidateProfile = () => {
             candidate={candidate}
             setValuesToEdit={setCandidate}
             fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
-            onClick={editHandlerProfile}
+            showModal={editHandlerProfile}
             onSave={handleSaveEdit}
             fieldKeysToEdit={[
               "first_name",
@@ -209,6 +229,11 @@ const CandidateProfile = () => {
           editContactInfo={editContactInfo}
           editLanguages={editLanguages}
           editSkills={editSkills}
+          editValues={editValues}
+          editProfile={editHandlerProfile}
+          editTypeOfJobs={editTypeOfJobs}
+          editExperience={editExperience}
+          editDocuments={editDocuments}
         />
 
         {/* Anonymous profile */}
@@ -220,7 +245,7 @@ const CandidateProfile = () => {
               candidate={candidate}
               visible={isAnonymousProfileEdit}
               setVisible={setIsAnonymousProfileEdit}
-              onClick={editHandlerAnonymousProfile}
+              showModal={editHandlerAnonymousProfile}
               allFields={allFields}
             />
           </div>
@@ -257,19 +282,23 @@ const CandidateProfile = () => {
               icon={<IconTags />}
               titleName="Choose your type of jobs"
               onSave={handleSaveEdit}
+              visible={isTypeOfJobsEdit}
+              setVisible={setIsTypeOfJobsEdit}
+              showModal={editTypeOfJobs}
             />
           </div>
 
           <div className={styling.associationContainerLabels}>
-            {candidate?.preferred_jobs?.map((label, index) => (
-              <Labels
-                key={index}
-                icon={<IconTags />}
-                labelName={label.job_name}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-              />
-            ))}
+            {candidate?.preferred_jobs &&
+              candidate?.preferred_jobs?.map((label, index) => (
+                <Labels
+                  key={index}
+                  icon={<IconTags />}
+                  labelName={label.job_name}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />
+              ))}
           </div>
         </CardContainer>
       </div>
@@ -291,8 +320,8 @@ const CandidateProfile = () => {
           />
         </div>
         <div className={styling.skillsContainerLabels}>
-          {candidate.skills &&
-            candidate.skills.map((label, index) => (
+          {candidate?.skills &&
+            candidate?.skills?.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconTags />}
@@ -313,13 +342,16 @@ const CandidateProfile = () => {
             setCandidate={setCandidate}
             allLabels={allValues}
             icon={<IconTags />}
-            titleName="Choose your skills"
+            titleName="Choose your values"
             onSave={handleSaveEdit}
+            visible={isValuesEdit}
+            setVisible={setIsValuesEdit}
+            showModal={editValues}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
-          {candidate.values &&
-            candidate.values.map((label, index) => (
+          {candidate?.values &&
+            candidate?.values?.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconTags />}
@@ -343,7 +375,7 @@ const CandidateProfile = () => {
               candidate={candidate}
               setValuesToEdit={setCandidate}
               fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
-              onClick={editContactInfo}
+              showModal={editContactInfo}
               onSave={handleSaveEdit}
               fieldKeysToEdit={["phone_number", "email", "address"]}
             />
@@ -385,9 +417,25 @@ const CandidateProfile = () => {
         <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Experience</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <EditExperience
+              visible={isExperienceEdit}
+              setVisible={setIsExperienceEdit}
+              showModal={editExperience}
+              candidate={candidate}
+              setCandidate={setCandidate}
+              onSave={handleSaveEdit}
+            />
           </div>
           <ContentBlock sections={sectionsExperience} />
+          <p>
+            Candidate:{" "}
+            {candidate?.experience &&
+              candidate.experience.length > 0 &&
+              candidate.experience[0].role}
+            {candidate?.experience && candidate.experience[0].industries}
+            {candidate?.experience &&
+              candidate.experience[0].years_of_experience}
+          </p>
         </CardContainer>
       </div>
 
@@ -395,9 +443,16 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Uploaded documents</h3>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
+          <FileUploadModal
+            candidate={candidate}
+            visible={isDocumentsEdit}
+            setVisible={setIsDocumentsEdit}
+            showModal={editDocuments}
+            onSave={handleSaveEdit}
+            setSectionDocuments={setSectionDocuments}
+          />
         </div>
-        <ContentBlock sections={sectionsDocuments} />
+        <ContentBlock sections={sectionDocuments} />
       </CardContainer>
     </div>
   );

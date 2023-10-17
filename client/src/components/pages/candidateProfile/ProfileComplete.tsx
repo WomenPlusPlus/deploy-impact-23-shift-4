@@ -1,7 +1,6 @@
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
-import { IconEdit } from "@tabler/icons-react";
 import styling from "./ProfileComplete.module.css";
 import { countNullFieldsByCategory, percentage } from "./helpers/helper";
 import { Candidate } from "../types/types";
@@ -14,6 +13,11 @@ interface ProfileCompletedProps {
   editContactInfo?: () => void;
   editLanguages?: () => void;
   editSkills?: () => void;
+  editValues?: () => void;
+  editProfile?: () => void;
+  editExperience?: () => void;
+  editTypeOfJobs?: () => void;
+  editDocuments?: () => void;
 }
 
 const ProfileComplete: React.FC<ProfileCompletedProps> = ({
@@ -23,6 +27,11 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   editContactInfo,
   editLanguages,
   editSkills,
+  editValues,
+  editProfile,
+  editExperience,
+  editTypeOfJobs,
+  editDocuments,
 }) => {
   // state
   const [fieldsByCategory, setFieldsByCategory] = useState(
@@ -59,10 +68,34 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
           editSkills();
         }
         break;
+      case "Values":
+        if (editValues) {
+          editValues();
+        }
+        break;
+      case "Profile":
+        if (editProfile) {
+          editProfile();
+        }
+        break;
+      case "Experience":
+        if (editExperience) {
+          editExperience();
+        }
+        break;
+      case "Type of jobs":
+        if (editTypeOfJobs) {
+          editTypeOfJobs();
+        }
+        break;
+      case "Documents":
+        if (editDocuments) {
+          editDocuments();
+        }
+        break;
       default:
         break;
     }
-    // setOpenCategory(category);
   };
 
   return (
@@ -75,7 +108,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
       <div className={styling.profileCompletedFields}>
         {
           /* Display fields by category */
-          allCategories.map((category) => (
+          allCategories?.map((category) => (
             <div key={category} className={styling.profileCompletedCategory}>
               {/* <h4>{category}</h4> */}
               {fieldsByCategory[category] > 0 ? (

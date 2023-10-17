@@ -32,7 +32,7 @@ export interface Candidate {
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
   visible_information?: { [key: string]: any };
-  experience?: { [key: string]: any };
+  experience?: { [key: string]: any }[];
   visa_status?: string[];
   salary_expectation?: string[];
   other_information?: { [key: string]: any };
@@ -43,7 +43,7 @@ export interface EditInputProps<Candidate> {
   setVisible: (arg: boolean) => void;
   setValuesToEdit: (arg: Candidate) => void;
   fieldsToDisplay: string[];
-  onClick: () => void;
+  showModal: () => void;
   onSave?: (arg: Candidate) => void;
   candidate: Candidate;
   fieldKeysToEdit: string[];

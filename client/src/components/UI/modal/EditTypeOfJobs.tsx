@@ -17,7 +17,9 @@ interface EditTypeOfJobsProps {
   titleName: string;
   allLabels: TypeOfJobs[];
   onSave?: (arg: Candidate) => void;
-  isOpen?: boolean;
+  visible: boolean;
+  setVisible: (arg: boolean) => void;
+  showModal?: () => void;
 }
 
 const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
@@ -27,10 +29,11 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   setCandidate,
   allLabels,
   onSave,
-  isOpen,
+  visible,
+  setVisible,
+  showModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>(
@@ -41,13 +44,10 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   );
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
-    updateFilteredTypeOfJobss(candidate.preferred_jobs as TypeOfJobs[]);
-    if (isOpen) {
-      showModal();
-    }
+    setLabelsToDeleteState(candidate?.preferred_jobs as TypeOfJobs[]);
+    updateFilteredTypeOfJobss(candidate?.preferred_jobs as TypeOfJobs[]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [candidate.preferred_jobs]);
+  }, []);
 
   const updateFilteredTypeOfJobss = (jobsToDelete: TypeOfJobs[]) => {
     const updatedFilteredTypeOfJobss = allLabels?.filter((job) => {
@@ -83,15 +83,11 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
     }
   };
 
-  const showModal = () => {
-    setOpen(true);
-  };
-
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+      setVisible(false);
       setCandidate({ ...candidate, preferred_jobs: labelsToDeleteState });
       onSave &&
         onSave({
@@ -103,7 +99,7 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setVisible(false);
     setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
     setSearchText("");
   };
@@ -116,7 +112,7 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
         onClick={showModal}
       />
       <Modal
-        open={open}
+        open={visible}
         title={titleName}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -156,7 +152,7 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
         />
         <div className={styling.elementInOneRow}>
           {filteredTypeOfJobs &&
-            filteredTypeOfJobs.map((job, index) => (
+            filteredTypeOfJobs?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}

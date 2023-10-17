@@ -40,9 +40,9 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.skills as Skill[]);
-    updateFilteredSkills(candidate.skills as Skill[]);
-  }, [candidate.skills]);
+    setLabelsToDeleteState(candidate?.skills as Skill[]);
+    updateFilteredSkills(candidate?.skills as Skill[]);
+  }, [candidate?.skills]);
 
   const updateFilteredSkills = (skillsToDelete: Skill[]) => {
     const updatedFilteredSkills = allLabels?.filter((skill) => {

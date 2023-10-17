@@ -18,6 +18,9 @@ interface EditValuesProps {
   titleName: string;
   allLabels: Value[];
   onSave?: (arg: Candidate) => void;
+  visible: boolean;
+  setVisible: (arg: boolean) => void;
+  showModal: () => void;
 }
 
 const EditValues: React.FC<EditValuesProps> = ({
@@ -27,17 +30,19 @@ const EditValues: React.FC<EditValuesProps> = ({
   setCandidate,
   allLabels,
   onSave,
+  visible,
+  setVisible,
+  showModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<Value[]>([]);
   const [filteredValues, setFilteredValues] = useState<Value[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.values as Value[]);
-    updateFilteredValues(candidate.values as Value[]);
-  }, [candidate.values]);
+    setLabelsToDeleteState(candidate?.values as Value[]);
+    updateFilteredValues(candidate?.values as Value[]);
+  }, []);
 
   const updateFilteredValues = (valuesToDelete: Value[]) => {
     const updatedFilteredValues = allLabels?.filter((value) => {
@@ -70,15 +75,11 @@ const EditValues: React.FC<EditValuesProps> = ({
     }
   };
 
-  const showModal = () => {
-    setOpen(true);
-  };
-
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+      setVisible(false);
       setCandidate({ ...candidate, values: labelsToDeleteState });
       onSave &&
         onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
@@ -87,7 +88,7 @@ const EditValues: React.FC<EditValuesProps> = ({
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setVisible(false);
     setLabelsToDeleteState(candidate.values as Value[]);
     setSearchText("");
   };
@@ -100,7 +101,7 @@ const EditValues: React.FC<EditValuesProps> = ({
         onClick={showModal}
       />
       <Modal
-        open={open}
+        open={visible}
         title={titleName}
         onOk={handleOk}
         onCancel={handleCancel}

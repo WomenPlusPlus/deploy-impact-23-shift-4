@@ -96,8 +96,8 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   address: "Contact info",
   phone_number: "Contact info",
   birth_date: "Profile",
-  work_permit: "Visa Status",
-  notice_period: "Notice",
+  work_permit: "Visible Information",
+  notice_period: "Visible Information",
   job_status: "Profile",
   preferred_jobs: "Type of jobs",
   company_type: "Experience",
@@ -110,24 +110,10 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   certificates: "Documents",
   visible_information: "Profile",
   experience: "Experience",
-  visa_status: "Visa Status",
-  salary_expectation: "Salary expectation",
+  visa_status: "Visible Information",
+  salary_expectation: "Visible Information",
   other_information: "Profile",
 };
-
-const categories = [
-  "Salary expectation",
-  "Notice",
-  "Visa Status",
-  "Documents",
-  "Profile",
-  "Skills",
-  "Values",
-  "Languages",
-  "Experience",
-  "Contact info",
-  "Type of jobs you're looking for",
-];
 
 const categoryFieldMapping: Record<string, number> = {};
 
@@ -144,7 +130,7 @@ const countNullFieldsByCategory = (
 
     const totalFieldsForCategory = fieldsForCategory.length;
 
-    const nullFieldsCount = fieldsForCategory.reduce((count, field) => {
+    const nullFieldsCount = fieldsForCategory?.reduce((count, field) => {
       if (candidate[field] === null) {
         return count + 1;
       }
@@ -172,11 +158,40 @@ const percentage = ({
   return Math.round(progress);
 };
 
+function transformCandidateData(candidate: Candidate) {
+  const transformedData = [];
+
+  // Transform CV data
+  if (candidate.cv_reference) {
+    transformedData.push({ title: "CV", subtext: "", type: "cv" });
+  }
+
+  // Transform certificate data
+  if (candidate.certificates && Array.isArray(candidate.certificates)) {
+    candidate.certificates.forEach((certificate) => {
+      const title = "Certificate";
+      const subtext = `${certificate.name} 2023`;
+      const type = "certificate";
+      transformedData.push({ title, subtext, type });
+    });
+  }
+
+  return transformedData;
+}
+
+const candidate = {
+  cv_reference: "",
+  certificates: [
+    { name: "deploy(impact)", reference: "pizza.png" },
+  ],
+};
+
+
 export {
   getFakeData,
   countNullFieldsByCategory,
   percentage,
-  categories,
   fieldCategoryMapping,
   completedCategories,
+  transformCandidateData
 };

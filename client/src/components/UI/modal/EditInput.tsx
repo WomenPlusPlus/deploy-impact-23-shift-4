@@ -11,7 +11,7 @@ enum LanguageLevelText {
 
 const EditInput: React.FC<EditInputProps<Candidate>> = ({
   onSave,
-  onClick,
+  showModal,
   setVisible,
   setValuesToEdit,
   visible,
@@ -47,7 +47,7 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
 
   return (
     <>
-      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={onClick} />
+      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={showModal} />
 
       <Modal
         open={visible}
@@ -62,14 +62,14 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
           </Button>,
         ]}
       >
-        {fieldKeysToEdit.map((field: string, index) => (
+        {fieldKeysToEdit && fieldKeysToEdit?.map((field: string, index) => (
           <div key={index}>
             <p>{fieldsToDisplay[index]}:</p>
 
             {field === "job_status" ? (
               <Select
                 style={{ width: "100%" }}
-                value={values[field] || ""}
+                value={values && values[field] || ""}
                 onChange={(value) => {
                   setValues((prevValues) => ({
                     ...prevValues,
@@ -85,7 +85,7 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
               </Select>
             ) : (
               <Input
-                value={(values[field as keyof Candidate] as string) || ""}
+                value={values && (values[field as keyof Candidate] as string) || ""}
                 onChange={(e) => {
                   setValues((prevValues) => ({
                     ...prevValues,

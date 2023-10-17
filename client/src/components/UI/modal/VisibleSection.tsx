@@ -11,7 +11,7 @@ interface ContentBlockModalProps {
   visible: boolean;
   setVisible: (arg: boolean) => void;
   candidate: Candidate;
-  onClick: () => void;
+  showModal: () => void;
   onSave?: (arg: Candidate) => void;
   allFields?: string[];
 }
@@ -20,7 +20,7 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   visible,
   setVisible,
   candidate,
-  onClick,
+  showModal,
   allFields,
   onSave
 }) => {
@@ -28,8 +28,8 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   const [editedSections, setEditedSections] = useState<string[]>([]);
 
   useEffect(() => {
-    if (candidate.visible_information) {
-      setEditedSections(candidate.visible_information as string[]);
+    if (candidate?.visible_information) {
+      setEditedSections(candidate?.visible_information as string[]);
     }
   }, [candidate]);
 
@@ -56,7 +56,7 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
 
   return (
     <>
-      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={onClick} />
+      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={showModal} />
       <Modal
         open={visible}
         title="Edit Information"
@@ -75,12 +75,12 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
           onChange={(value) => setSelectedField(value)}
           style={{ width: "100%" }}
         >
-          {allFields &&
-            allFields.map((field) => (
+          {/* {allFields &&
+            allFields?.map((field) => (
               <Option key={field} value={field}>
                 {field}
               </Option>
-            ))}
+            ))} */}
         </Select>
         <Button onClick={handleAddField}>Add Field</Button>
       </Modal>
