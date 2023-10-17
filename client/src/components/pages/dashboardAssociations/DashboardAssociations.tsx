@@ -28,11 +28,9 @@ const DashboardAssociations = () => {
   const fetchAssociation = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const userId = auth.user.id;
-    console.log(userId);
 
     if (userId) {
       const association = await getAssociationById(userId);
-      console.log(association);
       setAssociation(association);
     }
   };

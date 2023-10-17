@@ -17,8 +17,8 @@ interface Company {
 
 const Companies = () => {
   const values = ["Teamwork", "Diversity", "Inclusion"];
-
   const associationsOptions = ["Woman++", "Power Coders"];
+
   const navigate = useNavigate();
 
   // State

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../UI/avatar/Avatar";
 
-import logo from "../../../media/shift-logo.jpg";
+import logo from "../../../media/bridge-logo.png";
 
 import "./Navbar.css";
 
@@ -27,18 +27,17 @@ const Navbar = () => {
             <img
               className="logo"
               alt="logo"
-              style={{ width: 120, height: 35 }}
+              style={{ width: 180, height: 60 }}
               src={String(logo)}
             />
             <div className="leftMenu">
               <Search
                 placeholder="Enter a job title, name o keyword"
-                style={{ position: "relative", width: 300 }}
+                style={{ position: "relative", width: 400 }}
               />
             </div>
 
             <div className="rightMenu">
-              <IconBookmark color="var(--gray-medium)" />
               {/* TODO: update names with login profile */}
               <Avatar
                 firstName="Laura"
