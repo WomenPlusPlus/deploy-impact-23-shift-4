@@ -15,7 +15,7 @@ export interface Candidate {
   preferred_name?: string;
   city?: string;
   country?: string;
-  cv_reference?: string;
+  cv_reference?: string | null;
   address?: string;
   phone_number?: string;
   birth_date?: string; // You may want to use a Date type, or ISO string

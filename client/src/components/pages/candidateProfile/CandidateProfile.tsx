@@ -98,7 +98,6 @@ const CandidateProfile = () => {
     setAllSkills(getFakeData().allSkill as []);
     setAllValues(getFakeData().allValue as []);
     setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
-    
   }, []);
 
   // handlers
@@ -155,25 +154,6 @@ const CandidateProfile = () => {
     console.log("is_updated", is_updated);
   };
 
-  const handleSaveEditExperience = async (valuesToAdd: { experience: any }) => {
-    // Add the values to the candidate object
-    const candidateUpdated = {
-      ...candidate,
-      experience: valuesToAdd.experience,
-    };
-
-    // Update the state
-    setCandidate(candidateUpdated);
-
-    // Send a request to update the candidate
-    const is_updated = await updateCandidateById(
-      candidate?.user_id,
-      candidateUpdated
-    );
-
-    console.log("is_updated", is_updated);
-  };
-
   console.log("candidate profile", candidate);
   return (
     <div className={styling.main}>
@@ -190,12 +170,35 @@ const CandidateProfile = () => {
 
           <div className={styling.location}>
             <IconMapPin color="black" />
-            <p>
-              {candidate?.city}, {candidate?.country}
-            </p>
+            {candidate.city && candidate?.country ? (
+              <p>
+                {candidate?.city}, {candidate?.country}
+              </p>
+            ) : (
+              <p onClick={editHandlerProfile}>Add your location</p>
+            )}
             <p>|</p>
-            <IconBrandLinkedin color="black" />
-            <IconWorldWww color="black" />
+            {candidate.links && candidate.links.length > 0 ? (
+              candidate.links.map((link, index) => (
+                <div key={index}>
+                  {link.name === "LinkedIn" ? (
+                    <a href={link.url} target="_blank" rel="noreferrer">
+                      <IconBrandLinkedin color="black" />
+                    </a>
+                  ) : link.name === "Website" ? (
+                    <a href={link.url} target="_blank" rel="noreferrer">
+                      <IconWorldWww color="black" />
+                    </a>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              ))
+            ) : (
+              <>
+                <p onClick={editHandlerProfile}>Add links</p>
+              </>
+            )}
           </div>
         </div>
 
@@ -214,6 +217,7 @@ const CandidateProfile = () => {
               "job_status",
               "city",
               "country",
+              "links",
               // add links here. Remember: Links are an array of objects [{name: "", url: ""}]
             ]}
           />
