@@ -71,4 +71,6 @@ def match_candidates_route():
         except Exception as e:
             return jsonify({"message": f"Error matching candidates: {e}"}), 500
 
+        return jsonify({"message": "Invalid request"}), 400
+    
     return match_candidates_bp
