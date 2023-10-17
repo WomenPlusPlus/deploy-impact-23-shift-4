@@ -28,6 +28,12 @@ def init_association_model(db):
         address = db.Column(db.String(256))
         url = db.Column(db.String(256))  # URL to associations page as a string
         contact_details = db.Column(db.JSON)
+        description = db.Column(db.String(1000))
+        iniciatives = db.Column(
+            db.JSON
+        )  # Iniciatives as a JSON object of iniciatives ids
+        invites = db.Column(db.JSON)  # Invites as a JSON object of invites ids
+        size = db.Column(db.String(80))
 
         def __init__(
             self,
@@ -39,6 +45,10 @@ def init_association_model(db):
             address=None,
             url=None,
             contact_details=None,
+            description=None,
+            iniciatives=None,
+            invites=None,
+            size=None,
         ):
             """
             Initialize a new association object.
@@ -54,6 +64,10 @@ def init_association_model(db):
             self.address = address
             self.url = url
             self.contact_details = contact_details
+            self.description = description
+            self.iniciatives = iniciatives
+            self.invites = invites
+            self.size = size
 
         def to_dict(self):
             """
@@ -69,6 +83,10 @@ def init_association_model(db):
                 "address": self.address,
                 "url": self.url,
                 "contact_details": self.contact_details,
+                "description": self.description,
+                "iniciatives": self.iniciatives,
+                "invites": self.invites,
+                "size": self.size,
             }
 
     return Association

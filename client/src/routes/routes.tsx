@@ -14,6 +14,7 @@ import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 import NotFound from "../components/pages/notfound/NotFound";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
 import CompanyPublicProfile from "../components/pages/companyPublicProfile/CompanyPublicProfile";
+import AssociationProfile from "../components/pages/associationProfile/AssociationProfile";
 
 const Routes: React.FC = () => {
   return (
@@ -45,6 +46,10 @@ const Routes: React.FC = () => {
         <Route
           path="/company-profile"
           element={<Authenticated content={<CompanyProfile />} />}
+        />
+        <Route
+          path="/association-profile"
+          element={<Authenticated content={<AssociationProfile />} />}
         />
         <Route
           path="/dashboard-association"
