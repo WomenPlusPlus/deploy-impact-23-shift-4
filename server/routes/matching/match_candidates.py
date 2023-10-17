@@ -39,30 +39,31 @@ def match_candidates_route():
                 job_json = { 'job_id': id }
 
                 job = requests.post('http://localhost:5001/api/get_job_by_id', json=job_json)
-                job_skills_ids = job.json()['jobs']['skills']['hard_skills']
-                skills_response = requests.get('http://localhost:5001/api/get_all_skills')
-                skills_json = skills_response.json()['skills']
-                # job_skills = [get_skill_info(skill) for skill in job.json()['jobs']['skills']['hard_skills']]
-                job_skills = [skill['name'] for skill in skills_json if skill['id'] in job_skills_ids]
+                job_skills = job.json()['jobs']['skills']['technicalSkills']
                 candidates_response = requests.get('http://localhost:5001/api/get_all_candidates')
                 candidates = candidates_response.json()['candidates']
     
                 for candidate in candidates:
-                    cand_skills = candidate['skills']['hard_skills'] 
+                    cand_skills = candidate['skills']['technicalSkills'] 
                     # if cand_skills and any(item in cand_skills for item in job_skills_ids):
-                    cand_skills = {skill['name']:cand_skills[skill['id']] for skill in skills_json if skill['id'] in cand_skills}
                     cand_id = candidate['id']
                     if cand_skills:
-                        # cand_skills_parsed = {skill['skill_name']:[skill['skill_level']] for skill in cand_skills}
                         cand_score = score(job_skills, cand_skills)
                         if cand_score > 20:
                             cand_match[cand_id] = cand_score
+                            if candidate['matching_jobs']:
+                                candidate['matching_jobs'][id] = cand_score
+                            else:
+                                candidate['matching_jobs'] = {}
+                                candidate['matching_jobs'][id] = cand_score
+                            update_cand_json = {"user_id":candidate['user_id'], 'matching_jobs': candidate['matching_jobs']}
+                            update_cand_response = requests.put('http://localhost:5001/api/update_candidate', json=update_cand_json)
                 
                 update_json = {'job_id': id, 'matching_candidates': cand_match}
                 update_job = requests.put('http://localhost:5001/api/update_job', json=update_json)
 
                 if update_job.status_code == 200:
-                    return jsonify({'message':'Update job successfully','matching_candidates': cand_match}), 200
+                    return jsonify({'message':'Update job successfully', 'matching_candidates': cand_match}), 200
 
                 else:
                     return jsonify({"message": f"Error matching candidates"}), 500

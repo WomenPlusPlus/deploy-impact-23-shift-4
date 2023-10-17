@@ -28,7 +28,6 @@ def update_candidate_route(Candidate, db):
                 for key, _ in candidate_dict.items():
                     if key in data:
                         setattr(candidate, key, data[key])
-                print(candidate.to_dict())
                 db.session.commit()
 
                 return jsonify({"message": "Candidate updated successfully"}), 200
