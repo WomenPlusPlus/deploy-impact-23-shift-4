@@ -57,4 +57,5 @@ export interface Company {
   associations: string[];
   values: string[];
   logo: string;
+  company_size: string;
 }
