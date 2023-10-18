@@ -15,6 +15,8 @@
   align-content: center;
   flex-grow: 1; /* Allow the text to take up remaining space */
   text-align: left;
+  max-width: 75%;
+  max-height: 10rem;
   padding-left: 2rem;
   color: var(--gray-dark);
 }
@@ -28,6 +30,8 @@
   margin: 0;
   font-size: 2rem;
   color: var(--gray-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button {

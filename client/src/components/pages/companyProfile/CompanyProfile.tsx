@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import { getCompanyById } from "../../../api/companies";
 import { Company } from "../../pages/types/types";
-import { getAllJobs } from "../../../api/jobs";
+import { addJob, getAllJobs } from "../../../api/jobs";
 
 const CompanyProfile = () => {
   // const company = {
@@ -25,22 +25,20 @@ const CompanyProfile = () => {
   const [jobs, setJobs] = useState([]);
   const [company, setCompany] = useState({} as Company);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
 
   const showModal = () => {
     setOpen(true);
   };
 
   /**
-   * Handle ok button
+   * Handles the OK button
    */
-  const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
+  const handlePayload = async (payload: object) => {
+    console.log("Received payload from AddEditJob:", payload);
+    await addJob(payload);
+
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+    setOpen(false);
   };
 
   /**
@@ -67,7 +65,8 @@ const CompanyProfile = () => {
       }
     });
 
-    setJobs(jobs.filter(Boolean));
+    console.log("jobs", allJobs);
+    setJobs(jobs);
     setCompany(company);
   };
 
@@ -79,34 +78,27 @@ const CompanyProfile = () => {
   }, []);
 
   // Content for "Company jobs" tab
-  // const jobs = (
-  //   <div className={styling.mainSection}>
-  //     <div className={styling.sectionHeader}>
-  //       <h2 className={styling.titles}>Published jobs</h2>
-  //       <Button onClick={showModal} className={styling.button}>
-  //         Create new job
-  //       </Button>
-  //     </div>
-  //     <HorizontalCard
-  //       avatar={true}
-  //       button="Go to description"
-  //       firstName="Laura"
-  //       lastName="Purcaro"
-  //     />
-  //     <HorizontalCard
-  //       avatar={true}
-  //       button="Go to description"
-  //       firstName="Laura"
-  //       lastName="Purcaro"
-  //     />
-  //     <HorizontalCard
-  //       avatar={true}
-  //       button="Go to description"
-  //       firstName="Laura"
-  //       lastName="Purcaro"
-  //     />
-  //   </div>
-  // );
+  const jobsTemp = (
+    <div className={styling.mainSection}>
+      <div className={styling.sectionHeader}>
+        <h2 className={styling.titles}>Published jobs</h2>
+        <Button onClick={showModal} className={styling.button}>
+          Create new job
+        </Button>
+      </div>
+      {jobs.map((job: Record<string, any>) => {
+        return (
+          <HorizontalCard
+            avatar={true}
+            button="Go to description"
+            firstName={company.company_name}
+            title={job.title}
+            subtitle={job.description}
+          />
+        );
+      })}
+    </div>
+  );
 
   // Content for "About the company" tab
   const about = (
@@ -131,7 +123,7 @@ const CompanyProfile = () => {
     {
       label: "Company jobs",
       key: "1",
-      children: jobs,
+      children: jobsTemp,
     },
     {
       label: "About the company",
@@ -170,12 +162,13 @@ const CompanyProfile = () => {
       </CardContainer>
 
       <AddEditJob
-        title="Create new job"
+        modalTitle="Create new job"
         open={open}
-        onOk={handleOk}
+        onOk={handlePayload}
         onCancel={handleCancel}
         confirmLoading={confirmLoading}
-        content={modalText}
+        companyId={company.user_id}
+        associations={company.associations}
       />
     </div>
   );
