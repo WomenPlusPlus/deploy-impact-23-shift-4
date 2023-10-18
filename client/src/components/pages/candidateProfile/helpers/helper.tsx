@@ -282,6 +282,22 @@ function transformExperience(experience: Experience[]) {
   return sectionsExperience;
 }
 
+export const workLocationTypes: string[] = [
+  "Hybrid",
+  "Remote",
+  "On-site",
+  "In-office",
+];
+
+export const employmentTypes: string[] = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Freelance",
+];
+
 export {
   getFakeData,
   countNullFieldsByCategory,
