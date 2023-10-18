@@ -1,0 +1,34 @@
+.modal {
+  width: 70% !important;
+}
+
+.input {
+  margin: 1rem 0;
+}
+
+.inputNumber {
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.description {
+  min-height: 30rem !important;
+}
+
+.dropdown {
+  margin: 1rem 0;
+  width: 100%;
+}
+.bottomContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+}
+
+.sider {
+  width: 100%;
+}
+
+.autocomplete {
+  display: flex;
+}
