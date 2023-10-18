@@ -141,8 +141,8 @@ const EditValues: React.FC<EditValuesProps> = ({
         />
         {/* All values */}
         <div className={styling.elementInOneRow}>
-          {filteredValues &&
-            filteredValues?.map((value, index) => (
+          {allLabels &&
+            allLabels?.map((value, index) => (
               <Labels
                 key={index}
                 icon={icon}
