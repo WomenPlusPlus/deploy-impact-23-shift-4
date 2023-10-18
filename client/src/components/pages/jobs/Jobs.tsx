@@ -5,68 +5,73 @@ import { useNavigate } from "react-router-dom";
 
 const jobsData = [
   {
-    id: "d291901d2",
-    name: "Front-end Developer",
-    company_name: "ABC Tech",
-    company_location: "New York",
+    id: "cc4ee1fb-3bb4-4601-a788-b66d09749f88",
+    associations: ["woman++"],
+    company_id: "cde2fb38-fc86-45ba-897b-7b092f764687",
+    title: "Full-Stack Intern",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt eleifend mi at rhoncus. Phasellus sed felis in justo finibus sagittis. Nulla facilisis augue vitae euismod ultricies. Nullam consequat, sem eget hendrerit pellentesque, magna libero maximus ipsum, id convallis nisl erat eget dolor. Pellentesque tempus eleifend eleifend. Proin auctor ligula dui, eget sodales arcu vehicula quis. Nulla in urna enim. Aenean at diam accumsan quam",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-    employees: "50-200",
-    level: "Internship",
-    match: "10",
-    location: "Berlin",
-    department: "Hiring Manager",
-    skills: ["JavaScript", "React", "Node.js", "SQL"],
-  },
-  {
-    id: "d291901d3",
-    name: "Cloud Engineer",
-    company_name: "ABC Tech",
-    company_location: "New York",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt eleifend mi at rhoncus. Phasellus sed felis in justo finibus sagittis. Nulla facilisis augue vitae euismod ultricies. Nullam consequat, sem eget hendrerit pellentesque, magna libero maximus ipsum, id convallis nisl erat eget dolor. Pellentesque tempus eleifend eleifend. Proin auctor ligula dui, eget sodales arcu vehicula quis. Nulla in urna enim. Aenean at diam accumsan quam",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1542361345-89e58247f2d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-    employees: "50-200",
-    level: "Internship",
-    match: "10",
-    location: "Berlin",
-    department: "Hiring Manager",
-    skills: ["JavaScript", "React", "Node.js", "SQL"],
-  },
-  {
-    id: "d291901d4",
-    name: "Back-end Developer",
-    company_name: "ABC Tech",
-    company_location: "New York",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt eleifend mi at rhoncus. Phasellus sed felis in justo finibus sagittis. Nulla facilisis augue vitae euismod ultricies. Nullam consequat, sem eget hendrerit pellentesque, magna libero maximus ipsum, id convallis nisl erat eget dolor. Pellentesque tempus eleifend eleifend. Proin auctor ligula dui, eget sodales arcu vehicula quis. Nulla in urna enim. Aenean at diam accumsan quam",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1554435493-93422e8220c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1336&q=80",
-    employees: "50-200",
-    level: "Internship",
-    match: "60",
-    location: "Berlin",
-    department: "Hiring Manager",
-    skills: ["JavaScript", "React", "Node.js", "SQL"],
-  },
-  {
-    id: "d291901d5",
-    name: "Front-end Developer",
-    company_name: "ABC Tech",
-    company_location: "New York",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt eleifend mi at rhoncus. Phasellus sed felis in justo finibus sagittis. Nulla facilisis augue vitae euismod ultricies. Nullam consequat, sem eget hendrerit pellentesque, magna libero maximus ipsum, id convallis nisl erat eget dolor. Pellentesque tempus eleifend eleifend. Proin auctor ligula dui, eget sodales arcu vehicula quis. Nulla in urna enim. Aenean at diam accumsan quam",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1490644658840-3f2e3f8c5625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
-    employees: "50-200",
-    level: "Internship",
-    match: "50",
-    location: "Berlin",
-    department: "Hiring Manager",
-    skills: ["JavaScript", "React", "Node.js", "SQL"],
+      "We are seeking a talented and motivated Full-Stack Intern to join our team. This internship offers a unique opportunity to gain valuable experience in web development.",
+    values: [
+      "Innovation",
+      "Quality",
+      "Diversity",
+      "Teamwork",
+      "Customer Focus",
+      "Integrity",
+      "Responsibility",
+      "Adaptability",
+      "Continuous Learning",
+      "Sustainability",
+      "Community Involvement",
+      "Empowerment",
+      "Transparency",
+      "Excellence",
+      "Creativity",
+      "Open Communication",
+      "Work-Life Balance",
+      "Professional Growth",
+      "Leadership",
+      "Trust",
+      "Accountability",
+    ],
+    skills: [
+      {
+        skill_name: "Front-End Development",
+        skill_level: 3,
+      },
+      {
+        skill_name: "Back-End Development",
+        skill_level: 3,
+      },
+      {
+        skill_name: "Database Management",
+        skill_level: 1,
+      },
+      {
+        skill_name: "JavaScript",
+        skill_level: 3,
+      },
+      {
+        skill_name: "React",
+        skill_level: 3,
+      },
+      {
+        skill_name: "Node.js",
+        skill_level: 1,
+      },
+      {
+        skill_name: "SQL",
+        skill_level: 1,
+      },
+    ],
+    hiring_process_duration: "3 months",
+    posting_date: "2023-10-18",
+    matching_candidates: [],
+    salary: 80000,
+    location_city: "Basel",
+    location_country: "CH",
+    work_location: "Hybrid",
+    employment_type: "Internship",
   },
 ];
 
@@ -81,16 +86,16 @@ const Jobs: React.FC = () => {
         {jobsData.map((job, index) => (
           <JobCard
             key={index}
-            name={job.name}
-            company_name={job.company_name}
-            company_location={job.company_location}
-            description={job.description}
-            avatarUrl={job.avatarUrl}
-            employees={job.employees}
-            level={job.level}
-            match={job.match}
-            department={job.department}
-            location={job.location}
+            name={job.title}
+            // company_name={job.company_name}
+            // company_location={job.company_location}
+            // description={job.description}
+            // avatarUrl={job.avatarUrl}
+            // employees={job.employees}
+            // level={job.level}
+            // match={job.match}
+            // department={job.department}
+            // location={job.location}
             skills={job.skills}
             onClick={() => navigate(`/job/${job.id}`)}
           ></JobCard>
