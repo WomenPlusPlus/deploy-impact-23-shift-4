@@ -34,15 +34,17 @@ const EditExperience: React.FC<EditExperienceProps> = ({
   const [currentRole, setCurrentRole] = useState("");
   const [currentIndustries, setCurrentIndustries] = useState("");
   const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState("");
+  const [experienceToDelete, setExperienceToDelete] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
-    if (candidate.experience) {
-      setExperience(candidate?.experience as Experience[]);
+    if (candidate && candidate.experience) {
+      setExperience(candidate.experience as Experience[]);
     }
-  }, [candidate?.experience]);
+  }, [candidate.experience, candidate]);
 
   const handleSave = () => {
-    console.log("EXPERIENCE", experience);
     const updatedCandidate = { ...candidate, experience: experience };
     setCandidate(updatedCandidate);
     if (onSave) {
@@ -68,7 +70,6 @@ const EditExperience: React.FC<EditExperienceProps> = ({
         );
       }
       setExperience((prevExperience) => [...prevExperience, newExperience]);
-      handleSave();
       setCurrentRole("");
       setCurrentIndustries("");
       setCurrentYearsOfExperience("");
@@ -84,9 +85,13 @@ const EditExperience: React.FC<EditExperienceProps> = ({
     };
     setExperience(updatedExperience);
     handleSave();
-    setCurrentRole("");
-    setCurrentIndustries("");
-    setCurrentYearsOfExperience("");
+  };
+
+  // Function to delete experience by index
+  const deleteExperience = (index: number) => {
+    const updatedExperience = [...experience];
+    updatedExperience.splice(index, 1);
+    setExperience(updatedExperience);
   };
 
   return (
@@ -110,42 +115,48 @@ const EditExperience: React.FC<EditExperienceProps> = ({
         ]}
       >
         {/* Show current experience */}
-        {experience?.map((exp, index) => (
-          <div key={index}>
-            <Input
-              placeholder="Role"
-              value={exp.role}
-              onChange={(e) => {
-                const updatedExperience = [...experience];
-                updatedExperience[index].role = e.target.value;
-                setExperience(updatedExperience);
-              }}
-            />
-            <Input
-              placeholder="Industries"
-              value={exp.industries}
-              onChange={(e) => {
-                const updatedExperience = [...experience];
-                updatedExperience[index].industries = e.target.value;
-                setExperience(updatedExperience);
-              }}
-            />
-            <Input
-              placeholder="Years of Experience"
-              value={exp.years_of_experience?.toString() || ""}
-              onChange={(e) => {
-                const updatedExperience = [...experience];
-                updatedExperience[index].years_of_experience =
-                  parseInt(e.target.value, 10) || undefined;
-                setExperience(updatedExperience);
-              }}
-            />
-            <Button onClick={() => updateExperience(index)}>
-              Update Experience
-            </Button>
-            <hr />
-          </div>
-        ))}
+        {experience &&
+          experience?.map((exp, index) => (
+            <div key={index}>
+              <Input
+                placeholder="Role"
+                value={exp.role}
+                onChange={(e) => {
+                  const updatedExperience = [...experience];
+                  updatedExperience[index].role = e.target.value;
+                  setExperience(updatedExperience);
+                }}
+              />
+              <Input
+                placeholder="Industries"
+                value={exp.industries}
+                onChange={(e) => {
+                  const updatedExperience = [...experience];
+                  updatedExperience[index].industries = e.target.value;
+                  setExperience(updatedExperience);
+                }}
+              />
+              <Input
+                placeholder="Years of Experience"
+                value={exp.years_of_experience?.toString() || ""}
+                onChange={(e) => {
+                  const updatedExperience = [...experience];
+                  updatedExperience[index].years_of_experience =
+                    parseInt(e.target.value, 10) || undefined;
+                  setExperience(updatedExperience);
+                }}
+              />
+              <div key={index}>
+                {/* ... (other input fields) */}
+                <Button onClick={() => deleteExperience(index)}>
+                  Delete Experience
+                </Button>
+                <Button onClick={() => updateExperience(index)}>
+                  Update Experience
+                </Button>
+              </div>
+            </div>
+          ))}
         <hr />
         {/* Add new experience */}
         <Input

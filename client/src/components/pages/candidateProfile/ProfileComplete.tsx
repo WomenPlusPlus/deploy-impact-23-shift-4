@@ -42,7 +42,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
 
   useEffect(() => {
     setFieldsByCategory(countNullFieldsByCategory(candidate, allCategories));
-  }, [candidate, allCategories]);
+  }, [candidate]);
 
   const progress = percentage({
     completedCategories: Object.values(fieldsByCategory).filter(
@@ -103,7 +103,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
         break;
     }
   };
-  console.log("FIELD", fieldsByCategory)
+  console.log("FIELD", fieldsByCategory);
 
   return (
     <CardContainer className={`${className}`}>
@@ -115,25 +115,26 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
       <div className={styling.profileCompletedFields}>
         {
           /* Display fields by category */
-          allCategories?.map((category) => (
-            <div key={category} className={styling.profileCompletedCategory}>
-              {/* <h4>{category}</h4> */}
-              {fieldsByCategory && fieldsByCategory[category] > 0 ? (
-                <ProfileCompletedFields
-                  key={category}
-                  isCompleted={true}
-                  category={category}
-                />
-              ) : (
-                <ProfileCompletedFields
-                  key={category}
-                  isCompleted={false}
-                  category={category}
-                  onAddClick={() => handleAddClick(category)}
-                />
-              )}
-            </div>
-          ))
+          allCategories &&
+            allCategories?.map((category) => (
+              <div key={category} className={styling.profileCompletedCategory}>
+                {/* <h4>{category}</h4> */}
+                {fieldsByCategory && fieldsByCategory[category] > 0 ? (
+                  <ProfileCompletedFields
+                    key={category}
+                    isCompleted={true}
+                    category={category}
+                  />
+                ) : (
+                  <ProfileCompletedFields
+                    key={category}
+                    isCompleted={false}
+                    category={category}
+                    onAddClick={() => handleAddClick(category)}
+                  />
+                )}
+              </div>
+            ))
         }
       </div>
     </CardContainer>

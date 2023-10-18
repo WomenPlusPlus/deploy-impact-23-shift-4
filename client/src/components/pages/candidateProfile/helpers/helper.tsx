@@ -1,6 +1,26 @@
 import axios from "axios";
 import { Candidate } from "../../types/types";
-import { updateCandidateById } from "../../../../api/candidates";
+
+// const sectionsVisibleInfo = [
+//   { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
+//   { title: "Notice", subtitle: "Immediately available" },
+//   {
+//     title: "Visa Status",
+//     subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
+//   },
+// ];
+// const sectionsExperience = [
+//   {
+//     title: "Role",
+//     text: "5 Years in academia",
+//     subtext: "+ 1 year in Product, 3 in Engineering",
+//   },
+//   {
+//     title: "Industries",
+//     text: "Entertainment",
+//     subtext: "+ Software/Saas, Biotechnology, Medical devices",
+//   },
+// ];
 
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -162,7 +182,7 @@ const percentage = ({
   return Math.round(progress);
 };
 
-function transformCandidateData(candidate: Candidate) {
+function transformCandidateDocs(candidate: Candidate) {
   const transformedData = [];
 
   // Transform CV data
@@ -183,10 +203,84 @@ function transformCandidateData(candidate: Candidate) {
   return transformedData;
 }
 
-const candidate = {
-  cv_reference: "",
-  certificates: [{ name: "deploy(impact)", reference: "pizza.png" }],
-};
+function transformCandidateVisibleInfo(candidate: Candidate) {
+  const sectionsVisibleInfo = [];
+
+  // Transform salary_expectation
+  if (
+    candidate.salary_expectation &&
+    candidate.salary_expectation.length === 2
+  ) {
+    sectionsVisibleInfo.push({
+      title: "Salary bracket",
+      subtitle: `CHF ${candidate.salary_expectation[0]} / ${candidate.salary_expectation[1]} CHF`,
+    });
+  }
+
+  // Transform notice_period
+  if (candidate.notice_period) {
+    sectionsVisibleInfo.push({
+      title: "Notice",
+      subtitle: candidate.notice_period,
+    });
+  }
+
+  // Transform visa_status
+  if (candidate.visa_status && candidate.visa_status.length > 0) {
+    sectionsVisibleInfo.push({
+      title: "Visa Status",
+      subtitle: `(${candidate.visa_status.join(
+        ") valid visa \n ("
+      )}) valid visa`,
+    });
+  }
+
+  return sectionsVisibleInfo;
+}
+
+interface Experience {
+  role: string;
+  industries: string;
+  years_of_experience?: number;
+}
+
+function transformExperience(experience: Experience[]) {
+  const sectionsExperience = [];
+  let subtext = "";
+
+  if (experience && experience.length > 0) {
+    const firstExperience = experience[0];
+    if (firstExperience.role) {
+      subtext = experience
+        .map((exp, index) =>
+          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.role}`
+        )
+        .join(", ");
+
+      sectionsExperience.push({
+        title: "Role",
+        text: `${firstExperience.role}`,
+        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+      });
+    }
+
+    if (firstExperience.industries) {
+      subtext = experience
+        .map((exp, index) =>
+          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.industries}`
+        )
+        .join(", ");
+
+      sectionsExperience.push({
+        title: "Industries",
+        text: firstExperience.industries,
+        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+      });
+    }
+  }
+
+  return sectionsExperience;
+}
 
 export {
   getFakeData,
@@ -194,5 +288,7 @@ export {
   percentage,
   fieldCategoryMapping,
   completedCategories,
-  transformCandidateData,
+  transformCandidateDocs,
+  transformCandidateVisibleInfo,
+  transformExperience,
 };

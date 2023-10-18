@@ -46,7 +46,10 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
         additionalFields.includes(selectedField)
       ) {
         return; // Allow adding Salary and Notice only once
-      } else if (selectedField === "Visa Status" && !visaFields.includes(visaStatus)) {
+      } else if (
+        selectedField === "Visa Status" &&
+        !visaFields.includes(visaStatus)
+      ) {
         setVisaFields([...visaFields, visaStatus]);
         setVisaStatus(""); // Clear Visa Status input field
       }
@@ -78,7 +81,8 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
         };
       }
 
-      updatedCandidate.visible_information = editedSections.concat(additionalFields);
+      updatedCandidate.visible_information =
+        editedSections.concat(additionalFields);
 
       onSave(updatedCandidate);
     }
@@ -118,7 +122,11 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
           return (
             <div key={field}>
               <h3>{field}</h3>
-              <Select value={notice} onChange={(value) => setNotice(value)}>
+              <Select
+                value={notice}
+                onChange={(value) => setNotice(value)}
+                style={{ minWidth: "100%" }}
+              >
                 <Option value="1 week">1 week</Option>
                 <Option value="2 weeks">2 weeks</Option>
                 <Option value="1 month">1 month</Option>
@@ -136,10 +144,11 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
                   updatedVisaFields[index] = value;
                   setVisaFields(updatedVisaFields);
                 }}
+                style={{ minWidth: "100%" }}
               >
-                <Option value="H1B">H1B</Option>
-                <Option value="L1">L1</Option>
-                <Option value="F1">F1</Option>
+                <Option value="EU">EU valid visa</Option>
+                <Option value="CH">CH valid visa</Option>
+                <Option value="US">US valid visa</Option>
               </Select>
             </div>
           ));
@@ -157,7 +166,7 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
         onClick={showModal}
       />
       <Modal
-        visible={visible}
+        open={visible}
         title="Edit Information"
         onCancel={onCancel}
         footer={[

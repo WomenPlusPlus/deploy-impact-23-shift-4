@@ -55,7 +55,7 @@ const DashboardCandidate: React.FC = () => {
             {candidate?.experience ? (
               <p> {candidate?.experience[0]?.role}</p>
             ) : (
-              <p style={{ cursor: "pointer" }}>Add your current role</p>
+              <p className="role">Add your current role</p>
             )}
           </div>
 

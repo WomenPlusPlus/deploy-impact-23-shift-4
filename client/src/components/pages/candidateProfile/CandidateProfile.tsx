@@ -10,7 +10,12 @@ import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
 import { EditExperience } from "../../UI/modal/EditExperience";
 import { VisibleSection } from "../../UI/modal/VisibleSection";
-import { getFakeData, transformCandidateData } from "./helpers/helper";
+import {
+  getFakeData,
+  transformCandidateDocs,
+  transformCandidateVisibleInfo,
+  transformExperience,
+} from "./helpers/helper";
 import { FileUploadModal } from "../../UI/modal/EditUploadDocuments";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
@@ -31,26 +36,6 @@ import { Candidate } from "../types/types";
 import styling from "./CandidateProfile.module.css";
 
 const CandidateProfile = () => {
-  const sectionsVisibleInfo = [
-    { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
-    { title: "Notice", subtitle: "Immediately available" },
-    {
-      title: "Visa Status",
-      subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
-    },
-  ];
-  const sectionsExperience = [
-    {
-      title: "Role",
-      text: "5 Years in academia",
-      subtext: "+ 1 year in Product, 3 in Engineering",
-    },
-    {
-      title: "Industries",
-      text: "Entertainment",
-      subtext: "+ Software/Saas, Biotechnology, Medical devices",
-    },
-  ];
   const allFields = [
     "Visible Information",
     "Documents",
@@ -65,6 +50,8 @@ const CandidateProfile = () => {
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
   const [sectionDocuments, setSectionDocuments] = useState([] as any);
+  const [sectionsVisibleInfo, setSectionsVisibleInfo] = useState([] as any);
+  const [sectionsExperience, setSectionsExperience] = useState([] as any);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
@@ -86,8 +73,15 @@ const CandidateProfile = () => {
     try {
       const candidateFetched = await getCandidateById(auth.user.id);
       setCandidate(candidateFetched);
-      const transformedData = transformCandidateData(candidateFetched);
+      const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
+      const transformedVisibleInfo =
+        transformCandidateVisibleInfo(candidateFetched);
+      setSectionsVisibleInfo(transformedVisibleInfo);
+      const transformedExperience = transformExperience(
+        candidateFetched.experience
+      );
+      setSectionsExperience(transformedExperience);
     } catch (error) {
       console.log("error", error);
     }
@@ -226,20 +220,22 @@ const CandidateProfile = () => {
 
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
-        <ProfileComplete
-          className={styling.profileCompletedElement}
-          candidate={candidate}
-          allCategories={allFields}
-          editContactInfo={editContactInfo}
-          editLanguages={editLanguages}
-          editSkills={editSkills}
-          editValues={editValues}
-          editProfile={editHandlerProfile}
-          editTypeOfJobs={editTypeOfJobs}
-          editExperience={editExperience}
-          editDocuments={editDocuments}
-          editVisibleInformation={editHandlerAnonymousProfile}
-        />
+        {candidate && (
+          <ProfileComplete
+            className={styling.profileCompletedElement}
+            candidate={candidate}
+            allCategories={allFields}
+            editContactInfo={editContactInfo}
+            editLanguages={editLanguages}
+            editSkills={editSkills}
+            editValues={editValues}
+            editProfile={editHandlerProfile}
+            editTypeOfJobs={editTypeOfJobs}
+            editExperience={editExperience}
+            editDocuments={editDocuments}
+            editVisibleInformation={editHandlerAnonymousProfile}
+          />
+        )}
 
         {/* Anonymous profile */}
         <CardContainer className={styling.profileCompletedElement}>
@@ -252,6 +248,7 @@ const CandidateProfile = () => {
               setVisible={setIsAnonymousProfileEdit}
               showModal={editHandlerAnonymousProfile}
               allFields={allFields}
+              onSave={handleSaveEdit}
             />
           </div>
           <p>Initially employees will only see skills and values</p>

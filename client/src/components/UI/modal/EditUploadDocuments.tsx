@@ -4,7 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { UploadFile } from "antd/lib/upload/interface";
 import { Candidate } from "../../pages/types/types";
 import { IconEdit } from "@tabler/icons-react";
-import { transformCandidateData } from "../../pages/candidateProfile/helpers/helper";
+import { transformCandidateDocs } from "../../pages/candidateProfile/helpers/helper";
 
 interface FileUploadModalProps {
   visible: boolean;
@@ -48,7 +48,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     // Trigger the onSave callback to save the updated candidate
     if (onSave) {
       onSave(candidate);
-      const transformedData = transformCandidateData(candidate);
+      const transformedData = transformCandidateDocs(candidate);
       console.log(transformedData);
       setSectionDocuments(transformedData);
     }
