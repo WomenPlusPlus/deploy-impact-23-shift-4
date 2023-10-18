@@ -1,6 +1,7 @@
 import React from "react";
 import JobCard from "../../UI/card/JobCard";
 import styling from "./Jobs.module.css";
+import Search from "antd/es/input/Search";
 
 const jobsData = [
   {
@@ -68,7 +69,14 @@ const jobsData = [
 const Jobs: React.FC = () => {
   return (
     <div className={styling.mainContainer}>
-      <h2>Your jobs</h2>
+      <h2>Job Board</h2>
+      <div className={styling.inputContainer}>
+        <div>
+        </div>
+        <div></div>
+        <div></div>
+      </div>
+      <div>input result</div>
       <div className={styling.cards}>
         {jobsData.map((job, index) => (
           <JobCard

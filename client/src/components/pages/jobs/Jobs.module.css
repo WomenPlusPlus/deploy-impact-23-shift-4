@@ -11,3 +11,21 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputs {
+  display: flex;
+}
+
+.noResultText {
+  text-align: center;
+  padding: 20px;
+  font-size: 15rem;
+  font-style: italic;
+  font-weight: 100;
+  color: var(--gray-medium);
+}
