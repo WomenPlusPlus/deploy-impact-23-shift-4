@@ -1,9 +1,11 @@
 import React from "react";
 import JobCard from "../../UI/card/JobCard";
 import styling from "./Jobs.module.css";
+import { useNavigate } from "react-router-dom";
 
 const jobsData = [
   {
+    id: "d291901d2",
     name: "Front-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -19,6 +21,7 @@ const jobsData = [
     skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
+    id: "d291901d3",
     name: "Cloud Engineer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -34,6 +37,7 @@ const jobsData = [
     skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
+    id: "d291901d4",
     name: "Back-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -49,6 +53,7 @@ const jobsData = [
     skills: ["JavaScript", "React", "Node.js", "SQL"],
   },
   {
+    id: "d291901d5",
     name: "Front-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -66,6 +71,9 @@ const jobsData = [
 ];
 
 const Jobs: React.FC = () => {
+  // state
+  const navigate = useNavigate();
+
   return (
     <div className={styling.mainContainer}>
       <h2>Your jobs</h2>
@@ -84,6 +92,7 @@ const Jobs: React.FC = () => {
             department={job.department}
             location={job.location}
             skills={job.skills}
+            onClick={() => navigate(`/job/${job.id}`)}
           ></JobCard>
         ))}
       </div>

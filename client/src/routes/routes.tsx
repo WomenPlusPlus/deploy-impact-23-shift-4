@@ -6,6 +6,7 @@ import Candidates from "../components/pages/candidates/Candidates";
 import Authenticated from "../components/layout/authenticated/Authenticated";
 
 import Jobs from "../components/pages/jobs/Jobs";
+import PublicJob from "../components/pages/jobs/PublicJob";
 import Companies from "../components/pages/companies/Companies";
 import Shortlist from "../components/pages/shortlist/Shortlist";
 import CandidateProfile from "../components/pages/candidateProfile/CandidateProfile";
@@ -53,6 +54,10 @@ const Routes: React.FC = () => {
         <Route
           path="/company/:id"
           element={<Authenticated content={<CompanyPublicProfile />} />}
+        />
+        <Route
+          path="/job/:id"
+          element={<Authenticated content={<PublicJob />} />}
         />
         <Route path="*" element={<NotFound />} />
       </Routing>

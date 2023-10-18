@@ -15,6 +15,7 @@ interface JobCardProps {
   location?: string;
   department?: string;
   skills?: string[];
+  onClick?: () => void;
 }
 
 const JobCard: React.FC<JobCardProps> = ({
@@ -29,6 +30,7 @@ const JobCard: React.FC<JobCardProps> = ({
   location,
   department,
   skills,
+  onClick,
 }) => {
   const truncatedDescription: string | undefined = description
     ? typeof description === "string" && description.length > 150
@@ -71,7 +73,9 @@ const JobCard: React.FC<JobCardProps> = ({
           ))}
         </div>
         <div className={styling.goTalents}>
-          <Button className={styling.goToTalents}>Go to talents</Button>
+          <Button className={styling.goToTalents} onClick={onClick}>
+            Go to talents
+          </Button>
         </div>
       </div>
     </Card>

@@ -58,3 +58,4 @@ export interface Company {
   values: string[];
   logo: string;
 }
+
