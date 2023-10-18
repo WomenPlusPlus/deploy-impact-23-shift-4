@@ -11,9 +11,16 @@
 
 .header {
   display: flex;
+  align-items: center;
   gap: 2rem;
   padding: 2rem;
   margin-bottom: 2rem;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gray-medium);
 }
 
 .logo {
@@ -21,10 +28,12 @@
   height: 10rem;
   border-radius: 50%;
   object-fit: cover;
+  margin: 0;
 }
 
 .icon {
   margin-left: auto;
+  margin-bottom: auto;
 }
 
 .description {
@@ -52,4 +61,8 @@
 .button {
   color: var(--white);
   background-color: var(--color-button);
+}
+
+.text {
+  margin: 1rem 0;
 }

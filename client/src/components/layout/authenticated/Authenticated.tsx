@@ -8,15 +8,6 @@ import { Header } from "antd/es/layout/layout";
 
 const { Footer, Content } = AntLayout;
 
-const contentStyle: React.CSSProperties = {
-  minHeight: 120,
-  color: "black",
-  backgroundColor: "var(--background-color)",
-  marginLeft: 240,
-  paddingTop: 64,
-  overflow: "initial",
-};
-
 const footerStyle: React.CSSProperties = {
   textAlign: "center",
   color: "#fff",
@@ -30,10 +21,22 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     return storedComponent || "dashboard";
   });
 
+  const [collapsed, setCollapsed] = useState(false);
+
   useEffect(() => {
     // Save the selected component in sessionStorage
     window.sessionStorage.setItem("selectedComponent", selectedComponent);
   }, [selectedComponent]);
+
+  const contentStyle: React.CSSProperties = {
+    minHeight: 120,
+    color: "black",
+    backgroundColor: "var(--background-color)",
+    marginLeft: collapsed ? 100 : 240,
+    paddingTop: 64,
+    overflow: "initial",
+    transition: "margin-left 0.3s", // Add a smooth transition
+  };
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
@@ -43,6 +46,8 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
           <Sidebar
             selectedKey={selectedComponent}
             setSelectedKey={setSelectedComponent}
+            collapsed={collapsed}
+            setCollapsed={setCollapsed}
           />
           <ToastContainer theme="light" />
           <Content style={contentStyle}>{content}</Content>

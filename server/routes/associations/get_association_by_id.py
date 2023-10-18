@@ -15,6 +15,7 @@ def get_association_by_id_route(Association):
                     return jsonify({"message": "Missing 'id' in JSON data"}), 400
 
                 association = Association.query.filter_by(user_id=id).first()
+
                 if not association:
                     return jsonify({"message": "association not found"}), 404
 

@@ -25,6 +25,26 @@
   bottom: 0;
 }
 
+.ant-menu.ant-menu-inline-collapsed {
+  width: 10rem !important;
+}
+
+.ant-menu-inline-collapsed > .ant-menu-item {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* .ant-menu-inline-collapsed > .ant-menu-item-selected,
+.ant-menu-inline-collapsed > .ant-menu-item-selected:focus,
+.ant-menu-inline-collapsed > .ant-menu-item-selected:active {
+  width: 60% !important;
+  margin-left: 1rem;
+} */
+
+.ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon {
+  margin-left: 0;
+}
+
 /* Set the background color for the selected (clicked) item */
 .custom-menu .ant-menu-item-selected,
 .custom-menu .ant-menu-item-selected:focus,
@@ -46,4 +66,8 @@
   max-height: fit-content;
   width: var(--sidebar-width);
   padding-top: 3rem;
+}
+
+.toggle {
+  display: flex;
 }

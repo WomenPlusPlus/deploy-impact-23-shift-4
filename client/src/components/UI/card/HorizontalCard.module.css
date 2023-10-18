@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  padding: 3rem;
+  padding: 2rem;
   margin-bottom: 2rem;
   width: var(--secton-width);
   border: 1px solid var(--gray-bright);
@@ -20,12 +20,14 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2rem;
   margin: 0;
 }
 
 .subtitle {
+  margin: 0;
   font-size: 2rem;
+  color: var(--gray-medium);
 }
 
 .button {

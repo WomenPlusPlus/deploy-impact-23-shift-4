@@ -3,7 +3,7 @@ import styling from "./Label.module.css";
 import { IconX } from "@tabler/icons-react";
 
 interface LabelProps {
-  labelName: string;
+  labelName: string | number | JSX.Element;
   icon?: React.ReactNode;
   onCloseIcon?: () => void;
   disableCloseIcon?: boolean;
