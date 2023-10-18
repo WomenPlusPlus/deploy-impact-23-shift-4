@@ -26,7 +26,7 @@ export interface Candidate {
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };
-  values?: { [key: string]: any }[];
+  values?: string[];
   skills?: { [key: string]: any }[];
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];

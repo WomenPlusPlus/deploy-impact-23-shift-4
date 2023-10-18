@@ -16,7 +16,7 @@ interface EditValuesProps {
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: Value[];
+  allLabels: string[]; // Change the type to an array of strings
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
@@ -36,36 +36,36 @@ const EditValues: React.FC<EditValuesProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<Value[]>([]);
-  const [filteredValues, setFilteredValues] = useState<Value[]>([]);
+  const [labelsToDeleteState, setLabelsToDeleteState] = useState<string[]>([]); // Change the type to an array of strings
+  const [filteredValues, setFilteredValues] = useState<string[]>([]); // Change the type to an array of strings
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate?.values as Value[]);
-    updateFilteredValues(candidate?.values as Value[]);
+    setLabelsToDeleteState(candidate?.values as string[]);
+    updateFilteredValues(candidate?.values as string[]);
   }, [candidate?.values]);
 
-  const updateFilteredValues = (valuesToDelete: Value[]) => {
+  const updateFilteredValues = (valuesToDelete: string[]) => {
     const updatedFilteredValues = allLabels?.filter((value) => {
       const isValueInCandidate = valuesToDelete?.every(
-        (candidateValue) => candidateValue.value_id !== value.value_id
+        (candidateValue) => candidateValue !== value
       );
       return (
         isValueInCandidate &&
-        value.value_name.toLowerCase().includes(searchText.toLowerCase())
+        value.toLowerCase().includes(searchText.toLowerCase())
       );
     });
     setFilteredValues(updatedFilteredValues);
   };
 
-  const handleCloseValue = (valueToRemove: Value) => {
+  const handleCloseValue = (valueToRemove: string) => {
     const updatedValues = labelsToDeleteState.filter(
-      (value) => value.value_id !== valueToRemove.value_id
+      (value) => value !== valueToRemove
     );
-    setLabelsToDeleteState(updatedValues as Value[]);
+    setLabelsToDeleteState(updatedValues);
     updateFilteredValues(updatedValues); // Update filteredValues
   };
 
-  const addSkillToDeleteState = (skillToAdd: Value) => {
+  const addSkillToDeleteState = (skillToAdd: string) => {
     // Check if labelsToDeleteState is not empty
     if (labelsToDeleteState) {
       const updatedValues = [...labelsToDeleteState, skillToAdd];
@@ -84,17 +84,17 @@ const EditValues: React.FC<EditValuesProps> = ({
       setLoading(false);
       setVisible(false);
       setCandidate({ ...candidate, values: labelsToDeleteState });
-      onSave &&
-        onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
+      onSave && onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
       setSearchText("");
     }, 300);
   };
-
+  
   const handleCancel = () => {
     setVisible(false);
-    setLabelsToDeleteState(candidate.values as Value[]);
+    setLabelsToDeleteState(candidate.values as string[]); // Change the type to an array of strings
     setSearchText("");
   };
+  
 
   return (
     <>
@@ -129,7 +129,7 @@ const EditValues: React.FC<EditValuesProps> = ({
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value.value_name}
+                labelName={value}
                 onCloseIcon={() => handleCloseValue(value)}
                 disableCloseIcon={false}
                 customClass={styling.labelClassSelected}
@@ -144,12 +144,12 @@ const EditValues: React.FC<EditValuesProps> = ({
         />
         {/* All values */}
         <div className={styling.elementInOneRow}>
-          {filteredValues &&
-            filteredValues?.map((value, index) => (
+          {allLabels &&
+            allLabels?.map((value, index) => (
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value.value_name}
+                labelName={value}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
                 onClickHandle={() => addSkillToDeleteState(value)}

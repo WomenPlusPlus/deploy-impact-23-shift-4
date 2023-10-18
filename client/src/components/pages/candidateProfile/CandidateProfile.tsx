@@ -357,7 +357,7 @@ const CandidateProfile = () => {
               <Labels
                 key={index}
                 icon={<IconTags />}
-                labelName={label.value_name}
+                labelName={label}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
               />
