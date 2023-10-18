@@ -202,9 +202,9 @@
     font-size: 2rem;
     color: var(--grayDark);
     margin: 0;
-    white-space: nowrap; /* Metni satır sonunda kesme */
-    overflow: hidden; /* Taşan içeriği gizle */
-    text-overflow: ellipsis; /* Taşan içeriği üç nokta ile göster */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   .companyName{
@@ -216,29 +216,29 @@
 
   .horizontalLine{
     border: 0;
-  border-top: 2px solid #ddd; /* Çizgi rengi ve boyutunu ayarlayabilirsiniz */
-  margin: 10px 0; /* İhtiyaca göre ayarlayabilirsiniz */
+  border-top: 2px solid #ddd; 
+  margin: 10px 0; 
   }
   
   .iconAndText {
     display: flex;
     align-items: flex-start;
-    gap: 4px; /* İkon ile metin arasındaki boşluğu ayarlayabilirsiniz */
+    gap: 4px; 
     font-size: 12px;
     font-weight: 500;
     color: var(--gray-medium);
   }
 
   .iconAndText span {
-    white-space: nowrap; /* Metni satır sonunda kesme */
-    overflow: hidden; /* Taşan içeriği gizle */
-    text-overflow: ellipsis; /* Taşan içeriği üç nokta ile göster */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   .iconAndText svg {
-    width: 16px; /* İkonun genişliği (ayarlayabilirsiniz) */
-    height: 16px; /* İkonun yüksekliği (ayarlayabilirsiniz) */
-    vertical-align: middle; /* İkonu metinle aynı yükseklikte hizalar */
+    width: 16px; 
+    height: 16px; 
+    vertical-align: middle; 
   }
 
   .jobTitle{

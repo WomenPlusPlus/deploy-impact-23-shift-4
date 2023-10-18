@@ -142,8 +142,8 @@ const jobsData = [
 const Jobs2: React.FC = () => {
   //useStates
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
-  const [searchText, setSearchText] = useState(""); // Kullanıcının girdiği metni saklamak için state
-  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]); // State for selected job types
+  const [searchText, setSearchText] = useState(""); 
+  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]); 
   const [selectedContractTypes, setSelectedContractTypes] = useState<string[]>(
     []
   ); // State for selected contract types
@@ -155,7 +155,7 @@ const Jobs2: React.FC = () => {
 
   //multiple select
   const handleRemoveFilter = (filterToRemove: string, filterType: string) => {
-    // İlgili filtreyi kaldırmak için state'i güncelleyin
+   
     if (filterType === "jobType") {
       const updatedJobTypes = selectedJobTypes.filter(
         (type) => type !== filterToRemove
@@ -212,7 +212,7 @@ const Jobs2: React.FC = () => {
       contract_type,
     } = job;
 
-    // Tüm özellikleri tek bir metin içinde birleştirin.
+   
     const combinedText = `${name} ${company_name} ${description} ${employees} ${level} ${match} ${location} ${department} ${skills.technicalSkills.join(
       " "
     )} ${skills.softSkills.join(" ")} ${type} ${contract_type}`;
@@ -221,7 +221,7 @@ const Jobs2: React.FC = () => {
   };
 
   const handleSearch = useCallback((searchText: string) => {
-    setSearchText(searchText); // Kullanıcının girdiği metni state'e kaydet
+    setSearchText(searchText); 
 
     const lowerCasedSearchText = searchText.toLowerCase();
 
@@ -333,7 +333,7 @@ const Jobs2: React.FC = () => {
         </div>
       </div>
       <div className={styling.cards}>
-        {searchText && filteredJobs.length === 0 ? ( // Eğer metin varsa ve sonuç yoksa "No Result" mesajını göster
+        {searchText && filteredJobs.length === 0 ? ( 
           <p className={styling.noResultText}>No Result</p>
         ) : (
           filteredJobs.map((job, index) => (
