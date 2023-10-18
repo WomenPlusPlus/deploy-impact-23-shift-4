@@ -34,7 +34,6 @@ const DashboardCandidate: React.FC = () => {
     fetchCandidate(auth.user?.id);
   }, [auth.user?.id]);
 
-  const name = "John Doe";
   const profession = "Frontend Developer";
   const progress = 80;
   console.log("candidate", candidate?.email);
@@ -46,10 +45,18 @@ const DashboardCandidate: React.FC = () => {
           <Avatar firstName="Company" size={80} />
 
           <div className="header">
-            <h2 className="header-title">
-              Welcome back, {candidate?.first_name}
-            </h2>
-            <p>{profession}</p>
+            {candidate?.first_name ? (
+              <h2 className="header-title">
+                Welcome back, {candidate?.first_name}
+              </h2>
+            ) : (
+              <h2 className="header-title">Welcome</h2>
+            )}
+            {candidate?.experience ? (
+              <p> {candidate?.experience[0]?.role}</p>
+            ) : (
+              <p className="role">Add your current role</p>
+            )}
           </div>
 
           <div className="open-icon">

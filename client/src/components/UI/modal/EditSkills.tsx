@@ -18,6 +18,9 @@ interface EditSkillsProps {
   titleName: string;
   allLabels: Skill[];
   onSave?: (arg: Candidate) => void;
+  visible: boolean;
+  setVisible: (arg: boolean) => void;
+  showModal: () => void;
 }
 
 const EditSkills: React.FC<EditSkillsProps> = ({
@@ -27,17 +30,19 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   setCandidate,
   allLabels,
   onSave,
+  visible,
+  setVisible,
+  showModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<Skill[]>([]);
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.skills as Skill[]);
-    updateFilteredSkills(candidate.skills as Skill[]);
-  }, [candidate.skills]);
+    setLabelsToDeleteState(candidate?.skills as Skill[]);
+    updateFilteredSkills(candidate?.skills as Skill[]);
+  }, [candidate?.skills]);
 
   const updateFilteredSkills = (skillsToDelete: Skill[]) => {
     const updatedFilteredSkills = allLabels?.filter((skill) => {
@@ -73,15 +78,11 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     }
   };
 
-  const showModal = () => {
-    setOpen(true);
-  };
-
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+      setVisible(false);
       setCandidate({ ...candidate, skills: labelsToDeleteState });
       onSave &&
         onSave({ ...candidate, skills: labelsToDeleteState } as Candidate);
@@ -90,7 +91,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setVisible(false);
     setLabelsToDeleteState(candidate.skills as Skill[]);
     setSearchText("");
   };
@@ -103,7 +104,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
         onClick={showModal}
       />
       <Modal
-        open={open}
+        open={visible}
         title={titleName}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -143,7 +144,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
         />
         <div className={styling.elementInOneRow}>
           {filteredSkills &&
-            filteredSkills.map((skill, index) => (
+            filteredSkills?.map((skill, index) => (
               <Labels
                 key={index}
                 icon={icon}
