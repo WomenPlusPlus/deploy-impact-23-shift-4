@@ -9,7 +9,7 @@ interface ContentBlockModalProps {
   visible: boolean;
   setVisible: (arg: boolean) => void;
   candidate: Candidate;
-  onClick: () => void;
+  showModal: () => void;
   onSave?: (arg: Candidate) => void;
 }
 
@@ -17,10 +17,10 @@ const EditSection: React.FC<ContentBlockModalProps> = ({
   visible,
   setVisible,
   candidate,
-  onClick,
+  showModal,
 }) => {
   const [editedSections, setEditedSections] = useState(
-    candidate.visible_information as []
+    candidate?.visible_information as []
   );
 
   const handleSave = () => {
@@ -35,7 +35,7 @@ const EditSection: React.FC<ContentBlockModalProps> = ({
 
   return (
     <>
-      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={onClick} />
+      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={showModal} />
       <Modal
         open={visible}
         title="Edit Information"
@@ -49,7 +49,7 @@ const EditSection: React.FC<ContentBlockModalProps> = ({
           </Button>,
         ]}
       >
-        <ContentBlock sections={candidate.visible_information as []} />
+        <ContentBlock sections={candidate?.visible_information as []} />
         <button onClick={handleSave}>Save</button>
       </Modal>
     </>
