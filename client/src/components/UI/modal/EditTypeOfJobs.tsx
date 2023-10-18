@@ -47,7 +47,7 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
     setLabelsToDeleteState(candidate?.preferred_jobs as TypeOfJobs[]);
     updateFilteredTypeOfJobss(candidate?.preferred_jobs as TypeOfJobs[]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [candidate?.preferred_jobs]);
 
   const updateFilteredTypeOfJobss = (jobsToDelete: TypeOfJobs[]) => {
     const updatedFilteredTypeOfJobss = allLabels?.filter((job) => {
@@ -151,8 +151,8 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className={styling.elementInOneRow}>
-          {allLabels &&
-            allLabels?.map((job, index) => (
+          {filteredTypeOfJobs &&
+            filteredTypeOfJobs?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}

@@ -42,14 +42,17 @@ const EditValues: React.FC<EditValuesProps> = ({
   useEffect(() => {
     setLabelsToDeleteState(candidate?.values as Value[]);
     updateFilteredValues(candidate?.values as Value[]);
-  }, []);
+  }, [candidate?.values]);
 
   const updateFilteredValues = (valuesToDelete: Value[]) => {
     const updatedFilteredValues = allLabels?.filter((value) => {
       const isValueInCandidate = valuesToDelete?.every(
         (candidateValue) => candidateValue.value_id !== value.value_id
       );
-      return isValueInCandidate && value.value_name.toLowerCase().includes(searchText.toLowerCase());
+      return (
+        isValueInCandidate &&
+        value.value_name.toLowerCase().includes(searchText.toLowerCase())
+      );
     });
     setFilteredValues(updatedFilteredValues);
   };
@@ -141,8 +144,8 @@ const EditValues: React.FC<EditValuesProps> = ({
         />
         {/* All values */}
         <div className={styling.elementInOneRow}>
-          {allLabels &&
-            allLabels?.map((value, index) => (
+          {filteredValues &&
+            filteredValues?.map((value, index) => (
               <Labels
                 key={index}
                 icon={icon}

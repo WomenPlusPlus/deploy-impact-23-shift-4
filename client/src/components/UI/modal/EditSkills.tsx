@@ -143,8 +143,8 @@ const EditSkills: React.FC<EditSkillsProps> = ({
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className={styling.elementInOneRow}>
-          {allLabels &&
-            allLabels?.map((skill, index) => (
+          {filteredSkills &&
+            filteredSkills?.map((skill, index) => (
               <Labels
                 key={index}
                 icon={icon}

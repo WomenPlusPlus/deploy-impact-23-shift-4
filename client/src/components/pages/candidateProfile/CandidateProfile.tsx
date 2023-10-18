@@ -238,6 +238,7 @@ const CandidateProfile = () => {
           editTypeOfJobs={editTypeOfJobs}
           editExperience={editExperience}
           editDocuments={editDocuments}
+          editVisibleInformation={editHandlerAnonymousProfile}
         />
 
         {/* Anonymous profile */}
@@ -431,15 +432,6 @@ const CandidateProfile = () => {
             />
           </div>
           <ContentBlock sections={sectionsExperience} />
-          <p>
-            Candidate:{" "}
-            {candidate?.experience &&
-              candidate.experience.length > 0 &&
-              candidate.experience[0].role}
-            {candidate?.experience && candidate.experience[0].industries}
-            {candidate?.experience &&
-              candidate.experience[0].years_of_experience}
-          </p>
         </CardContainer>
       </div>
 

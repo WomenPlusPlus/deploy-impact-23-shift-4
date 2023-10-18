@@ -18,6 +18,7 @@ interface ProfileCompletedProps {
   editExperience?: () => void;
   editTypeOfJobs?: () => void;
   editDocuments?: () => void;
+  editVisibleInformation?: () => void;
 }
 
 const ProfileComplete: React.FC<ProfileCompletedProps> = ({
@@ -32,6 +33,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   editExperience,
   editTypeOfJobs,
   editDocuments,
+  editVisibleInformation,
 }) => {
   // state
   const [fieldsByCategory, setFieldsByCategory] = useState(
@@ -42,7 +44,6 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
     setFieldsByCategory(countNullFieldsByCategory(candidate, allCategories));
   }, [candidate, allCategories]);
 
-  console.log("FIELDS", fieldsByCategory);
   const progress = percentage({
     completedCategories: Object.values(fieldsByCategory).filter(
       (fraction) => fraction > 0
@@ -93,10 +94,16 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
           editDocuments();
         }
         break;
+      case "Visible Information":
+        if (editVisibleInformation) {
+          editVisibleInformation();
+        }
+        break;
       default:
         break;
     }
   };
+  console.log("FIELD", fieldsByCategory)
 
   return (
     <CardContainer className={`${className}`}>
@@ -111,10 +118,10 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
           allCategories?.map((category) => (
             <div key={category} className={styling.profileCompletedCategory}>
               {/* <h4>{category}</h4> */}
-              {fieldsByCategory[category] > 0 ? (
+              {fieldsByCategory && fieldsByCategory[category] > 0 ? (
                 <ProfileCompletedFields
                   key={category}
-                  isCompleted={false}
+                  isCompleted={true}
                   category={category}
                 />
               ) : (

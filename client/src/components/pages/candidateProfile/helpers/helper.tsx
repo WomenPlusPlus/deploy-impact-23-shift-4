@@ -131,7 +131,11 @@ const countNullFieldsByCategory = (
     const totalFieldsForCategory = fieldsForCategory.length;
 
     const nullFieldsCount = fieldsForCategory?.reduce((count, field) => {
-      if (candidate[field] === null) {
+      if (Array.isArray(candidate[field])) {
+        if (candidate[field]?.length === 0) {
+          return count + 1; // Empty array should be counted as null
+        }
+      } else if (candidate[field] === null) {
         return count + 1;
       }
       return count;
@@ -181,11 +185,8 @@ function transformCandidateData(candidate: Candidate) {
 
 const candidate = {
   cv_reference: "",
-  certificates: [
-    { name: "deploy(impact)", reference: "pizza.png" },
-  ],
+  certificates: [{ name: "deploy(impact)", reference: "pizza.png" }],
 };
-
 
 export {
   getFakeData,
@@ -193,5 +194,5 @@ export {
   percentage,
   fieldCategoryMapping,
   completedCategories,
-  transformCandidateData
+  transformCandidateData,
 };
