@@ -18,6 +18,9 @@ interface EditValuesProps {
   titleName: string;
   allLabels: Value[];
   onSave?: (arg: Candidate) => void;
+  visible: boolean;
+  setVisible: (arg: boolean) => void;
+  showModal: () => void;
 }
 
 const EditValues: React.FC<EditValuesProps> = ({
@@ -27,24 +30,29 @@ const EditValues: React.FC<EditValuesProps> = ({
   setCandidate,
   allLabels,
   onSave,
+  visible,
+  setVisible,
+  showModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [labelsToDeleteState, setLabelsToDeleteState] = useState<Value[]>([]);
   const [filteredValues, setFilteredValues] = useState<Value[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate.values as Value[]);
-    updateFilteredValues(candidate.values as Value[]);
-  }, [candidate.values]);
+    setLabelsToDeleteState(candidate?.values as Value[]);
+    updateFilteredValues(candidate?.values as Value[]);
+  }, [candidate?.values]);
 
   const updateFilteredValues = (valuesToDelete: Value[]) => {
     const updatedFilteredValues = allLabels?.filter((value) => {
       const isValueInCandidate = valuesToDelete?.every(
         (candidateValue) => candidateValue.value_id !== value.value_id
       );
-      return isValueInCandidate && value.value_name.toLowerCase().includes(searchText.toLowerCase());
+      return (
+        isValueInCandidate &&
+        value.value_name.toLowerCase().includes(searchText.toLowerCase())
+      );
     });
     setFilteredValues(updatedFilteredValues);
   };
@@ -70,15 +78,11 @@ const EditValues: React.FC<EditValuesProps> = ({
     }
   };
 
-  const showModal = () => {
-    setOpen(true);
-  };
-
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+      setVisible(false);
       setCandidate({ ...candidate, values: labelsToDeleteState });
       onSave &&
         onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
@@ -87,7 +91,7 @@ const EditValues: React.FC<EditValuesProps> = ({
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setVisible(false);
     setLabelsToDeleteState(candidate.values as Value[]);
     setSearchText("");
   };
@@ -100,7 +104,7 @@ const EditValues: React.FC<EditValuesProps> = ({
         onClick={showModal}
       />
       <Modal
-        open={open}
+        open={visible}
         title={titleName}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -141,7 +145,7 @@ const EditValues: React.FC<EditValuesProps> = ({
         {/* All values */}
         <div className={styling.elementInOneRow}>
           {filteredValues &&
-            filteredValues.map((value, index) => (
+            filteredValues?.map((value, index) => (
               <Labels
                 key={index}
                 icon={icon}

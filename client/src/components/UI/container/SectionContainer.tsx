@@ -16,7 +16,7 @@ interface ContentBlockProps {
 
 const ContentBlock: React.FC<ContentBlockProps> = ({ sections }) => (
   <div className={styling.containerVisibleInfo}>
-    {sections?.map((section, index) => (
+    {sections && sections?.map((section, index) => (
       <div key={index} className={styling.inOneRow}>
         <div className={styling.section}>
           <p className={styling.title}>{section.title}</p>

@@ -1,56 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../UI/card/Card";
 import "./Candidates.css";
 import Filter from "../../UI/filter/Filter";
+import { getAllCandidates } from "../../../api/candidates";
+import { useNavigate } from "react-router-dom";
+
+interface Candidate {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  associations: string[];
+  skills: object[];
+}
 
 const Candidates = () => {
-  const candidates = [
-    {
-      name: "John Doe",
-      profession: "Software Engineer",
-      associations: ["Woman++", "Power Coders"],
-      skills: ["Node.js", "SQL"],
-    },
-    {
-      name: "John Doe",
-      profession: "Software Engineer",
-      associations: ["Woman++", "Power Coders"],
-      skills: ["JavaScript", "React", "Node.js", "SQL"],
-    },
-    {
-      name: "John Doe",
-      profession: "Software Engineer",
-      associations: ["Power Coders"],
-      skills: ["JavaScript"],
-    },
-    {
-      name: "John Doe",
-      profession: "Software Engineer",
-      associations: ["Power Coders"],
-      skills: ["Node.js"],
-    },
-    {
-      name: "John Doe",
-      profession: "Software Engineer",
-      associations: ["Woman++"],
-      skills: ["React"],
-    },
-  ];
+  const skillsOptions = ["JavaScript", "React", "Node.js", "SQL"];
+  const associationsOptions = ["Woman++", "Power Coders"];
 
-  const skillsOptions = ["All", "JavaScript", "React", "Node.js", "SQL"];
-  const associationsOptions = ["All", "Woman++", "Power Coders"];
+  const navigate = useNavigate();
 
-  interface Candidate {
-    name: string;
-    profession: string;
-    associations: string[];
-    skills: string[];
-  }
-
+  //State
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
+
+  /**
+   * Handle filter change
+   * @param filteredCandidates - filtered candidates
+   */
   const handleFilterChange = (filteredCandidates: Candidate[]) => {
     setFilteredCandidates(filteredCandidates);
   };
+
+  /**
+   * Fetches the candidates data object by id
+   */
+  const fetchCandidates = async () => {
+    const candidates = await getAllCandidates();
+    setCandidates(candidates);
+    setFilteredCandidates(candidates);
+  };
+
+  useEffect(() => {
+    fetchCandidates();
+  }, []);
 
   return (
     <div className="mainContainer">
@@ -70,12 +62,15 @@ const Candidates = () => {
         />
       </div>
       <div className="cards">
-        {filteredCandidates.map((candidate) => (
+        {filteredCandidates?.map((candidate) => (
           <Card
-            header={candidate.name}
-            subheader={candidate.profession}
-            associations={candidate.associations}
-            skills={candidate.skills}
+            header={`${candidate?.first_name} ${candidate?.last_name}`}
+            subheader="Software Engineer"
+            associations={candidate?.associations}
+            skills={candidate?.skills}
+            onClickRedirect={() => {
+              navigate(`/candidate/${candidate.user_id}`);
+            }}
           />
         ))}
       </div>

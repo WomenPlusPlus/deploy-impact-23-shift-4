@@ -4,25 +4,33 @@ import styling from "./ProfileCompletedFields.module.css";
 interface ProfileCompletedFieldsProps {
   isCompleted: boolean;
   category: string;
+  onAddClick?: () => void;
 }
 
 const ProfileCompletedFields = ({
   isCompleted,
   category,
+  onAddClick,
 }: ProfileCompletedFieldsProps) => {
-
   return (
     <>
-      <div className={styling.profileCompletedIcon}>
-        {isCompleted ? (
-          <IconCircleCheck color="green" />
-        ) : (
-          <IconProgressAlert color="#FAAD14" />
-        )}
-        <p className={styling.profileCompletedText}>{category}</p>
-      </div>
-      <div hidden={isCompleted}>
-        <button className={styling.profileUncompletedButton}>Add</button>
+      <div className={styling.profileCompleted}>
+        <div className={styling.profileCompletedIcon}>
+          {isCompleted ? (
+            <IconCircleCheck color="green" />
+          ) : (
+            <IconProgressAlert color="#FAAD14" />
+          )}
+          <p className={styling.profileCompletedText}>{category}</p>
+        </div>
+        <div hidden={isCompleted}>
+          <button
+            className={styling.profileUncompletedButton}
+            onClick={onAddClick}
+          >
+            Add
+          </button>
+        </div>
       </div>
     </>
   );

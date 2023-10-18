@@ -13,7 +13,7 @@
 .nav-header {
   background-color: var(--white);
   border-bottom: 0;
-  padding: 0 4rem;
+  padding: 0 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -11,14 +11,33 @@ import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import Table from "../../UI/table/Table";
 import { Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
+import { useNavigate } from "react-router-dom";
+import { getAssociationById } from "../../../api/associations";
 
 const DashboardAssociations = () => {
-  const association_name = "Woman++";
-  const location = "Zürich, Switzerland";
+  const navigate = useNavigate();
 
-  const progress = 80;
+  //State
+  const [association, setAssociation] = useState<any>(null);
+
+  /**
+   * Fetches the association data object by id
+   */
+  const fetchAssociation = async () => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    const userId = auth.user.id;
+
+    if (userId) {
+      const association = await getAssociationById(userId);
+      setAssociation(association);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssociation();
+  }, []);
 
   const headerRequests = [
     {
@@ -172,34 +191,30 @@ const DashboardAssociations = () => {
     <div className={styling.main}>
       {/* Profile component */}
       <CardContainer className={styling.profile}>
-        <Avatar firstName={association_name} size={80} />
+        {association?.logo ? (
+          <img className={styling.logo} src={association?.logo} alt="Avatar" />
+        ) : (
+          <Avatar firstName={association?.association_name} size={80} />
+        )}
 
         <div className={styling.header}>
-          <h2>Welcome back, {association_name}</h2>
+          <h2 className={styling.headerTitle}>
+            Welcome back, {association?.association_name}
+          </h2>
           <div className={styling.location}>
             <IconMapPin color="var(--gray-dark)" />
-            <p>{location}</p>
+            <p>{association?.address}</p>
             <p>|</p>
             <IconBrandLinkedin color="var(--gray-dark)" />
             <IconWorldWww color="var(--gray-dark)" />
           </div>
         </div>
 
-        <IconExternalLink color="var(--gray-dark)" />
+        <IconExternalLink
+          color="var(--gray-dark)"
+          onClick={() => navigate("association-profile")}
+        />
       </CardContainer>
-
-      {/* Do we need this for associations?????? */}
-      {/* <CardContainer className={styling.progress}>
-        <p>You've completed {progress}% </p>
-
-        <div className={styling.progressSection}>
-          <div className={styling.progressBar}>
-            <ProgressBar progress={progress} />
-          </div>
-
-          <Button>Complete your profile</Button>
-        </div>
-      </CardContainer> */}
 
       <div className={styling.invites}>
         <CardContainer className={styling.inviteSection}>

@@ -1,6 +1,26 @@
 import axios from "axios";
 import { Candidate } from "../../types/types";
-import { updateCandidateById } from "../../../../api/candidates";
+
+// const sectionsVisibleInfo = [
+//   { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
+//   { title: "Notice", subtitle: "Immediately available" },
+//   {
+//     title: "Visa Status",
+//     subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
+//   },
+// ];
+// const sectionsExperience = [
+//   {
+//     title: "Role",
+//     text: "5 Years in academia",
+//     subtext: "+ 1 year in Product, 3 in Engineering",
+//   },
+//   {
+//     title: "Industries",
+//     text: "Entertainment",
+//     subtext: "+ Software/Saas, Biotechnology, Medical devices",
+//   },
+// ];
 
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -96,13 +116,13 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   address: "Contact info",
   phone_number: "Contact info",
   birth_date: "Profile",
-  work_permit: "Visa Status",
-  notice_period: "Notice",
-  job_status: "Role",
-  preferred_jobs: "Type of jobs you're looking for",
-  company_type: "Industries",
-  matching_jobs: "Role",
-  matching_companies: "Industries",
+  work_permit: "Visible Information",
+  notice_period: "Visible Information",
+  job_status: "Profile",
+  preferred_jobs: "Type of jobs",
+  company_type: "Experience",
+  matching_jobs: "",
+  matching_companies: "",
   values: "Values",
   skills: "Skills",
   languages: "Languages",
@@ -110,60 +130,181 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   certificates: "Documents",
   visible_information: "Profile",
   experience: "Experience",
+  visa_status: "Visible Information",
+  salary_expectation: "Visible Information",
   other_information: "Profile",
 };
 
-// Now you can create the mapping between categories and fields
+const categoryFieldMapping: Record<string, number> = {};
 
-const categoryFieldMapping: Record<string, (keyof Candidate)[]> = {};
-
-const categories = [
-  "Salary bracket",
-  "Notice",
-  "Visa Status",
-  "Role",
-  "Industries",
-  "Documents",
-  "Profile",
-  "Skills",
-  "Values",
-  "Languages",
-  "Experience",
-  "Contact info",
-  "Type of jobs you're looking for",
-];
-
-const countFieldsByCategory = (
+const countNullFieldsByCategory = (
   candidate: Candidate,
   allCategories: string[]
 ) => {
-  const categoryFieldMapping: Record<string, number> = {};
-
+  // Count the number of null fields for each category
   allCategories.forEach((category) => {
     const fieldsForCategory = Object.keys(fieldCategoryMapping).filter(
       (field) =>
         (fieldCategoryMapping as Record<string, string>)[field] === category
     ) as (keyof Candidate)[];
 
-    const nullOrUndefinedFieldsCount = fieldsForCategory.reduce(
-      (count, field) => {
-        if (candidate[field] === null || candidate[field] === undefined) {
-          return count + 1;
+    const totalFieldsForCategory = fieldsForCategory.length;
+
+    const nullFieldsCount = fieldsForCategory?.reduce((count, field) => {
+      if (Array.isArray(candidate[field])) {
+        if (candidate[field]?.length === 0) {
+          return count + 1; // Empty array should be counted as null
         }
-        return count;
-      },
-      0
-    );
-
-    categoryFieldMapping[category] = nullOrUndefinedFieldsCount;
+      } else if (candidate[field] === null) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+    // Assign the number of null fields to the category
+    categoryFieldMapping[category] = totalFieldsForCategory - nullFieldsCount;
   });
 
-  const result: Record<string, number> = {};
-  allCategories.forEach((category) => {
-    result[category] = categoryFieldMapping[category];
-  });
-
-  return result;
+  return categoryFieldMapping;
 };
 
-export { getFakeData, countFieldsByCategory };
+const completedCategories = Object.values(categoryFieldMapping).filter(
+  (fraction) => fraction > 0
+).length;
+
+const percentage = ({
+  completedCategories,
+  totalCategories,
+}: {
+  completedCategories: number;
+  totalCategories: number;
+}) => {
+  const progress = (completedCategories / totalCategories) * 100;
+  return Math.round(progress);
+};
+
+function transformCandidateDocs(candidate: Candidate) {
+  const transformedData = [];
+
+  // Transform CV data
+  if (candidate.cv_reference) {
+    transformedData.push({ title: "CV", subtext: "", type: "cv" });
+  }
+
+  // Transform certificate data
+  if (candidate.certificates && Array.isArray(candidate.certificates)) {
+    candidate.certificates.forEach((certificate) => {
+      const title = "Certificate";
+      const subtext = `${certificate.name} 2023`;
+      const type = "certificate";
+      transformedData.push({ title, subtext, type });
+    });
+  }
+
+  return transformedData;
+}
+
+function transformCandidateVisibleInfo(candidate: Candidate) {
+  const sectionsVisibleInfo = [];
+
+  // Transform salary_expectation
+  if (
+    candidate.salary_expectation &&
+    candidate.salary_expectation.length === 2
+  ) {
+    sectionsVisibleInfo.push({
+      title: "Salary bracket",
+      subtitle: `CHF ${candidate.salary_expectation[0]} / ${candidate.salary_expectation[1]} CHF`,
+    });
+  }
+
+  // Transform notice_period
+  if (candidate.notice_period) {
+    sectionsVisibleInfo.push({
+      title: "Notice",
+      subtitle: candidate.notice_period,
+    });
+  }
+
+  // Transform visa_status
+  if (candidate.visa_status && candidate.visa_status.length > 0) {
+    sectionsVisibleInfo.push({
+      title: "Visa Status",
+      subtitle: `(${candidate.visa_status.join(
+        ") valid visa \n ("
+      )}) valid visa`,
+    });
+  }
+
+  return sectionsVisibleInfo;
+}
+
+interface Experience {
+  role: string;
+  industries: string;
+  years_of_experience?: number;
+}
+
+function transformExperience(experience: Experience[]) {
+  const sectionsExperience = [];
+  let subtext = "";
+
+  if (experience && experience.length > 0) {
+    const firstExperience = experience[0];
+    if (firstExperience.role) {
+      subtext = experience
+        .map((exp, index) =>
+          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.role}`
+        )
+        .join(", ");
+
+      sectionsExperience.push({
+        title: "Role",
+        text: `${firstExperience.role}`,
+        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+      });
+    }
+
+    if (firstExperience.industries) {
+      subtext = experience
+        .map((exp, index) =>
+          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.industries}`
+        )
+        .join(", ");
+
+      sectionsExperience.push({
+        title: "Industries",
+        text: firstExperience.industries,
+        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+      });
+    }
+  }
+
+  return sectionsExperience;
+}
+
+export const workLocationTypes: string[] = [
+  "Hybrid",
+  "Remote",
+  "On-site",
+  "In-office",
+];
+
+export const employmentTypes: string[] = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Freelance",
+];
+
+export {
+  getFakeData,
+  countNullFieldsByCategory,
+  percentage,
+  fieldCategoryMapping,
+  completedCategories,
+  transformCandidateDocs,
+  transformCandidateVisibleInfo,
+  transformExperience,
+};
