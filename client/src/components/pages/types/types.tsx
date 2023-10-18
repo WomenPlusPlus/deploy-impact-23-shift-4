@@ -59,3 +59,4 @@ export interface Company {
   logo: string;
   company_size: string;
 }
+
