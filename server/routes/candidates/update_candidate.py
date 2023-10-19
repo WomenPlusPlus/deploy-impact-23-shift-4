@@ -30,7 +30,7 @@ def update_candidate_route(Candidate, db):
                         setattr(candidate, key, data[key])
 
                 db.session.commit()
-
+                print(candidate.to_dict())
                 return jsonify({"message": "Candidate updated successfully"}), 200
 
         except Exception as e:

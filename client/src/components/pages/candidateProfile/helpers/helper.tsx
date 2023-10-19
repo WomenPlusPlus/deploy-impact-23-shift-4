@@ -40,9 +40,13 @@ const getFakeData = () => {
   ];
   const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
   const allValue = [
-    { value_name: "Teamwork", value_id: "Teamwork", score: 20 },
-    { value_name: "Communication", value_id: "Communication", score: 20 },
-    { value_name: "Problem solving", value_id: "Problem solving", score: 20 },
+    "Teamwork", // Add more values as neede
+    "Communication",
+    "Problem solving",
+    "Creativity",
+    "Work ethic",
+    "Interpersonal skills",
+    "Adaptability",
   ];
   const allSkill = [
     { skill_name: "React", skill_id: "React", score: 20 },
@@ -75,7 +79,7 @@ const getFakeData = () => {
       { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
       { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
     ],
-    values: [{ value_name: "Teamwork", value_id: "Teamwork", score: 20 }],
+    values: ["Teamwork", "Communication", "Problem solving"],
     languages: [
       { name: "English", levelName: "Beginner", score: 20 },
       { name: "Italian", levelName: "Native", score: 100 },
@@ -179,6 +183,7 @@ const percentage = ({
   totalCategories: number;
 }) => {
   const progress = (completedCategories / totalCategories) * 100;
+  console.log("PROGRESS", progress);
   return Math.round(progress);
 };
 
@@ -267,7 +272,9 @@ function transformExperience(experience: Experience[]) {
     if (firstExperience.industries) {
       subtext = experience
         .map((exp, index) =>
-          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.industries}`
+          index === 0
+            ? ""
+            : `+ ${exp.years_of_experience} years in ${exp.industries}`
         )
         .join(", ");
 
