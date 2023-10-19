@@ -151,8 +151,8 @@ const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className={styling.elementInOneRow}>
-          {filteredTypeOfJobs &&
-            filteredTypeOfJobs?.map((job, index) => (
+          {allLabels &&
+            allLabels?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}

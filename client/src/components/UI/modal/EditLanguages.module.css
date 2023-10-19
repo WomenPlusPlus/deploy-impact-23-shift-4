@@ -3,7 +3,10 @@
 }
 
 .content {
+  display: flex;
+  flex-direction: row;
   width: fit-content;
+  align-items: flex-end;
   column-gap: 2rem;
   margin-bottom: 1rem;
 }

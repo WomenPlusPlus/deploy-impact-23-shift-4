@@ -80,6 +80,17 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
     });
   };
 
+  const deleteLanguage = (index: number) => {
+    setCandidateValues((prevCandidate) => {
+      const updatedLanguages = [...(prevCandidate.languages || [])];
+      updatedLanguages.splice(index, 1);
+      return {
+        ...prevCandidate,
+        languages: updatedLanguages,
+      };
+    });
+  };
+
   return (
     <Modal
       open={visible}
@@ -111,10 +122,10 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
             />
           </div>
 
-          <div>
+          <div style={{ minWidth: "150px" }}>
             <label>Level:</label>
             <Select
-              style={{ width: "100%" }}
+              style={{ minWidth: "100%" }}
               value={language.level || ""}
               onChange={(value) => handleChange(index, "level", value)}
             >
@@ -125,6 +136,12 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
               ))}
             </Select>
           </div>
+          <Button
+            key={`deleteLanguage${index}`}
+            onClick={() => deleteLanguage(index)}
+          >
+            Delete
+          </Button>
         </Space>
       ))}
 
