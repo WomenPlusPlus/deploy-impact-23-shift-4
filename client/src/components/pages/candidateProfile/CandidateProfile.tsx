@@ -154,7 +154,16 @@ const CandidateProfile = () => {
     <div className={styling.main}>
       {/* Profile text */}
       <CardContainer className={`${styling.profileComponent}`}>
-        <Avatar size={80} firstName="John" lastName="Doe" />
+        {candidate?.first_name && candidate?.last_name ? (
+          <Avatar
+            size={80}
+            firstName={candidate?.first_name}
+            lastName={candidate?.last_name}
+          />
+        ) : (
+          <Avatar size={80} firstName="John" lastName="Doe" />
+        )}
+
         <div>
           <div className={styling.userName}>
             <h3>
@@ -173,27 +182,29 @@ const CandidateProfile = () => {
               <p onClick={editHandlerProfile}>Add your location</p>
             )}
             <p>|</p>
-            {candidate.links && candidate.links.length > 0 ? (
-              candidate.links.map((link, index) => (
-                <div key={index}>
-                  {link.name === "LinkedIn" ? (
-                    <a href={link.url} target="_blank" rel="noreferrer">
-                      <IconBrandLinkedin color="black" />
-                    </a>
-                  ) : link.name === "Website" ? (
-                    <a href={link.url} target="_blank" rel="noreferrer">
-                      <IconWorldWww color="black" />
-                    </a>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              ))
-            ) : (
-              <>
-                <p onClick={editHandlerProfile}>Add links</p>
-              </>
-            )}
+            <div className={styling.row}>
+              {candidate.links && candidate.links.length > 0 ? (
+                candidate.links.map((link, index) => (
+                  <div key={index} className={styling.link}>
+                    {link.name === "LinkedIn" ? (
+                      <a href={link.url} target="_blank" rel="noreferrer">
+                        <IconBrandLinkedin color="black" />
+                      </a>
+                    ) : link.name === "Personal Website" ? (
+                      <a href={link.url} target="_blank" rel="noreferrer">
+                        <IconWorldWww color="black" />
+                      </a>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <>
+                  <p onClick={editHandlerProfile}>Add links</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
