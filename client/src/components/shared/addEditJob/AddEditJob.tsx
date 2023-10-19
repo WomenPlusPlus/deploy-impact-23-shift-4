@@ -5,12 +5,13 @@ import {
   Select,
   Divider,
   AutoComplete,
-  Button,
   Tag,
   InputNumber,
 } from "antd";
+import { Button } from "../../UI/button/Button";
 
 import styling from "./AddEditJob.module.css";
+import { Labels } from "../../UI/labels/Label";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -34,9 +35,11 @@ const AddEditJob: React.FC<ModalProps> = ({
   companyId,
   associations,
 }) => {
+  const MAX_LABELS_DISPLAYED = 6;
   const arrayOfValues = ["Teamwork", "Accountability", "Diversity"];
   const arrayOfSkills = ["React", "Node.js", "TypeScript"];
 
+  // State
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [values, setValues] = useState<string[]>([]);
@@ -56,6 +59,9 @@ const AddEditJob: React.FC<ModalProps> = ({
   const [skillDataSource, setSkillDataSource] =
     useState<string[]>(arrayOfSkills);
 
+  /**
+   * Handle the ok button click
+   */
   const handleOk = () => {
     const currentTimestamp = new Date();
 
@@ -104,15 +110,66 @@ const AddEditJob: React.FC<ModalProps> = ({
     setSkills(skills.filter((skill) => skill.skill_name !== skillName));
   };
 
+  const renderValueLabels = () => {
+    const visibleValues = values.slice(0, MAX_LABELS_DISPLAYED);
+    const hiddenValueCount = values.length - MAX_LABELS_DISPLAYED;
+
+    return (
+      <div className={styling.labelContainer}>
+        {visibleValues.map((value) => (
+          <Labels
+            customClass={styling.label}
+            labelName={value}
+            onCloseIcon={() => removeValue(value)}
+            key={value}
+          />
+        ))}
+        {hiddenValueCount > 0 && (
+          <Labels
+            customClass={styling.label}
+            labelName={`+${hiddenValueCount}`}
+            disableCloseIcon={true}
+          />
+        )}
+      </div>
+    );
+  };
+
+  const renderSkillLabels = () => {
+    const visibleSkills = skills.slice(0, MAX_LABELS_DISPLAYED);
+    const hiddenSkillCount = skills.length - MAX_LABELS_DISPLAYED;
+
+    return (
+      <div className={styling.labelContainer}>
+        {visibleSkills.map((skill) => (
+          <Labels
+            customClass={styling.label}
+            labelName={skill.skill_name}
+            onCloseIcon={() => removeSkill(skill.skill_name)}
+            key={skill.skill_name}
+          />
+        ))}
+        {hiddenSkillCount > 0 && (
+          <Labels
+            customClass={styling.label}
+            labelName={`+${hiddenSkillCount}`}
+            disableCloseIcon={true}
+          />
+        )}
+      </div>
+    );
+  };
+
   return (
     <AntdModal
       className={styling.modal}
-      title={modalTitle}
       open={open}
       onOk={handleOk}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
+      okText="Save"
     >
+      <h2 className={styling.header}>Create new job</h2>
       <Divider>Job Info</Divider>
       <Input
         className={styling.input}
@@ -127,10 +184,9 @@ const AddEditJob: React.FC<ModalProps> = ({
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <div className={styling.bottomContainer}>
+      <div className={styling.middle}>
         <div className={styling.sider}>
           <Divider>Values</Divider>
-
           <div className={styling.autocomplete}>
             <AutoComplete
               placeholder="Search for values"
@@ -154,37 +210,7 @@ const AddEditJob: React.FC<ModalProps> = ({
             <Button onClick={addValue}>Add</Button>
           </div>
 
-          {values.map((value) => (
-            <Tag closable onClose={() => removeValue(value)} key={value}>
-              {value}
-            </Tag>
-          ))}
-
-          <Divider>Job details</Divider>
-          <Select
-            className={styling.dropdown}
-            placeholder="Employment Type"
-            value={employment_type}
-            onChange={(value) => setEmploymentType(value)}
-          >
-            <Option value="Internship">Internship</Option>
-            <Option value="Full time">Full time</Option>
-            <Option value="Part time">Part time</Option>
-          </Select>
-
-          <Input
-            className={styling.input}
-            placeholder="Hiring Process Duration"
-            value={hiring_process_duration}
-            onChange={(e) => setHiringProcessDuration(e.target.value)}
-          />
-
-          <InputNumber
-            className={styling.inputNumber}
-            placeholder="Salary"
-            value={salary}
-            onChange={(value: any) => setSalary(value)}
-          />
+          {renderValueLabels()}
         </div>
 
         <div className={styling.sider}>
@@ -213,16 +239,40 @@ const AddEditJob: React.FC<ModalProps> = ({
             <Button onClick={addSkill}>Add</Button>
           </div>
 
-          {skills.map((skill) => (
-            <Tag
-              closable
-              onClose={() => removeSkill(skill.skill_name)}
-              key={skill.skill_name}
-            >
-              {skill.skill_name}
-            </Tag>
-          ))}
+          {renderSkillLabels()}
+        </div>
+      </div>
 
+      <div className={styling.bottomContainer}>
+        <div className={styling.sider}>
+          <Divider>Job details</Divider>
+          <Select
+            className={styling.dropdown}
+            placeholder="Employment Type"
+            value={employment_type}
+            onChange={(value) => setEmploymentType(value)}
+          >
+            <Option value="Internship">Internship</Option>
+            <Option value="Full time">Full time</Option>
+            <Option value="Part time">Part time</Option>
+          </Select>
+
+          <Input
+            className={styling.input}
+            placeholder="Hiring Process Duration"
+            value={hiring_process_duration}
+            onChange={(e) => setHiringProcessDuration(e.target.value)}
+          />
+
+          <InputNumber
+            className={styling.inputNumber}
+            placeholder="Salary"
+            value={salary}
+            onChange={(value: any) => setSalary(value)}
+          />
+        </div>
+
+        <div className={styling.sider}>
           <Divider>Location</Divider>
           <Input
             className={styling.input}

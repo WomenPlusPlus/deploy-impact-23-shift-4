@@ -2,6 +2,10 @@
   width: 70% !important;
 }
 
+.header {
+  font-size: 2rem;
+}
+
 .input {
   margin: 1rem 0;
 }
@@ -19,6 +23,13 @@
   margin: 1rem 0;
   width: 100%;
 }
+
+.middle {
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+}
+
 .bottomContainer {
   display: flex;
   justify-content: space-between;
@@ -31,4 +42,18 @@
 
 .autocomplete {
   display: flex;
+  gap: 1rem;
+}
+
+.labelContainer {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 20rem;
+}
+
+.label {
+  font-size: 1.5rem;
+  background-color: var(--gray-bright);
+  border-radius: var(--tag-radius);
+  margin: 0.5rem;
 }
