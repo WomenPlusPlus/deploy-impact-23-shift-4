@@ -9,6 +9,7 @@ interface HorizontalCardProps {
   lastName?: string;
   title?: string;
   subtitle?: string;
+  onClick?: () => void;
 }
 
 //TODO: add title and description props
@@ -19,6 +20,7 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
   lastName,
   title,
   subtitle,
+  onClick,
 }) => {
   const positionTitle = "Developer europe remote";
   const matchingText = [
@@ -37,7 +39,11 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
         </p>
       </div>
 
-      {button && <Button className={styling.button}>{button}</Button>}
+      {button && (
+        <Button className={styling.button} onClick={onClick}>
+          {button}
+        </Button>
+      )}
     </div>
   );
 };
