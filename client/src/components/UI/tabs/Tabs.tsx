@@ -8,16 +8,26 @@ type TabItem = {
 };
 
 type TabsProps = {
+  className?: string;
   defaultActiveKey: string;
   centered: boolean;
   items: TabItem[];
+  size?: "small" | "middle" | "large" | undefined;
 };
 
-const Tabs: React.FC<TabsProps> = ({ defaultActiveKey, centered, items }) => (
+const Tabs: React.FC<TabsProps> = ({
+  className,
+  defaultActiveKey,
+  centered,
+  items,
+  size,
+}) => (
   <AntTabs
+    className={className}
     defaultActiveKey={defaultActiveKey}
     centered={centered}
     items={items}
+    size={size}
   />
 );
 

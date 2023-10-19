@@ -1,0 +1,15 @@
+.cardContainerAboutMe {
+  background-color: var(--backgroun-light-blue);
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.cardContainerSkills {
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.cardContainerValues {
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
