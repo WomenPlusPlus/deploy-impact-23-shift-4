@@ -43,6 +43,10 @@ const getFakeData = () => {
     "Teamwork", // Add more values as neede
     "Communication",
     "Problem solving",
+    "Creativity",
+    "Work ethic",
+    "Interpersonal skills",
+    "Adaptability",
   ];
   const allSkill = [
     { skill_name: "React", skill_id: "React", score: 20 },
