@@ -39,17 +39,26 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   const [fieldsByCategory, setFieldsByCategory] = useState(
     {} as { [key: string]: number }
   );
+  const [categories, setCategories] = useState([] as string[]);
+  const [progress, setProgress] = useState(0);
+
+  const fetchData = () => {
+    const countFields = countNullFieldsByCategory(candidate, allCategories);
+    setFieldsByCategory(countFields);
+    setCategories(allCategories);
+    const countProgress = percentage({
+      completedCategories: Object.values(countFields).filter(
+        (fraction) => fraction > 0
+      ).length,
+      totalCategories: allCategories.length,
+    });
+    console.log("Count progress", countProgress);
+    setProgress(countProgress);
+  };
 
   useEffect(() => {
-    setFieldsByCategory(countNullFieldsByCategory(candidate, allCategories));
-  }, [candidate]);
-
-  const progress = percentage({
-    completedCategories: Object.values(fieldsByCategory).filter(
-      (fraction) => fraction > 0
-    ).length,
-    totalCategories: allCategories.length,
-  });
+    fetchData();
+  }, [candidate, allCategories]);
 
   const handleAddClick = (category: string) => {
     console.log("ADD CLICK", category);
@@ -108,33 +117,29 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   return (
     <CardContainer className={`${className}`}>
       <div className={styling.profileCompletedEditIcon}>
-        <h3>Your profile is complete.</h3>
+        <h3>Your profile is {progress}% complete.</h3>
         {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
       </div>
       <ProgressBar progress={progress} />
       <div className={styling.profileCompletedFields}>
         {
           /* Display fields by category */
-          allCategories &&
-            allCategories?.map((category) => (
-              <div key={category} className={styling.profileCompletedCategory}>
-                {/* <h4>{category}</h4> */}
-                {fieldsByCategory && fieldsByCategory[category] > 0 ? (
-                  <ProfileCompletedFields
-                    key={category}
-                    isCompleted={true}
-                    category={category}
-                  />
-                ) : (
-                  <ProfileCompletedFields
-                    key={category}
-                    isCompleted={false}
-                    category={category}
-                    onAddClick={() => handleAddClick(category)}
-                  />
-                )}
-              </div>
-            ))
+
+          categories?.map((category) => (
+            <div key={category} className={styling.profileCompletedCategory}>
+              {/* <h4>{category}</h4> */}
+              <ProfileCompletedFields
+                key={category}
+                isCompleted={fieldsByCategory[category] > 0 ? true : false}
+                category={category}
+                onAddClick={
+                  fieldsByCategory[category] > 0
+                    ? undefined
+                    : () => handleAddClick(category)
+                }
+              />
+            </div>
+          ))
         }
       </div>
     </CardContainer>

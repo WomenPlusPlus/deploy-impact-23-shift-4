@@ -145,6 +145,7 @@ const CandidateProfile = () => {
       candidate?.user_id,
       candidateUpdated
     );
+    await fetchCandidate();
     console.log("is_updated", is_updated);
   };
 
