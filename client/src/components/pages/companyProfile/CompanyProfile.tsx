@@ -16,46 +16,52 @@ const CompanyProfile = () => {
   };
 
   const jobs = (
-    <div className={styling.mainSection}>
-      <div className={styling.sectionHeader}>
-        <h2 className={styling.titles}>Published jobs</h2>
-        <Button className={styling.button}>Create new job</Button>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <div className={styling.sectionHeader}>
+          <h2 className={styling.titles}>Published jobs</h2>
+          <Button className={styling.button}>Create new job</Button>
+        </div>
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
       </div>
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-    </div>
+    </CardContainer>
   );
 
   const about = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company jobs</h2>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>Company jobs</h2>
 
-      <p>This is about the company</p>
-    </div>
+        <p>This is about the company</p>
+      </div>
+    </CardContainer>
   );
 
   const culture = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company culture</h2>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>Company culture</h2>
 
-      <p>This is about the culture</p>
-    </div>
+        <p>This is about the culture</p>
+      </div>
+    </CardContainer>
   );
 
   const tabs = [
@@ -78,7 +84,7 @@ const CompanyProfile = () => {
 
   return (
     <div className={styling.main}>
-      <CardContainer className={styling.container}>
+      <div className={styling.container}>
         <div className={styling.header}>
           <img className={styling.logo} src={company.logo} alt="Avatar" />
 
@@ -94,11 +100,9 @@ const CompanyProfile = () => {
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
         </div>
-      </CardContainer>
+      </div>
 
-      <CardContainer className={styling.container}>
-        <Tabs defaultActiveKey={"1"} centered items={tabs} />
-      </CardContainer>
+      <Tabs centered={false} items={tabs} />
     </div>
   );
 };

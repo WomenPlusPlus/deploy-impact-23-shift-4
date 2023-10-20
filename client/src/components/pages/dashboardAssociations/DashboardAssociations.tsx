@@ -1,5 +1,4 @@
 import styling from "./DashboardAssociations.module.scss";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import {
   IconBrandLinkedin,
   IconExternalLink,
@@ -113,50 +112,21 @@ const DashboardAssociations = () => {
     },
   ];
 
-  const dataInvite = [
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-  ];
+  const today = new Date();
+  const dataInvite = association?.invites.map((invite: any, index: number) => {
+    const inviteDate = new Date(invite.createdAt);
+    const timeDifference = today.getTime() - inviteDate.getTime();
+
+    const expiresInDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+    return {
+      key: index,
+      name: invite.name,
+      email: invite.email,
+      userType: invite.user_type,
+      expiresIn: expiresInDays > 0 ? `${expiresInDays} days` : "Expired",
+    };
+  });
 
   const [tableData, setTableData] = useState(data);
   const [isSendInviteCandidateOpen, setSendInviteCandidateOpen] =
@@ -260,12 +230,12 @@ const DashboardAssociations = () => {
 
       <div className={styling.tables}>
         <CardContainer className={styling.requests}>
-          <h2 className={styling.titleTables}>Already invited</h2>
+          <h1 className={styling.titleTables}>Already invited</h1>
           <Table columns={headerInvited} data={dataInvite} />
         </CardContainer>
 
         <CardContainer className={styling.requests}>
-          <h2 className={styling.titleTables}>Approval requests</h2>
+          <h1 className={styling.titleTables}>Approval requests</h1>
           <Table columns={headerRequests} data={tableData} />
         </CardContainer>
       </div>
