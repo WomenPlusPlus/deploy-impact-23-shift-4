@@ -1,24 +1,29 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Tabs from "../../UI/tabs/Tabs";
+import Spinner from "../../UI/spinner/Spinner";
+import { Button } from "../../UI/button/Button";
+import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { CardContainer } from "../../UI/container/CardContainer";
+import AddEditJob from "../../shared/addEditJob/AddEditJob";
+import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
+import { Company } from "../../pages/types/types";
+import { addJob, getAllJobs } from "../../../api/jobs";
+import { getCompanyById, updateCompanyById } from "../../../api/companies";
+
 import {
   IconBrandLinkedin,
   IconEdit,
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
-import { CardContainer } from "../../UI/container/CardContainer";
+
 import styling from "./CompanyProfile.module.css";
-import Tabs from "../../UI/tabs/Tabs";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
-import { Button } from "../../UI/button/Button";
-import { useEffect, useState } from "react";
-import AddEditJob from "../../shared/addEditJob/AddEditJob";
-import { getCompanyById, updateCompanyById } from "../../../api/companies";
-import { Company } from "../../pages/types/types";
-import { addJob, getAllJobs } from "../../../api/jobs";
-import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
-import { Spin } from "antd";
-import Spinner from "../../UI/spinner/Spinner";
 
 const CompanyProfile = () => {
+  const navigate = useNavigate();
+
   // State
   const [open, setOpen] = useState(false);
   const [jobs, setJobs] = useState([]);
@@ -109,14 +114,16 @@ const CompanyProfile = () => {
         </div>
         {jobs.map((job: Record<string, any>, index: number) => {
           return (
-            <HorizontalCard
-              key={index}
-              avatar={true}
-              button="Go to description"
-              firstName={company.company_name}
-              title={job.title}
-              subtitle={job.description}
-            />
+            <div onClick={() => navigate(`/job/${job.id}`)}>
+              <HorizontalCard
+                key={index}
+                avatar={true}
+                button="Go to description"
+                firstName={company.company_name}
+                title={job.title}
+                subtitle={job.description}
+              />
+            </div>
           );
         })}
       </div>

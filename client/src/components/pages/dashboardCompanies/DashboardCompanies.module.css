@@ -27,10 +27,12 @@
 }
 
 .title {
-  margin: 0;
+  margin: 0 0 1rem 0;
 }
 
 .subtitle {
+  display: flex;
+  align-items: center;
   font-size: 2rem;
   font-weight: 600;
   color: var(--gray-medium);
