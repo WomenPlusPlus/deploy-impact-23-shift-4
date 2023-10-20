@@ -19,6 +19,7 @@
 
 .inputs {
   display: flex;
+  justify-content: space-between;
 }
 
 .noResultText {
@@ -28,4 +29,36 @@
   font-style: italic;
   font-weight: 100;
   color: var(--gray-medium);
+}
+.multiFilter {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+.searchText {
+  width: 80rem;
+}
+.sortByDate {
+  display: flex;
+  justify-content: space-between;
+  font-size: 3rem;
+}
+.sortByDate span {
+  color: rgb(16, 35, 158);
+  font-weight: bolder;
+}
+
+.sortBy {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .inputContainer {
+    display: flex;
+  }
+  .inputs {
+    display: flex;
+    flex-direction: column;
+  }
 }

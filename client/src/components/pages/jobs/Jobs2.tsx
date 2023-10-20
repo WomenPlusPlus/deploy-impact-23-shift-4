@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styling from "./Jobs.module.css";
 import JobCard2 from "../../UI/card/JobCard2";
-import LocationSelect from "../../UI/searchbar/LocationSelect";
 import { Labels } from "../../UI/labels/Label";
-import { Select, Checkbox, Menu, Input } from "antd";
+import styles from "../../UI/labels/Label.module.css";
+import { Select, Input, Button } from "antd";
 const { Search } = Input;
 
 const { Option, OptGroup } = Select;
@@ -60,7 +60,7 @@ const jobsData = [
       "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
     employees: "50-200",
     level: "Internship",
-    match: "20",
+    match: "70",
     location: "Berlin",
     department: "Hiring Manager",
     skills: {
@@ -141,62 +141,18 @@ const jobsData = [
 ];
 const Jobs2: React.FC = () => {
   //useStates
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
-  const [searchText, setSearchText] = useState(""); 
-  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]); 
+  const [placeholderText, setPlaceholderText] =
+    useState<string>("Select Filters");
+  const [sortOrder, setSortOrder] = useState<string | undefined>(undefined);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>(jobsData);
+  const [searchText, setSearchText] = useState("");
+  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
   const [selectedContractTypes, setSelectedContractTypes] = useState<string[]>(
     []
-  ); // State for selected contract types
-  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
-
-  // const handleFilterChange = useCallback((filteredJobs: Job[]) => {
-  //   setFilteredJobs(filteredJobs);
-  // }, []);
-
-  //multiple select
-  const handleRemoveFilter = (filterToRemove: string, filterType: string) => {
-   
-    if (filterType === "jobType") {
-      const updatedJobTypes = selectedJobTypes.filter(
-        (type) => type !== filterToRemove
-      );
-      setSelectedJobTypes(updatedJobTypes);
-    } else if (filterType === "contractType") {
-      const updatedContractTypes = selectedContractTypes.filter(
-        (type) => type !== filterToRemove
-      );
-      setSelectedContractTypes(updatedContractTypes);
-    } else if (filterType === "workType") {
-      const updatedWorkTypes = selectedWorkTypes.filter(
-        (type) => type !== filterToRemove
-      );
-      setSelectedWorkTypes(updatedWorkTypes);
-    }
-  };
-
-  const handleFilterChange = useCallback(
-    (selectedFilters: string[]) => {
-      const filteredJobs = jobsData.filter((job) => {
-        if (
-          (selectedJobTypes.length === 0 ||
-            selectedJobTypes.includes(job.type)) &&
-          (selectedContractTypes.length === 0 ||
-            selectedContractTypes.includes(job.contract_type)) &&
-          (selectedWorkTypes.length === 0 ||
-            selectedWorkTypes.includes(job.work_type))
-        ) {
-          return true; // Kartı görüntüle
-        } else {
-          return false; // Kartı filtrele
-        }
-      });
-
-      setFilteredJobs(filteredJobs);
-    },
-    [selectedJobTypes, selectedContractTypes, selectedWorkTypes]
   );
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState("Anywhere");
 
-  //search for a text
   const combineJobProperties = (job: Job) => {
     const {
       name,
@@ -212,7 +168,6 @@ const Jobs2: React.FC = () => {
       contract_type,
     } = job;
 
-   
     const combinedText = `${name} ${company_name} ${description} ${employees} ${level} ${match} ${location} ${department} ${skills.technicalSkills.join(
       " "
     )} ${skills.softSkills.join(" ")} ${type} ${contract_type}`;
@@ -220,49 +175,221 @@ const Jobs2: React.FC = () => {
     return combinedText.toLowerCase();
   };
 
-  const handleSearch = useCallback((searchText: string) => {
-    setSearchText(searchText); 
+  // Handle filtering by multiple criteria
+  const filterJobs = (
+    selectedJobTypes: string[],
+    selectedContractTypes: string[],
+    selectedWorkTypes: string[],
+    selectedLocation: string,
+    searchText: string
+  ) => {
+    return jobsData.filter((job) => {
+      const matchesLocation =
+        selectedLocation === "Anywhere" || job.location === selectedLocation;
 
-    const lowerCasedSearchText = searchText.toLowerCase();
+      const matchesSearchText =
+        searchText === "" ||
+        combineJobProperties(job).includes(searchText.toLowerCase());
 
-    const allJobTexts = jobsData.map(combineJobProperties);
+      const matchesJobType =
+        selectedJobTypes.length === 0 || selectedJobTypes.includes(job.type);
 
-    const filteredJobs = jobsData.filter((job, index) => {
-      const jobText = allJobTexts[index];
-      return jobText.includes(lowerCasedSearchText);
+      const matchesContractType =
+        selectedContractTypes.length === 0 ||
+        selectedContractTypes.includes(job.contract_type);
+
+      const matchesWorkType =
+        selectedWorkTypes.length === 0 ||
+        selectedWorkTypes.includes(job.work_type);
+
+      return (
+        matchesLocation &&
+        matchesSearchText &&
+        matchesJobType &&
+        matchesContractType &&
+        matchesWorkType
+      );
     });
+  };
 
-    setFilteredJobs(filteredJobs);
+  const handleClearAllFilters = () => {
+    setSelectedJobTypes([]);
+    setSelectedContractTypes([]);
+    setSelectedWorkTypes([]);
+  };
+
+  const handleSearch = useCallback((text: string) => {
+    setSearchText(text);
   }, []);
 
-  // Filter categories
+  useEffect(() => {
+    const filteredJobs = filterJobs(
+      selectedJobTypes,
+      selectedContractTypes,
+      selectedWorkTypes,
+      selectedLocation,
+      searchText
+    );
+    setFilteredJobs(filteredJobs);
+  }, [
+    selectedJobTypes,
+    selectedContractTypes,
+    selectedWorkTypes,
+    selectedLocation,
+    searchText,
+  ]);
+
+  const selectProps = (
+    availableOptions: string[],
+    selectedOptions: string[],
+    placeholder: string
+  ) => ({
+    mode: "multiple",
+    placeholder:
+      selectedOptions.length > 0
+        ? `${selectedOptions.length} selected`
+        : placeholder,
+    value: selectedOptions,
+    onChange: (values: string[]) =>
+      selectedOptions === selectedJobTypes
+        ? setSelectedJobTypes(values)
+        : selectedOptions === selectedContractTypes
+        ? setSelectedContractTypes(values)
+        : setSelectedWorkTypes(values),
+  });
+  const handleFilterChange = useCallback(
+    (selectedFilters: string[]) => {
+      const filteredJobs = jobsData.filter((job) => {
+        if (
+          (selectedJobTypes.length === 0 ||
+            selectedJobTypes.includes(job.type)) &&
+          (selectedContractTypes.length === 0 ||
+            selectedContractTypes.includes(job.contract_type)) &&
+          (selectedWorkTypes.length === 0 ||
+            selectedWorkTypes.includes(job.work_type))
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      setFilteredJobs(filteredJobs);
+    },
+    [selectedJobTypes, selectedContractTypes, selectedWorkTypes]
+  );
+
+  const handleRemoveFilter = (filterToRemove: string, filterType: string) => {
+    if (filterType === "jobType") {
+      const updatedJobTypes = selectedJobTypes.filter(
+        (type) => type !== filterToRemove
+      );
+      setSelectedJobTypes(updatedJobTypes);
+    } else if (filterType === "contractType") {
+      const updatedContractTypes = selectedContractTypes.filter(
+        (type) => type !== filterToRemove
+      );
+      setSelectedContractTypes(updatedContractTypes);
+    } else if (filterType === "workType") {
+      const updatedWorkTypes = selectedWorkTypes.filter(
+        (type) => type !== filterToRemove
+      );
+      setSelectedWorkTypes(updatedWorkTypes);
+    } else if (filterType === "location") {
+      setSelectedLocation("Anywhere");
+    } else if (filterType === "search") {
+      setSearchText("");
+    }
+  };
+
+  const handleSortChange = (order: string) => {
+    setSortOrder(order);
+
+    const sortedJobs = [...filteredJobs].sort(sortJobsByDate);
+    setFilteredJobs(sortedJobs);
+  };
+
+  const sortJobsByDate = (a: Job, b: Job) => {
+    if (sortOrder === "asc") {
+      return (
+        new Date(a.posting_date).getTime() - new Date(b.posting_date).getTime()
+      );
+    } else if (sortOrder === "desc") {
+      return (
+        new Date(b.posting_date).getTime() - new Date(a.posting_date).getTime()
+      );
+    } else {
+      return 0;
+    }
+  };
 
   return (
     <div className={styling.mainContainer}>
       <h2>Job Board</h2>
       <div className={styling.inputContainer}>
         <div className={styling.inputs}>
-          <div>
+          <div className={styling.searchText}>
             {" "}
             <Search
               placeholder="Input search text"
               allowClear
               onSearch={handleSearch}
-              style={{ width: 200 }}
-            />
-          </div>
-          <div>
-            <LocationSelect
-              options={locationOptions}
-              data={jobsData}
-              criteria="location"
-              onFilterChange={handleFilterChange}
             />
           </div>
           <div>
             <Select
+              maxTagCount={1}
               mode="multiple"
-              placeholder="Select Filters"
+              placeholder="Select Location"
+              style={{ width: 200 }}
+              onChange={(selectedLocations) => {
+                let filteredJobs = jobsData;
+                if (selectedLocations.length === 0) {
+                  setFilteredJobs(jobsData);
+                } else {
+                  if (selectedLocations.includes("Anywhere")) {
+                    filteredJobs = jobsData;
+                  } else {
+                    filteredJobs = jobsData.filter((job) =>
+                      selectedLocations.includes(job.location)
+                    );
+                  }
+
+                  filteredJobs = filteredJobs.filter((job) => {
+                    return (
+                      (selectedJobTypes.length === 0 ||
+                        selectedJobTypes.includes(job.type)) &&
+                      (selectedContractTypes.length === 0 ||
+                        selectedContractTypes.includes(job.contract_type)) &&
+                      (selectedWorkTypes.length === 0 ||
+                        selectedWorkTypes.includes(job.work_type))
+                    );
+                  });
+
+                  setFilteredJobs(filteredJobs);
+                }
+              }}
+            >
+              {locationOptions.map((location) => (
+                <Select.Option key={location} value={location}>
+                  {location}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Select
+              {...selectProps(
+                availableWorkTypes,
+                selectedWorkTypes,
+                "Select Work Types"
+              )}
+              maxTagCount={0}
+              maxTagPlaceholder={(selectedItems) =>
+                `+${selectedItems.length} selected`
+              }
+              mode="multiple"
+              placeholder={placeholderText}
               style={{ width: 200 }}
               onChange={(selectedFilters: string[]) => {
                 const jobTypes = selectedFilters.filter((filter) =>
@@ -306,11 +433,13 @@ const Jobs2: React.FC = () => {
             </Select>
           </div>
         </div>
-        <div>
+        <div className={styling.multiFilter}>
+          Result
           {selectedJobTypes.map((jobType) => (
             <Labels
               key={jobType}
               labelName={jobType}
+              customClass={styles.label}
               onCloseIcon={() => handleRemoveFilter(jobType, "jobType")}
             />
           ))}
@@ -318,6 +447,7 @@ const Jobs2: React.FC = () => {
             <Labels
               key={contractType}
               labelName={contractType}
+              customClass={styles.label}
               onCloseIcon={() =>
                 handleRemoveFilter(contractType, "contractType")
               }
@@ -327,13 +457,42 @@ const Jobs2: React.FC = () => {
             <Labels
               key={workType}
               labelName={workType}
+              customClass={styles.label}
               onCloseIcon={() => handleRemoveFilter(workType, "workType")}
             />
           ))}
+          {selectedJobTypes.length > 0 ||
+          selectedContractTypes.length > 0 ||
+          selectedWorkTypes.length > 0 ||
+          selectedLocation !== "Anywhere" ? (
+            <div className={styling.clearAll}>
+              <Button onClick={handleClearAllFilters}>Clear All</Button>
+            </div>
+          ) : null}
+        </div>
+        <div className={styling.sortByDate}>
+          <div>
+            We have found <span>{filteredJobs.length}</span> jobs!
+          </div>
+          <div className={styling.sortBy}>
+            Sort by:{" "}
+            <Select
+              value={sortOrder}
+              style={{ width: 120 }}
+              onChange={handleSortChange}
+              placeholder="Date"
+            >
+              <Option value="asc">Ascending</Option>
+              <Option value="desc">Descending</Option>
+            </Select>
+          </div>
         </div>
       </div>
+
       <div className={styling.cards}>
-        {searchText && filteredJobs.length === 0 ? ( 
+        {searchText && filteredJobs.length === 0 ? (
+          <p className={styling.noResultText}>No Result</p>
+        ) : filteredJobs.length === 0 ? (
           <p className={styling.noResultText}>No Result</p>
         ) : (
           filteredJobs.map((job, index) => (
@@ -348,6 +507,7 @@ const Jobs2: React.FC = () => {
               match={job.match}
               department={job.department}
               location={job.location}
+              contract_type={job.contract_type}
               skills={{
                 technicalSkills: job.skills.technicalSkills,
                 softSkills: job.skills.softSkills,
