@@ -37,31 +37,38 @@ const jobsData = [
     skills: [
       {
         skill_name: "Front-End Development",
-        skill_level: 3,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "1",
       },
       {
         skill_name: "Back-End Development",
-        skill_level: 3,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "2",
       },
       {
         skill_name: "Database Management",
-        skill_level: 1,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "3",
       },
       {
         skill_name: "JavaScript",
-        skill_level: 3,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "4",
       },
       {
         skill_name: "React",
-        skill_level: 3,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "5",
       },
       {
         skill_name: "Node.js",
-        skill_level: 1,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "6",
       },
       {
         skill_name: "SQL",
-        skill_level: 1,
+        skill_level: "🌱 Novice Explorer",
+        skill_id: "7",
       },
     ],
     hiring_process_duration: "3 months",

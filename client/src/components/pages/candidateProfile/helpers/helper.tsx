@@ -192,7 +192,6 @@ const percentage = ({
   totalCategories: number;
 }) => {
   const progress = (completedCategories / totalCategories) * 100;
-  console.log("PROGRESS", progress);
   return Math.round(progress);
 };
 

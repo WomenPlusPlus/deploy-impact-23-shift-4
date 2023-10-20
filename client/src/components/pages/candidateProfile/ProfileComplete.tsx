@@ -10,6 +10,7 @@ interface ProfileCompletedProps {
   candidate: Candidate;
   allCategories: string[];
   className?: string;
+  getProgress?: (arg: number) => void;
   editContactInfo?: () => void;
   editLanguages?: () => void;
   editSkills?: () => void;
@@ -19,12 +20,14 @@ interface ProfileCompletedProps {
   editTypeOfJobs?: () => void;
   editDocuments?: () => void;
   editVisibleInformation?: () => void;
+  hidden?: boolean;
 }
 
 const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   candidate,
   allCategories,
   className,
+  getProgress,
   editContactInfo,
   editLanguages,
   editSkills,
@@ -34,6 +37,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   editTypeOfJobs,
   editDocuments,
   editVisibleInformation,
+  hidden,
 }) => {
   // state
   const [fieldsByCategory, setFieldsByCategory] = useState(
@@ -52,7 +56,9 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
       ).length,
       totalCategories: allCategories.length,
     });
-    console.log("Count progress", countProgress);
+    console.log("PROGRESS", countProgress);
+
+    getProgress && getProgress(countProgress);
     setProgress(countProgress);
   };
 
@@ -112,37 +118,43 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
         break;
     }
   };
-  console.log("FIELD", fieldsByCategory);
 
   return (
-    <CardContainer className={`${className}`}>
-      <div className={styling.profileCompletedEditIcon}>
-        <h3>Your profile is {progress}% complete.</h3>
-        {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
-      </div>
-      <ProgressBar progress={progress} />
-      <div className={styling.profileCompletedFields}>
-        {
-          /* Display fields by category */
+    <>
+      {!hidden && (
+        <CardContainer className={`${className}`}>
+          <div className={styling.profileCompletedEditIcon}>
+            <h3>Your profile is {progress}% complete.</h3>
+            {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
+          </div>
+          <ProgressBar progress={progress} />
+          <div className={styling.profileCompletedFields}>
+            {
+              /* Display fields by category */
 
-          categories?.map((category) => (
-            <div key={category} className={styling.profileCompletedCategory}>
-              {/* <h4>{category}</h4> */}
-              <ProfileCompletedFields
-                key={category}
-                isCompleted={fieldsByCategory[category] > 0 ? true : false}
-                category={category}
-                onAddClick={
-                  fieldsByCategory[category] > 0
-                    ? undefined
-                    : () => handleAddClick(category)
-                }
-              />
-            </div>
-          ))
-        }
-      </div>
-    </CardContainer>
+              categories?.map((category) => (
+                <div
+                  key={category}
+                  className={styling.profileCompletedCategory}
+                >
+                  {/* <h4>{category}</h4> */}
+                  <ProfileCompletedFields
+                    key={category}
+                    isCompleted={fieldsByCategory[category] > 0 ? true : false}
+                    category={category}
+                    onAddClick={
+                      fieldsByCategory[category] > 0
+                        ? undefined
+                        : () => handleAddClick(category)
+                    }
+                  />
+                </div>
+              ))
+            }
+          </div>
+        </CardContainer>
+      )}
+    </>
   );
 };
 
