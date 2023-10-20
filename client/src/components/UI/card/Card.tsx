@@ -18,12 +18,6 @@ interface CardProps {
   onClickRedirect?: () => void;
 }
 
-interface Skill {
-  skill_id: string;
-  skill_name: string;
-  score: number;
-}
-
 const Card: React.FC<CardProps> = ({
   logo,
   header,

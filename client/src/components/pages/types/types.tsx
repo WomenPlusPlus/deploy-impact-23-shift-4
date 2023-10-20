@@ -91,3 +91,10 @@ export interface Job {
   employment_type?: string;
   date_created?: string;
 }
+
+export interface Skill {
+  skill_name: string;
+  skill_id: string;
+  skill_level?: string;
+  score?: number;
+}
