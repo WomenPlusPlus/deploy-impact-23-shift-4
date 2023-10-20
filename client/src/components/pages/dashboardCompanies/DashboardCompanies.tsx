@@ -1,18 +1,27 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
-import { IconExternalLink } from "@tabler/icons-react";
+
+import Avatar from "../../UI/avatar/Avatar";
+import Spinner from "../../UI/spinner/Spinner";
 import { Button } from "../../UI/button/Button";
+import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { HorizontalCard } from "../../UI/card/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
-import Avatar from "../../UI/avatar/Avatar";
 
-import styling from "./DashboardCompanies.module.css";
-import { useEffect, useState } from "react";
-import { getCompanyById } from "../../../api/companies";
 import { Company } from "../../pages/types/types";
 import { getAllJobs } from "../../../api/jobs";
+import { getCompanyById } from "../../../api/companies";
 import { getAllCandidates } from "../../../api/candidates";
 import getMatchingCandidatesInfo from "./helpers/index";
+
+import {
+  IconBrandLinkedin,
+  IconExternalLink,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
+
+import styling from "./DashboardCompanies.module.css";
 
 const DashboardCompany = () => {
   const progress = 80;
@@ -22,6 +31,7 @@ const DashboardCompany = () => {
   const [company, setCompany] = useState({} as Company);
   const [jobs, setJobs] = useState([]);
   const [matchingCandidates, setMatchingCandidates] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchInfo = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -41,25 +51,34 @@ const DashboardCompany = () => {
     setCompany(company);
     setJobs(jobs);
     setMatchingCandidates(matchingCandidates);
+    setIsLoading(true);
   };
 
   useEffect(() => {
     fetchInfo();
   }, []);
 
-  return (
-    <div className={styling.main}>
+  const avatar = company.logo ? (
+    <img className={styling.logo} src={company.logo} alt="Avatar" />
+  ) : (
+    <Avatar firstName={company.company_name} size={80} />
+  );
+
+  const content = (
+    <>
       {/* Profile component */}
       <CardContainer className={styling.profile}>
-        <Avatar firstName={company.company_name} size={80} />
+        {avatar}
 
         <div className={styling.header}>
           <h2 className={styling.title}>
             Welcome back, {company.company_name}
           </h2>
-          <p className={styling.subtitle}>
-            {company.address} | {company.company_size}
-          </p>
+          <div className={styling.subtitle}>
+            <IconMapPin />
+            {company.address} | {company.company_size} employees |
+            <IconBrandLinkedin /> <IconWorldWww />
+          </div>
         </div>
 
         <IconExternalLink
@@ -88,16 +107,18 @@ const DashboardCompany = () => {
           <h1>Our listings</h1>
           {jobs.map((job: Record<string, any>) => {
             return (
-              <HorizontalCard
-                avatar={false}
-                button="Go to description"
-                title={job.title}
-                subtitle={
-                  job.matching_candidates.length
-                    ? `${job.matching_candidates.length} great match(es)!`
-                    : "No matches yet"
-                }
-              />
+              <div onClick={() => navigate(`/job/${job.id}`)}>
+                <HorizontalCard
+                  avatar={false}
+                  button="Go to description"
+                  title={job.title}
+                  subtitle={
+                    job.matching_candidates.length
+                      ? `${job.matching_candidates.length} great match(es)!`
+                      : "No matches yet"
+                  }
+                />
+              </div>
             );
           })}
         </CardContainer>
@@ -121,7 +142,11 @@ const DashboardCompany = () => {
           })}
         </CardContainer>
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
   );
 };
 

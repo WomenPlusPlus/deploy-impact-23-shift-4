@@ -5,6 +5,13 @@
   padding: 3rem;
 }
 
+.logo {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .profile {
   display: flex;
   align-items: center;
@@ -20,10 +27,12 @@
 }
 
 .title {
-  margin: 0;
+  margin: 0 0 1rem 0;
 }
 
 .subtitle {
+  display: flex;
+  align-items: center;
   font-size: 2rem;
   font-weight: 600;
   color: var(--gray-medium);

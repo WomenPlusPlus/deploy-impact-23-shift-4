@@ -10,28 +10,8 @@
   margin: 1rem 0;
 }
 
-.inputNumber {
-  margin: 1rem 0;
-  width: 100%;
-}
-
 .description {
-  min-height: 30rem !important;
-}
-
-.dropdown {
-  margin: 1rem 0;
-  width: 100%;
-}
-
-.twoColumn {
-  display: flex;
-  justify-content: space-between;
-  gap: 4rem;
-}
-
-.sider {
-  width: 100%;
+  min-height: 20rem !important;
 }
 
 .autocomplete {
@@ -39,10 +19,26 @@
   gap: 1rem;
 }
 
+.twoColumn {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
 .labelContainer {
   display: flex;
   flex-wrap: wrap;
   max-height: 20rem;
+}
+
+.section {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.sectionName {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 .label {

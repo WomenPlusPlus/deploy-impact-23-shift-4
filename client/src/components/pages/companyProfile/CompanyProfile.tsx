@@ -1,48 +1,77 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Tabs from "../../UI/tabs/Tabs";
+import Spinner from "../../UI/spinner/Spinner";
+import { Button } from "../../UI/button/Button";
+import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { CardContainer } from "../../UI/container/CardContainer";
+import AddEditJob from "../../shared/addEditJob/AddEditJob";
+import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
+import { Company } from "../../pages/types/types";
+import { addJob, getAllJobs } from "../../../api/jobs";
+import { getCompanyById, updateCompanyById } from "../../../api/companies";
+
 import {
   IconBrandLinkedin,
   IconEdit,
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
-import { CardContainer } from "../../UI/container/CardContainer";
+
 import styling from "./CompanyProfile.module.css";
-import Tabs from "../../UI/tabs/Tabs";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
-import { Button } from "../../UI/button/Button";
-import { useEffect, useState } from "react";
-import AddEditJob from "../../shared/addEditJob/AddEditJob";
-import { getCompanyById } from "../../../api/companies";
-import { Company } from "../../pages/types/types";
-import { addJob, getAllJobs } from "../../../api/jobs";
 
 const CompanyProfile = () => {
+  const navigate = useNavigate();
+
   // State
   const [open, setOpen] = useState(false);
   const [jobs, setJobs] = useState([]);
   const [company, setCompany] = useState({} as Company);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmEditCompanyLoading, setConfirmEditCompanyLoading] =
+    useState(false);
+  const [openEditJobModal, setOpenEditJobModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const showModal = () => {
-    setOpen(true);
+  /**
+   * Handles the toggle of the Add Job modal
+   */
+  const toggleAddJobModal = () => {
+    setOpen(!open);
   };
 
   /**
-   * Handles the OK button
+   * Handles the toggle of the Edit Company modal
    */
-  const handlePayload = async (payload: object) => {
+  const toggleEditCompanyModal = () => {
+    setOpenEditJobModal(!openEditJobModal);
+  };
+
+  /**
+   * Handles the save and update of the company profile
+   * @param payload the company data to update
+   */
+  const handleModalSave = async (payload: object) => {
+    console.log("Received payload from EditCompanyProfile:", payload);
+    await updateCompanyById(company.user_id, payload);
+
+    setConfirmEditCompanyLoading(true);
+    setOpenEditJobModal(false);
+    fetchCompanyInfo();
+  };
+
+  /**
+   * Handles the creation of a new job
+   * @param payload the job data to add
+   */
+  const handleAddJobPayload = async (payload: object) => {
     console.log("Received payload from AddEditJob:", payload);
     await addJob(payload);
 
     setConfirmLoading(true);
     setOpen(false);
-  };
-
-  /**
-   * Handle cancel button
-   */
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setOpen(false);
+    fetchCompanyInfo();
   };
 
   /**
@@ -63,6 +92,7 @@ const CompanyProfile = () => {
 
     setJobs(jobs);
     setCompany(company);
+    setIsLoading(true);
   };
 
   /**
@@ -78,19 +108,22 @@ const CompanyProfile = () => {
       <div className={styling.mainSection}>
         <div className={styling.sectionHeader}>
           <h2 className={styling.titles}>Published jobs</h2>
-          <Button onClick={showModal} className={styling.button}>
+          <Button onClick={toggleAddJobModal} className={styling.button}>
             Create new job
           </Button>
         </div>
-        {jobs.map((job: Record<string, any>) => {
+        {jobs.map((job: Record<string, any>, index: number) => {
           return (
-            <HorizontalCard
-              avatar={true}
-              button="Go to description"
-              firstName={company.company_name}
-              title={job.title}
-              subtitle={job.description}
-            />
+            <div onClick={() => navigate(`/job/${job.id}`)}>
+              <HorizontalCard
+                key={index}
+                avatar={true}
+                button="Go to description"
+                firstName={company.company_name}
+                title={job.title}
+                subtitle={job.description}
+              />
+            </div>
           );
         })}
       </div>
@@ -137,10 +170,9 @@ const CompanyProfile = () => {
       children: culture,
     },
   ];
-  console.log("company", company);
 
-  return (
-    <div className={styling.main}>
+  const content = (
+    <>
       <div className={styling.container}>
         <div className={styling.header}>
           <img className={styling.logo} src={company.logo} alt="Avatar" />
@@ -156,25 +188,41 @@ const CompanyProfile = () => {
           </div>
 
           <div className={styling.icon}>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={toggleEditCompanyModal}
+            />
           </div>
+          <EditCompanyProfile
+            open={openEditJobModal}
+            onOk={handleModalSave}
+            onCancel={toggleEditCompanyModal}
+            confirmLoading={confirmEditCompanyLoading}
+            companyId={company.user_id}
+            associations={company.associations}
+            companyInfo={company}
+          />
         </div>
       </div>
 
       <div className={styling.container}>
-        <Tabs defaultActiveKey={"1"} centered={false} items={tabs} />
+        <Tabs centered={false} items={tabs} />
       </div>
 
       <AddEditJob
-        modalTitle="Create new job"
         open={open}
-        onOk={handlePayload}
-        onCancel={handleCancel}
+        onOk={handleAddJobPayload}
+        onCancel={toggleAddJobModal}
         confirmLoading={confirmLoading}
         companyId={company.user_id}
         associations={company.associations}
       />
-    </div>
+    </>
+  );
+
+  return (
+    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
   );
 };
 

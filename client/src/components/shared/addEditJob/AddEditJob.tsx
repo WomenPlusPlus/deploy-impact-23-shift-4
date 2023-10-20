@@ -21,7 +21,6 @@ interface ModalProps {
   onOk: (payload: any) => void;
   onCancel: () => void;
   confirmLoading: boolean;
-  modalTitle: string;
   companyId: string;
   associations: string[];
 }
@@ -31,7 +30,6 @@ const AddEditJob: React.FC<ModalProps> = ({
   onOk,
   onCancel,
   confirmLoading,
-  modalTitle,
   companyId,
   associations,
 }) => {
@@ -116,7 +114,7 @@ const AddEditJob: React.FC<ModalProps> = ({
 
     return (
       <div className={styling.labelContainer}>
-        {visibleValues.map((value) => (
+        {visibleValues?.map((value) => (
           <Labels
             customClass={styling.label}
             labelName={value}
@@ -141,7 +139,7 @@ const AddEditJob: React.FC<ModalProps> = ({
 
     return (
       <div className={styling.labelContainer}>
-        {visibleSkills.map((skill) => (
+        {visibleSkills?.map((skill) => (
           <Labels
             customClass={styling.label}
             labelName={skill.skill_name}
@@ -184,7 +182,7 @@ const AddEditJob: React.FC<ModalProps> = ({
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <div className={styling.middle}>
+      <div className={styling.twoColumn}>
         <div className={styling.sider}>
           <Divider>Values</Divider>
           <div className={styling.autocomplete}>
@@ -243,7 +241,7 @@ const AddEditJob: React.FC<ModalProps> = ({
         </div>
       </div>
 
-      <div className={styling.bottomContainer}>
+      <div className={styling.twoColumn}>
         <div className={styling.sider}>
           <Divider>Job details</Divider>
           <Select

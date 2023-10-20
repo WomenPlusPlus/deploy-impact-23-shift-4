@@ -132,12 +132,7 @@ const CandidatePublicProfile = () => {
 
         {/* Tabs */}
         <div className={styling.margin}>
-          <Tabs
-            defaultActiveKey={"1"}
-            items={tabs}
-            centered={false}
-            size="large"
-          />
+          <Tabs items={tabs} centered={false} size="large" />
         </div>
       </div>
     </>

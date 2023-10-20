@@ -92,6 +92,14 @@ export interface Job {
   date_created?: string;
 }
 
+export interface Association {
+  association_name: string;
+  logo: string;
+  address: string;
+  description: string;
+  iniciatives: Object[];
+  invites: Object[];
+}
 export interface Skill {
   skill_name: string;
   skill_id: string;

@@ -33,7 +33,9 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
       {avatar && <Avatar firstName={firstName} lastName={lastName} size={70} />}
 
       <div className={styling.text}>
-        <h2 className={styling.title}>{title ? title : positionTitle}</h2>
+        <h2 className={styling.title} style={{ cursor: "pointer" }}>
+          {title ? title : positionTitle}
+        </h2>
         <p className={styling.subtitle}>
           {subtitle ? subtitle : matchingText[0]}
         </p>
