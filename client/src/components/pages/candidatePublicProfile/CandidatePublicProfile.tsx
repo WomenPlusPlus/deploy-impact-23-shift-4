@@ -1,33 +1,69 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styling from "./CandidatePublicProfile.module.css";
 import { useEffect, useState } from "react";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate } from "../types/types";
+import { Candidate, Job } from "../types/types";
 import Avatar from "../../UI/avatar/Avatar";
-import { IconWorldWww } from "@tabler/icons-react";
+import {
+  IconBrandLinkedin,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
 import Tabs from "../../UI/tabs/Tabs";
 import { CandidateMatchesTab } from "./CandidateMatchesTab";
 import { CandidateResumeTab } from "./CandidateResumeTab";
+import { getAllJobs } from "../../../api/jobs";
+import { getCompanyById } from "../../../api/companies";
 
 const CandidatePublicProfile = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [candidate, setCandidate] = useState({} as Candidate);
+  const [matchingJobs, setMatchingJobs] = useState([] as Job[]);
 
-  const fetchCandidate = async () => {
+  const fetchInfo = async () => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    const userId = auth.user.id;
+
+    // Fetch all info
     const candidateFetched = await getCandidateById(id!);
-    console.log("candidate", candidateFetched);
+    const allJobs = await getAllJobs();
+    const companyFetched = await getCompanyById(userId);
+
+    const filteredJobs: Job[] = allJobs?.map((job: Job) => {
+      if (job["company_id"] === companyFetched?.user_id) {
+        return job;
+      }
+    });
+    const matchedJobs = filterJobsByMatchingCandidates(id, filteredJobs);
+
     setCandidate(candidateFetched);
+    setMatchingJobs(matchedJobs);
   };
 
   useEffect(() => {
-    fetchCandidate();
+    fetchInfo();
   }, []);
 
-  const onclickLink = (link: string) => {
-    navigate(link);
-  };
+  function filterJobsByMatchingCandidates(
+    candidateId: string | undefined,
+    jobs: Job[]
+  ): Job[] {
+    const matchingJobs: Job[] = [];
+
+    jobs?.forEach((job) => {
+      const matchingCandidates = job?.matching_candidates;
+      const isMatched = matchingCandidates?.some((matchingCandidate) => {
+        return matchingCandidate.id === candidateId;
+      });
+
+      if (isMatched) {
+        matchingJobs.push(job);
+      }
+    });
+
+    return matchingJobs;
+  }
 
   // Tabs
   const tabs = [
@@ -39,7 +75,7 @@ const CandidatePublicProfile = () => {
     {
       label: "Matches",
       key: "2",
-      children: <CandidateMatchesTab />,
+      children: <CandidateMatchesTab matchingJobs={matchingJobs} />,
     },
   ];
 
@@ -64,13 +100,29 @@ const CandidatePublicProfile = () => {
               )}
             </div>
             <div className={styling.row}>
-              {candidate?.links
-                ? candidate.links.map((link) => (
-                    <div
-                      className={`${styling.link}`}
-                      onClick={() => onclickLink(link.link)}
-                    >
-                      <IconWorldWww size={20} />
+              <IconMapPin color="black" />
+              {candidate.city && candidate?.country ? (
+                <p className={styling.location}>
+                  {candidate?.city}, {candidate?.country}
+                </p>
+              ) : (
+                <p className={styling.location}>Not visible</p>
+              )}
+              <p> | </p>
+              {candidate.links && candidate.links.length > 0
+                ? candidate.links.map((link, index) => (
+                    <div key={index} className={styling.link}>
+                      {link.name === "LinkedIn" ? (
+                        <a href={link.url} target="_blank" rel="noreferrer">
+                          <IconBrandLinkedin color="black" />
+                        </a>
+                      ) : link.name === "Personal Website" ? (
+                        <a href={link.url} target="_blank" rel="noreferrer">
+                          <IconWorldWww color="black" />
+                        </a>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   ))
                 : null}

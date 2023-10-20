@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Candidate } from "../../types/types";
+import { Candidate, Experience } from "../../types/types";
 
 // const sectionsVisibleInfo = [
 //   { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
@@ -241,12 +241,6 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
   }
 
   return sectionsVisibleInfo;
-}
-
-interface Experience {
-  role: string;
-  industries: string;
-  years_of_experience?: number;
 }
 
 function transformExperience(experience: Experience[]) {

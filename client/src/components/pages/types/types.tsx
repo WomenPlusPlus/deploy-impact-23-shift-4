@@ -50,13 +50,44 @@ export interface EditInputProps<Candidate> {
 }
 
 export interface Company {
+  id: string;
   user_id: string;
-  company_name: string;
-  address: string;
-  description: string;
+  password: string;
+  email: string;
   associations: string[];
-  values: string[];
-  logo: string;
-  company_size: string;
+  company_name?: string;
+  address?: string;
+  logo?: string;
+  linkedin_url?: string;
+  values?: string[];
+  job_types?: string[];
+  contact_details?: Record<string, any>; // JSON object
+  kununu_url?: string;
+  open_positions?: string[];
+  company_size?: string;
 }
 
+export interface Experience {
+  role: string;
+  industries: string;
+  years_of_experience?: number;
+}
+
+export interface Job {
+  id: string;
+  associations: string[];
+  company_id: string;
+  title?: string;
+  description?: string;
+  values?: string[];
+  skills?: Record<string, any>; // JSON object
+  hiring_process_duration?: string;
+  posting_date?: string; // Use a string or Date type as per your requirements
+  matching_candidates?: Record<string, any>[]; // JSON object
+  salary?: number;
+  location_city?: string;
+  location_country?: string;
+  work_location?: string;
+  employment_type?: string;
+  date_created?: string;
+}

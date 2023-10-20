@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const jobsData = [
   {
     id: "d291901d2",
-    name: "Front-end Developer",
+    title: "Front-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
     description:
@@ -22,7 +22,7 @@ const jobsData = [
   },
   {
     id: "d291901d3",
-    name: "Cloud Engineer",
+    title: "Cloud Engineer",
     company_name: "ABC Tech",
     company_location: "New York",
     description:
@@ -38,7 +38,7 @@ const jobsData = [
   },
   {
     id: "d291901d4",
-    name: "Back-end Developer",
+    title: "Back-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
     description:
@@ -54,7 +54,7 @@ const jobsData = [
   },
   {
     id: "d291901d5",
-    name: "Front-end Developer",
+    title: "Front-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
     description:
@@ -81,7 +81,7 @@ const Jobs: React.FC = () => {
         {jobsData.map((job, index) => (
           <JobCard
             key={index}
-            name={job.name}
+            title={job.title}
             company_name={job.company_name}
             company_location={job.company_location}
             description={job.description}
