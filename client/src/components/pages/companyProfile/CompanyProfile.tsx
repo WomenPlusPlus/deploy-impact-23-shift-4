@@ -1,4 +1,9 @@
-import { IconEdit } from "@tabler/icons-react";
+import {
+  IconBrandLinkedin,
+  IconEdit,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
 import { CardContainer } from "../../UI/container/CardContainer";
 import styling from "./CompanyProfile.module.css";
 import Tabs from "../../UI/tabs/Tabs";
@@ -11,15 +16,6 @@ import { Company } from "../../pages/types/types";
 import { addJob, getAllJobs } from "../../../api/jobs";
 
 const CompanyProfile = () => {
-  // const company = {
-  //   logo: "https://via.placeholder.com/150",
-  //   name: "Dream Company",
-  //   location: "New York, NY",
-  //   size: "1000+ employees",
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-  // };
-
   // State
   const [open, setOpen] = useState(false);
   const [jobs, setJobs] = useState([]);
@@ -65,7 +61,6 @@ const CompanyProfile = () => {
       }
     });
 
-    console.log("jobs", allJobs);
     setJobs(jobs);
     setCompany(company);
   };
@@ -79,43 +74,49 @@ const CompanyProfile = () => {
 
   // Content for "Company jobs" tab
   const jobsTemp = (
-    <div className={styling.mainSection}>
-      <div className={styling.sectionHeader}>
-        <h2 className={styling.titles}>Published jobs</h2>
-        <Button onClick={showModal} className={styling.button}>
-          Create new job
-        </Button>
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <div className={styling.sectionHeader}>
+          <h2 className={styling.titles}>Published jobs</h2>
+          <Button onClick={showModal} className={styling.button}>
+            Create new job
+          </Button>
+        </div>
+        {jobs.map((job: Record<string, any>) => {
+          return (
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName={company.company_name}
+              title={job.title}
+              subtitle={job.description}
+            />
+          );
+        })}
       </div>
-      {jobs.map((job: Record<string, any>) => {
-        return (
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName={company.company_name}
-            title={job.title}
-            subtitle={job.description}
-          />
-        );
-      })}
-    </div>
+    </CardContainer>
   );
 
   // Content for "About the company" tab
   const about = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company jobs</h2>
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>About us</h2>
 
-      <p>This is about the company</p>
-    </div>
+        <p>This is about the company</p>
+      </div>
+    </CardContainer>
   );
 
   // Content for "Company culture" tab
   const culture = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company culture</h2>
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>Company culture</h2>
 
-      <p>This is about the culture</p>
-    </div>
+        <p>This is about the culture</p>
+      </div>
+    </CardContainer>
   );
 
   // Tabs
@@ -136,30 +137,33 @@ const CompanyProfile = () => {
       children: culture,
     },
   ];
+  console.log("company", company);
 
   return (
     <div className={styling.main}>
-      <CardContainer className={styling.container}>
+      <div className={styling.container}>
         <div className={styling.header}>
           <img className={styling.logo} src={company.logo} alt="Avatar" />
 
           <div>
-            <h1>{company.company_name}</h1>
+            <h1 className={styling.title}>{company.company_name}</h1>
 
-            <p>
-              {company.address} | {company.company_size}
-            </p>
+            <div className={styling.subtitle}>
+              <IconMapPin />
+              {company.address} | {company.company_size} employees |
+              <IconBrandLinkedin /> <IconWorldWww />
+            </div>
           </div>
 
           <div className={styling.icon}>
             <IconEdit color="black" style={{ cursor: "pointer" }} />
           </div>
         </div>
-      </CardContainer>
+      </div>
 
-      <CardContainer className={styling.container}>
-        <Tabs defaultActiveKey={"1"} centered items={tabs} />
-      </CardContainer>
+      <div className={styling.container}>
+        <Tabs defaultActiveKey={"1"} centered={false} items={tabs} />
+      </div>
 
       <AddEditJob
         modalTitle="Create new job"

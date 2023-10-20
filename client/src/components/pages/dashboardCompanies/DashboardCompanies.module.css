@@ -19,6 +19,16 @@
   color: var(--gray-dark);
 }
 
+.title {
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gray-medium);
+}
+
 .icon {
   margin-bottom: auto;
 }
