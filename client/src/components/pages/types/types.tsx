@@ -26,7 +26,7 @@ export interface Candidate {
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };
-  values?: { [key: string]: any }[];
+  values?: string[];
   skills?: { [key: string]: any }[];
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
@@ -48,16 +48,6 @@ export interface EditInputProps<Candidate> {
   candidate: Candidate;
   fieldKeysToEdit: string[];
 }
-
-// export interface Company {
-//   user_id: string;
-//   company_name: string;
-//   address: string;
-//   description: string;
-//   associations: string[];
-//   values: string[];
-//   logo: string;
-// }
 
 export interface Company {
   id: string;
