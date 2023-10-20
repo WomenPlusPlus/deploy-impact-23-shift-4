@@ -1,0 +1,59 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 3rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rowEnd {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jobTitle {
+  font-size: 5rem;
+  margin-bottom: 0;
+}
+
+.cardCont {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--secton-width);
+  height: var(--secton-height) / 2;
+  padding: 0 2rem 2rem;
+  box-sizing: border-box;
+  margin-top: 1.5rem;
+}
+
+.cardCont h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0;
+}
+
+.cardCont h2 {
+  font-size: 1.7rem;
+  margin-bottom: 0;
+}
+
+.applyButton {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.companyName {
+  margin-bottom: 0;
+}
+
+.allWidth {
+  width: 100%;
+}

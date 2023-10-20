@@ -5,6 +5,7 @@ import styling from "./RegisterCandidate.module.css"; // You can create a separa
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../../UI/oauth/GoogleButton";
+import TermsAndConditions from "./TermsAndConditions";
 
 interface RegisterCandidateProps {
   token: string;
@@ -41,7 +42,9 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
     associations: associations,
   });
 
-  const handleInputChange = (e: any) => {
+  const [agree, setAgree] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -153,10 +156,15 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
           </Form.Item>
 
           <Form.Item>
+            <TermsAndConditions onAgreeChange={(value) => setAgree(value)} />
+          </Form.Item>
+
+          <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               className={styling.registerFormButton}
+              disabled={!agree}
             >
               Register
             </Button>

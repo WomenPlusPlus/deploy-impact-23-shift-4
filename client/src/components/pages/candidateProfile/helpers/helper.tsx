@@ -1,26 +1,35 @@
-import axios from "axios";
-import { Candidate } from "../../types/types";
+import { Candidate, Experience } from "../../types/types";
+import React from "react";
 
-// const sectionsVisibleInfo = [
-//   { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
-//   { title: "Notice", subtitle: "Immediately available" },
-//   {
-//     title: "Visa Status",
-//     subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
-//   },
-// ];
-// const sectionsExperience = [
-//   {
-//     title: "Role",
-//     text: "5 Years in academia",
-//     subtext: "+ 1 year in Product, 3 in Engineering",
-//   },
-//   {
-//     title: "Industries",
-//     text: "Entertainment",
-//     subtext: "+ Software/Saas, Biotechnology, Medical devices",
-//   },
-// ];
+interface TimeAgoProps {
+  timestamp: string;
+}
+
+const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
+  const getTimeAgo = (timestampStr: string): string => {
+    const timestampDate = new Date(timestampStr);
+    const now = new Date();
+    const secondsAgo = Math.floor(
+      (now.getTime() - timestampDate.getTime()) / 1000
+    );
+
+    if (secondsAgo < 60) {
+      return `${secondsAgo} second${secondsAgo !== 1 ? "s" : ""} ago`;
+    } else if (secondsAgo < 3600) {
+      const minutesAgo = Math.floor(secondsAgo / 60);
+      return `${minutesAgo} minute${minutesAgo !== 1 ? "s" : ""} ago`;
+    } else if (secondsAgo < 86400) {
+      const hoursAgo = Math.floor(secondsAgo / 3600);
+      return `${hoursAgo} hour${hoursAgo !== 1 ? "s" : ""} ago`;
+    } else {
+      const daysAgo = Math.floor(secondsAgo / 86400);
+      return `${daysAgo} day${daysAgo !== 1 ? "s" : ""} ago`;
+    }
+  };
+
+  return <span>{getTimeAgo(timestamp)}</span>;
+};
+
 
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -40,9 +49,13 @@ const getFakeData = () => {
   ];
   const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
   const allValue = [
-    { value_name: "Teamwork", value_id: "Teamwork", score: 20 },
-    { value_name: "Communication", value_id: "Communication", score: 20 },
-    { value_name: "Problem solving", value_id: "Problem solving", score: 20 },
+    "Teamwork", // Add more values as neede
+    "Communication",
+    "Problem solving",
+    "Creativity",
+    "Work ethic",
+    "Interpersonal skills",
+    "Adaptability",
   ];
   const allSkill = [
     { skill_name: "React", skill_id: "React", score: 20 },
@@ -75,7 +88,7 @@ const getFakeData = () => {
       { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
       { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
     ],
-    values: [{ value_name: "Teamwork", value_id: "Teamwork", score: 20 }],
+    values: ["Teamwork", "Communication", "Problem solving"],
     languages: [
       { name: "English", levelName: "Beginner", score: 20 },
       { name: "Italian", levelName: "Native", score: 100 },
@@ -179,6 +192,7 @@ const percentage = ({
   totalCategories: number;
 }) => {
   const progress = (completedCategories / totalCategories) * 100;
+  console.log("PROGRESS", progress);
   return Math.round(progress);
 };
 
@@ -238,12 +252,6 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
   return sectionsVisibleInfo;
 }
 
-interface Experience {
-  role: string;
-  industries: string;
-  years_of_experience?: number;
-}
-
 function transformExperience(experience: Experience[]) {
   const sectionsExperience = [];
   let subtext = "";
@@ -267,7 +275,9 @@ function transformExperience(experience: Experience[]) {
     if (firstExperience.industries) {
       subtext = experience
         .map((exp, index) =>
-          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.industries}`
+          index === 0
+            ? ""
+            : `+ ${exp.years_of_experience} years in ${exp.industries}`
         )
         .join(", ");
 
@@ -282,6 +292,22 @@ function transformExperience(experience: Experience[]) {
   return sectionsExperience;
 }
 
+export const workLocationTypes: string[] = [
+  "Hybrid",
+  "Remote",
+  "On-site",
+  "In-office",
+];
+
+export const employmentTypes: string[] = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Freelance",
+];
+
 export {
   getFakeData,
   countNullFieldsByCategory,
@@ -291,4 +317,5 @@ export {
   transformCandidateDocs,
   transformCandidateVisibleInfo,
   transformExperience,
+  TimeAgo,
 };

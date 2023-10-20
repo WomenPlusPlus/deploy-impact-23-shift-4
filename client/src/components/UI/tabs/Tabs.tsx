@@ -8,11 +8,13 @@ type TabItem = {
 };
 
 type TabsProps = {
+  className?: string;
   centered: boolean;
   items: TabItem[];
+  size?: "small" | "middle" | "large" | undefined;
 };
 
-const Tabs: React.FC<TabsProps> = ({ centered, items }) => {
+const Tabs: React.FC<TabsProps> = ({ className, centered, items }) => {
   const storedActiveKey = localStorage.getItem("activeTabKey");
   const [activeKey, setActiveKey] = useState<string | undefined>(
     storedActiveKey && items.some((item) => item.key === storedActiveKey)
@@ -27,6 +29,7 @@ const Tabs: React.FC<TabsProps> = ({ centered, items }) => {
 
   return (
     <AntTabs
+      className={className}
       defaultActiveKey={activeKey}
       activeKey={activeKey}
       centered={centered}

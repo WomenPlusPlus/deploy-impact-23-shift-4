@@ -3,6 +3,7 @@ import { Modal, Input, Select } from "antd";
 import { Candidate } from "../../pages/types/types";
 import { IconEdit } from "@tabler/icons-react";
 import { Button } from "../button/Button";
+import styling from "./VisibleSection.module.css";
 
 const { Option } = Select;
 
@@ -36,6 +37,18 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   useEffect(() => {
     if (candidate?.visible_information) {
       setEditedSections(candidate?.visible_information as string[]);
+    }
+    if (candidate?.salary_expectation) {
+      setMinSalary(candidate?.salary_expectation[0] || "");
+    }
+    if (candidate?.salary_expectation) {
+      setMaxSalary(candidate?.salary_expectation[1] || "");
+    }
+    if (candidate?.notice_period) {
+      setNotice(candidate?.notice_period);
+    }
+    if (candidate?.visa_status) {
+      setVisaFields(candidate?.visa_status as string[]);
     }
   }, [candidate]);
 
@@ -158,6 +171,67 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
     });
   };
 
+  const renderExistingFieldsForField = (field: string) => {
+    switch (field) {
+      case "Salary range":
+        return (
+          <div >
+            <h3>{field}</h3>
+            <div className={styling.row}>
+              <p>Min: </p>
+              <Input
+                value={minSalary}
+                onChange={(e) => setMinSalary(e.target.value)}
+                placeholder="Min Salary"
+              />
+              <p>Max: </p>
+              <Input
+                value={maxSalary}
+                onChange={(e) => setMaxSalary(e.target.value)}
+                placeholder="Max Salary"
+              />
+            </div>
+          </div>
+        );
+      case "Notice":
+        return (
+          <div>
+            <h3>{field}</h3>
+            <Select
+              value={notice}
+              onChange={(value) => setNotice(value)}
+              style={{ minWidth: "100%" }}
+            >
+              <Option value="1 week">1 week</Option>
+              <Option value="2 weeks">2 weeks</Option>
+              <Option value="1 month">1 month</Option>
+            </Select>
+          </div>
+        );
+      case "Visa Status":
+        return visaFields.map((visa, index) => (
+          <div key={index}>
+            <h3>{field}</h3>
+            <Select
+              value={visa}
+              onChange={(value) => {
+                const updatedVisaFields = [...visaFields];
+                updatedVisaFields[index] = value;
+                setVisaFields(updatedVisaFields);
+              }}
+              style={{ minWidth: "100%" }}
+            >
+              <Option value="EU">EU valid visa</Option>
+              <Option value="CH">CH valid visa</Option>
+              <Option value="US">US valid visa</Option>
+            </Select>
+          </div>
+        ));
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <IconEdit
@@ -170,27 +244,36 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
         title="Edit Information"
         onCancel={onCancel}
         footer={[
-          <Button key="cancel" onClick={onCancel}>
+          <Button key="cancel" onClick={onCancel} className={styling.cancel}>
             Cancel
           </Button>,
-          <Button key="save" onClick={handleSave}>
+          <Button key="save" onClick={handleSave} className={styling.button}>
             Save
           </Button>,
         ]}
       >
-        <Select
-          value={selectedField}
-          onChange={(value) => setSelectedField(value)}
-          style={{ width: "100%" }}
-        >
-          {fieldsToShow.map((field) => (
-            <Option key={field} value={field}>
-              {field}
-            </Option>
-          ))}
-        </Select>
-        <Button onClick={handleAddField}>Add Field</Button>
-        {renderAdditionalFields()}
+        {/* Display existing fields based on selected additional fields */}
+        {additionalFields.map((field) => (
+          <div key={field}>
+            {renderExistingFieldsForField(field)}
+            <hr />
+          </div>
+        ))}
+        {/* Add fields */}
+        <div className={styling.row}>
+          <Select
+            value={selectedField}
+            onChange={(value) => setSelectedField(value)}
+            style={{ minWidth: "35rem", marginBottom: "1rem" }}
+          >
+            {fieldsToShow.map((field) => (
+              <Option key={field} value={field}>
+                {field}
+              </Option>
+            ))}
+          </Select>
+          <Button onClick={handleAddField}>Add Field</Button>
+        </div>
       </Modal>
     </>
   );

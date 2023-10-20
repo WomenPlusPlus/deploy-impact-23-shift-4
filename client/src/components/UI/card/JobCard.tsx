@@ -3,8 +3,12 @@ import { IconExternalLink } from "@tabler/icons-react";
 import styling from "./JobCard.module.css";
 import { Labels } from "../labels/Label";
 
+interface Skill {
+  skill_name: string;
+  skill_level: number;
+}
 interface JobCardProps {
-  name?: string;
+  title?: string;
   company_name?: string;
   company_location?: string;
   description?: string;
@@ -14,11 +18,12 @@ interface JobCardProps {
   match?: string;
   location?: string;
   department?: string;
-  skills?: string[];
+  skills?: Skill[];
+  onClick?: () => void;
 }
 
 const JobCard: React.FC<JobCardProps> = ({
-  name,
+  title,
   company_name,
   company_location,
   description,
@@ -29,6 +34,7 @@ const JobCard: React.FC<JobCardProps> = ({
   location,
   department,
   skills,
+  onClick,
 }) => {
   const truncatedDescription: string | undefined = description
     ? typeof description === "string" && description.length > 150
@@ -52,7 +58,7 @@ const JobCard: React.FC<JobCardProps> = ({
         </div>
         <div className={styling.jobInfo}>
           <div>
-            <p className={styling.jobTitle}>{name}</p>
+            <p className={styling.jobTitle}>{title}</p>
             <p className={styling.jobLevel}>
               {level} | {location} | {department}
             </p>
@@ -64,14 +70,16 @@ const JobCard: React.FC<JobCardProps> = ({
         <div className={styling.labelContainer}>
           {skills?.map((skill) => (
             <Labels
-              labelName={skill}
+              labelName={skill.skill_name}
               customClass={styling.label}
               disableCloseIcon
             />
           ))}
         </div>
         <div className={styling.goTalents}>
-          <Button className={styling.goToTalents}>Go to talents</Button>
+          <Button className={styling.goToTalents} onClick={onClick}>
+            Go to talents
+          </Button>
         </div>
       </div>
     </Card>

@@ -97,12 +97,12 @@ const DashboardAssociations = () => {
   const data = [
     {
       key: "1",
-      candidate: "John Brown",
+      candidate: "Anna Brown",
       project: "deploy(impact)",
     },
     {
       key: "2",
-      candidate: "Jim Green",
+      candidate: "Roger Nilsen",
       project: "deploy(impact)",
     },
     {
@@ -172,11 +172,11 @@ const DashboardAssociations = () => {
             Welcome back, {association?.association_name}
           </h2>
           <div className={styling.location}>
-            <IconMapPin color="var(--gray-dark)" />
+            <IconMapPin />
             <p>{association?.address}</p>
             <p>|</p>
-            <IconBrandLinkedin color="var(--gray-dark)" />
-            <IconWorldWww color="var(--gray-dark)" />
+            <IconBrandLinkedin />
+            <IconWorldWww />
           </div>
         </div>
 
