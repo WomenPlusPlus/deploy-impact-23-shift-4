@@ -55,33 +55,39 @@ export interface Company {
   password: string;
   email: string;
   associations: string[];
-  company_name: string;
-  address: string;
-  logo: string;
-  linkedin_url: string;
-  values: string[];
-  job_types: string[];
-  contact_details: Record<string, any>;
-  kununu_url: string;
-  open_positions: string[];
-  company_size: string;
+  company_name?: string;
+  address?: string;
+  logo?: string;
+  linkedin_url?: string;
+  values?: string[];
+  job_types?: string[];
+  contact_details?: Record<string, any>; // JSON object
+  kununu_url?: string;
+  open_positions?: string[];
+  company_size?: string;
+}
+
+export interface Experience {
+  role: string;
+  industries: string;
+  years_of_experience?: number;
 }
 
 export interface Job {
   id: string;
   associations: string[];
   company_id: string;
-  title: string;
-  description: string | null;
-  values: string[] | null;
-  skills: { skill_name: string, skill_level: number }[] | null;
-  hiring_process_duration: string | null;
-  posting_date: string | null;
-  matching_candidates: number[] | null;
-  salary: number | null;
-  location_city: string | null;
-  location_country: string | null;
-  work_location: string | null;
-  employment_type: string | null;
-  date_created: string;
+  title?: string;
+  description?: string;
+  values?: string[];
+  skills?: Record<string, any>; // JSON object
+  hiring_process_duration?: string;
+  posting_date?: string; // Use a string or Date type as per your requirements
+  matching_candidates?: Record<string, any>[]; // JSON object
+  salary?: number;
+  location_city?: string;
+  location_country?: string;
+  work_location?: string;
+  employment_type?: string;
+  date_created?: string;
 }

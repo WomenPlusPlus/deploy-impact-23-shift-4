@@ -1,4 +1,4 @@
-import { Candidate } from "../../types/types";
+import { Candidate, Experience } from "../../types/types";
 import React from "react";
 
 interface TimeAgoProps {
@@ -250,12 +250,6 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
   }
 
   return sectionsVisibleInfo;
-}
-
-interface Experience {
-  role: string;
-  industries: string;
-  years_of_experience?: number;
 }
 
 function transformExperience(experience: Experience[]) {

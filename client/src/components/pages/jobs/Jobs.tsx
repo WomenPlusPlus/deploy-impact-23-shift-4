@@ -86,7 +86,7 @@ const Jobs: React.FC = () => {
         {jobsData.map((job, index) => (
           <JobCard
             key={index}
-            name={job.title}
+            title={job.title}
             // company_name={job.company_name}
             // company_location={job.company_location}
             // description={job.description}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Upload, Input, message, Popconfirm } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { UploadFile } from "antd/lib/upload/interface";
@@ -28,27 +28,35 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     { file: UploadFile; name: string }[]
   >([]);
   const [certificateName, setCertificateName] = useState("");
+  const [candidateData, setCandidateData] = useState<Candidate | null>(null);
+
+  useEffect(() => {
+    setCandidateData(candidate);
+  }, [candidate]);
 
   const handleUpload = () => {
     // Upload the CV and certificates and update the candidate object
     if (cvFile) {
-      if (candidate) {
-        candidate.cv_reference = cvFile.name;
+      if (candidateData) {
+        candidateData.cv_reference = cvFile.name;
       }
     }
+    console.log("FILES",certificateFiles);
     if (certificateFiles.length > 0) {
-      if (candidate) {
-        candidate.certificates = certificateFiles.map(({ file, name }) => ({
+      if (candidateData) {
+        candidateData.certificates = certificateFiles.map(({ file, name }) => ({
           name,
           reference: file.name as string, // You can set this reference as needed
         }));
       }
     }
 
-    // Trigger the onSave callback to save the updated candidate
+    // Trigger the onSave callback to save the updated candidateData
     if (onSave) {
-      onSave(candidate);
-      const transformedData = transformCandidateDocs(candidate);
+      onSave(candidateData as Candidate);
+      const transformedData = transformCandidateDocs(
+        candidateData as Candidate
+      );
       console.log(transformedData);
       setSectionDocuments(transformedData);
     }
@@ -83,11 +91,16 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         message.error("Please enter a certificate name before uploading.");
         return false;
       }
+
+      // Add the new certificate to the certificateFiles state
       setCertificateFiles([
         ...certificateFiles,
         { file, name: certificateName },
       ]);
+
+      // Clear the certificateName field
       setCertificateName("");
+
       return false;
     },
   };
@@ -103,23 +116,23 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
     const updatedFiles = certificateFiles.filter(({ file: f }) => f !== file);
     setCertificateFiles(updatedFiles);
 
-    if (candidate) {
-      candidate.certificates = candidate?.certificates?.filter(
+    if (candidateData) {
+      candidateData.certificates = candidateData?.certificates?.filter(
         (cert) => cert.name !== name
       );
     }
     if (onSave) {
-      onSave(candidate);
+      onSave(candidateData as Candidate);
     }
   };
 
   const deleteCV = () => {
     setCvFile(null);
-    if (candidate) {
-      candidate.cv_reference = null;
+    if (candidateData) {
+      candidateData.cv_reference = null;
     }
     if (onSave) {
-      onSave(candidate);
+      onSave(candidateData as Candidate);
     }
   };
 
@@ -145,10 +158,10 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         ]}
       >
         {/* Show CV */}
-        {candidate?.cv_reference ? (
+        {candidateData?.cv_reference ? (
           <>
             <h3>Your CV:</h3>
-            <p>{candidate?.cv_reference}</p>
+            <p>{candidateData?.cv_reference}</p>
             <Popconfirm
               title="Are you sure you want to delete your CV?"
               onConfirm={() => deleteCV()}
@@ -180,63 +193,44 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         )}
 
         {/* Show certificate */}
-        {candidate?.certificates && candidate?.certificates.length > 0 ? (
-          <>
-            <h3>Your certificates:</h3>
+        {candidateData?.certificates &&
+          candidateData?.certificates.length > 0 && (
+            <>
+              <h3>Your certificates:</h3>
+              <ul>
+                {candidateData?.certificates.map(({ name, reference }) => (
+                  <li key={reference}>
+                    {name}{" "}
+                    <Popconfirm
+                      title={`Are you sure you want to delete "${name}" certificate?`}
+                      onConfirm={() => deleteCertificate(reference, name)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button danger>Delete</Button>
+                    </Popconfirm>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        <p>Upload a new certificate:</p>
+        <Input
+          placeholder="Certificate Name"
+          value={certificateName}
+          onChange={(e) => setCertificateName(e.target.value)}
+        />
+        <Upload {...certificateProps} multiple>
+          {certificateFiles.length > 0 ? (
             <ul>
-              {candidate?.certificates.map(({ name, reference }) => (
-                <li key={reference}>
-                  {name}{" "}
-                  <Popconfirm
-                    title={`Are you sure you want to delete "${name}" certificate?`}
-                    onConfirm={() => deleteCertificate(reference, name)}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button danger>Delete</Button>
-                  </Popconfirm>
-                </li>
+              {certificateFiles.map(({ file, name }) => (
+                <li key={file.uid}>{name}</li>
               ))}
             </ul>
-            <p>Upload a new certificate:</p>
-            <Input
-              placeholder="Certificate Name"
-              value={certificateName}
-              onChange={(e) => setCertificateName(e.target.value)}
-            />
-            <Upload {...certificateProps} multiple>
-              {certificateFiles.length > 0 ? (
-                <ul>
-                  {certificateFiles.map(({ file, name }) => (
-                    <li key={file.uid}>{name}</li>
-                  ))}
-                </ul>
-              ) : (
-                <Button icon={<UploadOutlined />}>Upload Certificates</Button>
-              )}
-            </Upload>
-          </>
-        ) : (
-          <>
-            <p>Upload certificates (multiple files allowed):</p>
-            <Input
-              placeholder="Certificate Name"
-              value={certificateName}
-              onChange={(e) => setCertificateName(e.target.value)}
-            />
-            <Upload {...certificateProps} multiple>
-              {certificateFiles.length > 0 ? (
-                <ul>
-                  {certificateFiles.map(({ file, name }) => (
-                    <li key={file.uid}>{name}</li>
-                  ))}
-                </ul>
-              ) : (
-                <Button icon={<UploadOutlined />}>Upload Certificates</Button>
-              )}
-            </Upload>
-          </>
-        )}
+          ) : (
+            <Button icon={<UploadOutlined />}>Upload Certificates</Button>
+          )}
+        </Upload>
       </Modal>
     </>
   );

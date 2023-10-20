@@ -1,0 +1,91 @@
+.main {
+  width: 100%;
+}
+
+.cardContainerAboutMe {
+  background-color: var(--backgroun-light-blue);
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.cardContainerSkills {
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.cardContainerValues {
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.label {
+  background-color: var(--label-color);
+  border-radius: var(--tag-radius);
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.resumeContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+}
+
+.languagesContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+}
+
+.language {
+  padding: 0 2rem;
+}
+
+.documents {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 2rem;
+  cursor: pointer;
+}
+
+.cv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.resumeElements {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin: 0 2rem 2rem 2rem;
+}
+
+.resumeElements p {
+  margin: 0;
+}

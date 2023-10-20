@@ -8,7 +8,7 @@ interface Skill {
   skill_level: number;
 }
 interface JobCardProps {
-  name?: string;
+  title?: string;
   company_name?: string;
   company_location?: string;
   description?: string;
@@ -23,7 +23,7 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({
-  name,
+  title,
   company_name,
   company_location,
   description,
@@ -58,7 +58,7 @@ const JobCard: React.FC<JobCardProps> = ({
         </div>
         <div className={styling.jobInfo}>
           <div>
-            <p className={styling.jobTitle}>{name}</p>
+            <p className={styling.jobTitle}>{title}</p>
             <p className={styling.jobLevel}>
               {level} | {location} | {department}
             </p>
