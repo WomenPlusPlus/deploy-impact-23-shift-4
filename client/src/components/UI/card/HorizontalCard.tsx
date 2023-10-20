@@ -7,6 +7,9 @@ interface HorizontalCardProps {
   button?: string;
   firstName?: string;
   lastName?: string;
+  title?: string;
+  subtitle?: string;
+  onClick?: () => void;
 }
 
 //TODO: add title and description props
@@ -15,6 +18,9 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
   button,
   firstName,
   lastName,
+  title,
+  subtitle,
+  onClick,
 }) => {
   const positionTitle = "Developer europe remote";
   const matchingText = [
@@ -27,11 +33,17 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
       {avatar && <Avatar firstName={firstName} lastName={lastName} size={70} />}
 
       <div className={styling.text}>
-        <h2>{positionTitle}</h2>
-        <p>{matchingText[0]}</p>
+        <h2 className={styling.title}>{title ? title : positionTitle}</h2>
+        <p className={styling.subtitle}>
+          {subtitle ? subtitle : matchingText[0]}
+        </p>
       </div>
 
-      {button && <Button className={styling.button}>{button}</Button>}
+      {button && (
+        <Button className={styling.button} onClick={onClick}>
+          {button}
+        </Button>
+      )}
     </div>
   );
 };

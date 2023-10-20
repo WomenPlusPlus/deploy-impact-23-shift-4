@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, Space } from "antd";
 import { Button } from "../button/Button";
 import styling from "./EditLanguages.module.css";
@@ -41,7 +41,11 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
   setValues,
   onSave,
 }) => {
-  const [candidateValues, setCandidateValues] = useState(values);
+  const [candidateValues, setCandidateValues] = useState({} as Candidate);
+
+  useEffect(() => {
+    setCandidateValues(values);
+  }, [values]);
 
   const handleSave = () => {
     setValues(candidateValues);
@@ -76,6 +80,17 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
     });
   };
 
+  const deleteLanguage = (index: number) => {
+    setCandidateValues((prevCandidate) => {
+      const updatedLanguages = [...(prevCandidate.languages || [])];
+      updatedLanguages.splice(index, 1);
+      return {
+        ...prevCandidate,
+        languages: updatedLanguages,
+      };
+    });
+  };
+
   return (
     <Modal
       open={visible}
@@ -107,10 +122,10 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
             />
           </div>
 
-          <div>
+          <div style={{ minWidth: "150px" }}>
             <label>Level:</label>
             <Select
-              style={{ width: "100%" }}
+              style={{ minWidth: "100%" }}
               value={language.level || ""}
               onChange={(value) => handleChange(index, "level", value)}
             >
@@ -121,6 +136,12 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
               ))}
             </Select>
           </div>
+          <Button
+            key={`deleteLanguage${index}`}
+            onClick={() => deleteLanguage(index)}
+          >
+            Delete
+          </Button>
         </Space>
       ))}
 

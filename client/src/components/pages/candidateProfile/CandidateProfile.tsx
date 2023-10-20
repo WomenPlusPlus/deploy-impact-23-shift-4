@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 
 import Avatar from "../../UI/avatar/Avatar";
-import ProfileCompletedFields from "./ProfileCompletedFields";
+
 import { Labels } from "../../UI/labels/Label";
-import { EditTag } from "../../UI/modal/EditTag";
+import { EditSkills } from "../../UI/modal/EditSkills";
+import { EditValues } from "../../UI/modal/EditValues";
 import { EditInput } from "../../UI/modal/EditInput";
-import { getFakeData } from "./helpers/helper";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
-import { CardContainer } from "../../UI/container/CardContainer";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
-import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
+import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
+import { EditExperience } from "../../UI/modal/EditExperience";
+import { VisibleSection } from "../../UI/modal/VisibleSection";
 import {
-  ContentBlock,
-  HorizontalLine,
-} from "../../UI/container/SectionContainer";
+  getFakeData,
+  transformCandidateDocs,
+  transformCandidateVisibleInfo,
+  transformExperience,
+} from "./helpers/helper";
+import { FileUploadModal } from "../../UI/modal/EditUploadDocuments";
+import { CardContainer } from "../../UI/container/CardContainer";
+import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
+import { ContentBlock } from "../../UI/container/SectionContainer";
+import { ProfileComplete } from "./ProfileComplete";
 import {
   IconEdit,
   IconMapPin,
@@ -24,40 +31,41 @@ import {
 
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
-import { Language, Candidate } from "../types/types";
+import { Candidate } from "../types/types";
 
 import styling from "./CandidateProfile.module.css";
 
 const CandidateProfile = () => {
-  // Filter out the labels that are already the candidate's labels
-  const allLabelsSkills = () => {
-    return getFakeData().allSkill.filter(
-      (label) => !skillsLabels.includes(label)
-    );
-  };
-  const allLabelsValues = () => {
-    return getFakeData().allValue.filter(
-      (label) => !valuesLabels.includes(label)
-    );
-  };
-  const allTypeOfJobs = () => {
-    return getFakeData().allTypeOfJob.filter(
-      (label) => !typeOfJobsLabels.includes(label)
-    );
-  };
-
+  const allFields = [
+    "Visible Information",
+    "Documents",
+    "Profile",
+    "Skills",
+    "Values",
+    "Languages",
+    "Experience",
+    "Contact info",
+    "Type of jobs",
+  ];
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
-  const [typeOfJobsLabels, setTypeOfJobsLabels] = useState(
-    getFakeData().user.typeOfJobs
-  );
-  const associationLabels = getFakeData().user.associations;
-  const [skillsLabels, setSkillsLabels] = useState(getFakeData().user.skills);
-  const [valuesLabels, setValuesLabels] = useState(getFakeData().user.values);
+  const [sectionDocuments, setSectionDocuments] = useState([] as any);
+  const [sectionsVisibleInfo, setSectionsVisibleInfo] = useState([] as any);
+  const [sectionsExperience, setSectionsExperience] = useState([] as any);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
+  const [isAnonymousProfileEdit, setIsAnonymousProfileEdit] = useState(false);
+  const [isSkillsEdit, setIsSkillsEdit] = useState(false);
+  const [isValuesEdit, setIsValuesEdit] = useState(false);
+  const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
+  const [isExperienceEdit, setIsExperienceEdit] = useState(false);
+  const [isDocumentsEdit, setIsDocumentsEdit] = useState(false);
+
+  const [allSkills, setAllSkills] = useState([]);
+  const [allValues, setAllValues] = useState([]);
+  const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -65,6 +73,15 @@ const CandidateProfile = () => {
     try {
       const candidateFetched = await getCandidateById(auth.user.id);
       setCandidate(candidateFetched);
+      const transformedData = transformCandidateDocs(candidateFetched);
+      setSectionDocuments(transformedData);
+      const transformedVisibleInfo =
+        transformCandidateVisibleInfo(candidateFetched);
+      setSectionsVisibleInfo(transformedVisibleInfo);
+      const transformedExperience = transformExperience(
+        candidateFetched.experience
+      );
+      setSectionsExperience(transformedExperience);
     } catch (error) {
       console.log("error", error);
     }
@@ -72,19 +89,46 @@ const CandidateProfile = () => {
 
   useEffect(() => {
     fetchCandidate();
+    setAllSkills(getFakeData().allSkill as []);
+    setAllValues(getFakeData().allValue as []);
+    setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
   }, []);
 
   // handlers
-  const editHandlerContactInfo = () => {
+  const editContactInfo = () => {
     setIsEditContactInfo(true);
   };
 
-  const editHandlerLanguages = () => {
+  const editLanguages = () => {
     setIsEditLanguages(true);
   };
 
   const editHandlerProfile = () => {
     setIsProfileEdit(true);
+  };
+
+  const editHandlerAnonymousProfile = () => {
+    setIsAnonymousProfileEdit(true);
+  };
+
+  const editSkills = () => {
+    setIsSkillsEdit(true);
+  };
+
+  const editValues = () => {
+    setIsValuesEdit(true);
+  };
+
+  const editTypeOfJobs = () => {
+    setIsTypeOfJobsEdit(true);
+  };
+
+  const editExperience = () => {
+    setIsExperienceEdit(true);
+  };
+
+  const editDocuments = () => {
+    setIsDocumentsEdit(true);
   };
 
   /**
@@ -101,6 +145,7 @@ const CandidateProfile = () => {
       candidate?.user_id,
       candidateUpdated
     );
+    await fetchCandidate();
     console.log("is_updated", is_updated);
   };
 
@@ -108,28 +153,58 @@ const CandidateProfile = () => {
   return (
     <div className={styling.main}>
       {/* Profile text */}
-      <CardContainer
-        className={`${styling.profileSectionElement} ${styling.profileComponent}`}
-      >
-        <Avatar size={80} firstName="John" lastName="Doe" />
+      <CardContainer className={`${styling.profileComponent}`}>
+        {candidate?.first_name && candidate?.last_name ? (
+          <Avatar
+            size={80}
+            firstName={candidate?.first_name}
+            lastName={candidate?.last_name}
+          />
+        ) : (
+          <Avatar size={80} firstName="John" lastName="Doe" />
+        )}
 
         <div>
           <div className={styling.userName}>
             <h3>
               {candidate?.first_name} {candidate?.last_name}
             </h3>
-
             <h4>{candidate?.job_status}</h4>
           </div>
 
           <div className={styling.location}>
             <IconMapPin color="black" />
-            <p>
-              {candidate?.city}, {candidate?.country}
-            </p>
+            {candidate.city && candidate?.country ? (
+              <p>
+                {candidate?.city}, {candidate?.country}
+              </p>
+            ) : (
+              <p onClick={editHandlerProfile}>Add your location</p>
+            )}
             <p>|</p>
-            <IconBrandLinkedin color="black" />
-            <IconWorldWww color="black" />
+            <div className={styling.row}>
+              {candidate.links && candidate.links.length > 0 ? (
+                candidate.links.map((link, index) => (
+                  <div key={index} className={styling.link}>
+                    {link.name === "LinkedIn" ? (
+                      <a href={link.url} target="_blank" rel="noreferrer">
+                        <IconBrandLinkedin color="black" />
+                      </a>
+                    ) : link.name === "Personal Website" ? (
+                      <a href={link.url} target="_blank" rel="noreferrer">
+                        <IconWorldWww color="black" />
+                      </a>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <>
+                  <p onClick={editHandlerProfile}>Add links</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -140,7 +215,7 @@ const CandidateProfile = () => {
             candidate={candidate}
             setValuesToEdit={setCandidate}
             fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
-            onClick={editHandlerProfile}
+            showModal={editHandlerProfile}
             onSave={handleSaveEdit}
             fieldKeysToEdit={[
               "first_name",
@@ -148,6 +223,7 @@ const CandidateProfile = () => {
               "job_status",
               "city",
               "country",
+              "links",
               // add links here. Remember: Links are an array of objects [{name: "", url: ""}]
             ]}
           />
@@ -156,75 +232,39 @@ const CandidateProfile = () => {
 
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
-        <CardContainer className={styling.profileCompletedElement}>
-          <div className={styling.profileCompletedEditIcon}>
-            <h3>Your profile is {getFakeData().user?.progress} complete.</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
-          </div>
-
-          <ProgressBar
-            progress={getFakeData().user?.progress}
-            height="1.5rem"
+        {candidate && (
+          <ProfileComplete
+            className={styling.profileCompletedElement}
+            candidate={candidate}
+            allCategories={allFields}
+            editContactInfo={editContactInfo}
+            editLanguages={editLanguages}
+            editSkills={editSkills}
+            editValues={editValues}
+            editProfile={editHandlerProfile}
+            editTypeOfJobs={editTypeOfJobs}
+            editExperience={editExperience}
+            editDocuments={editDocuments}
+            editVisibleInformation={editHandlerAnonymousProfile}
           />
-
-          {/* Fields completed */}
-          <div className={styling.profileCompletedFieldsComponent}>
-            <div className={styling.column}>
-              {getFakeData()
-                .user?.list.slice(
-                  0,
-                  Math.ceil(getFakeData().user?.list.length / 2)
-                )
-                .map((field, index) => (
-                  <div
-                    key={index}
-                    className={styling.profileCompletedFieldsElement}
-                  >
-                    <ProfileCompletedFields isCompleted={false} field={field} />
-                  </div>
-                ))}
-            </div>
-
-            <div className={styling.column}>
-              {getFakeData()
-                .user?.list.slice(
-                  Math.ceil(getFakeData().user?.list.length / 2)
-                )
-                .map((field, index) => (
-                  <div
-                    key={index}
-                    className={styling.profileCompletedFieldsElement}
-                  >
-                    <ProfileCompletedFields isCompleted={true} field={field} />
-                  </div>
-                ))}
-            </div>
-          </div>
-        </CardContainer>
+        )}
 
         {/* Anonymous profile */}
         <CardContainer className={styling.profileCompletedElement}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Visible Information</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
+            <VisibleSection
+              candidate={candidate}
+              visible={isAnonymousProfileEdit}
+              setVisible={setIsAnonymousProfileEdit}
+              showModal={editHandlerAnonymousProfile}
+              allFields={allFields}
+              onSave={handleSaveEdit}
+            />
           </div>
           <p>Initially employees will only see skills and values</p>
-          <div className={styling.containerVisibleInfo}>
-            <ContentBlock
-              title="Section 1"
-              text="This is the text inside Section 1."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 2"
-              text="This is the text inside Section 2."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 3"
-              text="This is the text inside Section 3."
-            />
-          </div>
+          <ContentBlock sections={sectionsVisibleInfo} />
         </CardContainer>
       </div>
 
@@ -235,7 +275,7 @@ const CandidateProfile = () => {
             <h3>Associations</h3>
           </div>
           <div className={styling.associationContainerLabels}>
-            {associationLabels.map((label, index) => (
+            {candidate?.associations?.map((label, index) => (
               <Labels
                 key={index}
                 icon={<IconTags />}
@@ -249,25 +289,30 @@ const CandidateProfile = () => {
         <CardContainer className={styling.secondContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
-            <EditTag
-              labelsList={typeOfJobsLabels}
-              setLabelsList={setTypeOfJobsLabels}
+            <EditTypeOfJobs
+              candidate={candidate}
+              setCandidate={setCandidate}
+              allLabels={allTypeOfJobs}
               icon={<IconTags />}
-              titleName="Edit your jobs"
-              allLabelsList={allTypeOfJobs()}
+              titleName="Choose your type of jobs"
+              onSave={handleSaveEdit}
+              visible={isTypeOfJobsEdit}
+              setVisible={setIsTypeOfJobsEdit}
+              showModal={editTypeOfJobs}
             />
           </div>
 
           <div className={styling.associationContainerLabels}>
-            {typeOfJobsLabels.map((label, index) => (
-              <Labels
-                key={index}
-                icon={<IconTags />}
-                labelName={label}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-              />
-            ))}
+            {candidate?.preferred_jobs &&
+              candidate?.preferred_jobs?.map((label, index) => (
+                <Labels
+                  key={index}
+                  icon={<IconTags />}
+                  labelName={label.job_name}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />
+              ))}
           </div>
         </CardContainer>
       </div>
@@ -276,24 +321,29 @@ const CandidateProfile = () => {
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Skills</h3>
-          <EditTag
-            labelsList={skillsLabels}
-            setLabelsList={setSkillsLabels}
+          <EditSkills
+            candidate={candidate}
+            setCandidate={setCandidate}
+            allLabels={allSkills}
             icon={<IconTags />}
             titleName="Choose your skills"
-            allLabelsList={allLabelsSkills()}
+            onSave={handleSaveEdit}
+            visible={isSkillsEdit}
+            setVisible={setIsSkillsEdit}
+            showModal={editSkills}
           />
         </div>
         <div className={styling.skillsContainerLabels}>
-          {skillsLabels.map((label, index) => (
-            <Labels
-              key={index}
-              icon={<IconTags />}
-              labelName={label}
-              disableCloseIcon={true}
-              customClass={styling.labelClass}
-            />
-          ))}
+          {candidate?.skills &&
+            candidate?.skills?.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconTags />}
+                labelName={label.skill_name}
+                disableCloseIcon={true}
+                customClass={styling.labelClass}
+              />
+            ))}
         </div>
       </CardContainer>
 
@@ -301,24 +351,29 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Values</h3>
-          <EditTag
-            labelsList={valuesLabels}
-            setLabelsList={setValuesLabels}
+          <EditValues
+            candidate={candidate}
+            setCandidate={setCandidate}
+            allLabels={allValues}
             icon={<IconTags />}
             titleName="Choose your values"
-            allLabelsList={allLabelsValues()}
+            onSave={handleSaveEdit}
+            visible={isValuesEdit}
+            setVisible={setIsValuesEdit}
+            showModal={editValues}
           />
         </div>
         <div className={styling.valuesContainerLabels}>
-          {valuesLabels.map((label, index) => (
-            <Labels
-              key={index}
-              icon={<IconTags />}
-              labelName={label}
-              disableCloseIcon={true}
-              customClass={styling.labelClass}
-            />
-          ))}
+          {candidate?.values &&
+            candidate?.values?.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconTags />}
+                labelName={label}
+                disableCloseIcon={true}
+                customClass={styling.labelClass}
+              />
+            ))}
         </div>
       </CardContainer>
 
@@ -334,7 +389,7 @@ const CandidateProfile = () => {
               candidate={candidate}
               setValuesToEdit={setCandidate}
               fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
-              onClick={editHandlerContactInfo}
+              showModal={editContactInfo}
               onSave={handleSaveEdit}
               fieldKeysToEdit={["phone_number", "email", "address"]}
             />
@@ -359,7 +414,7 @@ const CandidateProfile = () => {
             <IconEdit
               color="black"
               style={{ cursor: "pointer" }}
-              onClick={editHandlerLanguages}
+              onClick={editLanguages}
             />
           </div>
           <EditLanguages
@@ -376,19 +431,16 @@ const CandidateProfile = () => {
         <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Experience</h3>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
-          </div>
-          <div className={styling.containerVisibleInfo}>
-            <ContentBlock
-              title="Section 1"
-              text="This is the text inside Section 1."
-            />
-            <HorizontalLine />
-            <ContentBlock
-              title="Section 2"
-              text="This is the text inside Section 2."
+            <EditExperience
+              visible={isExperienceEdit}
+              setVisible={setIsExperienceEdit}
+              showModal={editExperience}
+              candidate={candidate}
+              setCandidate={setCandidate}
+              onSave={handleSaveEdit}
             />
           </div>
+          <ContentBlock sections={sectionsExperience} />
         </CardContainer>
       </div>
 
@@ -396,24 +448,16 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Uploaded documents</h3>
-          <IconEdit color="black" style={{ cursor: "pointer" }} />
-        </div>
-        <div className={styling.containerVisibleInfo}>
-          <ContentBlock
-            title="Section 1"
-            text="This is the text inside Section 1."
-          />
-          <HorizontalLine />
-          <ContentBlock
-            title="Section 2"
-            text="This is the text inside Section 2."
-          />
-          <HorizontalLine />
-          <ContentBlock
-            title="Section 3"
-            text="This is the text inside Section 3."
+          <FileUploadModal
+            candidate={candidate}
+            visible={isDocumentsEdit}
+            setVisible={setIsDocumentsEdit}
+            showModal={editDocuments}
+            onSave={handleSaveEdit}
+            setSectionDocuments={setSectionDocuments}
           />
         </div>
+        <ContentBlock sections={sectionDocuments} />
       </CardContainer>
     </div>
   );

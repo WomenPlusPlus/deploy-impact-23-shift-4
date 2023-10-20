@@ -37,7 +37,7 @@ def init_candidate_model(db):
         birth_date = db.Column(db.Date)  # Birth date as a date
         work_permit = db.Column(db.String(80))  # Work permit as a string
         notice_period = db.Column(db.String(80))  # Notice period as a string
-        job_status = db.Column(db.String(256))  # Job status as an integer
+        job_status = db.Column(db.String(256))  # Job status as a string
         preferred_jobs = db.Column(db.JSON)  # Type of job you're looking for as JSON
         company_type = db.Column(
             db.ARRAY(db.String)
@@ -49,8 +49,10 @@ def init_candidate_model(db):
         languages = db.Column(db.JSON)  # Languages as a JSON array of objects
         links = db.Column(db.JSON)  # Links as a JSON array of objects
         certificates = db.Column(db.JSON)  # Certificates as a JSON array of objects
-        visible_information = db.Column(db.JSON)
+        visible_information = db.Column(db.ARRAY(db.String)) 
         experience = db.Column(db.JSON)
+        visa_status = db.Column(db.ARRAY(db.String))
+        salary_expectation = db.Column(db.ARRAY(db.String))
         other_information = db.Column(db.JSON)
 
         def __init__(
@@ -82,6 +84,8 @@ def init_candidate_model(db):
             certificates=None,
             visible_information=None,
             experience=None,
+            visa_status=None,
+            salary_expectation=None,
             other_information=None,
         ):
             """
@@ -117,6 +121,8 @@ def init_candidate_model(db):
             self.certificates = certificates
             self.visible_information = visible_information
             self.experience = experience
+            self.visa_status = visa_status
+            self.salary_expectation = salary_expectation
             self.other_information = other_information
 
         def to_dict(self):
@@ -151,6 +157,8 @@ def init_candidate_model(db):
                 "certificates": self.certificates,
                 "visible_information": self.visible_information,
                 "experience": self.experience,
+                "visa_status": self.visa_status,
+                "salary_expectation": self.salary_expectation,
                 "other_information": self.other_information,
             }
 

@@ -5,18 +5,13 @@ const { Option } = Select;
 
 interface FilterProps {
   options: string[];
-  candidates: any[];
+  data: any[];
   criteria: string;
-  onFilterChange: (filteredCandidates: any[]) => void;
+  onFilterChange: (filteredData: any[]) => void;
 }
 
-const Filter = ({
-  options,
-  candidates,
-  criteria,
-  onFilterChange,
-}: FilterProps) => {
-  const [selectedCriteria, setSelectedCriteria] = useState(["All"]);
+const Filter = ({ options, data, criteria, onFilterChange }: FilterProps) => {
+  const [selectedCriteria, setSelectedCriteria] = useState<string[]>([]);
 
   const handleChange = (value: any) => {
     console.log(value);
@@ -24,14 +19,15 @@ const Filter = ({
   };
 
   useEffect(() => {
-    const filteredCandidates = selectedCriteria.includes("All")
-      ? candidates
-      : candidates.filter((candidate) =>
-          candidate[criteria].some((item: any) =>
-            selectedCriteria.includes(item)
-          )
-        );
-    onFilterChange(filteredCandidates);
+    const filteredData =
+      selectedCriteria.length === 0
+        ? data
+        : data.filter((candidate) =>
+            candidate[criteria]?.some((item: string) =>
+              selectedCriteria.includes(item)
+            )
+          );
+    onFilterChange(filteredData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCriteria]);
 
@@ -40,7 +36,7 @@ const Filter = ({
       <Select
         id="filter"
         mode="multiple"
-        style={{ minWidth: 150 }}
+        style={{ minWidth: 200 }}
         placeholder={"Select " + criteria}
         value={selectedCriteria}
         onChange={handleChange}

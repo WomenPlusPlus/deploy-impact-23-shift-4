@@ -15,7 +15,6 @@ const axios = configureAxios();
 const Login = () => {
   // state
   const { auth, setAuth } = useAuth();
-  console.log("auth", auth);
   const [formData, setFormData] = useState({
     email: "",
     password: "",

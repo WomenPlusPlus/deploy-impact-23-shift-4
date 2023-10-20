@@ -10,18 +10,15 @@ def get_candidate_by_id_route(Candidate):
             if request.method == "POST":
                 data = request.get_json()
                 id = data.get("user_id")
-                print("ID",id)
+
                 if not id:
                     return jsonify({"message": "Missing 'id' in JSON data"}), 400
 
                 candidate = Candidate.query.filter_by(user_id=id).first()
-                print("Candidate", candidate)
+
                 if not candidate:
                     return jsonify({"message": "Candidate not found"}), 404
-
-                
-                print("Candidate data", candidate.to_dict())
-
+                print(candidate.to_dict())
                 return jsonify({"candidates": candidate.to_dict()}), 200
 
         except Exception as e:
