@@ -3,6 +3,10 @@ import { IconExternalLink } from "@tabler/icons-react";
 import styling from "./JobCard.module.css";
 import { Labels } from "../labels/Label";
 
+interface Skill {
+  skill_name: string;
+  skill_level: number;
+}
 interface JobCardProps {
   title?: string;
   company_name?: string;
@@ -14,7 +18,7 @@ interface JobCardProps {
   match?: string;
   location?: string;
   department?: string;
-  skills?: string[];
+  skills?: Skill[];
   onClick?: () => void;
 }
 
@@ -66,7 +70,7 @@ const JobCard: React.FC<JobCardProps> = ({
         <div className={styling.labelContainer}>
           {skills?.map((skill) => (
             <Labels
-              labelName={skill}
+              labelName={skill.skill_name}
               customClass={styling.label}
               disableCloseIcon
             />
