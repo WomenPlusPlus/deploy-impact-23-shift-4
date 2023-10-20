@@ -16,7 +16,6 @@ import {
   transformCandidateVisibleInfo,
   transformExperience,
 } from "./helpers/helper";
-import { FileUploadModal } from "../../UI/modal/EditUploadDocuments";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";
@@ -28,7 +27,7 @@ import {
   IconWorldWww,
   IconTags,
 } from "@tabler/icons-react";
-
+import { DocumentUploadModal } from "../../UI/modal/EditUploadDocuments";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
 import { Candidate } from "../types/types";
@@ -52,6 +51,7 @@ const CandidateProfile = () => {
   const [sectionDocuments, setSectionDocuments] = useState([] as any);
   const [sectionsVisibleInfo, setSectionsVisibleInfo] = useState([] as any);
   const [sectionsExperience, setSectionsExperience] = useState([] as any);
+  const [isCompleteProfile, setIsCompleteProfile] = useState(false);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
@@ -129,6 +129,15 @@ const CandidateProfile = () => {
 
   const editDocuments = () => {
     setIsDocumentsEdit(true);
+  };
+
+  const getProgress = (progress: any) => {
+    localStorage.setItem("progress", progress);
+    if (progress === 100) {
+      setIsCompleteProfile(true);
+    } else {
+      setIsCompleteProfile(false);
+    }
   };
 
   /**
@@ -224,7 +233,6 @@ const CandidateProfile = () => {
               "city",
               "country",
               "links",
-              // add links here. Remember: Links are an array of objects [{name: "", url: ""}]
             ]}
           />
         </div>
@@ -232,25 +240,31 @@ const CandidateProfile = () => {
 
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
-        {candidate && (
-          <ProfileComplete
-            className={styling.profileCompletedElement}
-            candidate={candidate}
-            allCategories={allFields}
-            editContactInfo={editContactInfo}
-            editLanguages={editLanguages}
-            editSkills={editSkills}
-            editValues={editValues}
-            editProfile={editHandlerProfile}
-            editTypeOfJobs={editTypeOfJobs}
-            editExperience={editExperience}
-            editDocuments={editDocuments}
-            editVisibleInformation={editHandlerAnonymousProfile}
-          />
-        )}
+        <ProfileComplete
+          className={styling.profileCompletedElement}
+          candidate={candidate}
+          allCategories={allFields}
+          editContactInfo={editContactInfo}
+          editLanguages={editLanguages}
+          editSkills={editSkills}
+          editValues={editValues}
+          editProfile={editHandlerProfile}
+          editTypeOfJobs={editTypeOfJobs}
+          editExperience={editExperience}
+          editDocuments={editDocuments}
+          editVisibleInformation={editHandlerAnonymousProfile}
+          getProgress={getProgress}
+          hidden={isCompleteProfile}
+        />
 
         {/* Anonymous profile */}
-        <CardContainer className={styling.profileCompletedElement}>
+        <CardContainer
+          className={
+            isCompleteProfile
+              ? styling.visibleContainer
+              : styling.profileCompletedElement
+          }
+        >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Visible Information</h3>
             {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
@@ -264,7 +278,9 @@ const CandidateProfile = () => {
             />
           </div>
           <p>Initially employees will only see skills and values</p>
-          <ContentBlock sections={sectionsVisibleInfo} />
+          <div className={isCompleteProfile ? styling.visibleSectionComplete : styling.visibleSection}>
+            <ContentBlock sections={sectionsVisibleInfo} />
+          </div>
         </CardContainer>
       </div>
 
@@ -448,13 +464,20 @@ const CandidateProfile = () => {
       <CardContainer className={styling.valuesContainer}>
         <div className={styling.profileCompletedEditIcon}>
           <h3>Uploaded documents</h3>
-          <FileUploadModal
+          {/* <FileUploadModal
             candidate={candidate}
             visible={isDocumentsEdit}
             setVisible={setIsDocumentsEdit}
             showModal={editDocuments}
             onSave={handleSaveEdit}
             setSectionDocuments={setSectionDocuments}
+          /> */}
+          <DocumentUploadModal
+            candidate={candidate}
+            visible={isDocumentsEdit}
+            setVisible={setIsDocumentsEdit}
+            showModal={editDocuments}
+            onSave={handleSaveEdit}
           />
         </div>
         <ContentBlock sections={sectionDocuments} />

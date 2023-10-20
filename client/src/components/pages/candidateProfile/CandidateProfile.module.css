@@ -171,3 +171,26 @@
   margin: 0;
   gap: 1rem;
 }
+
+.visibleContainer {
+  padding: 3rem;
+  width: 100%;
+}
+
+.visibleSectionComplete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: large;
+}
+
+.visibleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: medium;
+}

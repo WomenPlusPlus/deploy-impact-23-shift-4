@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Input } from "antd";
+import { Button, Modal, Input, Select } from "antd";
 import { IconEdit } from "@tabler/icons-react";
 import { Labels } from "../labels/Label";
 import styling from "./EditSkills.module.css";
-import { Candidate } from "../../pages/types/types";
+import { Candidate, Skill } from "../../pages/types/types";
 
-interface Skill {
-  skill_name: string;
-  skill_id: string;
-  score: number;
-}
+const { Option } = Select;
 
 interface EditSkillsProps {
   candidate: Candidate;
@@ -36,11 +32,11 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<Skill[]>([]);
+  const [candidateLabels, setCandidateLabels] = useState<Skill[]>([]);
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate?.skills as Skill[]);
+    setCandidateLabels(candidate?.skills as Skill[]);
     updateFilteredSkills(candidate?.skills as Skill[]);
   }, [candidate?.skills]);
 
@@ -58,22 +54,22 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   };
 
   const handleCloseSkill = (skillToRemove: Skill) => {
-    const updatedSkills = labelsToDeleteState.filter(
+    const updatedSkills = candidateLabels.filter(
       (skill) => skill.skill_id !== skillToRemove.skill_id
     );
-    setLabelsToDeleteState(updatedSkills as Skill[]);
+    setCandidateLabels(updatedSkills as Skill[]);
     updateFilteredSkills(updatedSkills); // Update filteredSkills
   };
 
-  const addSkillToDeleteState = (skillToAdd: Skill) => {
-    // Check if labelsToDeleteState is not empty
-    if (labelsToDeleteState) {
-      const updatedSkills = [...labelsToDeleteState, skillToAdd];
-      setLabelsToDeleteState(updatedSkills);
+  const addSkillToCandidateSkills = (skillToAdd: Skill) => {
+    // Check if candidateLabels is not empty
+    if (candidateLabels) {
+      const updatedSkills = [...candidateLabels, skillToAdd];
+      setCandidateLabels(updatedSkills);
       updateFilteredSkills(updatedSkills); // Update filteredSkills
     } else {
-      // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
-      setLabelsToDeleteState([skillToAdd]);
+      // If it's empty, initialize candidateLabels with an array containing the skillToAdd
+      setCandidateLabels([skillToAdd]);
       updateFilteredSkills([skillToAdd]); // Update filteredSkills
     }
   };
@@ -83,16 +79,15 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     setTimeout(() => {
       setLoading(false);
       setVisible(false);
-      setCandidate({ ...candidate, skills: labelsToDeleteState });
-      onSave &&
-        onSave({ ...candidate, skills: labelsToDeleteState } as Candidate);
+      setCandidate({ ...candidate, skills: candidateLabels });
+      onSave && onSave({ ...candidate, skills: candidateLabels } as Candidate);
       setSearchText("");
     }, 300);
   };
 
   const handleCancel = () => {
     setVisible(false);
-    setLabelsToDeleteState(candidate.skills as Skill[]);
+    setCandidateLabels(candidate.skills as Skill[]);
     setSearchText("");
   };
 
@@ -123,17 +118,36 @@ const EditSkills: React.FC<EditSkillsProps> = ({
         ]}
       >
         {/* Candidates skills */}
-        <div className={styling.elementInOneRow}>
-          {labelsToDeleteState &&
-            labelsToDeleteState?.map((skill, index) => (
-              <Labels
-                key={index}
-                icon={icon}
-                labelName={skill.skill_name}
-                onCloseIcon={() => handleCloseSkill(skill)}
-                disableCloseIcon={false}
-                customClass={styling.labelClassSelected}
-              />
+        <div className={styling.column}>
+          {candidateLabels &&
+            candidateLabels?.map((skill, index) => (
+              <div className={styling.row} key={index}>
+                <Labels
+                  icon={icon}
+                  labelName={skill.skill_name}
+                  onCloseIcon={() => handleCloseSkill(skill)}
+                  disableCloseIcon={false}
+                  customClass={styling.labelClassSelected}
+                />
+
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder="Select skill level"
+                  onChange={(value) => {
+                    const updatedSkills = candidateLabels.map((item) =>
+                      item.skill_id === skill.skill_id
+                        ? { ...item, skill_level: value }
+                        : item
+                    );
+                    setCandidateLabels(updatedSkills);
+                  }}
+                >
+                  <Option value="beginner">🌱 Novice Explorer</Option>
+                  <Option value="intermediate">🌟 Adventurous Learner</Option>
+                  <Option value="advanced">🚀 Skilled Pioneer</Option>
+                  <Option value="pro">🌌 Master Voyager</Option>
+                </Select>
+              </div>
             ))}
         </div>
         <Input
@@ -151,7 +165,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                 labelName={skill.skill_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
-                onClickHandle={() => addSkillToDeleteState(skill)}
+                onClickHandle={() => addSkillToCandidateSkills(skill)}
               />
             ))}
         </div>

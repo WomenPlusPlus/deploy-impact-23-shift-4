@@ -2,11 +2,8 @@ import { Card, Avatar, Button } from "antd";
 import { IconExternalLink } from "@tabler/icons-react";
 import styling from "./JobCard.module.css";
 import { Labels } from "../labels/Label";
+import { Skill } from "../../pages/types/types";
 
-interface Skill {
-  skill_name: string;
-  skill_level: number;
-}
 interface JobCardProps {
   title?: string;
   company_name?: string;

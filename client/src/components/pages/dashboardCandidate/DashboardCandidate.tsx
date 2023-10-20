@@ -15,11 +15,12 @@ import React from "react";
 const DashboardCandidate: React.FC = () => {
   // state
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
+  const [progress, setProgress] = useState(0);
+
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-  console.log("auth dashboard", auth);
   const navigate = useNavigate();
 
-  const fetchCandidate = async (user_id: string) => {
+  const fetchInfo = async (user_id: string) => {
     console.log("user_id", user_id);
     try {
       const candidateFetched = await getCandidateById(user_id);
@@ -28,15 +29,16 @@ const DashboardCandidate: React.FC = () => {
     } catch (error) {
       console.log("error", error);
     }
+    const isProgress = localStorage.getItem("progress");
+    if (isProgress) {
+      setProgress(parseInt(isProgress));
+    }
   };
 
   useEffect(() => {
-    fetchCandidate(auth.user?.id);
+    fetchInfo(auth.user?.id);
   }, [auth.user?.id]);
 
-  const profession = "Frontend Developer";
-  const progress = 80;
-  console.log("candidate", candidate?.email);
   return (
     <div className="first-container">
       <div className="grid">
@@ -69,21 +71,23 @@ const DashboardCandidate: React.FC = () => {
         </CardContainer>
 
         {/* Progress bar */}
-        <CardContainer className="section-element progressbar-completion-component">
-          <div className="progressbar-text-element">
-            <p className="paragraph">You've completed {progress}% </p>
-          </div>
-
-          <div className="progressbar-component-element">
-            <div className="progressbar-element">
-              <ProgressBar progress={progress} />
+        {progress < 100 && (
+          <CardContainer className="section-element progressbar-completion-component">
+            <div className="progressbar-text-element">
+              <p className="paragraph">You've completed {progress}% </p>
             </div>
 
-            <div className="progressbar-button">
-              <Button>Complete your profile</Button>
+            <div className="progressbar-component-element">
+              <div className="progressbar-element">
+                <ProgressBar progress={progress} />
+              </div>
+
+              <div className="progressbar-button">
+                <Button>Complete your profile</Button>
+              </div>
             </div>
-          </div>
-        </CardContainer>
+          </CardContainer>
+        )}
 
         {/* Find Jobs */}
         <div className="findjobs-component">
