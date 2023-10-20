@@ -1,26 +1,35 @@
-import axios from "axios";
 import { Candidate } from "../../types/types";
+import React from "react";
 
-// const sectionsVisibleInfo = [
-//   { title: "Salary bracket", subtitle: "CHF 90'000 / 110'000 pa" },
-//   { title: "Notice", subtitle: "Immediately available" },
-//   {
-//     title: "Visa Status",
-//     subtitle: "(EU) valid visa \n (CH) valid visa \n (UK) valid visa",
-//   },
-// ];
-// const sectionsExperience = [
-//   {
-//     title: "Role",
-//     text: "5 Years in academia",
-//     subtext: "+ 1 year in Product, 3 in Engineering",
-//   },
-//   {
-//     title: "Industries",
-//     text: "Entertainment",
-//     subtext: "+ Software/Saas, Biotechnology, Medical devices",
-//   },
-// ];
+interface TimeAgoProps {
+  timestamp: string;
+}
+
+const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
+  const getTimeAgo = (timestampStr: string): string => {
+    const timestampDate = new Date(timestampStr);
+    const now = new Date();
+    const secondsAgo = Math.floor(
+      (now.getTime() - timestampDate.getTime()) / 1000
+    );
+
+    if (secondsAgo < 60) {
+      return `${secondsAgo} second${secondsAgo !== 1 ? "s" : ""} ago`;
+    } else if (secondsAgo < 3600) {
+      const minutesAgo = Math.floor(secondsAgo / 60);
+      return `${minutesAgo} minute${minutesAgo !== 1 ? "s" : ""} ago`;
+    } else if (secondsAgo < 86400) {
+      const hoursAgo = Math.floor(secondsAgo / 3600);
+      return `${hoursAgo} hour${hoursAgo !== 1 ? "s" : ""} ago`;
+    } else {
+      const daysAgo = Math.floor(secondsAgo / 86400);
+      return `${daysAgo} day${daysAgo !== 1 ? "s" : ""} ago`;
+    }
+  };
+
+  return <span>{getTimeAgo(timestamp)}</span>;
+};
+
 
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -314,4 +323,5 @@ export {
   transformCandidateDocs,
   transformCandidateVisibleInfo,
   transformExperience,
+  TimeAgo,
 };
