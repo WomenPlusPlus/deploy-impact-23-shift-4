@@ -8,7 +8,7 @@ import IniciativesComponent from "./tabs/iniciativesTab/Iniciatives";
 
 import { getAssociationById } from "../../../api/associations";
 
-import { Association } from "../types/types";
+import { Association } from "../../../types/types";
 
 import styling from "./AssociationProfile.module.scss";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Switch } from "antd";
-import { Button } from "../button/Button";
+import { Button } from "../../UI/button/Button";
 import styling from "./ToggleModal.module.css";
 import TextArea from "antd/es/input/TextArea";
 

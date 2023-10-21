@@ -1,5 +1,5 @@
 import { Upload } from "antd";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 import { Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { UploadFile } from "antd/lib/upload/interface";
@@ -39,7 +39,9 @@ const CV: React.FC<CVProps> = ({
       {cvReference ? (
         <>
           <h3>Your CV:</h3>
-          <p><strong>Reference:</strong> {cvReference}</p>
+          <p>
+            <strong>Reference:</strong> {cvReference}
+          </p>
 
           <Button onClick={deleteCV}>Delete CV</Button>
 

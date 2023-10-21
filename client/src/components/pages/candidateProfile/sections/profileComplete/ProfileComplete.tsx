@@ -1,9 +1,13 @@
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
+import { ProgressBar } from "../../../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
-import { CardContainer } from "../../UI/container/CardContainer";
+import { CardContainer } from "../../../../UI/container/CardContainer";
 import styling from "./ProfileComplete.module.css";
-import { countNullFieldsByCategory, percentage, allCategories } from "./helpers/helper";
-import { Candidate } from "../types/types";
+import {
+  countNullFieldsByCategory,
+  percentage,
+  allCategories,
+} from "../../helpers/helper";
+import { Candidate } from "../../../../../types/types";
 import { useEffect, useState } from "react";
 
 interface ProfileCompletedProps {

@@ -1,4 +1,4 @@
-import { Section } from "../../pages/types/types";
+import { Section } from "../../../types/types";
 import styling from "./SectionContainer.module.css";
 import { IconCertificate, IconClipboardText } from "@tabler/icons-react";
 

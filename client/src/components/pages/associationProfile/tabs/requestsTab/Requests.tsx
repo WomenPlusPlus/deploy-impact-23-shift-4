@@ -1,5 +1,5 @@
 import { Space } from "antd";
-import { Association } from "../../../types/types";
+import { Association } from "../../../../../types/types";
 import { CardContainer } from "../../../../UI/container/CardContainer";
 import Table from "../../../../UI/table/Table";
 import styling from "./Requests.module.scss";

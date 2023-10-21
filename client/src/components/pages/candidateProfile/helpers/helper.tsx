@@ -1,4 +1,4 @@
-import { Candidate, Experience } from "../../types/types";
+import { Candidate, Experience } from "../../../../types/types";
 import React from "react";
 
 interface TimeAgoProps {

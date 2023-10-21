@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import { CardContainer } from "../../UI/container/CardContainer";
+import { CardContainer } from "../../../../UI/container/CardContainer";
+import { ContentBlock } from "../../../../UI/container/SectionContainer";
+import { Labels } from "../../../../UI/labels/Label";
 import {
-  ContentBlock,
-  HorizontalLine,
-} from "../../UI/container/SectionContainer";
-import { Labels } from "../../UI/labels/Label";
-import { Candidate, Experience, Job, Section } from "../types/types";
+  Candidate,
+  Experience,
+  Job,
+  Section,
+} from "../../../../../types/types";
 import styling from "./CandidateResumeTab.module.css";
-import { IconCertificate, IconTags, IconChecklist } from "@tabler/icons-react";
-import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
-import { WorkExperience } from "./WorkExperience";
-import { SkillsLevelGuide } from "./SkillsLevelGuide";
-import { RequestAccess } from "../../UI/modal/RequestAccess";
-import { Skeleton } from "antd";
-import { transformExperience } from "../candidateProfile/helpers/helper";
-import { Button } from "../../UI/button/Button";
+import { IconTags } from "@tabler/icons-react";
+import { SkillsLevelGuide } from "../../../../shared/skillsLevelGuide/SkillsLevelGuide";
+import { RequestAccess } from "../../modal/RequestAccess";
+import { transformExperience } from "../../../candidateProfile/helpers/helper";
+import { Button } from "../../../../UI/button/Button";
 interface Props {
   candidate: Candidate;
   matchingJobs: Job[];

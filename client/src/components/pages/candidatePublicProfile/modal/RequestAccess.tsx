@@ -1,7 +1,7 @@
 import { Modal, Button, Select } from "antd";
 import React from "react";
 import { toast } from "react-toastify";
-import { Job } from "../../pages/types/types";
+import { Job } from "../../../../types/types";
 import TextArea from "antd/es/input/TextArea";
 const { Option } = Select;
 

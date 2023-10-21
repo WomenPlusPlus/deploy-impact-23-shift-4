@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Input } from "antd";
 import { IconEdit } from "@tabler/icons-react";
-import { Labels } from "../labels/Label";
-import styling from "./EditValues.module.css";
-import { Candidate } from "../../pages/types/types";
+import { Labels } from "../../../UI/labels/Label";
+import styling from "./EditTypeOfJobs.module.css";
+import { Candidate } from "../../../../types/types";
 
-interface Value {
-  value_name: string;
-  value_id: string;
-  score: number;
+interface TypeOfJobs {
+  job_name: string;
+  job_id: string;
 }
 
-interface EditValuesProps {
+interface EditTypeOfJobsProps {
   candidate: Candidate;
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: string[]; // Change the type to an array of strings
+  allLabels: TypeOfJobs[];
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
-  showModal: () => void;
+  showModal?: () => void;
 }
 
-const EditValues: React.FC<EditValuesProps> = ({
+const EditTypeOfJobs: React.FC<EditTypeOfJobsProps> = ({
   candidate,
   icon,
   titleName,
@@ -36,45 +35,51 @@ const EditValues: React.FC<EditValuesProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<string[]>([]); // Change the type to an array of strings
-  const [filteredValues, setFilteredValues] = useState<string[]>([]); // Change the type to an array of strings
+
+  const [labelsToDeleteState, setLabelsToDeleteState] = useState<TypeOfJobs[]>(
+    []
+  );
+  const [filteredTypeOfJobs, setFilteredTypeOfJobs] = useState<TypeOfJobs[]>(
+    []
+  );
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate?.values as string[]);
-    updateFilteredValues(candidate?.values as string[]);
-  }, [candidate?.values]);
+    setLabelsToDeleteState(candidate?.preferred_jobs as TypeOfJobs[]);
+    updateFilteredTypeOfJobss(candidate?.preferred_jobs as TypeOfJobs[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [candidate?.preferred_jobs]);
 
-  const updateFilteredValues = (valuesToDelete: string[]) => {
-    const updatedFilteredValues = allLabels?.filter((value) => {
-      const isValueInCandidate = valuesToDelete?.every(
-        (candidateValue) => candidateValue !== value
+  const updateFilteredTypeOfJobss = (jobsToDelete: TypeOfJobs[]) => {
+    const updatedFilteredTypeOfJobss = allLabels?.filter((job) => {
+      const isValueInCandidate = jobsToDelete?.every(
+        (candidateValue) => candidateValue.job_id !== job.job_id
       );
       return (
         isValueInCandidate &&
-        value.toLowerCase().includes(searchText.toLowerCase())
+        job.job_name.toLowerCase().includes(searchText.toLowerCase())
       );
     });
-    setFilteredValues(updatedFilteredValues);
+    setFilteredTypeOfJobs(updatedFilteredTypeOfJobss);
   };
 
-  const handleCloseValue = (valueToRemove: string) => {
-    const updatedValues = labelsToDeleteState.filter(
-      (value) => value !== valueToRemove
+  const handleCloseTypeOfJobs = (valueToRemove: TypeOfJobs) => {
+    const updatedTypeOfJobs = labelsToDeleteState.filter(
+      (job) => job.job_id !== valueToRemove.job_id
     );
-    setLabelsToDeleteState(updatedValues);
-    updateFilteredValues(updatedValues); // Update filteredValues
+    setLabelsToDeleteState(updatedTypeOfJobs);
+    updateFilteredTypeOfJobss(updatedTypeOfJobs); // Update filteredTypeOfJobss
   };
 
-  const addSkillToDeleteState = (skillToAdd: string) => {
+  const addSkillToDeleteState = (jobToAdd: TypeOfJobs) => {
     // Check if labelsToDeleteState is not empty
     if (labelsToDeleteState) {
-      const updatedValues = [...labelsToDeleteState, skillToAdd];
-      setLabelsToDeleteState(updatedValues);
-      updateFilteredValues(updatedValues); // Update filteredValues
+      const updatedTypeOfJobss = [...labelsToDeleteState, jobToAdd];
+      setLabelsToDeleteState(updatedTypeOfJobss);
+      updateFilteredTypeOfJobss(updatedTypeOfJobss); // Update filteredTypeOfJobss
     } else {
       // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
-      setLabelsToDeleteState([skillToAdd]);
-      updateFilteredValues([skillToAdd]); // Update filteredValues
+      setLabelsToDeleteState([jobToAdd]);
+      updateFilteredTypeOfJobss([jobToAdd]); // Update filteredTypeOfJobss
     }
   };
 
@@ -83,18 +88,21 @@ const EditValues: React.FC<EditValuesProps> = ({
     setTimeout(() => {
       setLoading(false);
       setVisible(false);
-      setCandidate({ ...candidate, values: labelsToDeleteState });
-      onSave && onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
+      setCandidate({ ...candidate, preferred_jobs: labelsToDeleteState });
+      onSave &&
+        onSave({
+          ...candidate,
+          preferred_jobs: labelsToDeleteState,
+        } as Candidate);
       setSearchText("");
     }, 300);
   };
-  
+
   const handleCancel = () => {
     setVisible(false);
-    setLabelsToDeleteState(candidate.values as string[]); // Change the type to an array of strings
+    setLabelsToDeleteState(candidate.preferred_jobs as TypeOfJobs[]);
     setSearchText("");
   };
-  
 
   return (
     <>
@@ -125,12 +133,12 @@ const EditValues: React.FC<EditValuesProps> = ({
         {/* Candidates values */}
         <div className={styling.elementInOneRow}>
           {labelsToDeleteState &&
-            labelsToDeleteState?.map((value, index) => (
+            labelsToDeleteState?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value}
-                onCloseIcon={() => handleCloseValue(value)}
+                labelName={job.job_name}
+                onCloseIcon={() => handleCloseTypeOfJobs(job)}
                 disableCloseIcon={false}
                 customClass={styling.labelClassSelected}
               />
@@ -142,17 +150,16 @@ const EditValues: React.FC<EditValuesProps> = ({
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        {/* All values */}
         <div className={styling.elementInOneRow}>
           {allLabels &&
-            allLabels?.map((value, index) => (
+            allLabels?.map((job, index) => (
               <Labels
                 key={index}
                 icon={icon}
-                labelName={value}
+                labelName={job.job_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
-                onClickHandle={() => addSkillToDeleteState(value)}
+                onClickHandle={() => addSkillToDeleteState(job)}
               />
             ))}
         </div>
@@ -161,4 +168,4 @@ const EditValues: React.FC<EditValuesProps> = ({
   );
 };
 
-export { EditValues };
+export { EditTypeOfJobs };

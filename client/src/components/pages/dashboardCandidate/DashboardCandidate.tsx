@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate } from "../../../components/pages/types/types";
+import { Candidate } from "../../../types/types";
 
 import React from "react";
 import {
@@ -33,7 +33,6 @@ const DashboardCandidate: React.FC = () => {
       setCandidate(candidateFetched);
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
-      
     } catch (error) {
       console.log("error", error);
     }

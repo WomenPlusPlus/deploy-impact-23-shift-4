@@ -5,10 +5,10 @@ import Avatar from "../../UI/avatar/Avatar";
 import Spinner from "../../UI/spinner/Spinner";
 import { Button } from "../../UI/button/Button";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 
-import { Company } from "../../pages/types/types";
+import { Company } from "../../../types/types";
 import { getAllJobs } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { getAllCandidates } from "../../../api/candidates";
@@ -105,22 +105,23 @@ const DashboardCompany = () => {
       <div className={styling.section}>
         <CardContainer className={styling.card}>
           <h1>Our listings</h1>
-          {jobs && jobs?.map((job: Record<string, any>) => {
-            return (
-              <div onClick={() => navigate(`/job/${job.id}`)}>
-                <HorizontalCard
-                  avatar={false}
-                  button="Go to description"
-                  title={job?.title}
-                  subtitle={
-                    job?.matching_candidates?.length
-                      ? `${job?.matching_candidates?.length} great match(es)!`
-                      : "No matches yet"
-                  }
-                />
-              </div>
-            );
-          })}
+          {jobs &&
+            jobs?.map((job: Record<string, any>) => {
+              return (
+                <div onClick={() => navigate(`/job/${job.id}`)}>
+                  <HorizontalCard
+                    avatar={false}
+                    button="Go to description"
+                    title={job?.title}
+                    subtitle={
+                      job?.matching_candidates?.length
+                        ? `${job?.matching_candidates?.length} great match(es)!`
+                        : "No matches yet"
+                    }
+                  />
+                </div>
+              );
+            })}
         </CardContainer>
 
         <CardContainer className={styling.card}>
