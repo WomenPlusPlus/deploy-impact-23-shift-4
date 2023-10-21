@@ -11,6 +11,11 @@ import { getCandidateById } from "../../../api/candidates";
 import { Candidate } from "../../../components/pages/types/types";
 
 import React from "react";
+import {
+  allCategories,
+  countNullFieldsByCategory,
+  percentage,
+} from "../candidateProfile/helpers/helper";
 
 const DashboardCandidate: React.FC = () => {
   // state
@@ -26,13 +31,24 @@ const DashboardCandidate: React.FC = () => {
       const candidateFetched = await getCandidateById(user_id);
       console.log("candidateFetched", candidateFetched);
       setCandidate(candidateFetched);
+      const isProgress = calculateProgress(candidateFetched as Candidate);
+      setProgress(isProgress);
+      
     } catch (error) {
       console.log("error", error);
     }
-    const isProgress = localStorage.getItem("progress");
-    if (isProgress) {
-      setProgress(parseInt(isProgress));
-    }
+  };
+
+  const calculateProgress = (candidate: Candidate) => {
+    const countFields = countNullFieldsByCategory(candidate, allCategories);
+    const countProgress = percentage({
+      completedCategories: Object.values(countFields).filter(
+        (fraction) => fraction > 0
+      ).length,
+      totalCategories: allCategories.length,
+    });
+    console.log("PROGRESS", countProgress);
+    return countProgress;
   };
 
   useEffect(() => {
@@ -93,12 +109,19 @@ const DashboardCandidate: React.FC = () => {
         <div className="findjobs-component">
           <CardContainer className="section-element findjobs-element">
             <h1 className="top-left">Find your next job</h1>
-            <Button className="bottom-right" onClick={() => navigate("/jobs")}>Jobs</Button>
+            <Button className="bottom-right" onClick={() => navigate("/jobs")}>
+              Jobs
+            </Button>
           </CardContainer>
 
           <CardContainer className="section-element findjobs-element">
             <h1 className="top-left">Explore Companies</h1>
-            <Button className="bottom-right" onClick={() => navigate("/companies")}>Companies</Button>
+            <Button
+              className="bottom-right"
+              onClick={() => navigate("/companies")}
+            >
+              Companies
+            </Button>
           </CardContainer>
         </div>
 

@@ -30,7 +30,6 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   return <span>{getTimeAgo(timestamp)}</span>;
 };
 
-
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
   const fieldsToDisplayProfile = [
@@ -113,22 +112,34 @@ const getFakeData = () => {
   };
 };
 
+const allCategories = [
+  "Job Preferences",
+  "Documents",
+  "Profile",
+  "Skills",
+  "Values",
+  "Languages",
+  "Experience",
+  "Contact info",
+  "Type of jobs",
+];
+
 type FieldCategoryMapping = Record<keyof Candidate, string>;
 const fieldCategoryMapping: FieldCategoryMapping = {
-  id: "Profile",
-  user_id: "Profile",
-  password: "Profile",
+  id: "",
+  user_id: "",
+  password: "",
   email: "Contact info",
-  associations: "Profile",
+  associations: "",
   first_name: "Profile",
   last_name: "Profile",
-  preferred_name: "Profile",
+  preferred_name: "",
   city: "Contact info",
   country: "Contact info",
   cv_reference: "Documents",
   address: "Contact info",
   phone_number: "Contact info",
-  birth_date: "Profile",
+  birth_date: "",
   work_permit: "Job Preferences",
   notice_period: "Job Preferences",
   job_status: "Profile",
@@ -218,7 +229,7 @@ function transformCandidateDocs(candidate: Candidate) {
   return transformedData;
 }
 
-function transformCandidateVisibleInfo(candidate: Candidate) {
+function transformCandidateJobPref(candidate: Candidate) {
   const sectionsVisibleInfo = [];
 
   // Transform salary_expectation
@@ -251,6 +262,22 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
   }
 
   // transform locations
+  if (
+    candidate.possible_work_locations &&
+    candidate.possible_work_locations.length > 0
+  ) {
+    sectionsVisibleInfo.push({
+      title: "Locations",
+      subtitle: candidate.possible_work_locations.join(", "),
+    });
+  }
+
+  if (candidate.type_of_work && candidate.type_of_work.length > 0) {
+    sectionsVisibleInfo.push({
+      title: "Type of work",
+      subtitle: candidate.type_of_work.join(", "),
+    });
+  }
 
   return sectionsVisibleInfo;
 }
@@ -277,11 +304,7 @@ function transformExperience(experience: Experience[]) {
 
     if (firstExperience.industries) {
       subtext = experience
-        .map((exp, index) =>
-          index === 0
-            ? ""
-            : `${exp.industries}`
-        )
+        .map((exp, index) => (index === 0 ? "" : `${exp.industries}`))
         .join(" ");
 
       sectionsExperience.push({
@@ -318,7 +341,8 @@ export {
   fieldCategoryMapping,
   completedCategories,
   transformCandidateDocs,
-  transformCandidateVisibleInfo,
+  transformCandidateJobPref,
   transformExperience,
   TimeAgo,
+  allCategories,
 };
