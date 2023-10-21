@@ -10,9 +10,14 @@
 
 .filters {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 2rem;
-  padding: 0 8rem 2rem 8rem;
+  padding: 1rem 0;
+}
+
+.filter-dropdown {
+  display: flex;
+  gap: 1rem;
 }
 
 .cards {

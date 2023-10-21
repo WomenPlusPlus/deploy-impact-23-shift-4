@@ -136,7 +136,24 @@ const CompanyProfile = () => {
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>About us</h2>
 
-        <p>This is about the company</p>
+        <p>
+          Welcome to The Dream Company, where innovation meets imagination, and
+          technology takes flight. We are not just a tech company; we are
+          dreamweavers, shaping the future one idea at a time. Founded on a
+          shared vision of pushing the boundaries of what's possible, The Dream
+          Company is a collective of brilliant minds, creatives, and tech
+          enthusiasts.
+        </p>
+        <p>
+          Our journey began with a simple yet powerful dream: to create a world
+          where technology doesn't just serve us but inspires us. At The Dream
+          Company, we pride ourselves on turning dreams into reality. Our
+          talented team of engineers, designers, and visionaries work tirelessly
+          to develop cutting-edge solutions that redefine the digital landscape.
+          From web applications to artificial intelligence, cybersecurity to
+          cloud computing, we're dedicated to crafting the tools that empower
+          your dreams.
+        </p>
       </div>
     </CardContainer>
   );
@@ -147,7 +164,15 @@ const CompanyProfile = () => {
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>Company culture</h2>
 
-        <p>This is about the culture</p>
+        <p>
+          At The Dream Company, we're fueled by innovation, united by teamwork,
+          and committed to inclusivity. We value continuous learning, promote
+          work-life balance, and actively engage with our communities. Our
+          culture is built on the foundation of creativity, responsibility, and
+          a customer-centric approach. Join us in living the dream, where work
+          is enjoyable, learning is ongoing, and making a difference is a daily
+          mission.
+        </p>
       </div>
     </CardContainer>
   );

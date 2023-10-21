@@ -4,6 +4,7 @@ import "./Candidates.css";
 import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
 import { useNavigate } from "react-router-dom";
+import Searchbar from "../../UI/searchbar/Searchbar";
 
 interface Candidate {
   user_id: string;
@@ -48,18 +49,27 @@ const Candidates = () => {
     <div className="mainContainer">
       <h1 className="header">The best talent is right here!</h1>
       <div className="filters">
-        <Filter
-          options={skillsOptions}
-          data={candidates}
-          criteria="skills"
-          onFilterChange={handleFilterChange}
+        <Searchbar
+          placeholder="Search..."
+          width={800}
+          onSearch={() => {
+            console.log("search");
+          }}
         />
-        <Filter
-          options={associationsOptions}
-          data={candidates}
-          criteria="associations"
-          onFilterChange={handleFilterChange}
-        />
+        <div className={"filter-dropdown"}>
+          <Filter
+            options={skillsOptions}
+            data={candidates}
+            criteria="skills"
+            onFilterChange={handleFilterChange}
+          />
+          <Filter
+            options={associationsOptions}
+            data={candidates}
+            criteria="associations"
+            onFilterChange={handleFilterChange}
+          />
+        </div>
       </div>
       <div className="cards">
         {filteredCandidates?.map((candidate) => (
