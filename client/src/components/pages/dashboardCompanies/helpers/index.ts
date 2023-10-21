@@ -3,6 +3,9 @@ export const getMatchingCandidatesInfo = (jobData: any, candidateData: any) => {
   const resultArray: any = [];
 
   jobData.forEach((job: any) => {
+    if (!job) {
+      return;
+    }
     const jobId = job.id;
     const jobTitle = job.title;
 

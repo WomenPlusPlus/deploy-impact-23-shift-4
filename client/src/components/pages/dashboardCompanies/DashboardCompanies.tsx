@@ -105,16 +105,16 @@ const DashboardCompany = () => {
       <div className={styling.section}>
         <CardContainer className={styling.card}>
           <h1>Our listings</h1>
-          {jobs.map((job: Record<string, any>) => {
+          {jobs && jobs?.map((job: Record<string, any>) => {
             return (
               <div onClick={() => navigate(`/job/${job.id}`)}>
                 <HorizontalCard
                   avatar={false}
                   button="Go to description"
-                  title={job.title}
+                  title={job?.title}
                   subtitle={
-                    job.matching_candidates.length
-                      ? `${job.matching_candidates.length} great match(es)!`
+                    job?.matching_candidates?.length
+                      ? `${job?.matching_candidates?.length} great match(es)!`
                       : "No matches yet"
                   }
                 />

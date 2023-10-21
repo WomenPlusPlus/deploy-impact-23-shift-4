@@ -5,6 +5,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
 // import axios from "axios"; // Import Axios for making HTTP requests
 import { useAuth } from "../../../context/auth";
+import BridgeLogo from "../../../media/bridge-logo.png";
 
 import "./Login.css";
 
@@ -60,14 +61,15 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <img
+      {/* <img
         className="backgroud-image"
         alt="background"
         // style={{ width: 160 }}
         src={String(backgroundLogin)}
-      />
+      /> */}
       <div className="login-box">
-        <h1>Welcome to Shift4</h1>
+        <img src={BridgeLogo} alt="Bridge Logo" className="logo" />
+        <h1>Login</h1>
         <Form
           name="normal_login"
           className="login-form"
