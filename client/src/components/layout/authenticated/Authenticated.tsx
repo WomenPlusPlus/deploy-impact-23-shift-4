@@ -4,16 +4,8 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
-import { Header } from "antd/es/layout/layout";
 
-const { Footer, Content } = AntLayout;
-
-const footerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#7dbcea",
-  bottom: 0,
-};
+const { Content } = AntLayout;
 
 const Authenticated = ({ content }: { content: JSX.Element }) => {
   const [selectedComponent, setSelectedComponent] = useState(() => {
@@ -35,7 +27,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     marginLeft: collapsed ? 80 : 200,
     paddingTop: 64,
     overflow: "initial",
-    transition: "margin-left 0.3s", // Add a smooth transition
+    transition: "margin-left 0.3s",
   };
 
   return (

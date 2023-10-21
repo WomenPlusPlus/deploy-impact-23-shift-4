@@ -6,6 +6,11 @@ import { useParams } from "react-router-dom";
 import { getCompanyById } from "../../../api/companies";
 import { useCallback, useEffect, useState } from "react";
 import { Company } from "../types/types";
+import {
+  IconBrandLinkedin,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
@@ -96,11 +101,13 @@ const CompanyPublicProfile = () => {
           <img className={styling.logo} src={company?.logo} alt="Avatar" />
 
           <div>
-            <h1>{company?.company_name}</h1>
+            <h1 className={styling.title}>{company?.company_name}</h1>
 
-            <p>
-              {company?.address} | {"> 500 employees"}
-            </p>
+            <div className={styling.subtitle}>
+              <IconMapPin />
+              {company?.address} | {company?.company_size} employees |
+              <IconBrandLinkedin /> <IconWorldWww />
+            </div>
           </div>
         </div>
       </div>
