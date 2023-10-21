@@ -9,17 +9,74 @@ import { Button } from "../../UI/button/Button";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import Table from "../../UI/table/Table";
-import { Space } from "antd";
+import { Space, message } from "antd";
 import { useEffect, useState } from "react";
 import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
 import { useNavigate } from "react-router-dom";
-import { getAssociationById } from "../../../api/associations";
+import {
+  getAssociationById,
+  updateAssociationById,
+} from "../../../api/associations";
+import { sendInvite } from "../../../api/invite";
+
+interface Payload {
+  name: string;
+  user_type: string | null;
+  recipient_email: string;
+  association: string;
+}
 
 const DashboardAssociations = () => {
   const navigate = useNavigate();
 
   //State
   const [association, setAssociation] = useState<any>(null);
+  const [isSendInviteOpen, setSendInviteOpen] = useState(false);
+  const [defaultOption, setDefaultOption] = useState("");
+
+  /**
+   * Sends the invite to the backend
+   * @param payload - The payload to be sent to the backend
+   */
+  const handleSendInvite = async (payload: Payload) => {
+    const payloadInvite = {
+      user_type: payload.user_type,
+      recipient_email: payload.recipient_email,
+      association: association.association_name,
+    };
+    // Send invite
+    const isInviteSent = await sendInvite(payloadInvite);
+
+    const payloadInvites = {
+      name: payload.name,
+      email: payload.recipient_email,
+      user_type: payload.user_type,
+      createdAt: new Date(),
+    };
+    // Update association invites array
+    await updateAssociationById(association?.user_id, {
+      invites: [...association.invites, payloadInvites],
+    });
+
+    setSendInviteOpen(false);
+
+    fetchAssociation();
+
+    if (isInviteSent.success) {
+      message.success("Invite sent");
+    } else {
+      message.error("Error sending invite. Please try again");
+    }
+  };
+
+  /**
+   * Opens the send invite modal
+   * @param defaultOption - The default option to be selected
+   */
+  const handleOpenInvite = (defaultOption: any) => {
+    setDefaultOption(defaultOption);
+    setSendInviteOpen(true);
+  };
 
   /**
    * Fetches the association data object by id
@@ -84,8 +141,8 @@ const DashboardAssociations = () => {
     },
     {
       title: "User type",
-      dataIndex: "userType",
-      key: "userType",
+      dataIndex: "user_type",
+      key: "user_type",
     },
     {
       title: "Expires in",
@@ -123,15 +180,12 @@ const DashboardAssociations = () => {
       key: index,
       name: invite.name,
       email: invite.email,
-      userType: invite.user_type,
+      user_type: invite.user_type,
       expiresIn: expiresInDays > 0 ? `${expiresInDays} days` : "Expired",
     };
   });
 
   const [tableData, setTableData] = useState(data);
-  const [isSendInviteCandidateOpen, setSendInviteCandidateOpen] =
-    useState(false);
-  const [isSendInviteCompanyOpen, setSendInviteCompanyOpen] = useState(false);
 
   const handleAccept = (record: any) => {
     console.log(`Accepted: ${record.candidate}`);
@@ -145,16 +199,6 @@ const DashboardAssociations = () => {
     // Filter out the row with the rejected candidate
     const updatedData = tableData.filter((item) => item.key !== record.key);
     setTableData(updatedData);
-  };
-
-  const handleSendCompanyInvite = (email: any) => {
-    console.log(`Sending invite to company${email}`);
-    setSendInviteCompanyOpen(false);
-  };
-
-  const handleSendCandidateInvite = (email: any) => {
-    console.log(`Sending invite to candidate ${email}`);
-    setSendInviteCandidateOpen(false);
   };
 
   return (
@@ -195,15 +239,12 @@ const DashboardAssociations = () => {
           </p>
           <Button
             className={styling.inviteButton}
-            onClick={() => setSendInviteCandidateOpen(true)}
+            onClick={() => {
+              handleOpenInvite("Candidate");
+            }}
           >
             Invite
           </Button>
-          <SendInviteModal
-            isOpen={isSendInviteCandidateOpen}
-            onClose={() => setSendInviteCandidateOpen(false)}
-            handleSend={handleSendCandidateInvite}
-          />
         </CardContainer>
 
         <CardContainer className={styling.inviteSection}>
@@ -216,17 +257,20 @@ const DashboardAssociations = () => {
           </p>
           <Button
             className={styling.inviteButton}
-            onClick={() => setSendInviteCompanyOpen(true)}
+            onClick={() => {
+              handleOpenInvite("Company");
+            }}
           >
             Invite
           </Button>
-          <SendInviteModal
-            isOpen={isSendInviteCompanyOpen}
-            onClose={() => setSendInviteCompanyOpen(false)}
-            handleSend={handleSendCompanyInvite}
-          />
         </CardContainer>
       </div>
+      <SendInviteModal
+        isOpen={isSendInviteOpen}
+        defaultOption={defaultOption}
+        onClose={() => setSendInviteOpen(false)}
+        handleSend={handleSendInvite}
+      />
 
       <div className={styling.tables}>
         <CardContainer className={styling.requests}>

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import Tabs from "../../UI/tabs/Tabs";
 import { CardContainer } from "../../UI/container/CardContainer";
-import InvitesComponent from "../dashboardAssociations/tabs/invitesTab/Invites";
-import RequestsComponent from "../dashboardAssociations/tabs/requestsTab/Requests";
-import IniciativesComponent from "../dashboardAssociations/tabs/iniciativesTab/Iniciatives";
+import InvitesComponent from "./tabs/invitesTab/Invites";
+import RequestsComponent from "./tabs/requestsTab/Requests";
+import IniciativesComponent from "./tabs/iniciativesTab/Iniciatives";
 
 import { getAssociationById } from "../../../api/associations";
 
@@ -33,7 +33,6 @@ const AssociationProfile = () => {
 
     if (userId) {
       const association = await getAssociationById(userId);
-      console.log(association);
       setAssociation(association);
     }
   };
@@ -61,7 +60,12 @@ const AssociationProfile = () => {
     {
       label: "Invites",
       key: "2",
-      children: <InvitesComponent association={association} />,
+      children: (
+        <InvitesComponent
+          association={association}
+          callback={fetchAssociation}
+        />
+      ),
     },
     {
       label: "Requests",
