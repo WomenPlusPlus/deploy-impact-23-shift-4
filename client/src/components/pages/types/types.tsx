@@ -93,6 +93,8 @@ export interface Job {
 }
 
 export interface Association {
+  id: string;
+  user_id: string;
   association_name: string;
   logo: string;
   address: string;
