@@ -1,4 +1,4 @@
-import { Association } from "../../../types/types";
+import { Association } from "../../../../../types/types";
 import { CardContainer } from "../../../../UI/container/CardContainer";
 import { Button } from "../../../../UI/button/Button";
 import Table from "../../../../UI/table/Table";

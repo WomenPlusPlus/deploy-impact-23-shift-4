@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Input, Select } from "antd";
 import { IconEdit } from "@tabler/icons-react";
-import { Labels } from "../labels/Label";
+import { Labels } from "../../../UI/labels/Label";
 import styling from "./EditSkills.module.css";
-import { Candidate, Skill } from "../../pages/types/types";
+import { Candidate, Skill } from "../../../../types/types";
 
 const { Option } = Select;
 

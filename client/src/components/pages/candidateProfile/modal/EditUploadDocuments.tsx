@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { IconEdit } from "@tabler/icons-react";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 import { Certificates } from "./UploadCertificates";
 import { CV } from "./UploadCV";
 

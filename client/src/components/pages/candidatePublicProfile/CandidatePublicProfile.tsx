@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import styling from "./CandidatePublicProfile.module.css";
 import { useEffect, useState } from "react";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate, Job } from "../types/types";
+import { Candidate, Job } from "../../../types/types";
 import Avatar from "../../UI/avatar/Avatar";
 import {
   IconBrandLinkedin,
@@ -10,8 +10,8 @@ import {
   IconWorldWww,
 } from "@tabler/icons-react";
 import Tabs from "../../UI/tabs/Tabs";
-import { CandidateMatchesTab } from "./CandidateMatchesTab";
-import { CandidateResumeTab } from "./CandidateResumeTab";
+import { CandidateMatchesTab } from "./tabs/matches/CandidateMatchesTab";
+import { CandidateResumeTab } from "./tabs/resume/CandidateResumeTab";
 import { getAllJobs } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 

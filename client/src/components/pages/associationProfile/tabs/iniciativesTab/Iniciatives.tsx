@@ -1,7 +1,7 @@
 import { CardContainer } from "../../../../UI/container/CardContainer";
 import { Button } from "../../../../UI/button/Button";
-import { HorizontalCard } from "../../../../UI/card/HorizontalCard";
-import { Association } from "../../../types/types";
+import { HorizontalCard } from "../../../../UI/horizontalCard/HorizontalCard";
+import { Association } from "../../../../../types/types";
 import styling from "./Iniciatives.module.css";
 
 const IniciativesComponent = ({

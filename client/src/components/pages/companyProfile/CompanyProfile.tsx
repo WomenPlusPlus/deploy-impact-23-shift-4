@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../UI/tabs/Tabs";
 import Spinner from "../../UI/spinner/Spinner";
 import { Button } from "../../UI/button/Button";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
-import { Company } from "../../pages/types/types";
+import { Company } from "../../../types/types";
 import { addJob, getAllJobs } from "../../../api/jobs";
 import { getCompanyById, updateCompanyById } from "../../../api/companies";
 

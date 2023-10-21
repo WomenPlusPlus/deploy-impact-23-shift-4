@@ -189,9 +189,9 @@
 
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Select } from "antd";
-import { Button } from "../button/Button";
+import { Button } from "../../../UI/button/Button";
 import { IconEdit } from "@tabler/icons-react";
-import { Candidate, EditInputProps } from "../../pages/types/types";
+import { Candidate, EditInputProps } from "../../../../types/types";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
 import { CloseCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
@@ -320,43 +320,44 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                     return (
                       <div>
                         {links && links.length > 0 && <p>Links:</p>}
-                        {links && links?.map((link, index) => (
-                          <div key={index}>
-                            {/* Show existing links */}
-                            <Input
-                              value={link.name}
-                              onChange={(e) => {
-                                const updatedLinks = [...links];
-                                updatedLinks[index].name = e.target.value;
-                                setLinks(updatedLinks);
-                              }}
-                              disabled={true}
-                            />
-                            <Input
-                              value={link.url}
-                              onChange={(e) => {
-                                const updatedLinks = [...links];
-                                updatedLinks[index].url = e.target.value;
-                                setLinks(updatedLinks);
-                              }}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                // Handle link deletion here
-                                const updatedLinks = [...links];
-                                updatedLinks.splice(index, 1);
-                                setLinks(updatedLinks);
-                                setValues((prevValues) => ({
-                                  ...prevValues,
-                                  links: updatedLinks,
-                                }));
-                              }}
-                            >
-                              <CloseCircleOutlined />
-                            </button>
-                          </div>
-                        ))}
+                        {links &&
+                          links?.map((link, index) => (
+                            <div key={index}>
+                              {/* Show existing links */}
+                              <Input
+                                value={link.name}
+                                onChange={(e) => {
+                                  const updatedLinks = [...links];
+                                  updatedLinks[index].name = e.target.value;
+                                  setLinks(updatedLinks);
+                                }}
+                                disabled={true}
+                              />
+                              <Input
+                                value={link.url}
+                                onChange={(e) => {
+                                  const updatedLinks = [...links];
+                                  updatedLinks[index].url = e.target.value;
+                                  setLinks(updatedLinks);
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  // Handle link deletion here
+                                  const updatedLinks = [...links];
+                                  updatedLinks.splice(index, 1);
+                                  setLinks(updatedLinks);
+                                  setValues((prevValues) => ({
+                                    ...prevValues,
+                                    links: updatedLinks,
+                                  }));
+                                }}
+                              >
+                                <CloseCircleOutlined />
+                              </button>
+                            </div>
+                          ))}
                         <div>
                           <p>Additional Link:</p>
                           <Select

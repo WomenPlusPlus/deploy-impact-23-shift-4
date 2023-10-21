@@ -2,7 +2,7 @@ import { Space, Table } from "antd";
 import { CardContainer } from "../../../UI/container/CardContainer";
 import { useState } from "react";
 import styling from "./ApplicationRequests.module.scss";
-import ToggleModal from "../../../UI/toggleModal/ToggleModal";
+import ToggleModal from "../../../shared/toggleModal/ToggleModal";
 
 const ApplicationRequests = () => {
   const data = [

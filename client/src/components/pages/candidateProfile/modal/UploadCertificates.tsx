@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Input, Button, Upload, message, UploadFile } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 import styling from "./UploadCertificates.module.css";
 
 interface CertificatesProps {
@@ -48,7 +48,7 @@ const Certificates: React.FC<CertificatesProps> = ({
 
   return (
     <>
-    <h3>Your certificates</h3>
+      <h3>Your certificates</h3>
       {certificates?.map((certificate, index) => (
         <div key={index} className={styling.certificates}>
           <p>

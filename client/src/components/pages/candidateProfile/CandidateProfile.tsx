@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import Avatar from "../../UI/avatar/Avatar";
 
 import { Labels } from "../../UI/labels/Label";
-import { EditSkills } from "../../UI/modal/EditSkills";
-import { EditValues } from "../../UI/modal/EditValues";
-import { EditInput } from "../../UI/modal/EditInput";
-import { EditLanguages } from "../../UI/modal/EditLanguages";
-import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
-import { EditExperience } from "../../UI/modal/EditExperience";
-import { EditJobSearchPref } from "../../UI/modal/EditJobSearchPref";
+import { EditSkills } from "./modal/EditSkills";
+import { EditValues } from "./modal/EditValues";
+import { EditInput } from "./modal/EditInput";
+import { EditLanguages } from "./modal/EditLanguages";
+import { EditTypeOfJobs } from "./modal/EditTypeOfJobs";
+import { EditExperience } from "./modal/EditExperience";
+import { EditJobSearchPref } from "./modal/EditJobSearchPref";
 import {
   allCategories,
   countNullFieldsByCategory,
@@ -21,7 +21,7 @@ import {
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";
-import { ProfileComplete } from "./ProfileComplete";
+import { ProfileComplete } from "./sections/profileComplete/ProfileComplete";
 import {
   IconEdit,
   IconMapPin,
@@ -30,14 +30,14 @@ import {
   IconTags,
   IconSpy,
 } from "@tabler/icons-react";
-import { DocumentUploadModal } from "../../UI/modal/EditUploadDocuments";
+import { DocumentUploadModal } from "./modal/EditUploadDocuments";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
-import { Candidate } from "../types/types";
+import { Candidate } from "../../../types/types";
 
 import styling from "./CandidateProfile.module.css";
-import { SkillsLevelGuide } from "../candidatePublicProfile/SkillsLevelGuide";
-import Icon from "@ant-design/icons/lib/components/Icon";
+import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
+import ToggleModal from "../../shared/toggleModal/ToggleModal";
 
 const CandidateProfile = () => {
   // State
@@ -60,10 +60,24 @@ const CandidateProfile = () => {
   const [allSkills, setAllSkills] = useState([]);
   const [allValues, setAllValues] = useState([]);
   const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
-
+  // count null categories
   const [countNullCategories, setCountNullCategories] = useState<
     Record<string, number>
   >({});
+
+  // toggle
+  const [showToggleModal, setShowToggleModal] = useState(false);
+  const [selectedStrings, setSelectedStrings] = useState<boolean[]>([
+    true,
+    true,
+    true,
+    true,
+  ]);
+  const handleToggle = (index: number) => {
+    const updatedSelectedStrings = [...selectedStrings];
+    updatedSelectedStrings[index] = !selectedStrings[index];
+    setSelectedStrings(updatedSelectedStrings);
+  };
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -160,7 +174,12 @@ const CandidateProfile = () => {
     console.log("is_updated", is_updated);
   };
 
-  console.log("candidate profile", candidate);
+  const handleSaveToggleModal = (enabledStrings: string[]) => {
+    setShowToggleModal(false);
+    handleSaveEdit({ visible_information: enabledStrings });
+    console.log("Enabled Strings:", enabledStrings);
+  };
+
   return (
     <div className={styling.main}>
       {/* Profile text */}
@@ -275,7 +294,22 @@ const CandidateProfile = () => {
         >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Unbiased Job search</h3>
-            <IconEdit color="black" />
+            <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
+            <ToggleModal
+              visible={showToggleModal}
+              strings={allCategories}
+              selectedStrings={selectedStrings}
+              title="Visible Information"
+              subtitle="Choose what information you want to be visible to recruiters."
+              buttonText="Save"
+              onToggle={handleToggle}
+              onAcceptWithEnabledStrings={handleSaveToggleModal}
+              isTextAreaVisible={false}
+              onCancel={() => {
+                setSelectedStrings([true, true, true, true]);
+                setShowToggleModal(false);
+              }}
+            />
           </div>
           <div className={styling.unbiasedSearch}>
             <IconSpy color="black" size={120} stroke={1.5} />

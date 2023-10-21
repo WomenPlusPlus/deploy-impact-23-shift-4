@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Select } from "antd";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 import { IconEdit } from "@tabler/icons-react";
-import { Button } from "../button/Button";
+import { Button } from "../../../UI/button/Button";
 import styling from "./EditJobSearchPref.module.css";
 
 const { Option } = Select;
@@ -33,7 +33,13 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   const [workLocation, setWorkLocation] = useState<string[]>([]);
   const [typeOfWork, setTypeOfWork] = useState<string[]>([]);
 
-  const fieldsToShow = ["Salary range", "Notice", "Visa Status", "Possible Work Locations", "Type of work"];
+  const fieldsToShow = [
+    "Salary range",
+    "Notice",
+    "Visa Status",
+    "Possible Work Locations",
+    "Type of work",
+  ];
 
   useEffect(() => {
     if (candidate?.visible_information) {
@@ -135,7 +141,7 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
     switch (field) {
       case "Salary range":
         return (
-          <div >
+          <div>
             <h3>{field}</h3>
             <div className={styling.row}>
               <p>Min: </p>

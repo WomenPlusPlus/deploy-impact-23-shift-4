@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, Space } from "antd";
-import { Button } from "../button/Button";
+import { Button } from "../../../UI/button/Button";
 import styling from "./EditLanguages.module.css";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 
 const { Option } = Select;
 

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Input, Select } from "antd";
-import { Candidate } from "../../pages/types/types";
-import { ContentBlock } from "../../UI/container/SectionContainer";
+import { Candidate } from "../../../../types/types";
+import { ContentBlock } from "../../../UI/container/SectionContainer";
 import { IconEdit } from "@tabler/icons-react";
-import { Button } from "../button/Button";
+import { Button } from "../../../UI/button/Button";
 
 interface ContentBlockModalProps {
   visible: boolean;
@@ -35,7 +35,11 @@ const EditSection: React.FC<ContentBlockModalProps> = ({
 
   return (
     <>
-      <IconEdit color="black" style={{ cursor: "pointer" }} onClick={showModal} />
+      <IconEdit
+        color="black"
+        style={{ cursor: "pointer" }}
+        onClick={showModal}
+      />
       <Modal
         open={visible}
         title="Edit Information"

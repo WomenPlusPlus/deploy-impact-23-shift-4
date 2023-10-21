@@ -1,5 +1,5 @@
 import { IconEdit } from "@tabler/icons-react";
-import { Candidate } from "../../pages/types/types";
+import { Candidate } from "../../../../types/types";
 import { Button, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 

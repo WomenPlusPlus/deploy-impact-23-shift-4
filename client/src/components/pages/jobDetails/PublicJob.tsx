@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
-import { Job, Company } from "../types/types";
+import { Job, Company } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
 
 const PublicJob = () => {

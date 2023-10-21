@@ -1,11 +1,11 @@
 import { CardContainer } from "../../UI/container/CardContainer";
 import styling from "./CompanyPublicProfile.module.css";
 import Tabs from "../../UI/tabs/Tabs";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { useParams } from "react-router-dom";
 import { getCompanyById } from "../../../api/companies";
 import { useCallback, useEffect, useState } from "react";
-import { Company } from "../types/types";
+import { Company } from "../../../types/types";
 import {
   IconBrandLinkedin,
   IconMapPin,

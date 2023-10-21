@@ -1,6 +1,6 @@
 import styling from "./CandidateMatchesTab.module.css";
 
-import { Job } from "../types/types";
+import { Job } from "../../../../../types/types";
 
 interface Props {
   matchingJobs: Job[];

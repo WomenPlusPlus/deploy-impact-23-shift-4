@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Switch } from "antd";
-import { Button } from "../button/Button";
+import { Button } from "../../UI/button/Button";
 import styling from "./ToggleModal.module.css";
 import TextArea from "antd/es/input/TextArea";
 
@@ -14,6 +14,7 @@ interface StringSelectorModalProps {
   onToggle: (index: number) => void;
   onAcceptWithEnabledStrings: (enabledStrings: string[]) => void;
   onCancel: () => void;
+  isTextAreaVisible?: boolean;
 }
 
 const ToggleModal: React.FC<StringSelectorModalProps> = ({
@@ -26,6 +27,7 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
   onToggle,
   onAcceptWithEnabledStrings,
   onCancel,
+  isTextAreaVisible = true,
 }) => {
   const handleOk = () => {
     const enabledStrings = strings.filter((_, index) => selectedStrings[index]);
@@ -58,10 +60,12 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
             />
           </div>
         ))}
-        <TextArea
-          className={styling.text}
-          placeholder="Message to recruiter (optional)"
-        />
+        {isTextAreaVisible && (
+          <TextArea
+            className={styling.text}
+            placeholder="Message to recruiter (optional)"
+          />
+        )}
       </div>
     </Modal>
   );
