@@ -30,7 +30,6 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   return <span>{getTimeAgo(timestamp)}</span>;
 };
 
-
 const getFakeData = () => {
   const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
   const fieldsToDisplayProfile = [
@@ -113,24 +112,36 @@ const getFakeData = () => {
   };
 };
 
+const allCategories = [
+  "Job Preferences",
+  "Documents",
+  "Profile",
+  "Skills",
+  "Values",
+  "Languages",
+  "Experience",
+  "Contact info",
+  "Type of jobs",
+];
+
 type FieldCategoryMapping = Record<keyof Candidate, string>;
 const fieldCategoryMapping: FieldCategoryMapping = {
-  id: "Profile",
-  user_id: "Profile",
-  password: "Profile",
+  id: "",
+  user_id: "",
+  password: "",
   email: "Contact info",
-  associations: "Profile",
+  associations: "",
   first_name: "Profile",
   last_name: "Profile",
-  preferred_name: "Profile",
+  preferred_name: "",
   city: "Contact info",
   country: "Contact info",
   cv_reference: "Documents",
   address: "Contact info",
   phone_number: "Contact info",
-  birth_date: "Profile",
-  work_permit: "Visible Information",
-  notice_period: "Visible Information",
+  birth_date: "",
+  work_permit: "Job Preferences",
+  notice_period: "Job Preferences",
   job_status: "Profile",
   preferred_jobs: "Type of jobs",
   company_type: "Experience",
@@ -138,14 +149,16 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   matching_companies: "",
   values: "Values",
   skills: "Skills",
+  soft_skills: "Skills",
   languages: "Languages",
   links: "Profile",
   certificates: "Documents",
   visible_information: "Profile",
   experience: "Experience",
-  visa_status: "Visible Information",
-  salary_expectation: "Visible Information",
-  other_information: "Profile",
+  visa_status: "Job Preferences",
+  salary_expectation: "Job Preferences",
+  possible_work_locations: "Job Preferences",
+  type_of_work: "Job Preferences",
 };
 
 const categoryFieldMapping: Record<string, number> = {};
@@ -216,7 +229,7 @@ function transformCandidateDocs(candidate: Candidate) {
   return transformedData;
 }
 
-function transformCandidateVisibleInfo(candidate: Candidate) {
+function transformCandidateJobPref(candidate: Candidate) {
   const sectionsVisibleInfo = [];
 
   // Transform salary_expectation
@@ -248,6 +261,24 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
     });
   }
 
+  // transform locations
+  if (
+    candidate.possible_work_locations &&
+    candidate.possible_work_locations.length > 0
+  ) {
+    sectionsVisibleInfo.push({
+      title: "Locations",
+      subtitle: candidate.possible_work_locations.join(", "),
+    });
+  }
+
+  if (candidate.type_of_work && candidate.type_of_work.length > 0) {
+    sectionsVisibleInfo.push({
+      title: "Type of work",
+      subtitle: candidate.type_of_work.join(", "),
+    });
+  }
+
   return sectionsVisibleInfo;
 }
 
@@ -260,30 +291,26 @@ function transformExperience(experience: Experience[]) {
     if (firstExperience.role) {
       subtext = experience
         .map((exp, index) =>
-          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.role}`
+          index === 0 ? "" : ` ${exp.years_of_experience} years in ${exp.role}`
         )
-        .join(", ");
+        .join(" ");
 
       sectionsExperience.push({
-        title: "Role",
-        text: `${firstExperience.role}`,
-        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+        title: "Roles",
+        text: `${firstExperience.years_of_experience} years ${firstExperience.role}`,
+        subtext: `+ ${subtext},`,
       });
     }
 
     if (firstExperience.industries) {
       subtext = experience
-        .map((exp, index) =>
-          index === 0
-            ? ""
-            : `+ ${exp.years_of_experience} years in ${exp.industries}`
-        )
-        .join(", ");
+        .map((exp, index) => (index === 0 ? "" : `${exp.industries}`))
+        .join(" ");
 
       sectionsExperience.push({
         title: "Industries",
-        text: firstExperience.industries,
-        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+        text: `${firstExperience.industries}`,
+        subtext: `+ ${subtext} ,`,
       });
     }
   }
@@ -314,7 +341,8 @@ export {
   fieldCategoryMapping,
   completedCategories,
   transformCandidateDocs,
-  transformCandidateVisibleInfo,
+  transformCandidateJobPref,
   transformExperience,
   TimeAgo,
+  allCategories,
 };

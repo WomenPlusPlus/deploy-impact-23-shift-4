@@ -3,7 +3,7 @@ import { Modal, Input, Select } from "antd";
 import { Candidate } from "../../pages/types/types";
 import { IconEdit } from "@tabler/icons-react";
 import { Button } from "../button/Button";
-import styling from "./VisibleSection.module.css";
+import styling from "./EditJobSearchPref.module.css";
 
 const { Option } = Select;
 
@@ -13,10 +13,9 @@ interface ContentBlockModalProps {
   candidate: Candidate;
   showModal: () => void;
   onSave?: (arg: Candidate) => void;
-  allFields?: string[];
 }
 
-const VisibleSection: React.FC<ContentBlockModalProps> = ({
+const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   visible,
   setVisible,
   candidate,
@@ -31,8 +30,10 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   const [notice, setNotice] = useState<string>("");
   const [visaStatus, setVisaStatus] = useState<string>("");
   const [visaFields, setVisaFields] = useState<string[]>([]);
+  const [workLocation, setWorkLocation] = useState<string[]>([]);
+  const [typeOfWork, setTypeOfWork] = useState<string[]>([]);
 
-  const fieldsToShow = ["Salary range", "Notice", "Visa Status"];
+  const fieldsToShow = ["Salary range", "Notice", "Visa Status", "Possible Work Locations", "Type of work"];
 
   useEffect(() => {
     if (candidate?.visible_information) {
@@ -49,6 +50,12 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
     }
     if (candidate?.visa_status) {
       setVisaFields(candidate?.visa_status as string[]);
+    }
+    if (candidate?.possible_work_locations) {
+      setWorkLocation(candidate?.possible_work_locations || []);
+    }
+    if (candidate?.type_of_work) {
+      setTypeOfWork(candidate?.type_of_work || []);
     }
   }, [candidate]);
 
@@ -87,10 +94,22 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
           notice_period: notice,
         };
       }
-      if (visaFields.length > 0) {
+      if (visaFields) {
         updatedCandidate = {
           ...updatedCandidate,
           visa_status: visaFields,
+        };
+      }
+      if (workLocation) {
+        updatedCandidate = {
+          ...updatedCandidate,
+          possible_work_locations: workLocation,
+        };
+      }
+      if (typeOfWork) {
+        updatedCandidate = {
+          ...updatedCandidate,
+          type_of_work: typeOfWork,
         };
       }
 
@@ -112,66 +131,7 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
     setVisible(false);
   };
 
-  const renderAdditionalFields = () => {
-    return additionalFields.map((field, index) => {
-      switch (field) {
-        case "Salary range":
-          return (
-            <div key={field}>
-              <h3>{field}</h3>
-              <Input
-                value={minSalary}
-                onChange={(e) => setMinSalary(e.target.value)}
-                placeholder="Min Salary"
-              />
-              <Input
-                value={maxSalary}
-                onChange={(e) => setMaxSalary(e.target.value)}
-                placeholder="Max Salary"
-              />
-            </div>
-          );
-        case "Notice":
-          return (
-            <div key={field}>
-              <h3>{field}</h3>
-              <Select
-                value={notice}
-                onChange={(value) => setNotice(value)}
-                style={{ minWidth: "100%" }}
-              >
-                <Option value="1 week">1 week</Option>
-                <Option value="2 weeks">2 weeks</Option>
-                <Option value="1 month">1 month</Option>
-              </Select>
-            </div>
-          );
-        case "Visa Status":
-          return visaFields.map((visa, index) => (
-            <div key={index}>
-              <h3>{field}</h3>
-              <Select
-                value={visa}
-                onChange={(value) => {
-                  const updatedVisaFields = [...visaFields];
-                  updatedVisaFields[index] = value;
-                  setVisaFields(updatedVisaFields);
-                }}
-                style={{ minWidth: "100%" }}
-              >
-                <Option value="EU">EU valid visa</Option>
-                <Option value="CH">CH valid visa</Option>
-                <Option value="US">US valid visa</Option>
-              </Select>
-            </div>
-          ));
-        default:
-          return null;
-      }
-    });
-  };
-
-  const renderExistingFieldsForField = (field: string) => {
+  const renderFields = (field: string) => {
     switch (field) {
       case "Salary range":
         return (
@@ -227,6 +187,44 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
             </Select>
           </div>
         ));
+      case "Possible Work Locations":
+        return (
+          <div>
+            <h3>{field}</h3>
+            <Select
+              value={workLocation}
+              onChange={(value) => setWorkLocation(value)}
+              style={{ minWidth: "100%" }}
+              mode="tags"
+            >
+              <Option value="Zurich">Zurich</Option>
+              <Option value="Bern">Bern</Option>
+              <Option value="Basel">Basel</Option>
+              <Option value="Geneva">Geneva</Option>
+              <Option value="Lausanne">Lausanne</Option>
+              <Option value="Lugano">Lugano</Option>
+              <Option value="Luzern">Luzern</Option>
+              <Option value="St. Gallen">St. Gallen</Option>
+            </Select>
+          </div>
+        );
+      case "Type of work":
+        return (
+          <div>
+            <h3>{field}</h3>
+            <Select
+              value={typeOfWork}
+              onChange={(value) => setTypeOfWork(value)}
+              style={{ minWidth: "100%" }}
+              mode="tags"
+            >
+              <Option value="remote">Remote</Option>
+              <Option value="partly-home">Partly Home</Option>
+              <Option value="mostly-home">Mostly Home</Option>
+              <Option value="in-office">In office</Option>
+            </Select>
+          </div>
+        );
       default:
         return null;
     }
@@ -252,10 +250,17 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
           </Button>,
         ]}
       >
-        {/* Display existing fields based on selected additional fields */}
-        {additionalFields.map((field) => (
+        {/* Display existing fields */}
+        {editedSections?.map((field) => (
           <div key={field}>
-            {renderExistingFieldsForField(field)}
+            {renderFields(field)}
+            <hr />
+          </div>
+        ))}
+        {/* Display fields */}
+        {additionalFields?.map((field) => (
+          <div key={field}>
+            {renderFields(field)}
             <hr />
           </div>
         ))}
@@ -279,4 +284,4 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   );
 };
 
-export { VisibleSection };
+export { EditJobSearchPref };

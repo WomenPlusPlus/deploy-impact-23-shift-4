@@ -30,11 +30,9 @@ const CandidatePublicProfile = () => {
     const allJobs = await getAllJobs();
     const companyFetched = await getCompanyById(userId);
 
-    const filteredJobs: Job[] = allJobs?.map((job: Job) => {
-      if (job["company_id"] === companyFetched?.user_id) {
-        return job;
-      }
-    });
+    const filteredJobs: Job[] = allJobs?.filter(
+      (job: Job) => job?.company_id === companyFetched?.user_id && job
+    );
     const matchedJobs = filterJobsByMatchingCandidates(id, filteredJobs);
 
     setCandidate(candidateFetched);
@@ -52,6 +50,7 @@ const CandidatePublicProfile = () => {
     const matchingJobs: Job[] = [];
 
     jobs?.forEach((job) => {
+      console.log("job: ", job);
       const matchingCandidates = job?.matching_candidates;
       const isMatched = matchingCandidates?.some((matchingCandidate) => {
         return matchingCandidate.id === candidateId;
@@ -70,7 +69,9 @@ const CandidatePublicProfile = () => {
     {
       label: "Resume",
       key: "1",
-      children: <CandidateResumeTab candidate={candidate} />,
+      children: (
+        <CandidateResumeTab candidate={candidate} matchingJobs={matchingJobs} />
+      ),
     },
     {
       label: "Matches",
@@ -101,7 +102,7 @@ const CandidatePublicProfile = () => {
             </div>
             <div className={styling.row}>
               <IconMapPin color="black" />
-              {candidate.city && candidate?.country ? (
+              {candidate?.city && candidate?.country ? (
                 <p className={styling.location}>
                   {candidate?.city}, {candidate?.country}
                 </p>
@@ -109,8 +110,8 @@ const CandidatePublicProfile = () => {
                 <p className={styling.location}>Not visible</p>
               )}
               <p> | </p>
-              {candidate.links && candidate.links.length > 0
-                ? candidate.links.map((link, index) => (
+              {candidate?.links && candidate?.links?.length > 0
+                ? candidate?.links?.map((link, index) => (
                     <div key={index} className={styling.link}>
                       {link.name === "LinkedIn" ? (
                         <a href={link.url} target="_blank" rel="noreferrer">

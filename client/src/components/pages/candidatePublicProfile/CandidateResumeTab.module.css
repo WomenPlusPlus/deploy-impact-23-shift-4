@@ -3,52 +3,76 @@
 }
 
 .cardContainerAboutMe {
-  background-color: var(--backgroun-light-blue);
   margin-bottom: 2rem;
   padding: 2rem;
+  width: 100%;
 }
 
 .cardContainerSkills {
   margin-bottom: 2rem;
   padding: 2rem;
+  width: 100%;
 }
 
 .cardContainerValues {
   margin-bottom: 2rem;
   padding: 2rem;
+  width: 100%;
+}
+
+.cardContainerExperiences {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  width: 100%;
 }
 
 .label {
   background-color: var(--label-color);
   border-radius: var(--tag-radius);
+  margin: 0 1rem 1rem 0;
+}
+
+.values {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0 0 1rem;
 }
 
 .skills {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-left: 1rem;
+  margin: 1rem 0 0 1rem;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   gap: 2rem;
 }
 
-.resumeContainer {
+.rowMargin {
   display: flex;
-  flex-direction: column;
   width: 100%;
-  padding: 2rem;
+  justify-content: space-between;
+  margin: 0 4rem 2rem 2rem;
 }
 
-.languagesContainer {
+.associationContainer {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 40%;
   padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.associations {
+  /* padding: 2rem; */
+  margin-left: 1rem;
 }
 
 .language {
@@ -88,4 +112,63 @@
 
 .resumeElements p {
   margin: 0;
+}
+
+.customClass {
+  margin: 0 2rem 2rem 2rem;
+}
+
+.margin {
+  margin: 0 0 2rem 1rem;
+}
+
+.skillsTitle {
+  margin-bottom: 0;
+}
+
+.hr {
+  margin: 3rem 3rem;
+}
+
+.hrDocs {
+  margin: 3rem 3rem;
+  height: 5rem;
+}
+
+.infos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.visa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.applyButton {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: var(--background-hover);
+  color: white;
+  font-size: large;
+}
+
+.cardCont {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--secton-width);
+  height: var(--secton-height) / 2;
+  padding: 0 2rem 2rem;
+  box-sizing: border-box;
+  margin-top: 1.5rem;
+  background-color: var(--color-button);
+}
+
+.requestAccessTitle {
+  color: white
 }

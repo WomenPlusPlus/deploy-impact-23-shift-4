@@ -2,13 +2,12 @@ import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import ProfileCompletedFields from "./ProfileCompletedFields";
 import { CardContainer } from "../../UI/container/CardContainer";
 import styling from "./ProfileComplete.module.css";
-import { countNullFieldsByCategory, percentage } from "./helpers/helper";
+import { countNullFieldsByCategory, percentage, allCategories } from "./helpers/helper";
 import { Candidate } from "../types/types";
 import { useEffect, useState } from "react";
 
 interface ProfileCompletedProps {
   candidate: Candidate;
-  allCategories: string[];
   className?: string;
   getProgress?: (arg: number) => void;
   editContactInfo?: () => void;
@@ -25,7 +24,6 @@ interface ProfileCompletedProps {
 
 const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   candidate,
-  allCategories,
   className,
   getProgress,
   editContactInfo,

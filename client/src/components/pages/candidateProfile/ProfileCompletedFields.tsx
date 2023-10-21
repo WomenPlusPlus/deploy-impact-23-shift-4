@@ -1,5 +1,6 @@
 import { IconCircleCheck, IconProgressAlert } from "@tabler/icons-react";
 import styling from "./ProfileCompletedFields.module.css";
+import { Button } from "antd";
 
 interface ProfileCompletedFieldsProps {
   isCompleted: boolean;
@@ -24,12 +25,12 @@ const ProfileCompletedFields = ({
           <p className={styling.profileCompletedText}>{category}</p>
         </div>
         <div hidden={isCompleted}>
-          <button
+          <Button
             className={styling.profileUncompletedButton}
             onClick={onAddClick}
           >
             Add
-          </button>
+          </Button>
         </div>
       </div>
     </>

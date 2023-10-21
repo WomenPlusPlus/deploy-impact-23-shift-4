@@ -9,11 +9,13 @@ import { EditInput } from "../../UI/modal/EditInput";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
 import { EditExperience } from "../../UI/modal/EditExperience";
-import { VisibleSection } from "../../UI/modal/VisibleSection";
+import { EditJobSearchPref } from "../../UI/modal/EditJobSearchPref";
 import {
+  allCategories,
+  countNullFieldsByCategory,
   getFakeData,
   transformCandidateDocs,
-  transformCandidateVisibleInfo,
+  transformCandidateJobPref,
   transformExperience,
 } from "./helpers/helper";
 import { CardContainer } from "../../UI/container/CardContainer";
@@ -26,6 +28,7 @@ import {
   IconBrandLinkedin,
   IconWorldWww,
   IconTags,
+  IconSpy,
 } from "@tabler/icons-react";
 import { DocumentUploadModal } from "../../UI/modal/EditUploadDocuments";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
@@ -33,30 +36,21 @@ import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import { Candidate } from "../types/types";
 
 import styling from "./CandidateProfile.module.css";
+import { SkillsLevelGuide } from "../candidatePublicProfile/SkillsLevelGuide";
+import Icon from "@ant-design/icons/lib/components/Icon";
 
 const CandidateProfile = () => {
-  const allFields = [
-    "Visible Information",
-    "Documents",
-    "Profile",
-    "Skills",
-    "Values",
-    "Languages",
-    "Experience",
-    "Contact info",
-    "Type of jobs",
-  ];
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
   const [sectionDocuments, setSectionDocuments] = useState([] as any);
-  const [sectionsVisibleInfo, setSectionsVisibleInfo] = useState([] as any);
+  const [sectionsJobSearchPref, setSectionsJobSearchPref] = useState([] as any);
   const [sectionsExperience, setSectionsExperience] = useState([] as any);
   const [isCompleteProfile, setIsCompleteProfile] = useState(false);
   // Is edit
   const [isEditContactInfo, setIsEditContactInfo] = useState(false);
   const [isEditLanguages, setIsEditLanguages] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
-  const [isAnonymousProfileEdit, setIsAnonymousProfileEdit] = useState(false);
+  const [isJobSearchPrefEdit, setisJobSearchPrefEdit] = useState(false);
   const [isSkillsEdit, setIsSkillsEdit] = useState(false);
   const [isValuesEdit, setIsValuesEdit] = useState(false);
   const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
@@ -67,6 +61,10 @@ const CandidateProfile = () => {
   const [allValues, setAllValues] = useState([]);
   const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
 
+  const [countNullCategories, setCountNullCategories] = useState<
+    Record<string, number>
+  >({});
+
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     console.log("user_id", auth.user.id);
@@ -76,12 +74,16 @@ const CandidateProfile = () => {
       const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
       const transformedVisibleInfo =
-        transformCandidateVisibleInfo(candidateFetched);
-      setSectionsVisibleInfo(transformedVisibleInfo);
+        transformCandidateJobPref(candidateFetched);
+      setSectionsJobSearchPref(transformedVisibleInfo);
       const transformedExperience = transformExperience(
         candidateFetched.experience
       );
       setSectionsExperience(transformedExperience);
+      // Count the number of null categories
+      const countFields = countNullFieldsByCategory(candidate, allCategories);
+      setCountNullCategories(countFields);
+      console.log("countFields", countFields);
     } catch (error) {
       console.log("error", error);
     }
@@ -107,8 +109,8 @@ const CandidateProfile = () => {
     setIsProfileEdit(true);
   };
 
-  const editHandlerAnonymousProfile = () => {
-    setIsAnonymousProfileEdit(true);
+  const editHandlerJobSearchPref = () => {
+    setisJobSearchPrefEdit(true);
   };
 
   const editSkills = () => {
@@ -183,17 +185,19 @@ const CandidateProfile = () => {
 
           <div className={styling.location}>
             <IconMapPin color="black" />
-            {candidate.city && candidate?.country ? (
+            {candidate?.city && candidate?.country ? (
               <p>
                 {candidate?.city}, {candidate?.country}
               </p>
             ) : (
-              <p onClick={editHandlerProfile}>Add your location</p>
+              <p className={styling.stillToAdd} onClick={editHandlerProfile}>
+                Add your location
+              </p>
             )}
-            <p>|</p>
+            <p className={styling.stillToAdd}>|</p>
             <div className={styling.row}>
-              {candidate.links && candidate.links.length > 0 ? (
-                candidate.links.map((link, index) => (
+              {candidate?.links && candidate?.links?.length > 0 ? (
+                candidate?.links.map((link, index) => (
                   <div key={index} className={styling.link}>
                     {link.name === "LinkedIn" ? (
                       <a href={link.url} target="_blank" rel="noreferrer">
@@ -210,7 +214,12 @@ const CandidateProfile = () => {
                 ))
               ) : (
                 <>
-                  <p onClick={editHandlerProfile}>Add links</p>
+                  <p
+                    className={styling.stillToAdd}
+                    onClick={editHandlerProfile}
+                  >
+                    Add links
+                  </p>
                 </>
               )}
             </div>
@@ -243,7 +252,6 @@ const CandidateProfile = () => {
         <ProfileComplete
           className={styling.profileCompletedElement}
           candidate={candidate}
-          allCategories={allFields}
           editContactInfo={editContactInfo}
           editLanguages={editLanguages}
           editSkills={editSkills}
@@ -252,12 +260,12 @@ const CandidateProfile = () => {
           editTypeOfJobs={editTypeOfJobs}
           editExperience={editExperience}
           editDocuments={editDocuments}
-          editVisibleInformation={editHandlerAnonymousProfile}
+          editVisibleInformation={editHandlerJobSearchPref}
           getProgress={getProgress}
           hidden={isCompleteProfile}
         />
 
-        {/* Anonymous profile */}
+        {/* Unbiased job search */}
         <CardContainer
           className={
             isCompleteProfile
@@ -266,27 +274,23 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Visible Information</h3>
-            {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
-            <VisibleSection
-              candidate={candidate}
-              visible={isAnonymousProfileEdit}
-              setVisible={setIsAnonymousProfileEdit}
-              showModal={editHandlerAnonymousProfile}
-              allFields={allFields}
-              onSave={handleSaveEdit}
-            />
+            <h3>Unbiased Job search</h3>
+            <IconEdit color="black" />
           </div>
-          <p>Initially employees will only see skills and values</p>
-          <div className={isCompleteProfile ? styling.visibleSectionComplete : styling.visibleSection}>
-            <ContentBlock sections={sectionsVisibleInfo} />
+          <div className={styling.unbiasedSearch}>
+            <IconSpy color="black" size={120} stroke={1.5} />
+            <p>
+              Your personal information is kept private by default until you
+              choose to share it with recruiters who request access. Some
+              information can be set as visible for your public profile.
+            </p>
           </div>
         </CardContainer>
       </div>
 
       {/* Associations & Type of jobs  */}
-      <div className={styling.associationsTypeOfJobs}>
-        <CardContainer className={styling.secondContainer}>
+      <div className={styling.inOneRow}>
+        <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Associations</h3>
           </div>
@@ -302,7 +306,13 @@ const CandidateProfile = () => {
             ))}
           </div>
         </CardContainer>
-        <CardContainer className={styling.secondContainer}>
+        <CardContainer
+          className={
+            countNullCategories["Type of jobs"] > 0
+              ? styling.secondContainer
+              : `${styling.secondContainer} ${styling.dottedLine}`
+          }
+        >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Type of jobs you're looking for</h3>
             <EditTypeOfJobs
@@ -334,9 +344,18 @@ const CandidateProfile = () => {
       </div>
 
       {/* Skills */}
-      <CardContainer className={styling.skillsContainer}>
+      <CardContainer
+        className={
+          countNullCategories["Skills"] > 0
+            ? styling.skillsContainer
+            : `${styling.skillsContainer} ${styling.dottedLine}`
+        }
+      >
         <div className={styling.profileCompletedEditIcon}>
-          <h3>Skills</h3>
+          <div>
+            <h3>Skills</h3>
+            <SkillsLevelGuide />
+          </div>
           <EditSkills
             candidate={candidate}
             setCandidate={setCandidate}
@@ -358,45 +377,84 @@ const CandidateProfile = () => {
                 labelName={label.skill_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
+                isSkill={true}
+                skillLevel={label.skill_level}
               />
             ))}
         </div>
       </CardContainer>
 
-      {/* Values */}
-      <CardContainer className={styling.valuesContainer}>
-        <div className={styling.profileCompletedEditIcon}>
-          <h3>Values</h3>
-          <EditValues
-            candidate={candidate}
-            setCandidate={setCandidate}
-            allLabels={allValues}
-            icon={<IconTags />}
-            titleName="Choose your values"
-            onSave={handleSaveEdit}
-            visible={isValuesEdit}
-            setVisible={setIsValuesEdit}
-            showModal={editValues}
-          />
-        </div>
-        <div className={styling.valuesContainerLabels}>
-          {candidate?.values &&
-            candidate?.values?.map((label, index) => (
-              <Labels
-                key={index}
-                icon={<IconTags />}
-                labelName={label}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-              />
-            ))}
-        </div>
-      </CardContainer>
+      {/* Values & Experience */}
+      <div className={styling.inOneRow}>
+        {/* Values */}
+        <CardContainer
+          className={
+            countNullCategories["Values"] > 0
+              ? styling.valuesContainer
+              : `${styling.valuesContainer} ${styling.dottedLine}`
+          }
+        >
+          <div className={styling.profileCompletedEditIcon}>
+            <h3>Values</h3>
+            <EditValues
+              candidate={candidate}
+              setCandidate={setCandidate}
+              allLabels={allValues}
+              icon={<IconTags />}
+              titleName="Choose your values"
+              onSave={handleSaveEdit}
+              visible={isValuesEdit}
+              setVisible={setIsValuesEdit}
+              showModal={editValues}
+            />
+          </div>
+          <div className={styling.valuesContainerLabels}>
+            {candidate?.values &&
+              candidate?.values?.map((label, index) => (
+                <Labels
+                  key={index}
+                  icon={<IconTags />}
+                  labelName={label}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />
+              ))}
+          </div>
+        </CardContainer>
+
+        {/* Experience */}
+        <CardContainer
+          className={
+            countNullCategories["Experience"] > 0
+              ? styling.experienceContainer
+              : `${styling.experienceContainer} ${styling.dottedLine}`
+          }
+        >
+          <div className={styling.profileCompletedEditIcon}>
+            <h3>Experience</h3>
+            <EditExperience
+              visible={isExperienceEdit}
+              setVisible={setIsExperienceEdit}
+              showModal={editExperience}
+              candidate={candidate}
+              setCandidate={setCandidate}
+              onSave={handleSaveEdit}
+            />
+          </div>
+          <ContentBlock sections={sectionsExperience} />
+        </CardContainer>
+      </div>
 
       {/* Contact info, languages, experience */}
       {/* Contact info */}
-      <div className={styling.associationsTypeOfJobs}>
-        <CardContainer className={styling.lowerContainer}>
+      <div className={styling.inOneRow}>
+        <CardContainer
+          className={
+            countNullCategories["Contact info"] > 0
+              ? styling.lowerContainer
+              : `${styling.lowerContainer} ${styling.dottedLine}`
+          }
+        >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
             <EditInput
@@ -424,7 +482,13 @@ const CandidateProfile = () => {
         </CardContainer>
 
         {/* Laguages */}
-        <CardContainer className={styling.lowerContainer}>
+        <CardContainer
+          className={
+            countNullCategories["Languages"] > 0
+              ? styling.lowerContainer
+              : `${styling.lowerContainer} ${styling.dottedLine}`
+          }
+        >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Languages</h3>
             <IconEdit
@@ -443,44 +507,49 @@ const CandidateProfile = () => {
           <ProgressBarComponent candidate={candidate} />
         </CardContainer>
 
-        {/* Experience */}
-        <CardContainer className={styling.lowerContainer}>
+        {/* Uploaded documents */}
+        <CardContainer
+          className={
+            countNullCategories["Documents"] > 0
+              ? styling.lowerContainer
+              : `${styling.lowerContainer} ${styling.dottedLine}`
+          }
+        >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Experience</h3>
-            <EditExperience
-              visible={isExperienceEdit}
-              setVisible={setIsExperienceEdit}
-              showModal={editExperience}
+            <h3>Uploaded documents</h3>
+            <DocumentUploadModal
               candidate={candidate}
-              setCandidate={setCandidate}
+              visible={isDocumentsEdit}
+              setVisible={setIsDocumentsEdit}
+              showModal={editDocuments}
               onSave={handleSaveEdit}
             />
           </div>
-          <ContentBlock sections={sectionsExperience} />
+          <ContentBlock sections={sectionDocuments} />
         </CardContainer>
       </div>
 
-      {/* Uploaded documents */}
-      <CardContainer className={styling.valuesContainer}>
+      {/* Job search preferences */}
+      <CardContainer
+        className={
+          countNullCategories["Job Preferences"] > 0
+            ? styling.jobPrefContainer
+            : `${styling.jobPrefContainer} ${styling.dottedLine}`
+        }
+      >
         <div className={styling.profileCompletedEditIcon}>
-          <h3>Uploaded documents</h3>
-          {/* <FileUploadModal
+          <h3>Job Search Preferences</h3>
+          <EditJobSearchPref
             candidate={candidate}
-            visible={isDocumentsEdit}
-            setVisible={setIsDocumentsEdit}
-            showModal={editDocuments}
-            onSave={handleSaveEdit}
-            setSectionDocuments={setSectionDocuments}
-          /> */}
-          <DocumentUploadModal
-            candidate={candidate}
-            visible={isDocumentsEdit}
-            setVisible={setIsDocumentsEdit}
-            showModal={editDocuments}
+            visible={isJobSearchPrefEdit}
+            setVisible={setisJobSearchPrefEdit}
+            showModal={editHandlerJobSearchPref}
             onSave={handleSaveEdit}
           />
         </div>
-        <ContentBlock sections={sectionDocuments} />
+        <div className={styling.visibleSection}>
+          <ContentBlock sections={sectionsJobSearchPref} />
+        </div>
       </CardContainer>
     </div>
   );

@@ -4,6 +4,7 @@ import JobCard from "../../UI/card/JobCard";
 import { Labels } from "../../UI/labels/Label";
 import styles from "../../UI/labels/Label.module.css";
 import { Select, Input, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 const { Search } = Input;
 
 const { Option, OptGroup } = Select;
@@ -30,6 +31,7 @@ const locationOptions = [
 ];
 
 interface Job {
+  id?: string;
   name: string;
   company_name: string;
   company_location: string;
@@ -51,6 +53,7 @@ interface Job {
 }
 const jobsData = [
   {
+    id: "aa13e038-36ff-4634-ba97-e0772af0b0de",
     name: "Front-end Developer Front-end Developer Front-end Developer Front-end DeveloperFront-end DeveloperFront-end Developer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -73,6 +76,7 @@ const jobsData = [
     work_type: "Hybrid",
   },
   {
+    id: "2",
     name: "Cloud Engineer",
     company_name: "ABC Tech",
     company_location: "New York",
@@ -95,6 +99,7 @@ const jobsData = [
     work_type: "Remote",
   },
   {
+    id: "3",
     name: "Back-end Developer",
     company_name: "Zülkhe",
     company_location: "New York",
@@ -117,6 +122,7 @@ const jobsData = [
     work_type: "Home Office",
   },
   {
+    id: "4",
     name: "Front-end Developer",
     company_name: "ABC Tech",
     company_location: "Netherland",
@@ -140,6 +146,8 @@ const jobsData = [
   },
 ];
 const Jobs: React.FC = () => {
+  // useNavigate
+  const navigate = useNavigate();
   //useStates
   const [placeholderText, setPlaceholderText] =
     useState<string>("Select Filters");
@@ -512,6 +520,7 @@ const Jobs: React.FC = () => {
                 technicalSkills: job.skills.technicalSkills,
                 softSkills: job.skills.softSkills,
               }}
+              onClick={() => navigate(`/job/${job.id}`)}
             />
           ))
         )}
