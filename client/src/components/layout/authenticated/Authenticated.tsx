@@ -25,7 +25,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     color: "black",
     backgroundColor: "var(--background-color)",
     marginLeft: collapsed ? 80 : 200,
-    paddingTop: 64,
+    padding: 64,
     overflow: "initial",
     transition: "margin-left 0.3s",
   };

@@ -6,7 +6,7 @@ import Candidates from "../components/pages/candidates/Candidates";
 import Authenticated from "../components/layout/authenticated/Authenticated";
 
 import Jobs from "../components/pages/jobs/Jobs";
-import PublicJob from "../components/pages/jobs/PublicJob";
+import PublicJob from "../components/pages/jobDetails/PublicJob";
 import Companies from "../components/pages/companies/Companies";
 import Shortlist from "../components/pages/shortlist/Shortlist";
 import CandidateProfile from "../components/pages/candidateProfile/CandidateProfile";
@@ -15,7 +15,6 @@ import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 import NotFound from "../components/pages/notfound/NotFound";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
 import CompanyPublicProfile from "../components/pages/companyPublicProfile/CompanyPublicProfile";
-import Jobs2 from "../components/pages/jobs/Jobs2"
 import AssociationProfile from "../components/pages/associationProfile/AssociationProfile";
 import CandidatePublicProfile from "../components/pages/candidatePublicProfile/CandidatePublicProfile";
 
@@ -29,7 +28,7 @@ const Routes: React.FC = () => {
           path="/"
           element={<Authenticated content={<DashboardRoute />} />}
         />
-        <Route path="/jobs" element={<Authenticated content={<Jobs2 />} />} />
+        <Route path="/jobs" element={<Authenticated content={<Jobs />} />} />
         <Route
           path="/companies"
           element={<Authenticated content={<Companies />} />}
