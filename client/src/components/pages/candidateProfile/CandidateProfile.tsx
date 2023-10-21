@@ -37,7 +37,7 @@ import { Candidate } from "../types/types";
 
 import styling from "./CandidateProfile.module.css";
 import { SkillsLevelGuide } from "../candidatePublicProfile/SkillsLevelGuide";
-import Icon from "@ant-design/icons/lib/components/Icon";
+import ToggleModal from "../../UI/toggleModal/ToggleModal";
 
 const CandidateProfile = () => {
   // State
@@ -60,10 +60,24 @@ const CandidateProfile = () => {
   const [allSkills, setAllSkills] = useState([]);
   const [allValues, setAllValues] = useState([]);
   const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
-
+  // count null categories
   const [countNullCategories, setCountNullCategories] = useState<
     Record<string, number>
   >({});
+
+  // toggle
+  const [showToggleModal, setShowToggleModal] = useState(false);
+  const [selectedStrings, setSelectedStrings] = useState<boolean[]>([
+    true,
+    true,
+    true,
+    true,
+  ]);
+  const handleToggle = (index: number) => {
+    const updatedSelectedStrings = [...selectedStrings];
+    updatedSelectedStrings[index] = !selectedStrings[index];
+    setSelectedStrings(updatedSelectedStrings);
+  };
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -160,7 +174,12 @@ const CandidateProfile = () => {
     console.log("is_updated", is_updated);
   };
 
-  console.log("candidate profile", candidate);
+  const handleSaveToggleModal = (enabledStrings: string[]) => {
+    setShowToggleModal(false);
+    handleSaveEdit({ visible_information: enabledStrings });
+    console.log("Enabled Strings:", enabledStrings);
+  };
+
   return (
     <div className={styling.main}>
       {/* Profile text */}
@@ -275,7 +294,22 @@ const CandidateProfile = () => {
         >
           <div className={styling.profileCompletedEditIcon}>
             <h3>Unbiased Job search</h3>
-            <IconEdit color="black" />
+            <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
+            <ToggleModal
+              visible={showToggleModal}
+              strings={allCategories}
+              selectedStrings={selectedStrings}
+              title="Visible Information"
+              subtitle="Choose what information you want to be visible to recruiters."
+              buttonText="Save"
+              onToggle={handleToggle}
+              onAcceptWithEnabledStrings={handleSaveToggleModal}
+              isTextAreaVisible={false}
+              onCancel={() => {
+                setSelectedStrings([true, true, true, true]);
+                setShowToggleModal(false);
+              }}
+            />
           </div>
           <div className={styling.unbiasedSearch}>
             <IconSpy color="black" size={120} stroke={1.5} />
