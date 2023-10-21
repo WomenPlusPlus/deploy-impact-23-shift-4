@@ -1,48 +1,16 @@
-/* dashboard items */
-.sider-component {
-  overflow: auto;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  background-color: var(--background-color);
-  z-index: 1;
-  width: var(--sidebar-width);
-}
-
 .custom-menu {
-  background-color: var(--background-color);
+  padding: 3rem 0;
+  /* background-color: var(--background-color); */
+  height: 100%;
 }
 
 .custom-menu .ant-menu-item {
-  text-align: left;
   margin-bottom: 2rem;
-  margin-left: 2rem;
-  width: 80%;
 }
 
 .custom-menu .ant-menu-item:last-child {
   position: absolute;
-  bottom: 0;
-}
-
-.ant-menu.ant-menu-inline-collapsed {
-  width: 10rem !important;
-}
-
-.ant-menu-inline-collapsed > .ant-menu-item {
-  width: 100%;
-  margin-left: 0;
-}
-
-/* .ant-menu-inline-collapsed > .ant-menu-item-selected,
-.ant-menu-inline-collapsed > .ant-menu-item-selected:focus,
-.ant-menu-inline-collapsed > .ant-menu-item-selected:active {
-  width: 60% !important;
-  margin-left: 1rem;
-} */
-
-.ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon {
-  margin-left: 0;
+  bottom: 5rem;
 }
 
 /* Set the background color for the selected (clicked) item */
@@ -51,23 +19,10 @@
 .custom-menu .ant-menu-item-selected:active {
   background-color: var(--color-button) !important;
   color: var(--white);
-  width: 80%;
 }
 
 /* Color when hovering on items */
 .custom-menu .ant-menu-item-active {
   background-color: var(--background-hover) !important;
   color: var(--white);
-  width: 80%;
-}
-
-.custom-menu {
-  height: 100vh;
-  max-height: fit-content;
-  width: var(--sidebar-width);
-  padding-top: 3rem;
-}
-
-.toggle {
-  display: flex;
 }

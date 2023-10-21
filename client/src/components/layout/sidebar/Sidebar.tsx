@@ -102,11 +102,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   // state
   const navigate = useNavigate();
 
-  // Toggle sidebar collapse
-  const toggleSidebar = () => {
-    setCollapsed(!collapsed);
-  };
-
   return (
     <>
       <div className="toggle">
@@ -120,27 +115,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             bottom: 0,
             backgroundColor: "#fff",
           }}
+          collapsible
           collapsed={collapsed}
           onCollapse={setCollapsed}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: 80,
-              right: collapsed ? -32 : -60,
-              width: 32,
-              padding: 2,
-              color: "#030852",
-              borderRadius: 15,
-              backgroundColor: "#fff",
-              borderStyle: "solid",
-              borderWidth: 0.5,
-              borderColor: "#d9d9d9",
-            }}
-            onClick={toggleSidebar}
-          >
-            {collapsed ? <IconChevronRight /> : <IconChevronLeft />}
-          </div>
           <Menu
             className="custom-menu"
             mode="inline"
@@ -148,7 +126,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             onClick={(item) => {
               setSelectedKey(item.key.toString());
               handleButtonClick(item.key.toString(), navigate);
-              console.log("Item: ", item.key.toString());
               return item.key.toString();
             }}
             selectedKeys={[selectedKey]}

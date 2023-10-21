@@ -21,7 +21,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     return storedComponent || "dashboard";
   });
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
     // Save the selected component in sessionStorage
@@ -32,7 +32,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     minHeight: 120,
     color: "black",
     backgroundColor: "var(--background-color)",
-    marginLeft: collapsed ? 100 : 240,
+    marginLeft: collapsed ? 80 : 200,
     paddingTop: 64,
     overflow: "initial",
     transition: "margin-left 0.3s", // Add a smooth transition
