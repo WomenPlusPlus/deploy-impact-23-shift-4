@@ -28,6 +28,7 @@ export interface Candidate {
   matching_companies?: { [key: string]: any };
   values?: string[];
   skills?: { [key: string]: any }[];
+  soft_skills?: string[];
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
@@ -35,7 +36,8 @@ export interface Candidate {
   experience?: { [key: string]: any }[];
   visa_status?: string[];
   salary_expectation?: string[];
-  other_information?: { [key: string]: any };
+  possible_work_locations?: string[];
+  type_of_work?: string[];
 }
 
 export interface EditInputProps<Candidate> {

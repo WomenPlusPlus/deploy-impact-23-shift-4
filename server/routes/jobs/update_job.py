@@ -10,7 +10,7 @@ def update_job_route(Job, db):
             if request.method == "PUT":
                 data = request.get_json()
                 id = data.get("job_id")
-
+                
                 job = Job.query.filter_by(id=id).first()
 
                 if not job:

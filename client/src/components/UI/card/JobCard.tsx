@@ -20,6 +20,7 @@ interface JobCard2Props {
   department?: string;
   skills?: { technicalSkills: string[]; softSkills: string[] };
   contract_type?: string;
+  onClick?: () => void;
 }
 
 const JobCard: React.FC<JobCard2Props> = ({
@@ -35,6 +36,7 @@ const JobCard: React.FC<JobCard2Props> = ({
   department,
   skills,
   contract_type,
+  onClick,
 }) => {
   const truncatedDescription: string | undefined = description
     ? typeof description === "string" && description.length > 150
@@ -44,7 +46,7 @@ const JobCard: React.FC<JobCard2Props> = ({
 
   return (
     <>
-      <Card className={styling.card}>
+      <Card className={styling.card} onClick={onClick}>
         <div className={styling.jobHeader}>
           <div>
             <Avatar className={styling.avatar} src={avatarUrl} />

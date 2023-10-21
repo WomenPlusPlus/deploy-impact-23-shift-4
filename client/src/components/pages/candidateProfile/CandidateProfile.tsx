@@ -9,7 +9,7 @@ import { EditInput } from "../../UI/modal/EditInput";
 import { EditLanguages } from "../../UI/modal/EditLanguages";
 import { EditTypeOfJobs } from "../../UI/modal/EditTypeOfJobs";
 import { EditExperience } from "../../UI/modal/EditExperience";
-import { VisibleSection } from "../../UI/modal/VisibleSection";
+import { EditJobSearchPref } from "../../UI/modal/EditJobSearchPref";
 import {
   getFakeData,
   transformCandidateDocs,
@@ -33,6 +33,7 @@ import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import { Candidate } from "../types/types";
 
 import styling from "./CandidateProfile.module.css";
+import { SkillsLevelGuide } from "../candidatePublicProfile/SkillsLevelGuide";
 
 const CandidateProfile = () => {
   const allFields = [
@@ -49,7 +50,7 @@ const CandidateProfile = () => {
   // State
   const [candidate, setCandidate] = useState({} as Candidate);
   const [sectionDocuments, setSectionDocuments] = useState([] as any);
-  const [sectionsVisibleInfo, setSectionsVisibleInfo] = useState([] as any);
+  const [sectionsJobSearchPref, setSectionsJobSearchPref] = useState([] as any);
   const [sectionsExperience, setSectionsExperience] = useState([] as any);
   const [isCompleteProfile, setIsCompleteProfile] = useState(false);
   // Is edit
@@ -77,7 +78,7 @@ const CandidateProfile = () => {
       setSectionDocuments(transformedData);
       const transformedVisibleInfo =
         transformCandidateVisibleInfo(candidateFetched);
-      setSectionsVisibleInfo(transformedVisibleInfo);
+      setSectionsJobSearchPref(transformedVisibleInfo);
       const transformedExperience = transformExperience(
         candidateFetched.experience
       );
@@ -183,7 +184,7 @@ const CandidateProfile = () => {
 
           <div className={styling.location}>
             <IconMapPin color="black" />
-            {candidate.city && candidate?.country ? (
+            {candidate?.city && candidate?.country ? (
               <p>
                 {candidate?.city}, {candidate?.country}
               </p>
@@ -192,8 +193,8 @@ const CandidateProfile = () => {
             )}
             <p>|</p>
             <div className={styling.row}>
-              {candidate.links && candidate.links.length > 0 ? (
-                candidate.links.map((link, index) => (
+              {candidate?.links && candidate?.links?.length > 0 ? (
+                candidate?.links.map((link, index) => (
                   <div key={index} className={styling.link}>
                     {link.name === "LinkedIn" ? (
                       <a href={link.url} target="_blank" rel="noreferrer">
@@ -257,7 +258,7 @@ const CandidateProfile = () => {
           hidden={isCompleteProfile}
         />
 
-        {/* Anonymous profile */}
+        {/* Unbiased job search */}
         <CardContainer
           className={
             isCompleteProfile
@@ -265,28 +266,15 @@ const CandidateProfile = () => {
               : styling.profileCompletedElement
           }
         >
-          <div className={styling.profileCompletedEditIcon}>
-            <h3>Visible Information</h3>
-            {/* <IconEdit color="black" style={{ cursor: "pointer" }} /> */}
-            <VisibleSection
-              candidate={candidate}
-              visible={isAnonymousProfileEdit}
-              setVisible={setIsAnonymousProfileEdit}
-              showModal={editHandlerAnonymousProfile}
-              allFields={allFields}
-              onSave={handleSaveEdit}
-            />
-          </div>
-          <p>Initially employees will only see skills and values</p>
-          <div className={isCompleteProfile ? styling.visibleSectionComplete : styling.visibleSection}>
-            <ContentBlock sections={sectionsVisibleInfo} />
+          <div>
+            <h3>Unbiased Job search</h3>
           </div>
         </CardContainer>
       </div>
 
       {/* Associations & Type of jobs  */}
-      <div className={styling.associationsTypeOfJobs}>
-        <CardContainer className={styling.secondContainer}>
+      <div className={styling.inOneRow}>
+        <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Associations</h3>
           </div>
@@ -336,7 +324,10 @@ const CandidateProfile = () => {
       {/* Skills */}
       <CardContainer className={styling.skillsContainer}>
         <div className={styling.profileCompletedEditIcon}>
-          <h3>Skills</h3>
+          <div>
+            <h3>Skills</h3>
+            <SkillsLevelGuide />
+          </div>
           <EditSkills
             candidate={candidate}
             setCandidate={setCandidate}
@@ -358,44 +349,65 @@ const CandidateProfile = () => {
                 labelName={label.skill_name}
                 disableCloseIcon={true}
                 customClass={styling.labelClass}
+                isSkill={true}
+                skillLevel={label.skill_level}
               />
             ))}
         </div>
       </CardContainer>
 
-      {/* Values */}
-      <CardContainer className={styling.valuesContainer}>
-        <div className={styling.profileCompletedEditIcon}>
-          <h3>Values</h3>
-          <EditValues
-            candidate={candidate}
-            setCandidate={setCandidate}
-            allLabels={allValues}
-            icon={<IconTags />}
-            titleName="Choose your values"
-            onSave={handleSaveEdit}
-            visible={isValuesEdit}
-            setVisible={setIsValuesEdit}
-            showModal={editValues}
-          />
-        </div>
-        <div className={styling.valuesContainerLabels}>
-          {candidate?.values &&
-            candidate?.values?.map((label, index) => (
-              <Labels
-                key={index}
-                icon={<IconTags />}
-                labelName={label}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-              />
-            ))}
-        </div>
-      </CardContainer>
+      {/* Values & Experience */}
+      <div className={styling.inOneRow}>
+        {/* Values */}
+        <CardContainer className={styling.valuesContainer}>
+          <div className={styling.profileCompletedEditIcon}>
+            <h3>Values</h3>
+            <EditValues
+              candidate={candidate}
+              setCandidate={setCandidate}
+              allLabels={allValues}
+              icon={<IconTags />}
+              titleName="Choose your values"
+              onSave={handleSaveEdit}
+              visible={isValuesEdit}
+              setVisible={setIsValuesEdit}
+              showModal={editValues}
+            />
+          </div>
+          <div className={styling.valuesContainerLabels}>
+            {candidate?.values &&
+              candidate?.values?.map((label, index) => (
+                <Labels
+                  key={index}
+                  icon={<IconTags />}
+                  labelName={label}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />
+              ))}
+          </div>
+        </CardContainer>
+
+        {/* Experience */}
+        <CardContainer className={styling.experienceContainer}>
+          <div className={styling.profileCompletedEditIcon}>
+            <h3>Experience</h3>
+            <EditExperience
+              visible={isExperienceEdit}
+              setVisible={setIsExperienceEdit}
+              showModal={editExperience}
+              candidate={candidate}
+              setCandidate={setCandidate}
+              onSave={handleSaveEdit}
+            />
+          </div>
+          <ContentBlock sections={sectionsExperience} />
+        </CardContainer>
+      </div>
 
       {/* Contact info, languages, experience */}
       {/* Contact info */}
-      <div className={styling.associationsTypeOfJobs}>
+      <div className={styling.inOneRow}>
         <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
             <h3>Contact info</h3>
@@ -443,44 +455,45 @@ const CandidateProfile = () => {
           <ProgressBarComponent candidate={candidate} />
         </CardContainer>
 
-        {/* Experience */}
+        {/* Uploaded documents */}
         <CardContainer className={styling.lowerContainer}>
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Experience</h3>
-            <EditExperience
-              visible={isExperienceEdit}
-              setVisible={setIsExperienceEdit}
-              showModal={editExperience}
+            <h3>Uploaded documents</h3>
+            <DocumentUploadModal
               candidate={candidate}
-              setCandidate={setCandidate}
+              visible={isDocumentsEdit}
+              setVisible={setIsDocumentsEdit}
+              showModal={editDocuments}
               onSave={handleSaveEdit}
             />
           </div>
-          <ContentBlock sections={sectionsExperience} />
+          <ContentBlock sections={sectionDocuments} />
         </CardContainer>
       </div>
 
-      {/* Uploaded documents */}
-      <CardContainer className={styling.valuesContainer}>
+      {/* Job search preferences */}
+      <CardContainer className={styling.container}>
         <div className={styling.profileCompletedEditIcon}>
-          <h3>Uploaded documents</h3>
-          {/* <FileUploadModal
+          <h3>Visible Information</h3>
+          <EditJobSearchPref
             candidate={candidate}
-            visible={isDocumentsEdit}
-            setVisible={setIsDocumentsEdit}
-            showModal={editDocuments}
-            onSave={handleSaveEdit}
-            setSectionDocuments={setSectionDocuments}
-          /> */}
-          <DocumentUploadModal
-            candidate={candidate}
-            visible={isDocumentsEdit}
-            setVisible={setIsDocumentsEdit}
-            showModal={editDocuments}
+            visible={isAnonymousProfileEdit}
+            setVisible={setIsAnonymousProfileEdit}
+            showModal={editHandlerAnonymousProfile}
+            allFields={allFields}
             onSave={handleSaveEdit}
           />
         </div>
-        <ContentBlock sections={sectionDocuments} />
+        <p>Initially employees will only see skills and values</p>
+        <div
+          className={
+            isCompleteProfile
+              ? styling.visibleSectionComplete
+              : styling.visibleSection
+          }
+        >
+          <ContentBlock sections={sectionsJobSearchPref} />
+        </div>
       </CardContainer>
     </div>
   );

@@ -11,7 +11,6 @@ import time
 
 # Constants
 email_from = os.environ.get("SMTPLIB_EMAIL")
-password_from = os.environ.get("SMTPLIB_PASSWORD")
 api_key = os.environ.get("SENDGRID_API_KEY")
 
 

@@ -129,8 +129,8 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   address: "Contact info",
   phone_number: "Contact info",
   birth_date: "Profile",
-  work_permit: "Visible Information",
-  notice_period: "Visible Information",
+  work_permit: "Job Preferences",
+  notice_period: "Job Preferences",
   job_status: "Profile",
   preferred_jobs: "Type of jobs",
   company_type: "Experience",
@@ -138,14 +138,16 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   matching_companies: "",
   values: "Values",
   skills: "Skills",
+  soft_skills: "Skills",
   languages: "Languages",
   links: "Profile",
   certificates: "Documents",
   visible_information: "Profile",
   experience: "Experience",
-  visa_status: "Visible Information",
-  salary_expectation: "Visible Information",
-  other_information: "Profile",
+  visa_status: "Job Preferences",
+  salary_expectation: "Job Preferences",
+  possible_work_locations: "Job Preferences",
+  type_of_work: "Job Preferences",
 };
 
 const categoryFieldMapping: Record<string, number> = {};
@@ -247,6 +249,8 @@ function transformCandidateVisibleInfo(candidate: Candidate) {
       )}) valid visa`,
     });
   }
+
+  // transform locations
 
   return sectionsVisibleInfo;
 }

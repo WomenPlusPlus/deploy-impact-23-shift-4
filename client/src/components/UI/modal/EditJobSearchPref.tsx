@@ -3,7 +3,7 @@ import { Modal, Input, Select } from "antd";
 import { Candidate } from "../../pages/types/types";
 import { IconEdit } from "@tabler/icons-react";
 import { Button } from "../button/Button";
-import styling from "./VisibleSection.module.css";
+import styling from "./EditJobSearchPref.module.css";
 
 const { Option } = Select;
 
@@ -16,7 +16,7 @@ interface ContentBlockModalProps {
   allFields?: string[];
 }
 
-const VisibleSection: React.FC<ContentBlockModalProps> = ({
+const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   visible,
   setVisible,
   candidate,
@@ -279,4 +279,4 @@ const VisibleSection: React.FC<ContentBlockModalProps> = ({
   );
 };
 
-export { VisibleSection };
+export { EditJobSearchPref };

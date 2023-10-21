@@ -133,6 +133,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                 <Select
                   style={{ width: "100%" }}
                   placeholder="Select skill level"
+                  defaultValue={skill.skill_level}
                   onChange={(value) => {
                     const updatedSkills = candidateLabels.map((item) =>
                       item.skill_id === skill.skill_id
