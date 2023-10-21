@@ -9,6 +9,8 @@ interface LabelProps {
   disableCloseIcon?: boolean;
   customClass?: string;
   onClickHandle?: () => void;
+  isSkill?: boolean;
+  skillLevel?: string;
 }
 
 const Labels: React.FC<LabelProps> = ({
@@ -18,15 +20,24 @@ const Labels: React.FC<LabelProps> = ({
   disableCloseIcon,
   customClass = "styling.label",
   onClickHandle,
+  isSkill,
+  skillLevel,
 }) => {
   return (
     <div
       className={`${styling.labelContainer} ${customClass}`}
       onClick={onClickHandle}
     >
-      <div className={styling.labelIcon}>
-        {icon} {labelName}
-      </div>
+      {!isSkill ? (
+        <div className={styling.labelIcon}>
+          {icon} {labelName}
+        </div>
+      ) : (
+        <div className={styling.labelIcon}>
+          {icon} <strong>{labelName}</strong> | {skillLevel}
+        </div>
+      )}
+
       {!disableCloseIcon && (
         <div className={styling.labelCloseIcon} onClick={onCloseIcon}>
           <IconX

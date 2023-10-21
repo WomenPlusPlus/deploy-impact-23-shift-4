@@ -260,14 +260,14 @@ function transformExperience(experience: Experience[]) {
     if (firstExperience.role) {
       subtext = experience
         .map((exp, index) =>
-          index === 0 ? "" : `+ ${exp.years_of_experience} years in ${exp.role}`
+          index === 0 ? "" : ` ${exp.years_of_experience} years in ${exp.role}`
         )
-        .join(", ");
+        .join(" ");
 
       sectionsExperience.push({
-        title: "Role",
-        text: `${firstExperience.role}`,
-        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+        title: "Roles",
+        text: `${firstExperience.years_of_experience} years ${firstExperience.role}`,
+        subtext: `+ ${subtext},`,
       });
     }
 
@@ -276,14 +276,14 @@ function transformExperience(experience: Experience[]) {
         .map((exp, index) =>
           index === 0
             ? ""
-            : `+ ${exp.years_of_experience} years in ${exp.industries}`
+            : `${exp.industries}`
         )
-        .join(", ");
+        .join(" ");
 
       sectionsExperience.push({
         title: "Industries",
-        text: firstExperience.industries,
-        subtext: `+ ${firstExperience.years_of_experience} years, ${subtext}`,
+        text: `${firstExperience.industries}`,
+        subtext: `+ ${subtext} ,`,
       });
     }
   }

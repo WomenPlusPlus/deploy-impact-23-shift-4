@@ -106,3 +106,12 @@ export interface Skill {
   skill_level?: string;
   score?: number;
 }
+
+export interface Section {
+  title: string;
+  subtitle?: string;
+  text?: string;
+  subtext?: string;
+  icon?: JSX.Element;
+  type?: string;
+}
