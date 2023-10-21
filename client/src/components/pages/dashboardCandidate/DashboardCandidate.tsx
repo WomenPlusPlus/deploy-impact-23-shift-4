@@ -93,12 +93,12 @@ const DashboardCandidate: React.FC = () => {
         <div className="findjobs-component">
           <CardContainer className="section-element findjobs-element">
             <h1 className="top-left">Find your next job</h1>
-            <Button className="bottom-right">Jobs</Button>
+            <Button className="bottom-right" onClick={() => navigate("/jobs")}>Jobs</Button>
           </CardContainer>
 
           <CardContainer className="section-element findjobs-element">
             <h1 className="top-left">Explore Companies</h1>
-            <Button className="bottom-right">Companies</Button>
+            <Button className="bottom-right" onClick={() => navigate("/companies")}>Companies</Button>
           </CardContainer>
         </div>
 
