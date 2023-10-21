@@ -43,7 +43,7 @@ const items: MenuItem[] = [
   getItem("Dashboard", "", <IconDashboard />),
   getItem("Jobs", "jobs", <IconDeviceLaptop />),
   getItem("Companies", "companies", <IconBuildingSkyscraper />),
-  getItem("Talent", "candidates", <IconStar />),
+  // getItem("Talent", "candidates", <IconStar />),
   getItem("Saved", "saved", <IconBookmark />),
   getItem("Logout", "logout", <IconLogout2 />),
 ];

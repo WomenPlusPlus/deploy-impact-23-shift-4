@@ -81,7 +81,7 @@ const Navbar = () => {
         <Layout.Header className="nav-header">
           <div className="navbar-menu">
             <img
-              className="logo"
+              className=""
               alt="logo"
               style={{ width: 180, height: 60 }}
               src={String(logo)}
