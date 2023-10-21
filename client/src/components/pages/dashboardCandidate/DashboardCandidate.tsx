@@ -1,4 +1,4 @@
-import "./DashboardCandidate.css";
+import styling from "./DashboardCandidate.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
@@ -11,6 +11,7 @@ import { getCandidateById } from "../../../api/candidates";
 import { Candidate } from "../../../components/pages/types/types";
 
 import React from "react";
+import ApplicationRequests from "./applicationRequests/ApplicationRequests";
 
 const DashboardCandidate: React.FC = () => {
   // state
@@ -21,7 +22,6 @@ const DashboardCandidate: React.FC = () => {
   const navigate = useNavigate();
 
   const fetchInfo = async (user_id: string) => {
-    console.log("user_id", user_id);
     try {
       const candidateFetched = await getCandidateById(user_id);
       console.log("candidateFetched", candidateFetched);
@@ -36,34 +36,34 @@ const DashboardCandidate: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchInfo(auth.user?.id);
-  }, [auth.user?.id]);
+    fetchInfo(auth?.user?.id);
+  }, [auth?.user?.id]);
 
   return (
-    <div className="first-container">
-      <div className="grid">
+    <div className={styling.main}>
+      <div className={styling.grid}>
         {/* Profile component */}
-        <CardContainer className="section-element profile-component">
+        <CardContainer className={styling.profile}>
           <Avatar firstName="Company" size={80} />
 
-          <div className="header">
+          <div className={styling.header}>
             {candidate?.first_name ? (
-              <h2 className="header-title">
+              <h2 className={styling.headerTitle}>
                 Welcome back, {candidate?.first_name}
               </h2>
             ) : (
-              <h2 className="header-title">Welcome</h2>
+              <h2 className={styling.headerTitle}>Welcome</h2>
             )}
             {candidate?.experience ? (
               <p> {candidate?.experience[0]?.role}</p>
             ) : (
-              <p className="role">Add your current role</p>
+              <p className={styling.role}>Add your current role</p>
             )}
           </div>
 
-          <div className="open-icon">
+          <div className={styling.icon}>
             <IconExternalLink
-              color="black"
+              color="var(--gray-dark)"
               onClick={() => navigate("/candidate-profile")}
               style={{ cursor: "pointer" }}
             />
@@ -72,17 +72,17 @@ const DashboardCandidate: React.FC = () => {
 
         {/* Progress bar */}
         {progress < 100 && (
-          <CardContainer className="section-element progressbar-completion-component">
-            <div className="progressbar-text-element">
-              <p className="paragraph">You've completed {progress}% </p>
+          <CardContainer className={styling.progressbarCompletion}>
+            <div className={styling.progressText}>
+              <p className={styling.paragraph}>You've completed {progress}% </p>
             </div>
 
-            <div className="progressbar-component-element">
-              <div className="progressbar-element">
+            <div className={styling.progressbar}>
+              <div className={styling.progressElement}>
                 <ProgressBar progress={progress} />
               </div>
 
-              <div className="progressbar-button">
+              <div>
                 <Button>Complete your profile</Button>
               </div>
             </div>
@@ -90,44 +90,54 @@ const DashboardCandidate: React.FC = () => {
         )}
 
         {/* Find Jobs */}
-        <div className="findjobs-component">
-          <CardContainer className="section-element findjobs-element">
-            <h1 className="top-left">Find your next job</h1>
-            <Button className="bottom-right" onClick={() => navigate("/jobs")}>Jobs</Button>
+        <div className={styling.jobs}>
+          <CardContainer className={styling.findJobs}>
+            <h1>Find your next job</h1>
+            <Button
+              className={styling.button}
+              onClick={() => navigate("/jobs")}
+            >
+              Jobs
+            </Button>
           </CardContainer>
 
-          <CardContainer className="section-element findjobs-element">
-            <h1 className="top-left">Explore Companies</h1>
-            <Button className="bottom-right" onClick={() => navigate("/companies")}>Companies</Button>
+          <CardContainer className={styling.findJobs}>
+            <h1>Explore Companies</h1>
+            <Button
+              className={styling.button}
+              onClick={() => navigate("/companies")}
+            >
+              Companies
+            </Button>
           </CardContainer>
         </div>
 
         {/* Matches */}
-        <CardContainer className="section-element matches-component">
-          <h2 className="top-left matches-title">Your matches</h2>
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-        </CardContainer>
+        <div className={styling.section}>
+          <CardContainer className={styling.matches}>
+            <h1 className={styling.matchesTitle}>Your matches</h1>
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+          </CardContainer>
+          <ApplicationRequests />
+        </div>
       </div>
-
-      {/* Right sidebar */}
-      {/* <div className="grid"></div> */}
     </div>
   );
 };
