@@ -1,11 +1,14 @@
+import React from "react";
 import { Card, Avatar, Button } from "antd";
 import { IconExternalLink } from "@tabler/icons-react";
-import styling from "./JobCard.module.css";
 import { Labels } from "../labels/Label";
-import { Skill } from "../../pages/types/types";
+import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
+import { PieChartFilled } from "@ant-design/icons";
 
-interface JobCardProps {
-  title?: string;
+import styling from "./JobCard.module.css";
+
+interface JobCard2Props {
+  name?: string;
   company_name?: string;
   company_location?: string;
   description?: string;
@@ -15,12 +18,12 @@ interface JobCardProps {
   match?: string;
   location?: string;
   department?: string;
-  skills?: Skill[];
-  onClick?: () => void;
+  skills?: { technicalSkills: string[]; softSkills: string[] };
+  contract_type?: string;
 }
 
-const JobCard: React.FC<JobCardProps> = ({
-  title,
+const JobCard: React.FC<JobCard2Props> = ({
+  name,
   company_name,
   company_location,
   description,
@@ -31,7 +34,7 @@ const JobCard: React.FC<JobCardProps> = ({
   location,
   department,
   skills,
-  onClick,
+  contract_type,
 }) => {
   const truncatedDescription: string | undefined = description
     ? typeof description === "string" && description.length > 150
@@ -40,46 +43,60 @@ const JobCard: React.FC<JobCardProps> = ({
     : undefined;
 
   return (
-    <Card className={styling.card}>
-      <div className={styling.cardContent}>
+    <>
+      <Card className={styling.card}>
         <div className={styling.jobHeader}>
-          <Avatar className={styling.avatar} src={avatarUrl} />
-          <div className={styling.companyInfo}>
-            <h4 className={styling.companyName}>{company_name}</h4>
-            <h5 className={styling.companyLocation}>{company_location}</h5>
-            <h6 className={styling.employee}>{employees} employees</h6>
-          </div>
-          <div className={styling.topRightIcon}>
-            {<IconExternalLink color="black" />}
-          </div>
-        </div>
-        <div className={styling.jobInfo}>
           <div>
-            <p className={styling.jobTitle}>{title}</p>
-            <p className={styling.jobLevel}>
-              {level} | {location} | {department}
-            </p>
+            <Avatar className={styling.avatar} src={avatarUrl} />
           </div>
-          <div className={styling.matchesTag}>{match} matches</div>
+          <div className={styling.jobTitle}>
+            <h2 className={styling.jobName}>{name}</h2>
+            <p className={styling.companyName}>@{company_name}</p>
+          </div>
+          <div>
+            <IconBookmark />{" "}
+          </div>
         </div>
-        <p className={styling.jobDescription}>{truncatedDescription}</p>
 
-        <div className={styling.labelContainer}>
-          {skills?.map((skill) => (
-            <Labels
-              labelName={skill.skill_name}
-              customClass={styling.label}
-              disableCloseIcon
-            />
-          ))}
+        <div className={styling.jobDescription}>
+          <div className={styling.iconAndText}>
+            <PieChartFilled style={{ color: "#10239E" }} />
+            <span>{match} % Match</span>
+          </div>
+          <div className={styling.iconAndText}>
+            <IconMapPin />
+            <span>{location}</span>
+          </div>
+          <div className={styling.iconAndText}>
+            <IconShoppingBag />
+            <span>{contract_type}</span>
+          </div>
         </div>
-        <div className={styling.goTalents}>
-          <Button className={styling.goToTalents} onClick={onClick}>
-            Go to talents
-          </Button>
+        <hr className={styling.horizontalLine} />
+        <div className={styling.skillTag}>
+          {skills && (
+            <>
+              {skills.technicalSkills.map((technicalSkill, index) => (
+                <Labels
+                  key={`technical_${index}`}
+                  labelName={technicalSkill}
+                  customClass={styling.label}
+                  disableCloseIcon
+                />
+              ))}
+              {skills.softSkills.map((softSkill, index) => (
+                <Labels
+                  key={`soft_${index}`}
+                  labelName={softSkill}
+                  customClass={styling.label}
+                  disableCloseIcon
+                />
+              ))}
+            </>
+          )}
         </div>
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 
