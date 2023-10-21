@@ -15,6 +15,7 @@ import CompanyProfile from "../components/pages/companyProfile/CompanyProfile";
 import NotFound from "../components/pages/notfound/NotFound";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
 import CompanyPublicProfile from "../components/pages/companyPublicProfile/CompanyPublicProfile";
+import Jobs2 from "../components/pages/jobs/Jobs2"
 import AssociationProfile from "../components/pages/associationProfile/AssociationProfile";
 import CandidatePublicProfile from "../components/pages/candidatePublicProfile/CandidatePublicProfile";
 
@@ -28,7 +29,7 @@ const Routes: React.FC = () => {
           path="/"
           element={<Authenticated content={<DashboardRoute />} />}
         />
-        <Route path="/jobs" element={<Authenticated content={<Jobs />} />} />
+        <Route path="/jobs" element={<Authenticated content={<Jobs2 />} />} />
         <Route
           path="/companies"
           element={<Authenticated content={<Companies />} />}
