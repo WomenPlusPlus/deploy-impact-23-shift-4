@@ -58,3 +58,12 @@
   align-items: center;
   gap: 2rem;
 }
+
+.sectionName {
+  margin-bottom: 0;
+}
+
+.labelContainer {
+  display: flex;
+  gap: 1rem;
+}

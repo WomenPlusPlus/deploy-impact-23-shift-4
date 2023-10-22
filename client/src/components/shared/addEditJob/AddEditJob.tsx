@@ -193,21 +193,23 @@ const AddEditJob: React.FC<ModalProps> = ({
 
             <Button onClick={addSkill}>Add</Button>
           </div>
-          {selectedSkills.map((skill: any, index: number) => (
-            <div key={index}>
+          <div className={styling.labelContainer}>
+            {selectedSkills?.map((skill: any, index: number) => (
               <Labels
+                key={index}
                 customClass={styling.label}
-                labelName={`${skill.skill_name} - ${skill.skill_level}`}
-                onCloseIcon={() => removeSkill(skill.skill_name)}
+                labelName={`${skill?.skill_name} | ${skill?.skill_level}`}
+                onCloseIcon={() => removeSkill(skill?.skill_name)}
               />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
       <div className={styling.twoColumn}>
         <div className={styling.sider}>
           <Divider>Job details</Divider>
+          <p className={styling.sectionName}>Employment type:</p>
           <Select
             className={styling.dropdown}
             placeholder="Employment Type"
@@ -219,6 +221,7 @@ const AddEditJob: React.FC<ModalProps> = ({
             <Option value="Internship">Internship</Option>
           </Select>
 
+          <p className={styling.sectionName}>Hiring process duration:</p>
           <Input
             className={styling.input}
             placeholder="Hiring Process Duration"
@@ -226,7 +229,7 @@ const AddEditJob: React.FC<ModalProps> = ({
             onChange={(e) => setHiringProcessDuration(e.target.value)}
           />
 
-          <p>Annual salary:</p>
+          <p className={styling.sectionName}>Annual salary:</p>
           <div className={styling.salary}>
             <Input
               className={styling.input}
@@ -245,6 +248,7 @@ const AddEditJob: React.FC<ModalProps> = ({
 
         <div className={styling.sider}>
           <Divider>Location</Divider>
+          <p className={styling.sectionName}>Work location:</p>
           <Select
             className={styling.dropdown}
             placeholder="Work Location"
@@ -256,6 +260,7 @@ const AddEditJob: React.FC<ModalProps> = ({
             <Option value="Remote">Remote</Option>
           </Select>
 
+          <p className={styling.sectionName}>City:</p>
           <Input
             className={styling.input}
             placeholder="City"
@@ -263,6 +268,7 @@ const AddEditJob: React.FC<ModalProps> = ({
             onChange={(e) => setLocationCity(e.target.value)}
           />
 
+          <p className={styling.sectionName}>Country:</p>
           <Input
             className={styling.input}
             placeholder="Country"
