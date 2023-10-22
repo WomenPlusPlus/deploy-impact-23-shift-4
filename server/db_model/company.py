@@ -40,6 +40,12 @@ def init_company_model(db):
             db.ARRAY(db.String)
         )  # Positions/job lists as an array of foreign keys (integer)
         company_size = db.Column(db.String(256))  # Company size as a string
+        shared_candidate_packages = db.Column(
+            db.JSON
+        )  # Packages that candidates shared with the company
+        interested_candidates = db.Column(
+            db.JSON
+        )  # Candidates that are interested in a job at the company
 
         def __init__(
             self,
@@ -57,6 +63,8 @@ def init_company_model(db):
             kununu_url=None,
             open_positions=None,
             company_size=None,
+            shared_candidate_packages=None,
+            interested_candidates=None,
         ):
             """
             Initialize a new company object.
@@ -78,6 +86,8 @@ def init_company_model(db):
             self.kununu_url = kununu_url
             self.open_positions = open_positions
             self.company_size = company_size
+            self.shared_candidate_packages = shared_candidate_packages
+            self.interested_candidates = interested_candidates
 
         def to_dict(self):
             """
@@ -99,6 +109,8 @@ def init_company_model(db):
                 "kununu_url": self.kununu_url,
                 "open_positions": self.open_positions,
                 "company_size": self.company_size,
+                "shared_candidate_packages": self.shared_candidate_packages,
+                "interested_candidates": self.interested_candidates,
             }
 
     return Company

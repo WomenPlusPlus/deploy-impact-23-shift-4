@@ -73,7 +73,10 @@ def init_candidate_model(db):
         possible_work_locations = db.Column(
             db.ARRAY(db.String)
         )  # Possible work locations as an array of strings e.g ['Amsterdam', 'Rotterdam']
-        type_of_work = db.Column(db.ARRAY(db.String)) # Type of work as an array of strings e.g ['Hybrid', 'Remote', 'Office']
+        type_of_work = db.Column(
+            db.ARRAY(db.String)
+        )  # Type of work as an array of strings e.g ['Hybrid', 'Remote', 'Office']
+        package_requested = db.Column(db.JSON)  # Package requestes from the company
 
         def __init__(
             self,
@@ -109,6 +112,7 @@ def init_candidate_model(db):
             salary_expectation=None,
             possible_work_locations=None,
             type_of_work=None,
+            package_requested=None,
         ):
             """
             Initialize a new candidate object.
@@ -148,6 +152,7 @@ def init_candidate_model(db):
             self.salary_expectation = salary_expectation
             self.possible_work_locations = possible_work_locations
             self.type_of_work = type_of_work
+            self.package_requested = package_requested
 
         def to_dict(self):
             """
@@ -186,6 +191,7 @@ def init_candidate_model(db):
                 "salary_expectation": self.salary_expectation,
                 "possible_work_locations": self.possible_work_locations,
                 "type_of_work": self.type_of_work,
+                "package_requested": self.package_requested,
             }
 
     return Candidate
