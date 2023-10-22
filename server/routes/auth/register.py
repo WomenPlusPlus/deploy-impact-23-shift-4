@@ -31,7 +31,6 @@ def register_route(User, Candidate, Company, Association, db):
             password = data.get("password")
             email = data.get("email")
             user_type = data.get("user_type")  # Get user type from the request
-            associations = data.get("associations")
 
             try:
                 # Hash the password before saving it to the appropriate table
@@ -55,6 +54,7 @@ def register_route(User, Candidate, Company, Association, db):
                 if user_type == "candidate":
                     first_name = data.get("first_name")
                     last_name = data.get("last_name")
+                    associations = data.get("associations")
                     # Save the user also in the "candidate" table
                     new_candidate = Candidate(
                         user_id=user_id,
@@ -69,6 +69,7 @@ def register_route(User, Candidate, Company, Association, db):
 
                 elif user_type == "company":
                     company_name = data.get("company_name")
+                    associations = data.get("associations")
                     # Save the user also in the "company" table
                     new_company = Company(
                         user_id=user_id,

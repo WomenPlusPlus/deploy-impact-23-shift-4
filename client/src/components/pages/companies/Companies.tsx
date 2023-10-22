@@ -103,8 +103,9 @@ const Companies = () => {
         </div>
       </div>
       <div className={styling.cards}>
-        {filteredCompanies.map((company) => (
+        {filteredCompanies?.map((company, index) => (
           <Card
+            key={index}
             header={company.company_name}
             subheader={company.address}
             associations={company.associations}
