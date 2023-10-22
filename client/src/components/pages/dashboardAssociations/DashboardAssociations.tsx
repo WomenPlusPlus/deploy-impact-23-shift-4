@@ -170,7 +170,7 @@ const DashboardAssociations = () => {
   ];
 
   const today = new Date();
-  const dataInvite = association?.invites.map((invite: any, index: number) => {
+  const dataInvite = association?.invites?.map((invite: any, index: number) => {
     const inviteDate = new Date(invite.createdAt);
     const timeDifference = today.getTime() - inviteDate.getTime();
 
