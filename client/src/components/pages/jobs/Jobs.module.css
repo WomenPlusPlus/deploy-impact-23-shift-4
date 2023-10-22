@@ -5,6 +5,12 @@
   padding: 3rem;
 }
 
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .header {
   color: black;
 }
