@@ -25,6 +25,7 @@ def init_jobs_model(db):
             db.ARRAY(db.String)
         )  # Values as an array of foreign keys (integer)
         skills = db.Column(db.JSON)  # Skills as an array of foreign keys (integer)
+        soft_skills = db.Column(db.ARRAY(db.String))  # Soft skills as an array of strings
         hiring_process_duration = db.Column(
             db.String(256)
         )  # Interview process duration as a string
@@ -49,6 +50,7 @@ def init_jobs_model(db):
             description=None,
             values=None,
             skills=None,
+            soft_skills=None,
             hiring_process_duration=None,
             posting_date=None,
             matching_candidates=None,
@@ -71,6 +73,7 @@ def init_jobs_model(db):
             self.description = description
             self.values = values
             self.skills = skills
+            self.soft_skills = soft_skills
             self.hiring_process_duration = hiring_process_duration
             self.posting_date = posting_date
             self.matching_candidates = matching_candidates
@@ -93,6 +96,7 @@ def init_jobs_model(db):
                 "description": self.description,
                 "values": self.values,
                 "skills": self.skills,
+                "soft_skills": self.soft_skills,
                 "hiring_process_duration": self.hiring_process_duration,
                 "posting_date": self.posting_date.isoformat()
                 if self.posting_date

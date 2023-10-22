@@ -54,7 +54,7 @@ const CompanyProfile = () => {
    */
   const handleModalSave = async (payload: object) => {
     console.log("Received payload from EditCompanyProfile:", payload);
-    await updateCompanyById(company.user_id, payload);
+    await updateCompanyById(company?.user_id, payload);
 
     setConfirmEditCompanyLoading(true);
     setOpenEditJobModal(false);
@@ -79,11 +79,11 @@ const CompanyProfile = () => {
    */
   const fetchCompanyInfo = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
+    const userId = auth?.user?.id;
 
     const company = await getCompanyById(userId);
     const allJobs = await getAllJobs();
-    const jobs = allJobs.map((job: Record<string, any>) => {
+    const jobs = allJobs?.map((job: Record<string, any>) => {
       // get all jobs that belong to this company
       if (job["company_id"] === userId) {
         return job;
@@ -114,14 +114,14 @@ const CompanyProfile = () => {
         </div>
         {jobs.map((job: Record<string, any>, index: number) => {
           return (
-            <div onClick={() => navigate(`/job/${job.id}`)}>
+            <div onClick={() => navigate(`/job/${job?.id}`)}>
               <HorizontalCard
                 key={index}
                 avatar={true}
                 button="Go to description"
-                firstName={company.company_name}
-                title={job.title}
-                subtitle={job.description}
+                firstName={company?.company_name}
+                title={job?.title}
+                subtitle={job?.description}
               />
             </div>
           );
@@ -224,8 +224,8 @@ const CompanyProfile = () => {
             onOk={handleModalSave}
             onCancel={toggleEditCompanyModal}
             confirmLoading={confirmEditCompanyLoading}
-            companyId={company.user_id}
-            associations={company.associations}
+            companyId={company?.user_id}
+            associations={company?.associations}
             companyInfo={company}
           />
         </div>
@@ -240,8 +240,8 @@ const CompanyProfile = () => {
         onOk={handleAddJobPayload}
         onCancel={toggleAddJobModal}
         confirmLoading={confirmLoading}
-        companyId={company.user_id}
-        associations={company.associations}
+        companyId={company?.user_id}
+        associations={company?.associations}
       />
     </>
   );

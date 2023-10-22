@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import backgroundLogin from "../../../media/login-background.jpg";
+import { ToastContainer, toast } from "react-toastify";
 // import axios from "axios"; // Import Axios for making HTTP requests
 import { useAuth } from "../../../context/auth";
 import BridgeLogo from "../../../media/bridge-logo.png";
@@ -41,6 +42,9 @@ const Login = () => {
         // Handle the backend response here
         const { user } = response.data;
         console.log("Response", response.status);
+        if (response.status === 200) {
+          toast.success("Login Success");
+        }
         // Set auth, user_type in local storage
         localStorage.setItem("user_type", user.user_type);
         localStorage.setItem("auth", JSON.stringify({ user: user }));
@@ -51,16 +55,25 @@ const Login = () => {
       .catch((error) => {
         // Handle any errors here
         if (error.response) {
-          console.error("HTTP Status Code:", error.response.status);
-          console.error("Response Data:", error.response.data);
-        } else {
-          console.error("Network Error:", error.message);
+          const { response } = error;
+          if (response.status === 401) {
+            toast.error("Invalid email or password");
+          } else if (response.status === 403) {
+            toast.error("User is not registered");
+          } else if (response.status === 417) {
+            toast.error("Login unsuccessful");
+          } else {
+            toast.error("Internal Server Error");
+            console.error("HTTP Status Code:", error.response.status);
+            console.error("Response Data:", error.response.data);
+          }
         }
       });
   };
 
   return (
     <div className="login-container">
+      <ToastContainer theme="light" />
       {/* <img
         className="backgroud-image"
         alt="background"

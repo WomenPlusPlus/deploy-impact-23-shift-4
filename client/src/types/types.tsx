@@ -82,7 +82,8 @@ export interface Job {
   title?: string;
   description?: string;
   values?: string[];
-  skills?: Record<string, any>; // JSON object
+  skills?: Skill[];
+  soft_skills?: string[];
   hiring_process_duration?: string;
   posting_date?: string; // Use a string or Date type as per your requirements
   matching_candidates?: Record<string, any>[]; // JSON object
