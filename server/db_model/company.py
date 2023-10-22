@@ -43,6 +43,12 @@ def init_company_model(db):
         company_website = db.Column(db.String(256))
         company_industry = db.Column(db.String(256))
         saved_items = db.Column(db.ARRAY(db.String))  # Saved items as an array of strings
+        shared_candidate_packages = db.Column(
+            db.JSON
+        )  # Packages that candidates shared with the company
+        interested_candidates = db.Column(
+            db.JSON
+        )  # Candidates that are interested in a job at the company
 
         def __init__(
             self,
@@ -65,6 +71,8 @@ def init_company_model(db):
             company_website=None,
             company_industry=None,
             saved_items=None,
+            shared_candidate_packages=None,
+            interested_candidates=None,
         ):
             """
             Initialize a new company object.
@@ -91,6 +99,8 @@ def init_company_model(db):
             self.company_website = company_website
             self.company_industry = company_industry
             self.saved_items = saved_items
+            self.shared_candidate_packages = shared_candidate_packages
+            self.interested_candidates = interested_candidates
 
         def to_dict(self):
             """
@@ -117,6 +127,8 @@ def init_company_model(db):
                 "company_website": self.company_website,
                 "company_industry": self.company_industry,
                 "saved_items": self.saved_items,
+                "shared_candidate_packages": self.shared_candidate_packages,
+                "interested_candidates": self.interested_candidates,
             }
 
     return Company

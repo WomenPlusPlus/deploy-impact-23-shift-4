@@ -40,6 +40,7 @@ export interface Candidate {
   type_of_work?: string[];
   saved_items?: string[];
   date_profile_modified?: string;
+  package_requested?: string[];
 }
 
 export interface EditInputProps<Candidate> {
@@ -74,6 +75,8 @@ export interface Company {
   company_website?: string;
   company_industry?: string[];
   saved_items?: string[];
+  shared_candidate_packages?: string[];
+  interested_candidates?: string[];
 }
 
 export interface Experience {
@@ -94,7 +97,7 @@ export interface Job {
   hiring_process_duration?: string;
   posting_date?: string; // Use a string or Date type as per your requirements
   matching_candidates?: Record<string, any>[]; // JSON object
-  salary?: number;
+  salary?: string[]; // array of 2 strings, min and max salary range
   location_city?: string;
   location_country?: string;
   work_location?: string;

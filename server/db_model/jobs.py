@@ -24,7 +24,9 @@ def init_jobs_model(db):
             db.ARRAY(db.String)
         )  # Values as an array of foreign keys (integer)
         skills = db.Column(db.JSON)  # Skills as an array of foreign keys (integer)
-        soft_skills = db.Column(db.ARRAY(db.String))  # Soft skills as an array of strings
+        soft_skills = db.Column(
+            db.ARRAY(db.String)
+        )  # Soft skills as an array of strings
         hiring_process_duration = db.Column(
             db.String(256)
         )  # Interview process duration as a string
@@ -33,12 +35,16 @@ def init_jobs_model(db):
             db.JSON
         )  # Matching candidates as an array of foreign keys (integer)
         salary = db.Column(
-            db.Numeric(10, 2)
-        )  # Salary as a numeric value with 2 decimal places
+            db.ARRAY(db.String)
+        )  # Salary expectation as an array of strings e.g ['50k', '70k']
         location_city = db.Column(db.String(256))  # Location as a string
         location_country = db.Column(db.String(256))  # Location as a string
-        work_location = db.Column(db.String(256))  # Job type as a string (hybrid, remote, etc.)
-        employment_type = db.Column(db.String(256))  # Job type as a string (full-time, part-time, etc.)
+        work_location = db.Column(
+            db.String(256)
+        )  # Job type as a string (hybrid, remote, onsite)
+        employment_type = db.Column(
+            db.String(256)
+        )  # Job type as a string (full-time, part-time, internship)
         date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
         def __init__(

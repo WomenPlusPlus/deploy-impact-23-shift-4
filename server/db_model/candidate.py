@@ -78,6 +78,7 @@ def init_candidate_model(db):
             db.ARRAY(db.String)
         )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
         date_profile_modified = db.Column(db.DateTime)
+        package_requested = db.Column(db.JSON)  # Package requestes from the company
 
         def __init__(
             self,
@@ -115,6 +116,7 @@ def init_candidate_model(db):
             type_of_work=None,
             saved_items=None,
             date_profile_modified=None,
+            package_requested=None,
         ):
             """
             Initialize a new candidate object.
@@ -156,6 +158,7 @@ def init_candidate_model(db):
             self.type_of_work = type_of_work
             self.saved_items = saved_items
             self.date_profile_modified = date_profile_modified
+            self.package_requested = package_requested
 
         def to_dict(self):
             """
@@ -198,6 +201,7 @@ def init_candidate_model(db):
                 "date_profile_modified": self.date_profile_modified.isoformat()
                 if self.date_profile_modified
                 else None,
+                "package_requested": self.package_requested,
             }
 
     return Candidate

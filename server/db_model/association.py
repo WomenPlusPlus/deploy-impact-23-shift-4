@@ -32,7 +32,6 @@ def init_association_model(db):
         )  # Iniciatives as a JSON object of iniciatives ids
         invites = db.Column(db.JSON)  # Invites as a JSON object of invites ids
         size = db.Column(db.String(80))
-        saved_items = db.Column(db.ARRAY(db.String))  # Saved items as an array of strings
 
         def __init__(
             self,
@@ -48,7 +47,6 @@ def init_association_model(db):
             iniciatives=None,
             invites=None,
             size=None,
-            saved_items=None,
         ):
             """
             Initialize a new association object.
@@ -68,7 +66,6 @@ def init_association_model(db):
             self.iniciatives = iniciatives
             self.invites = invites
             self.size = size
-            self.saved_items = saved_items
 
         def to_dict(self):
             """
@@ -88,7 +85,6 @@ def init_association_model(db):
                 "iniciatives": self.iniciatives,
                 "invites": self.invites,
                 "size": self.size,
-                "saved_items": self.saved_items,
             }
 
     return Association

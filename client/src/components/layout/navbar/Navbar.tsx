@@ -10,6 +10,7 @@ import "./Navbar.css";
 import { getCompanyById } from "../../../api/companies";
 import { getAssociationById } from "../../../api/associations";
 import { getCandidateById } from "../../../api/candidates";
+import Notifications from "../../shared/notifications/Notifications";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -103,7 +104,8 @@ const Navbar = () => {
             </div>
 
             <div className="rightMenu">
-              {/* TODO: update names with login profile */}
+              <Notifications />
+
               {avatarComponent}
             </div>
           </div>

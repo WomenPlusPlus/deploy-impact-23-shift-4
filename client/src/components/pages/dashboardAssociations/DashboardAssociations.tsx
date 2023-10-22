@@ -18,6 +18,7 @@ import {
   updateAssociationById,
 } from "../../../api/associations";
 import { sendInvite } from "../../../api/invite";
+import { getAllUsers } from "../../../api/user";
 
 interface Payload {
   name: string;
@@ -44,6 +45,22 @@ const DashboardAssociations = () => {
       recipient_email: payload?.recipient_email,
       association: association?.association_name,
     };
+
+    // Check if user already exists in the database
+    const users = await getAllUsers();
+    const user = users.find(
+      (user: any) => user.email === payload.recipient_email
+    );
+
+    if (user) {
+      message.error("User already exists");
+      return;
+    }
+
+    if (!association.invites) {
+      association.invites = [];
+    }
+
     // Send invite
     const isInviteSent = await sendInvite(payloadInvite);
 
@@ -53,6 +70,7 @@ const DashboardAssociations = () => {
       user_type: payload?.user_type,
       createdAt: new Date(),
     };
+
     // Update association invites array
     await updateAssociationById(association?.user_id, {
       invites: [...association?.invites, payloadInvites],
@@ -201,6 +219,7 @@ const DashboardAssociations = () => {
     setTableData(updatedData);
   };
 
+  console.log(association);
   return (
     <div className={styling.main}>
       {/* Profile component */}
