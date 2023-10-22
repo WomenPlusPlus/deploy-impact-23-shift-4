@@ -14,34 +14,80 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
-import { Job, Company } from "../../../types/types";
+import { Job, Company, Candidate } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
 import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
 import { Labels } from "../../UI/labels/Label";
+import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
 const PublicJob = () => {
   // Job id from url
   const { id } = useParams<{ id: string }>();
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const iconSize = 20;
   const companyIconSize = 15;
   const matchScore = 80;
   // state
-  const [jobData, setJobData] = useState<Job>();
+  const [candidate, setCandidate] = useState<Candidate>();
+  const [jobData, setJobData] = useState<Job>({} as Job);
   const [companyData, setCompanyData] = useState<Company>();
+  const [isSaved, setIsSaved] = useState(false);
 
   const getInfo = async (id: string) => {
     const getJob = await getJobById(id);
+    const candidate = await getCandidateById(userId);
+    const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
+    setIsSaved(fetchIsSaved);
 
     if (getJob) {
       const getCompany = await getCompanyById(getJob?.company_id ?? "");
       setCompanyData(getCompany);
       setJobData(getJob);
     }
+    setCandidate(candidate);
   };
 
   useEffect(() => {
     getInfo(id ?? "");
   }, [id]);
+
+  const saveJob = async () => {
+    // add to local storage
+    setIsSaved(!isSaved);
+    // if not yet saved
+    if (!isSaved) {
+      // Check if the job is already saved
+      const isJobSaved = candidate?.saved_items?.includes(jobData?.id);
+      if (isJobSaved) {
+        return;
+      } else {
+        localStorage.setItem(
+          "saved_items",
+          JSON.stringify([...(candidate?.saved_items || []), jobData?.id])
+        );
+        await updateCandidateById(candidate?.user_id || "", {
+          saved_items: [...(candidate?.saved_items || []), jobData?.id],
+        });
+      }
+    } else {
+      // if already saved
+      const savedItems = JSON.parse(
+        localStorage.getItem("saved_items") || "[]"
+      );
+      // Check if the job is already saved in local storage
+      const isJobSaved = savedItems.includes(jobData?.id);
+      if (!isJobSaved) {
+        return;
+      }
+      const filtered = savedItems.filter(
+        (savedItem: string) => savedItem !== jobData?.id
+      );
+      localStorage.setItem("saved_items", JSON.stringify(filtered));
+      await updateCandidateById(candidate?.user_id || "", {
+        saved_items: filtered,
+      });
+    }
+  };
 
   return (
     <div className={styling.main}>
@@ -63,8 +109,12 @@ const PublicJob = () => {
           </p>
         </div>
         <div className={styling.row}>
-          <IconBookmark />
-          <Button>Apply</Button>
+          {isSaved ? (
+            <IconBookmark className={styling.savedBookmark} onClick={saveJob} />
+          ) : (
+            <IconBookmark className={styling.bookmark} onClick={saveJob} />
+          )}
+          <Button className={styling.companyButton}>Apply</Button>
         </div>
       </div>
 
@@ -163,12 +213,12 @@ const PublicJob = () => {
             </div>
           </div>
           <div className={styling.row}>
-            <Button>Company Profile</Button>
+            <Button className={styling.companyButton}>View company</Button>
           </div>
-          <div>
-            <h2 className={styling.h2Title}>About us</h2>
-            <p>{companyData?.company_description}</p> 
-          </div>
+        </div>
+        <div>
+          <h2 className={styling.h2Title}>About us</h2>
+          <p>{companyData?.company_description}</p>
         </div>
       </CardContainer>
     </div>
