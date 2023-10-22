@@ -5,6 +5,8 @@ import styling from "./RegisterCandidate.module.css"; // You can create a separa
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../../UI/oauth/GoogleButton";
+import TermsAndConditions from "./TermsAndConditions";
+import BridgeLogo from "../../../media/bridge-logo.png";
 
 interface RegisterCandidateProps {
   token: string;
@@ -32,16 +34,28 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
     signature
   );
   // state
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    password: "",
-    email: "",
-    user_type: user_type,
-    associations: associations,
-  });
+  const [formData, setFormData] = useState(
+    user_type === "candidate"
+      ? {
+          first_name: "",
+          last_name: "",
+          password: "",
+          email: "",
+          user_type: user_type,
+          associations: associations,
+        }
+      : {
+          password: "",
+          email: "",
+          user_type: user_type,
+          associations: associations,
+          company_name: "",
+        }
+  );
 
-  const handleInputChange = (e: any) => {
+  const [agree, setAgree] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -75,46 +89,68 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
   return (
     <div className={styling.registerContainer}>
       <div className={styling.registerBox}>
-        <h1>Candidate registration for Shift4</h1>
+        <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
+        <h1>Register</h1>
         <Form
           name="register_form"
           className={styling.registerForm}
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >
-          <Form.Item
-            name="first_name"
-            rules={[
-              { required: true, message: "Please input your First Name!" },
-            ]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              className={styling.antInput}
-              type="text"
-              name="first_name"
-              value={formData.first_name}
-              placeholder="First Name"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+          {user_type === "candidate" ? (
+            <>
+              <Form.Item
+                name="first_name"
+                rules={[
+                  { required: true, message: "Please input your First Name!" },
+                ]}
+              >
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  className={styling.antInput}
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  placeholder="First Name"
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="last_name"
-            rules={[
-              { required: true, message: "Please input your Last Name!" },
-            ]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              className={styling.antInput}
-              type="text"
-              name="last_name"
-              value={formData.last_name}
-              placeholder="Last Name"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+              <Form.Item
+                name="last_name"
+                rules={[
+                  { required: true, message: "Please input your Last Name!" },
+                ]}
+              >
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  className={styling.antInput}
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  placeholder="Last Name"
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
+            </>
+          ) : (
+            <Form.Item
+              name="company_name"
+              rules={[
+                { required: true, message: "Please input your Company Name!" },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                className={styling.antInput}
+                type="text"
+                name="company_name"
+                value={formData.company_name}
+                placeholder="Company Name"
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          )}
 
           <Form.Item
             name="email"
@@ -153,10 +189,15 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
           </Form.Item>
 
           <Form.Item>
+            <TermsAndConditions onAgreeChange={(value) => setAgree(value)} />
+          </Form.Item>
+
+          <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               className={styling.registerFormButton}
+              disabled={!agree}
             >
               Register
             </Button>

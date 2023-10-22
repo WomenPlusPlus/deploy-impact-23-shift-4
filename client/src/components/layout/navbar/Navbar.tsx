@@ -1,16 +1,72 @@
+import React, { useEffect, useState } from "react";
 import { Layout, Input } from "antd";
-import { IconBookmark } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../UI/avatar/Avatar";
 
-import logo from "../../../media/shift-logo.jpg";
+import logo from "../../../media/bridge-logo.png";
 
 import "./Navbar.css";
+import { getCompanyById } from "../../../api/companies";
+import { getAssociationById } from "../../../api/associations";
+import { getCandidateById } from "../../../api/candidates";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { Search } = Input;
+
+  const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+  const userType = auth.user.user_type;
+
+  const [avatarComponent, setAvatarComponent] = useState<React.ReactNode>();
+
+  const loadAvatar = async () => {
+    if (userType === "company") {
+      const company = await getCompanyById(auth.user.id);
+      console.log(company);
+      setAvatarComponent(
+        <Avatar
+          firstName={company.company_name}
+          lastName=""
+          size="large"
+          handleProfileClick={handleProfileClick}
+        />
+      );
+    } else if (userType === "candidate") {
+      const candidate = await getCandidateById(auth.user.id);
+      setAvatarComponent(
+        <Avatar
+          firstName={candidate.first_name}
+          lastName={candidate.last_name}
+          size="large"
+          handleProfileClick={handleProfileClick}
+        />
+      );
+    } else if (userType === "association") {
+      const association = await getAssociationById(auth.user.id);
+      setAvatarComponent(
+        <Avatar
+          firstName={association.association_name}
+          lastName=""
+          size="large"
+          handleProfileClick={handleProfileClick}
+        />
+      );
+    } else {
+      setAvatarComponent(
+        <Avatar
+          firstName=""
+          lastName=""
+          size="large"
+          handleProfileClick={handleProfileClick}
+        />
+      );
+    }
+  };
+
+  useEffect(() => {
+    loadAvatar();
+  }, []);
 
   const handleProfileClick = () => {
     const userType = localStorage.getItem("user_type");
@@ -25,27 +81,21 @@ const Navbar = () => {
         <Layout.Header className="nav-header">
           <div className="navbar-menu">
             <img
-              className="logo"
+              className=""
               alt="logo"
-              style={{ width: 120, height: 35 }}
+              style={{ width: 180, height: 60 }}
               src={String(logo)}
             />
             <div className="leftMenu">
               <Search
                 placeholder="Enter a job title, name o keyword"
-                style={{ position: "relative", width: 300 }}
+                style={{ position: "relative", width: 400 }}
               />
             </div>
 
             <div className="rightMenu">
-              <IconBookmark color="var(--gray-medium)" />
               {/* TODO: update names with login profile */}
-              <Avatar
-                firstName="Laura"
-                lastName="Purcaro"
-                size="large"
-                handleProfileClick={handleProfileClick}
-              />
+              {avatarComponent}
             </div>
           </div>
         </Layout.Header>

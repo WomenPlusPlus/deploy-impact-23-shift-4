@@ -1,60 +1,84 @@
-import "./DashboardCandidate.css";
+import styling from "./DashboardCandidate.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { IconExternalLink } from "@tabler/icons-react";
 import { Button } from "../../UI/button/Button";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate } from "../../../components/pages/types/types";
+import { Candidate } from "../../../types/types";
 
 import React from "react";
+import {
+  allCategories,
+  countNullFieldsByCategory,
+  percentage,
+} from "../candidateProfile/helpers/helper";
+import ApplicationRequests from "./applicationRequests/ApplicationRequests";
 
 const DashboardCandidate: React.FC = () => {
   // state
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
+  const [progress, setProgress] = useState(0);
+
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-  console.log("auth dashboard", auth);
   const navigate = useNavigate();
 
-  const fetchCandidate = async (user_id: string) => {
-    console.log("user_id", user_id);
+  const fetchInfo = async (user_id: string) => {
     try {
       const candidateFetched = await getCandidateById(user_id);
       console.log("candidateFetched", candidateFetched);
       setCandidate(candidateFetched);
+      const isProgress = calculateProgress(candidateFetched as Candidate);
+      setProgress(isProgress);
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  useEffect(() => {
-    fetchCandidate(auth.user?.id);
-  }, [auth.user?.id]);
+  const calculateProgress = (candidate: Candidate) => {
+    const countFields = countNullFieldsByCategory(candidate, allCategories);
+    const countProgress = percentage({
+      completedCategories: Object.values(countFields).filter(
+        (fraction) => fraction > 0
+      ).length,
+      totalCategories: allCategories.length,
+    });
+    console.log("PROGRESS", countProgress);
+    return countProgress;
+  };
 
-  const name = "John Doe";
-  const profession = "Frontend Developer";
-  const progress = 80;
-  console.log("candidate", candidate?.email);
+  useEffect(() => {
+    fetchInfo(auth?.user?.id);
+  }, [auth?.user?.id]);
+
   return (
-    <div className="first-container">
-      <div className="grid">
+    <div className={styling.main}>
+      <div className={styling.grid}>
         {/* Profile component */}
-        <CardContainer className="section-element profile-component">
+        <CardContainer className={styling.profile}>
           <Avatar firstName="Company" size={80} />
 
-          <div className="header">
-            <h2 className="header-title">
-              Welcome back, {candidate?.first_name}
-            </h2>
-            <p>{profession}</p>
+          <div className={styling.header}>
+            {candidate?.first_name ? (
+              <h2 className={styling.headerTitle}>
+                Welcome back, {candidate?.first_name}
+              </h2>
+            ) : (
+              <h2 className={styling.headerTitle}>Welcome</h2>
+            )}
+            {candidate?.experience ? (
+              <p> {candidate?.experience[0]?.role}</p>
+            ) : (
+              <p className={styling.role}>Add your current role</p>
+            )}
           </div>
 
-          <div className="open-icon">
+          <div className={styling.icon}>
             <IconExternalLink
-              color="black"
+              color="var(--gray-dark)"
               onClick={() => navigate("/candidate-profile")}
               style={{ cursor: "pointer" }}
             />
@@ -62,61 +86,73 @@ const DashboardCandidate: React.FC = () => {
         </CardContainer>
 
         {/* Progress bar */}
-        <CardContainer className="section-element progressbar-completion-component">
-          <div className="progressbar-text-element">
-            <p className="paragraph">You've completed {progress}% </p>
-          </div>
-
-          <div className="progressbar-component-element">
-            <div className="progressbar-element">
-              <ProgressBar progress={progress} />
+        {progress < 100 && (
+          <CardContainer className={styling.progressbarCompletion}>
+            <div className={styling.progressText}>
+              <p className={styling.paragraph}>You've completed {progress}% </p>
             </div>
 
-            <div className="progressbar-button">
-              <Button>Complete your profile</Button>
+            <div className={styling.progressbar}>
+              <div className={styling.progressElement}>
+                <ProgressBar progress={progress} />
+              </div>
+
+              <div>
+                <Button>Complete your profile</Button>
+              </div>
             </div>
-          </div>
-        </CardContainer>
+          </CardContainer>
+        )}
 
         {/* Find Jobs */}
-        <div className="findjobs-component">
-          <CardContainer className="section-element findjobs-element">
-            <h1 className="top-left">Find your next job</h1>
-            <Button className="bottom-right">Jobs</Button>
+        <div className={styling.jobs}>
+          <CardContainer className={styling.findJobs}>
+            <h1>Find your next job</h1>
+            <Button
+              className={styling.button}
+              onClick={() => navigate("/jobs")}
+            >
+              Jobs
+            </Button>
           </CardContainer>
 
-          <CardContainer className="section-element findjobs-element">
-            <h1 className="top-left">Explore Companies</h1>
-            <Button className="bottom-right">Companies</Button>
+          <CardContainer className={styling.findJobs}>
+            <h1>Explore Companies</h1>
+            <Button
+              className={styling.button}
+              onClick={() => navigate("/companies")}
+            >
+              Companies
+            </Button>
           </CardContainer>
         </div>
 
         {/* Matches */}
-        <CardContainer className="section-element matches-component">
-          <h2 className="top-left matches-title">Your matches</h2>
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-          <HorizontalCard
-            avatar={true}
-            button="Go to description"
-            firstName="Laura"
-            lastName="Purcaro"
-          />
-        </CardContainer>
+        <div className={styling.section}>
+          <CardContainer className={styling.matches}>
+            <h1 className={styling.matchesTitle}>Your matches</h1>
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+            <HorizontalCard
+              avatar={true}
+              button="Go to description"
+              firstName="Laura"
+              lastName="Purcaro"
+            />
+          </CardContainer>
+          <ApplicationRequests />
+        </div>
       </div>
-
-      {/* Right sidebar */}
-      {/* <div className="grid"></div> */}
     </div>
   );
 };

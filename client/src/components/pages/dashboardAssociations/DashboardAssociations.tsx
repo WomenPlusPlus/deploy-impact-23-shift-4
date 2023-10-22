@@ -1,5 +1,4 @@
 import styling from "./DashboardAssociations.module.scss";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import {
   IconBrandLinkedin,
   IconExternalLink,
@@ -10,15 +9,91 @@ import { Button } from "../../UI/button/Button";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import Table from "../../UI/table/Table";
-import { Space } from "antd";
-import { useState } from "react";
+import { Space, message } from "antd";
+import { useEffect, useState } from "react";
 import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
+import { useNavigate } from "react-router-dom";
+import {
+  getAssociationById,
+  updateAssociationById,
+} from "../../../api/associations";
+import { sendInvite } from "../../../api/invite";
+
+interface Payload {
+  name: string;
+  user_type: string | null;
+  recipient_email: string;
+  association: string;
+}
 
 const DashboardAssociations = () => {
-  const association_name = "Woman++";
-  const location = "Zürich, Switzerland";
+  const navigate = useNavigate();
 
-  const progress = 80;
+  //State
+  const [association, setAssociation] = useState<any>(null);
+  const [isSendInviteOpen, setSendInviteOpen] = useState(false);
+  const [defaultOption, setDefaultOption] = useState("");
+
+  /**
+   * Sends the invite to the backend
+   * @param payload - The payload to be sent to the backend
+   */
+  const handleSendInvite = async (payload: Payload) => {
+    const payloadInvite = {
+      user_type: payload.user_type,
+      recipient_email: payload.recipient_email,
+      association: association.association_name,
+    };
+    // Send invite
+    const isInviteSent = await sendInvite(payloadInvite);
+
+    const payloadInvites = {
+      name: payload.name,
+      email: payload.recipient_email,
+      user_type: payload.user_type,
+      createdAt: new Date(),
+    };
+    // Update association invites array
+    await updateAssociationById(association?.user_id, {
+      invites: [...association.invites, payloadInvites],
+    });
+
+    setSendInviteOpen(false);
+
+    fetchAssociation();
+
+    if (isInviteSent.success) {
+      message.success("Invite sent");
+    } else {
+      message.error("Error sending invite. Please try again");
+    }
+  };
+
+  /**
+   * Opens the send invite modal
+   * @param defaultOption - The default option to be selected
+   */
+  const handleOpenInvite = (defaultOption: any) => {
+    setDefaultOption(defaultOption);
+    setSendInviteOpen(true);
+  };
+
+  /**
+   * Fetches the association data object by id
+   */
+  const fetchAssociation = async () => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    const userId = auth.user.id;
+
+    if (userId) {
+      const association = await getAssociationById(userId);
+      setAssociation(association);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssociation();
+  }, []);
 
   const headerRequests = [
     {
@@ -66,8 +141,8 @@ const DashboardAssociations = () => {
     },
     {
       title: "User type",
-      dataIndex: "userType",
-      key: "userType",
+      dataIndex: "user_type",
+      key: "user_type",
     },
     {
       title: "Expires in",
@@ -79,12 +154,12 @@ const DashboardAssociations = () => {
   const data = [
     {
       key: "1",
-      candidate: "John Brown",
+      candidate: "Anna Brown",
       project: "deploy(impact)",
     },
     {
       key: "2",
-      candidate: "Jim Green",
+      candidate: "Roger Nilsen",
       project: "deploy(impact)",
     },
     {
@@ -94,55 +169,23 @@ const DashboardAssociations = () => {
     },
   ];
 
-  const dataInvite = [
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@gmail.com",
-      userType: "Candidate",
-      expiresIn: "7 days",
-    },
-  ];
+  const today = new Date();
+  const dataInvite = association?.invites.map((invite: any, index: number) => {
+    const inviteDate = new Date(invite.createdAt);
+    const timeDifference = today.getTime() - inviteDate.getTime();
+
+    const expiresInDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+    return {
+      key: index,
+      name: invite.name,
+      email: invite.email,
+      user_type: invite.user_type,
+      expiresIn: expiresInDays > 0 ? `${expiresInDays} days` : "Expired",
+    };
+  });
 
   const [tableData, setTableData] = useState(data);
-  const [isSendInviteCandidateOpen, setSendInviteCandidateOpen] =
-    useState(false);
-  const [isSendInviteCompanyOpen, setSendInviteCompanyOpen] = useState(false);
 
   const handleAccept = (record: any) => {
     console.log(`Accepted: ${record.candidate}`);
@@ -158,48 +201,34 @@ const DashboardAssociations = () => {
     setTableData(updatedData);
   };
 
-  const handleSendCompanyInvite = (email: any) => {
-    console.log(`Sending invite to company${email}`);
-    setSendInviteCompanyOpen(false);
-  };
-
-  const handleSendCandidateInvite = (email: any) => {
-    console.log(`Sending invite to candidate ${email}`);
-    setSendInviteCandidateOpen(false);
-  };
-
   return (
     <div className={styling.main}>
       {/* Profile component */}
       <CardContainer className={styling.profile}>
-        <Avatar firstName={association_name} size={80} />
+        {association?.logo ? (
+          <img className={styling.logo} src={association?.logo} alt="Avatar" />
+        ) : (
+          <Avatar firstName={association?.association_name} size={80} />
+        )}
 
         <div className={styling.header}>
-          <h2>Welcome back, {association_name}</h2>
+          <h2 className={styling.headerTitle}>
+            Welcome back, {association?.association_name}
+          </h2>
           <div className={styling.location}>
-            <IconMapPin color="var(--gray-dark)" />
-            <p>{location}</p>
+            <IconMapPin />
+            <p>{association?.address}</p>
             <p>|</p>
-            <IconBrandLinkedin color="var(--gray-dark)" />
-            <IconWorldWww color="var(--gray-dark)" />
+            <IconBrandLinkedin />
+            <IconWorldWww />
           </div>
         </div>
 
-        <IconExternalLink color="var(--gray-dark)" />
+        <IconExternalLink
+          color="var(--gray-dark)"
+          onClick={() => navigate("association-profile")}
+        />
       </CardContainer>
-
-      {/* Do we need this for associations?????? */}
-      {/* <CardContainer className={styling.progress}>
-        <p>You've completed {progress}% </p>
-
-        <div className={styling.progressSection}>
-          <div className={styling.progressBar}>
-            <ProgressBar progress={progress} />
-          </div>
-
-          <Button>Complete your profile</Button>
-        </div>
-      </CardContainer> */}
 
       <div className={styling.invites}>
         <CardContainer className={styling.inviteSection}>
@@ -210,15 +239,12 @@ const DashboardAssociations = () => {
           </p>
           <Button
             className={styling.inviteButton}
-            onClick={() => setSendInviteCandidateOpen(true)}
+            onClick={() => {
+              handleOpenInvite("Candidate");
+            }}
           >
             Invite
           </Button>
-          <SendInviteModal
-            isOpen={isSendInviteCandidateOpen}
-            onClose={() => setSendInviteCandidateOpen(false)}
-            handleSend={handleSendCandidateInvite}
-          />
         </CardContainer>
 
         <CardContainer className={styling.inviteSection}>
@@ -231,26 +257,29 @@ const DashboardAssociations = () => {
           </p>
           <Button
             className={styling.inviteButton}
-            onClick={() => setSendInviteCompanyOpen(true)}
+            onClick={() => {
+              handleOpenInvite("Company");
+            }}
           >
             Invite
           </Button>
-          <SendInviteModal
-            isOpen={isSendInviteCompanyOpen}
-            onClose={() => setSendInviteCompanyOpen(false)}
-            handleSend={handleSendCompanyInvite}
-          />
         </CardContainer>
       </div>
+      <SendInviteModal
+        isOpen={isSendInviteOpen}
+        defaultOption={defaultOption}
+        onClose={() => setSendInviteOpen(false)}
+        handleSend={handleSendInvite}
+      />
 
       <div className={styling.tables}>
         <CardContainer className={styling.requests}>
-          <h2 className={styling.titleTables}>Already invited</h2>
+          <h1 className={styling.titleTables}>Already invited</h1>
           <Table columns={headerInvited} data={dataInvite} />
         </CardContainer>
 
         <CardContainer className={styling.requests}>
-          <h2 className={styling.titleTables}>Approval requests</h2>
+          <h1 className={styling.titleTables}>Approval requests</h1>
           <Table columns={headerRequests} data={tableData} />
         </CardContainer>
       </div>

@@ -6,14 +6,27 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .header {
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 4rem;
+  margin: 0;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gray-medium);
 }
 
 .logo {
@@ -35,7 +48,7 @@
 }
 
 .mainSection {
-  padding: 0 3rem;
+  padding: 2rem 3rem;
 }
 
 .sectionHeader {

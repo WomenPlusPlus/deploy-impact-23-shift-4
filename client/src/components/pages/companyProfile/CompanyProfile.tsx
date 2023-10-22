@@ -1,68 +1,188 @@
-import { IconEdit } from "@tabler/icons-react";
-import { CardContainer } from "../../UI/container/CardContainer";
-import styling from "./CompanyProfile.module.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Tabs from "../../UI/tabs/Tabs";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import Spinner from "../../UI/spinner/Spinner";
 import { Button } from "../../UI/button/Button";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
+import { CardContainer } from "../../UI/container/CardContainer";
+import AddEditJob from "../../shared/addEditJob/AddEditJob";
+import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
+import { Company } from "../../../types/types";
+import { addJob, getAllJobs } from "../../../api/jobs";
+import { getCompanyById, updateCompanyById } from "../../../api/companies";
+
+import {
+  IconBrandLinkedin,
+  IconEdit,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
+
+import styling from "./CompanyProfile.module.css";
 
 const CompanyProfile = () => {
-  const company = {
-    logo: "https://via.placeholder.com/150",
-    name: "Dream Company",
-    location: "New York, NY",
-    size: "1000+ employees",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
+  const navigate = useNavigate();
+
+  // State
+  const [open, setOpen] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [company, setCompany] = useState({} as Company);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmEditCompanyLoading, setConfirmEditCompanyLoading] =
+    useState(false);
+  const [openEditJobModal, setOpenEditJobModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  /**
+   * Handles the toggle of the Add Job modal
+   */
+  const toggleAddJobModal = () => {
+    setOpen(!open);
   };
 
-  const jobs = (
-    <div className={styling.mainSection}>
-      <div className={styling.sectionHeader}>
-        <h2 className={styling.titles}>Published jobs</h2>
-        <Button className={styling.button}>Create new job</Button>
+  /**
+   * Handles the toggle of the Edit Company modal
+   */
+  const toggleEditCompanyModal = () => {
+    setOpenEditJobModal(!openEditJobModal);
+  };
+
+  /**
+   * Handles the save and update of the company profile
+   * @param payload the company data to update
+   */
+  const handleModalSave = async (payload: object) => {
+    console.log("Received payload from EditCompanyProfile:", payload);
+    await updateCompanyById(company?.user_id, payload);
+
+    setConfirmEditCompanyLoading(true);
+    setOpenEditJobModal(false);
+    fetchCompanyInfo();
+  };
+
+  /**
+   * Handles the creation of a new job
+   * @param payload the job data to add
+   */
+  const handleAddJobPayload = async (payload: object) => {
+    console.log("Received payload from AddEditJob:", payload);
+    await addJob(payload);
+
+    setConfirmLoading(true);
+    setOpen(false);
+    fetchCompanyInfo();
+  };
+
+  /**
+   * Fetches the company data object by id
+   */
+  const fetchCompanyInfo = async () => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    const userId = auth?.user?.id;
+
+    const company = await getCompanyById(userId);
+    const allJobs = await getAllJobs();
+    const jobs = allJobs?.map((job: Record<string, any>) => {
+      // get all jobs that belong to this company
+      if (job["company_id"] === userId) {
+        return job;
+      }
+    });
+
+    setJobs(jobs);
+    setCompany(company);
+    setIsLoading(true);
+  };
+
+  /**
+   * Fetches the company data object by id
+   */
+  useEffect(() => {
+    fetchCompanyInfo();
+  }, []);
+
+  // Content for "Company jobs" tab
+  const jobsTemp = (
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <div className={styling.sectionHeader}>
+          <h2 className={styling.titles}>Published jobs</h2>
+          <Button onClick={toggleAddJobModal} className={styling.button}>
+            Create new job
+          </Button>
+        </div>
+        {jobs.map((job: Record<string, any>, index: number) => {
+          return (
+            <div onClick={() => navigate(`/job/${job?.id}`)}>
+              <HorizontalCard
+                key={index}
+                avatar={true}
+                button="Go to description"
+                firstName={company?.company_name}
+                title={job?.title}
+                subtitle={job?.description}
+              />
+            </div>
+          );
+        })}
       </div>
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-    </div>
+    </CardContainer>
   );
 
+  // Content for "About the company" tab
   const about = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company jobs</h2>
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>About us</h2>
 
-      <p>This is about the company</p>
-    </div>
+        <p>
+          Welcome to The Dream Company, where innovation meets imagination, and
+          technology takes flight. We are not just a tech company; we are
+          dreamweavers, shaping the future one idea at a time. Founded on a
+          shared vision of pushing the boundaries of what's possible, The Dream
+          Company is a collective of brilliant minds, creatives, and tech
+          enthusiasts.
+        </p>
+        <p>
+          Our journey began with a simple yet powerful dream: to create a world
+          where technology doesn't just serve us but inspires us. At The Dream
+          Company, we pride ourselves on turning dreams into reality. Our
+          talented team of engineers, designers, and visionaries work tirelessly
+          to develop cutting-edge solutions that redefine the digital landscape.
+          From web applications to artificial intelligence, cybersecurity to
+          cloud computing, we're dedicated to crafting the tools that empower
+          your dreams.
+        </p>
+      </div>
+    </CardContainer>
   );
 
+  // Content for "Company culture" tab
   const culture = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company culture</h2>
+    <CardContainer>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>Company culture</h2>
 
-      <p>This is about the culture</p>
-    </div>
+        <p>
+          At The Dream Company, we're fueled by innovation, united by teamwork,
+          and committed to inclusivity. We value continuous learning, promote
+          work-life balance, and actively engage with our communities. Our
+          culture is built on the foundation of creativity, responsibility, and
+          a customer-centric approach. Join us in living the dream, where work
+          is enjoyable, learning is ongoing, and making a difference is a daily
+          mission.
+        </p>
+      </div>
+    </CardContainer>
   );
 
+  // Tabs
   const tabs = [
     {
       label: "Company jobs",
       key: "1",
-      children: jobs,
+      children: jobsTemp,
     },
     {
       label: "About the company",
@@ -76,30 +196,58 @@ const CompanyProfile = () => {
     },
   ];
 
-  return (
-    <div className={styling.main}>
-      <CardContainer className={styling.container}>
+  const content = (
+    <>
+      <div className={styling.container}>
         <div className={styling.header}>
           <img className={styling.logo} src={company.logo} alt="Avatar" />
 
           <div>
-            <h1>{company.name}</h1>
+            <h1 className={styling.title}>{company.company_name}</h1>
 
-            <p>
-              {company.location} | {company.size}
-            </p>
+            <div className={styling.subtitle}>
+              <IconMapPin />
+              {company.address} | {company.company_size} employees |
+              <IconBrandLinkedin /> <IconWorldWww />
+            </div>
           </div>
 
           <div className={styling.icon}>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={toggleEditCompanyModal}
+            />
           </div>
+          <EditCompanyProfile
+            open={openEditJobModal}
+            onOk={handleModalSave}
+            onCancel={toggleEditCompanyModal}
+            confirmLoading={confirmEditCompanyLoading}
+            companyId={company?.user_id}
+            associations={company?.associations}
+            companyInfo={company}
+          />
         </div>
-      </CardContainer>
+      </div>
 
-      <CardContainer className={styling.container}>
-        <Tabs defaultActiveKey={"1"} centered items={tabs} />
-      </CardContainer>
-    </div>
+      <div className={styling.container}>
+        <Tabs centered={false} items={tabs} />
+      </div>
+
+      <AddEditJob
+        open={open}
+        onOk={handleAddJobPayload}
+        onCancel={toggleAddJobModal}
+        confirmLoading={confirmLoading}
+        companyId={company?.user_id}
+        associations={company?.associations}
+      />
+    </>
+  );
+
+  return (
+    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
   );
 };
 

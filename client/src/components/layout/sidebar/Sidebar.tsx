@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import configureAxios from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,6 +11,9 @@ import {
   IconBuildingSkyscraper,
   IconBookmark,
   IconStar,
+  IconArrowBarRight,
+  IconChevronLeft,
+  IconChevronRight,
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
@@ -48,6 +51,8 @@ const items: MenuItem[] = [
 interface SidebarProps {
   selectedKey: string;
   setSelectedKey: (key: string) => void;
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
 }
 
 const logoutError = () =>
@@ -88,37 +93,45 @@ const handleButtonClick = async (
   }
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedKey, setSelectedKey }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  selectedKey,
+  setSelectedKey,
+  collapsed,
+  setCollapsed,
+}) => {
   // state
   const navigate = useNavigate();
 
   return (
     <>
-      <Sider
-        style={{
-          height: "100vh",
-          position: "fixed",
-          paddingTop: 64,
-          left: 0,
-          top: 0,
-          bottom: 0,
-          backgroundColor: "#fff",
-        }}
-        width={240}
-      >
-        <Menu
-          className="custom-menu"
-          mode="inline"
-          items={items ?? []}
-          onClick={(item) => {
-            setSelectedKey(item.key.toString());
-            handleButtonClick(item.key.toString(), navigate);
-            console.log("Item: ", item.key.toString());
-            return item.key.toString();
+      <div className="toggle">
+        <Sider
+          style={{
+            height: "100vh",
+            position: "fixed",
+            paddingTop: 64,
+            left: 0,
+            top: 0,
+            bottom: 0,
+            backgroundColor: "#fff",
           }}
-          selectedKeys={[selectedKey]}
-        />
-      </Sider>
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+        >
+          <Menu
+            className="custom-menu"
+            mode="inline"
+            items={items ?? []}
+            onClick={(item) => {
+              setSelectedKey(item.key.toString());
+              handleButtonClick(item.key.toString(), navigate);
+              return item.key.toString();
+            }}
+            selectedKeys={[selectedKey]}
+          />
+        </Sider>
+      </div>
     </>
   );
 };

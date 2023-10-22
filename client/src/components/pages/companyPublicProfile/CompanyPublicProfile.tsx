@@ -1,11 +1,16 @@
 import { CardContainer } from "../../UI/container/CardContainer";
 import styling from "./CompanyPublicProfile.module.css";
 import Tabs from "../../UI/tabs/Tabs";
-import { HorizontalCard } from "../../UI/card/HorizontalCard";
+import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { useParams } from "react-router-dom";
 import { getCompanyById } from "../../../api/companies";
 import { useCallback, useEffect, useState } from "react";
-import { Company } from "../types/types";
+import { Company } from "../../../types/types";
+import {
+  IconBrandLinkedin,
+  IconMapPin,
+  IconWorldWww,
+} from "@tabler/icons-react";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
@@ -24,45 +29,51 @@ const CompanyPublicProfile = () => {
   }, [fetchCompany]);
 
   const jobs = (
-    <div className={styling.mainSection}>
-      <div className={styling.sectionHeader}>
-        <h2 className={styling.titles}>Published jobs</h2>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <div className={styling.sectionHeader}>
+          <h2 className={styling.titles}>Published jobs</h2>
+        </div>
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
+        <HorizontalCard
+          avatar={true}
+          button="Go to description"
+          firstName="Laura"
+          lastName="Purcaro"
+        />
       </div>
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-      <HorizontalCard
-        avatar={true}
-        button="Go to description"
-        firstName="Laura"
-        lastName="Purcaro"
-      />
-    </div>
+    </CardContainer>
   );
 
   const about = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>About the company</h2>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>About the company</h2>
 
-      <p>This is about the company</p>
-    </div>
+        <p>This is about the company</p>
+      </div>
+    </CardContainer>
   );
 
   const culture = (
-    <div className={styling.mainSection}>
-      <h2 className={styling.titles}>Company culture</h2>
+    <CardContainer className={styling.container}>
+      <div className={styling.mainSection}>
+        <h2 className={styling.titles}>Company culture</h2>
 
-      <p>This is about the culture</p>
-    </div>
+        <p>This is about the culture</p>
+      </div>
+    </CardContainer>
   );
 
   const tabs = [
@@ -85,23 +96,23 @@ const CompanyPublicProfile = () => {
 
   return (
     <div className={styling.main}>
-      <CardContainer className={styling.container}>
+      <div className={styling.container}>
         <div className={styling.header}>
           <img className={styling.logo} src={company?.logo} alt="Avatar" />
 
           <div>
-            <h1>{company?.company_name}</h1>
+            <h1 className={styling.title}>{company?.company_name}</h1>
 
-            <p>
-              {company?.address} | {"> 500 employees"}
-            </p>
+            <div className={styling.subtitle}>
+              <IconMapPin />
+              {company?.address} | {company?.company_size} employees |
+              <IconBrandLinkedin /> <IconWorldWww />
+            </div>
           </div>
         </div>
-      </CardContainer>
+      </div>
 
-      <CardContainer className={styling.container}>
-        <Tabs defaultActiveKey={"1"} centered items={tabs} />
-      </CardContainer>
+      <Tabs centered={false} items={tabs} />
     </div>
   );
 };

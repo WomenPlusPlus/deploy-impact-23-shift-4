@@ -10,7 +10,7 @@ interface CardProps {
   subheader?: string;
   associations?: string[];
   description?: string;
-  skills?: string[];
+  skills?: object[] | undefined;
   values?: string[];
   bordered?: boolean;
   style?: React.CSSProperties;
@@ -32,7 +32,7 @@ const Card: React.FC<CardProps> = ({
 }) => (
   <div className={styling.candidateCard}>
     <div className={styling.cardHeader}>
-      <Avatar size={50} />
+      <Avatar firstName={header} size={50} />
       <div>
         <h2 className={styling.header}>{header}</h2>
         <p className={styling.subheader}>{subheader}</p>
@@ -58,9 +58,9 @@ const Card: React.FC<CardProps> = ({
       </div>
 
       <div className={styling.labelContainer}>
-        {skills?.map((skill) => (
+        {skills?.map((skill: any) => (
           <Labels
-            labelName={skill}
+            labelName={skill?.skill_name}
             customClass={styling.label}
             disableCloseIcon
           />

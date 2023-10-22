@@ -6,6 +6,11 @@
   padding: 3rem;
 }
 
+h3 {
+  margin: 0 0 1rem 1rem;
+  font-size: 2rem;
+}
+
 .profileSectionElement {
   width: var(--secton-width);
   box-sizing: border-box;
@@ -16,11 +21,11 @@
   align-items: flex-start;
   padding: 2rem;
   margin-bottom: 2rem;
-  /* height: 30rem; */
 }
 
 .profileComponent p {
   margin: 0;
+  cursor: pointer;
 }
 
 .userName {
@@ -29,23 +34,22 @@
   align-items: center;
   gap: 1rem;
   margin-left: 1rem;
-  /* background-color: #f5f5f5; */
 }
 
 .userName h3 {
   font-size: 3.5rem;
   color: black;
+  margin: 0;
 }
 
 .location {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.9rem;
   margin-left: 1rem;
   color: black;
   font-size: large;
-  /* background-color: #f5f5f5; */
 }
 
 /* Profile completed */
@@ -84,8 +88,8 @@
 
 .profileCompletedEditIcon {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 2rem;
 }
@@ -105,6 +109,12 @@
   width: 100%;
 }
 
+.associationContainer {
+  padding: 3rem;
+  min-height: 20rem;
+  width: 40%;
+}
+
 .profileCompletedEditIcon h2 {
   margin-bottom: 1rem;
 }
@@ -118,9 +128,10 @@
 }
 
 /* Type of jobs */
-.associationsTypeOfJobs {
+.inOneRow {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   gap: 2rem;
   width: 100%;
@@ -150,7 +161,16 @@
 /* Values */
 .valuesContainer {
   padding: 3rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  min-height: 25rem;
+}
+
+.experienceContainer {
+  padding: 3rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  min-height: 25rem;
 }
 
 .valuesContainerLabels {
@@ -164,4 +184,60 @@
 .labelClass {
   background-color: var(--label-color);
   border-radius: var(--tag-radius);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  gap: 1rem;
+}
+
+.visibleContainer {
+  padding: 3rem;
+  width: 100%;
+}
+
+.visibleSectionComplete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: large;
+}
+
+.visibleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: medium;
+}
+
+.jobPrefContainer {
+  padding: 3rem;
+  width: 100%;
+}
+
+.dottedLine {
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CFCFCFFF' stroke-width='2' stroke-dasharray='18%2c 10' stroke-dashoffset='100' stroke-linecap='butt'/%3e%3c/svg%3e");
+  border-radius: 16px;
+}
+
+.stillToAdd {
+  color: var(--gray-light);
+}
+
+.unbiasedSearch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12%;
+}
+
+.unbiasedSearch p {
+  max-width: 30rem;
 }

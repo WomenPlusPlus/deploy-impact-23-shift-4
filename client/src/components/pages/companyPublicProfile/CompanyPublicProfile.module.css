@@ -49,3 +49,16 @@
   color: var(--white);
   background-color: var(--color-button);
 }
+
+.title {
+  font-size: 5rem;
+  margin: 0;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: medium;
+  color: var(--gray-medium);
+}

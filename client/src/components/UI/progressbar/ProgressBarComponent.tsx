@@ -1,7 +1,7 @@
 import React from "react";
 import { ProgressBar } from "./ProgressBar";
 import styling from "./ProgressBarComponent.module.css";
-import { Candidate } from "../../pages/types/types"; // Import the Candidate interface
+import { Candidate } from "../../../types/types"; // Import the Candidate interface
 
 interface ProgressBarComponentProps {
   candidate: Candidate; // Update the prop to accept a Candidate object
@@ -21,12 +21,13 @@ const ProgressBarComponent: React.FC<ProgressBarComponentProps> = ({
 }) => {
   return (
     <div>
-      {candidate.languages && candidate.languages.map((language, index) => (
-        <div key={index}>
-          <LanguageItem language={language} />
-          <ProgressBar progress={language.score} height="1.5rem" />
-        </div>
-      ))}
+      {candidate?.languages &&
+        candidate?.languages?.map((language, index) => (
+          <div key={index}>
+            <LanguageItem language={language} />
+            <ProgressBar progress={language.score} height="1.5rem" />
+          </div>
+        ))}
     </div>
   );
 };

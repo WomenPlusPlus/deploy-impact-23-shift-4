@@ -49,3 +49,8 @@
   background-color: #fff; /* Optional: Set a background color */
   border-radius: 8px; /* Optional: Add border radius for rounded corners */
 }
+
+.logo {
+  width: 20rem;
+  margin-left: 20%;
+}

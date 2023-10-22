@@ -1,168 +1,267 @@
-.matchesTag {
-  background-color: rgb(87, 175, 116);
-  color: #fff;
-  font-size: 1rem;
-  border-radius: 1rem;
-  height: 3rem;
-  margin-left: 2rem;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  top: 0.6rem;
-  transform: translateX(0);
-  transform: translateY(0);
-  width: 100%;
-}
-
-.companyInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.jobHeader {
-  display: flex;
-  justify-content: space-between;
-}
-
-.jobTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.cardContent {
-  display: flex;
-  flex-direction: column;
-}
-
-.goToTalents {
-  width: 20rem;
-  border-radius: 1.2rem;
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 4px;
-  margin-right: 16px;
-}
-
-.cardContent div:nth-child(2) {
-  flex: 1;
-}
-
-.jobInfo {
-  display: flex;
-  margin-bottom: 2rem;
-}
-
-.card {
-  box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
-  width: 36rem;
-  margin: 2rem 4rem 2rem 0;
-}
-
-.jobDescription {
-  max-block-size: 10rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: pre-line;
-}
-
-.goTalents {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-}
-
-.employee {
-  font-size: 1rem;
-  position: relative;
-  top: -1rem;
-}
-
-.jobLevel {
-  font-size: 1.3rem;
-  margin: 0;
-}
-
-.companyName,
-.companyLocation {
-  margin: 0;
-}
-
-.labelContainer {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem 0;
-}
-
-.label {
-  background-color: var(--label-color);
-  border-radius: var(--tag-radius);
-}
-
-@media (max-width: 768px) {
-  .card {
-    width: 100%;
-    margin-bottom: 0.05rem;
-  }
-
-  .matchesTag {
-    position: relative;
-    transform: translate(-11rem, -7rem);
-    white-space: normal;
+/* .matchesTag {
+    background-color: rgb(87, 175, 116);
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 1rem;
+    height: 3rem;
+    margin-left: 2rem;
+    text-align: center;
     overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 90%;
-    height: fit-content;
-    margin: auto;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0.6rem;
+    transform: translateX(0);
+    transform: translateY(0);
+    width: 100%;
   }
+  
+  .companyInfo {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .jobHeader {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .jobTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .goToTalents {
+    width: 20rem;
+    border-radius: 1.2rem;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+    
+    margin-right: 16px;
+  }
+  
+  .cardContent div:nth-child(2) {
+    flex: 1;
+  }
+  
+  .jobInfo {
+    display: flex;
+    margin-bottom: 2rem;
+  }
+  
+  .card {
+    box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+    width: 36rem;
+    margin: 2rem 4rem 2rem 0;
+  }
+  
 
-  .jobDescription {
-    display: none;
+  
+  .goTalents {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
   }
+  
+  .employee {
+    font-size: 1rem;
+    position: relative;
+    top: -1rem;
+  }
+  
+  .jobLevel {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+  
+  .companyName,
+  .companyLocation {
+    margin: 0;
+  }
+  
+  .labelContainer {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  
+  .label {
+    background-color: var(--label-color);
+    border-radius: var(--tag-radius);
+  }
+  
+  @media (max-width: 768px) {
+    .card {
+      width: 100%;
+      margin-bottom: 0.05rem;
+    }
+  
+    .matchesTag {
+      position: relative;
+      transform: translate(-11rem, -7rem);
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 90%;
+      height: fit-content;
+      margin: auto;
+    }
+  
+  
+    
+  
+    .companyInfo {
+      text-align: center;
+    }
+  
+    .employee {
+      top: 0;
+    }
+  
+    .goTalents {
+      margin-top: 2rem;
+    }
+  
+    .jobLevel {
+      font-size: 1.3rem;
+  
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
+    .cardContent {
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      flex-direction: column;
+    }
+    .jobTitle {
+      padding-top: 2rem;
+    }
+  } */
+
+
+
+  /*new css*/
+
 
   .jobHeader {
     display: flex;
     justify-content: space-between;
-    margin-right: 2rem;
+  
   }
 
-  .companyInfo {
-    text-align: center;
+  .jobDescription{
+    display: flex;
+    justify-content: space-between;
+    font: size 16px;
+    margin: 1.5rem 0;
+
   }
 
-  .employee {
-    top: 0;
+  .skillTag{
+    display: flex;
+    gap:1rem;
+    flex-wrap: wrap;
   }
 
-  .goTalents {
-    margin-top: 2rem;
+
+  .card{
+  width: 36rem;
+  margin: 2rem 4rem 2rem 0;
+  background-color: #fdfdfd;
+  box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  
   }
 
-  .jobLevel {
-    font-size: 1.3rem;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .avatar {
+    width: 80px;
+    height: 80px;
+   
   }
 
-  .cardContent {
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .jobName{
+    font-size: 2rem;
+    color: var(--grayDark);
+    margin: 0;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+  }
+
+  .companyName{
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--gray-medium);
+    margin: -0.5rem 0;
+  }
+
+  .horizontalLine{
+    border: 0;
+  border-top: 2px solid #ddd; 
+  margin: 10px 0; 
+  }
+  
+  .iconAndText {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px; 
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-medium);
+  }
+
+  .iconAndText span {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+  }
+
+  .iconAndText svg {
+    width: 16px; 
+    height: 16px; 
+    vertical-align: middle; 
+  }
+
+  .jobTitle{
     display: flex;
     flex-direction: column;
+    margin-left: 1rem;
+    overflow: hidden;
   }
-  .jobTitle {
-    padding-top: 2rem;
+
+  .skillTag div{
+    background-color: var(--label-color);
+    border-radius: var(--tag-radius);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    width: -moz-fit-content;
+    width: fit-content;
+     
   }
-}
+  
+  
+  
+  

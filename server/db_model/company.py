@@ -39,6 +39,7 @@ def init_company_model(db):
         open_positions = db.Column(
             db.ARRAY(db.String)
         )  # Positions/job lists as an array of foreign keys (integer)
+        company_size = db.Column(db.String(256))  # Company size as a string
 
         def __init__(
             self,
@@ -55,6 +56,7 @@ def init_company_model(db):
             contact_details=None,
             kununu_url=None,
             open_positions=None,
+            company_size=None,
         ):
             """
             Initialize a new company object.
@@ -75,6 +77,7 @@ def init_company_model(db):
             self.contact_details = contact_details
             self.kununu_url = kununu_url
             self.open_positions = open_positions
+            self.company_size = company_size
 
         def to_dict(self):
             """
@@ -87,6 +90,7 @@ def init_company_model(db):
                 "email": self.email,
                 "associations": self.associations,
                 "company_name": self.company_name,
+                "logo": self.logo,
                 "address": self.address,
                 "linkedin_url": self.linkedin_url,
                 "values": self.values,
@@ -94,6 +98,7 @@ def init_company_model(db):
                 "contact_details": self.contact_details,
                 "kununu_url": self.kununu_url,
                 "open_positions": self.open_positions,
+                "company_size": self.company_size,
             }
 
     return Company
