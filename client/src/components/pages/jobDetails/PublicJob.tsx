@@ -16,7 +16,8 @@ import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { Job, Company } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
-import { get } from "http";
+import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
+import { Labels } from "../../UI/labels/Label";
 
 const PublicJob = () => {
   // Job id from url
@@ -89,29 +90,39 @@ const PublicJob = () => {
         </div>
       </div>
 
-      {/* Third line */}
-      <div className={styling.row}>
-        <CardContainer className={styling.cardCont}>
-          <h1>Role and Job type</h1>
-        </CardContainer>
-        <CardContainer className={styling.cardCont}>
-          <h1>Rate</h1>
-        </CardContainer>
-      </div>
+      {/* Containers */}
       <CardContainer className={styling.cardCont}>
-        <h1>Skills</h1>
+        <h1 className={styling.titles}>Skills</h1>
+        <SkillsLevelGuide />
+        <div className={styling.labelDiv}>
+          {jobData?.skills?.map((skill, index) => (
+            <Labels
+              key={`technical_${index}`}
+              labelName={skill?.skill_name}
+              isSkill={true}
+              skillLevel={skill?.skill_level}
+              disableCloseIcon={true}
+              customClass={styling.label}
+            />
+          ))}
+        </div>
       </CardContainer>
+
+      {/* Job Description */}
       <CardContainer className={styling.cardCont}>
-        <h1>Job Description</h1>
-        <h2>What will you do?</h2>
+        <h1 className={styling.titles}>Job Description</h1>
+        <h2 className={styling.h2Title}>What will you do?</h2>
         <p>{jobData?.description}</p>
       </CardContainer>
-      <CardContainer className={styling.cardCont}>
-        <h1>Accepting applications</h1>
+
+      {/* Accepting applications */}
+      <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
+        <h1 className={styling.titles}>Accepting applications</h1>
         <Button className={styling.applyButton}>Apply</Button>
       </CardContainer>
+
       <CardContainer className={styling.cardCont}>
-        <h1>Company details</h1>
+        <h1 className={styling.titles}>Company details</h1>
         <div className={`${styling.rowEnd} ${styling.allWidth}`}>
           <div className={styling.row}>
             <Avatar firstName={companyData?.company_name} size={50} />
@@ -153,6 +164,10 @@ const PublicJob = () => {
           </div>
           <div className={styling.row}>
             <Button>Company Profile</Button>
+          </div>
+          <div>
+            <h2 className={styling.h2Title}>About us</h2>
+            <p>{companyData?.company_description}</p> 
           </div>
         </div>
       </CardContainer>

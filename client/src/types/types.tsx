@@ -38,6 +38,8 @@ export interface Candidate {
   salary_expectation?: string[];
   possible_work_locations?: string[];
   type_of_work?: string[];
+  saved_items?: string[];
+  date_profile_modified?: string;
   package_requested?: string[];
 }
 
@@ -68,6 +70,11 @@ export interface Company {
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
+  company_type?: string;
+  company_description?: string;
+  company_website?: string;
+  company_industry?: string[];
+  saved_items?: string[];
   shared_candidate_packages?: string[];
   interested_candidates?: string[];
 }
