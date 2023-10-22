@@ -162,7 +162,6 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   package_requested: "",
   saved_items: "",
   date_profile_modified: "",
-  package_requested: "",
 };
 
 const categoryFieldMapping: Record<string, number> = {};
