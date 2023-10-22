@@ -72,8 +72,9 @@ const Candidates = () => {
         </div>
       </div>
       <div className="cards">
-        {filteredCandidates?.map((candidate) => (
+        {filteredCandidates?.map((candidate, index) => (
           <Card
+            key={index}
             header={`${candidate?.first_name} ${candidate?.last_name}`}
             subheader="Software Engineer"
             associations={candidate?.associations}

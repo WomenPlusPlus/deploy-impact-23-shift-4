@@ -1,7 +1,5 @@
 from flask_login import UserMixin
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
-
+from sqlalchemy import text
 
 def init_candidate_model(db):
     class Candidate(db.Model, UserMixin):
@@ -12,7 +10,7 @@ def init_candidate_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )
@@ -73,7 +71,13 @@ def init_candidate_model(db):
         possible_work_locations = db.Column(
             db.ARRAY(db.String)
         )  # Possible work locations as an array of strings e.g ['Amsterdam', 'Rotterdam']
-        type_of_work = db.Column(db.ARRAY(db.String)) # Type of work as an array of strings e.g ['Hybrid', 'Remote', 'Office']
+        type_of_work = db.Column(
+            db.ARRAY(db.String)
+        )  # Type of work as an array of strings e.g ['Hybrid', 'Remote', 'Office']
+        saved_items = db.Column(
+            db.ARRAY(db.String)
+        )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
+        date_profile_modified = db.Column(db.DateTime)
 
         def __init__(
             self,
@@ -109,6 +113,8 @@ def init_candidate_model(db):
             salary_expectation=None,
             possible_work_locations=None,
             type_of_work=None,
+            saved_items=None,
+            date_profile_modified=None,
         ):
             """
             Initialize a new candidate object.
@@ -148,6 +154,8 @@ def init_candidate_model(db):
             self.salary_expectation = salary_expectation
             self.possible_work_locations = possible_work_locations
             self.type_of_work = type_of_work
+            self.saved_items = saved_items
+            self.date_profile_modified = date_profile_modified
 
         def to_dict(self):
             """
@@ -186,6 +194,10 @@ def init_candidate_model(db):
                 "salary_expectation": self.salary_expectation,
                 "possible_work_locations": self.possible_work_locations,
                 "type_of_work": self.type_of_work,
+                "saved_items": self.saved_items,
+                "date_profile_modified": self.date_profile_modified.isoformat()
+                if self.date_profile_modified
+                else None,
             }
 
     return Candidate

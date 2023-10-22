@@ -38,6 +38,8 @@ export interface Candidate {
   salary_expectation?: string[];
   possible_work_locations?: string[];
   type_of_work?: string[];
+  saved_items?: string[];
+  date_profile_modified?: string;
 }
 
 export interface EditInputProps<Candidate> {
@@ -67,6 +69,11 @@ export interface Company {
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
+  company_type?: string;
+  company_description?: string;
+  company_website?: string;
+  company_industry?: string[];
+  saved_items?: string[];
 }
 
 export interface Experience {
