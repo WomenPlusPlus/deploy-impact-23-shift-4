@@ -7,11 +7,11 @@ import Table from "../../UI/table/Table";
 import { message } from "antd";
 import { useEffect, useState } from "react";
 import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
-import { useNavigate } from "react-router-dom";
 import { sendInvite } from "../../../api/invite";
 import { getAllAssociations } from "../../../api/associations";
 import { getAllCandidates } from "../../../api/candidates";
 import { getAllCompanies } from "../../../api/companies";
+import { getAllUsers } from "../../../api/user";
 
 interface Payload {
   name: string;
@@ -38,6 +38,18 @@ const DashboardAdmin = () => {
       recipient_email: payload.recipient_email,
       association: "default", // TODO: Update send invite modal to allow for a payload without association
     };
+
+    // Check if user already exists in the database
+    const users = await getAllUsers();
+    const user = users.find(
+      (user: any) => user.email === payload.recipient_email
+    );
+
+    if (user) {
+      message.error("User already exists");
+      return;
+    }
+
     // Send invite
     const isInviteSent = await sendInvite(payloadInvite);
 
