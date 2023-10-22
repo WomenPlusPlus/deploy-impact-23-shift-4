@@ -51,3 +51,10 @@
   border-radius: var(--tag-radius);
   margin: 0.5rem;
 }
+
+.salary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
