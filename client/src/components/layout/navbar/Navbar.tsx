@@ -22,31 +22,31 @@ const Navbar = () => {
 
   const loadAvatar = async () => {
     if (userType === "company") {
-      const company = await getCompanyById(auth.user.id);
+      const company = await getCompanyById(auth?.user?.id);
       console.log(company);
       setAvatarComponent(
         <Avatar
-          firstName={company.company_name}
+          firstName={company?.company_name}
           lastName=""
           size="large"
           handleProfileClick={handleProfileClick}
         />
       );
     } else if (userType === "candidate") {
-      const candidate = await getCandidateById(auth.user.id);
+      const candidate = await getCandidateById(auth?.user?.id);
       setAvatarComponent(
         <Avatar
-          firstName={candidate.first_name}
-          lastName={candidate.last_name}
+          firstName={candidate?.first_name}
+          lastName={candidate?.last_name}
           size="large"
           handleProfileClick={handleProfileClick}
         />
       );
     } else if (userType === "association") {
-      const association = await getAssociationById(auth.user.id);
+      const association = await getAssociationById(auth?.user?.id);
       setAvatarComponent(
         <Avatar
-          firstName={association.association_name}
+          firstName={association?.association_name}
           lastName=""
           size="large"
           handleProfileClick={handleProfileClick}

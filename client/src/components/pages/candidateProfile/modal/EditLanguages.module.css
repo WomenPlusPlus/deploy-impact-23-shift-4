@@ -11,6 +11,10 @@
   margin-bottom: 1rem;
 }
 
+.languageName {
+  margin: 0;
+}
+
 .buttonSave {
   background-color: var(--color-button);
   border: none;

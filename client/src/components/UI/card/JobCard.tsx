@@ -25,6 +25,7 @@ const JobCard: React.FC<JobCardProps> = ({
 }) => {
   // state
   const [isSaved, setIsSaved] = React.useState(false);
+
   const truncatedDescription: string | undefined = job?.description
     ? typeof job?.description === "string" && job?.description?.length > 150
       ? `${job?.description.slice(0, 150)}...`
@@ -58,7 +59,7 @@ const JobCard: React.FC<JobCardProps> = ({
 
     matchScore = matchScores.reduce((acc: any, score: any) => acc + score, 0);
   }
-
+  // SAVE BASED ON IF CANIDATE OR COMPANY
   const saveJob = async () => {
     // add to local storage
     setIsSaved(!isSaved);

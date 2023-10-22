@@ -196,7 +196,7 @@ const CandidateProfile = () => {
 
         <div>
           <div className={styling.userName}>
-            <h3>
+            <h3 className={styling.h3}>
               {candidate?.first_name} {candidate?.last_name}
             </h3>
             <h4>{candidate?.job_status}</h4>
@@ -293,7 +293,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Unbiased Job search</h3>
+            <h3 className={styling.h3}>Unbiased Job search</h3>
             <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
             <ToggleModal
               visible={showToggleModal}
@@ -326,7 +326,7 @@ const CandidateProfile = () => {
       <div className={styling.inOneRow}>
         <CardContainer className={styling.associationContainer}>
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Associations</h3>
+            <h3 className={styling.h3}>Associations</h3>
           </div>
           <div className={styling.associationContainerLabels}>
             {candidate?.associations?.map((label, index) => (
@@ -348,7 +348,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Type of jobs you're looking for</h3>
+            <h3 className={styling.h3}>Type of jobs you're looking for</h3>
             <EditTypeOfJobs
               candidate={candidate}
               setCandidate={setCandidate}
@@ -387,7 +387,7 @@ const CandidateProfile = () => {
       >
         <div className={styling.profileCompletedEditIcon}>
           <div>
-            <h3>Skills</h3>
+            <h3 className={styling.h3}>Skills</h3>
             <SkillsLevelGuide />
           </div>
           <EditSkills
@@ -429,7 +429,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Values</h3>
+            <h3 className={styling.h3}>Values</h3>
             <EditValues
               candidate={candidate}
               setCandidate={setCandidate}
@@ -465,7 +465,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Experience</h3>
+            <h3 className={styling.h3}>Experience</h3>
             <EditExperience
               visible={isExperienceEdit}
               setVisible={setIsExperienceEdit}
@@ -490,7 +490,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Contact info</h3>
+            <h3 className={styling.h3}>Contact info</h3>
             <EditInput
               visible={isEditContactInfo}
               setVisible={setIsEditContactInfo}
@@ -524,7 +524,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Languages</h3>
+            <h3 className={styling.h3}>Languages</h3>
             <IconEdit
               color="black"
               style={{ cursor: "pointer" }}
@@ -550,7 +550,7 @@ const CandidateProfile = () => {
           }
         >
           <div className={styling.profileCompletedEditIcon}>
-            <h3>Uploaded documents</h3>
+            <h3 className={styling.h3}>Uploaded documents</h3>
             <DocumentUploadModal
               candidate={candidate}
               visible={isDocumentsEdit}
@@ -572,7 +572,7 @@ const CandidateProfile = () => {
         }
       >
         <div className={styling.profileCompletedEditIcon}>
-          <h3>Job Search Preferences</h3>
+          <h3 className={styling.h3}>Job Search Preferences</h3>
           <EditJobSearchPref
             candidate={candidate}
             visible={isJobSearchPrefEdit}

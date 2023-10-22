@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import configureAxios from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import {
   IconDashboard,
   IconDeviceLaptop,
   IconBuildingSkyscraper,
-  IconBookmark,
+  IconBookmarks,
   IconStar,
 } from "@tabler/icons-react";
 
@@ -56,6 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   // Set permissions for sidebar items
   const isCompaniesVisible = auth?.user?.user_type === "company" ? false : true;
   const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
+  const isShortListVisible = auth?.user?.user_type === "association" ? false : true;
 
   const items: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
@@ -64,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       ? getItem("Companies", "companies", <IconBuildingSkyscraper />)
       : null,
     isTalentVisible ? getItem("Talent", "candidates", <IconStar />) : null,
-    getItem("Saved", "saved", <IconBookmark />),
+    isShortListVisible ? getItem("Short List", "saved", <IconBookmarks />) : null,
     getItem("Logout", "logout", <IconLogout2 />),
   ];
 

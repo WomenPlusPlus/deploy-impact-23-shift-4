@@ -13,27 +13,31 @@ const Shortlist = () => {
   const [jobs, setJobs] = useState([] as Job[]);
   const [companies, setCompanies] = useState([] as any);
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
+  const user_type = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
 
   const fetchInfo = async () => {
-    const candidate = await getCandidateById(userId);
-    const allCompanies = await getAllCompanies();
-    
-    // fetch all jobs from candidate's shortlist
-    const jobsIds = candidate?.saved_items;
-    console.log("WHISHLIST",jobsIds);
-    if (jobsIds && jobsIds.length > 0) {
-      // Use Promise.all to fetch jobs concurrently
-      const jobPromises = jobsIds.map(async (jobId: string) => {
-        return getJobById(jobId);
-      });
-      // Wait for all job fetch promises to resolve
-      const jobs = await Promise.all(jobPromises);
-      // jobs is now an array of type Job[]
-      console.log(jobs);
-      setJobs(jobs);
+    if (user_type === "candidate") {
+      const candidate = await getCandidateById(userId);
+      const allCompanies = await getAllCompanies();
+
+      // fetch all jobs from candidate's shortlist
+      const jobsIds = candidate?.saved_items;
+      console.log("WHISHLIST", jobsIds);
+      if (jobsIds && jobsIds.length > 0) {
+        // Use Promise.all to fetch jobs concurrently
+        const jobPromises = jobsIds.map(async (jobId: string) => {
+          return getJobById(jobId);
+        });
+        // Wait for all job fetch promises to resolve
+        const jobs = await Promise.all(jobPromises);
+        // jobs is now an array of type Job[]
+        console.log(jobs);
+        setJobs(jobs);
+      }
+      setCandidate(candidate);
+      setCompanies(allCompanies);
     }
-    setCandidate(candidate);
-    setCompanies(allCompanies);
   };
 
   useEffect(() => {
@@ -44,19 +48,21 @@ const Shortlist = () => {
     <div className={styling.main}>
       <h1>Shortlist</h1>
       <p>Shortlist page</p>
-      <div className={styling.cardContainer}>
-        {jobs &&
-          jobs?.map((job, index) => (
-            <JobCard
-              key={index}
-              job={job}
-              companies={companies}
-              candidate={candidate}
-              onClick={() => navigate(`/job/${job?.id}`)}
-              isMatchVisible={true}
-            />
-          ))}
-      </div>
+      {user_type === "candidate" && (
+        <div className={styling.cardContainer}>
+          {jobs &&
+            jobs?.map((job, index) => (
+              <JobCard
+                key={index}
+                job={job}
+                companies={companies}
+                candidate={candidate}
+                onClick={() => navigate(`/job/${job?.id}`)}
+                isMatchVisible={true}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

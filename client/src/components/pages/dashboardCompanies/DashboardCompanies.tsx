@@ -107,9 +107,9 @@ const DashboardCompany = () => {
         <CardContainer className={styling.card}>
           <h1>Our listings</h1>
           {jobs &&
-            jobs?.map((job: Record<string, any>) => {
+            jobs?.map((job: Record<string, any>, index) => {
               return (
-                <div onClick={() => navigate(`/job/${job?.id}`)}>
+                <div key={index} onClick={() => navigate(`/job/${job?.id}`)}>
                   <HorizontalCard
                     avatar={false}
                     button="Go to description"
@@ -127,9 +127,10 @@ const DashboardCompany = () => {
 
         <CardContainer className={styling.card}>
           <h1>Newest matches</h1>
-          {matchingCandidates.map((candidate: Record<string, any>) => {
+          {matchingCandidates.map((candidate: Record<string, any>, index) => {
             return (
               <div
+                key={index}
                 onClick={() => navigate(`/candidate/${candidate?.candidateId}`)}
               >
                 <HorizontalCard
