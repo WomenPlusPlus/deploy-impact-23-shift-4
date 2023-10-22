@@ -55,6 +55,11 @@
   font-size: large;
 }
 
+.companyButton {
+  background-color: var(--background-avatar);
+  color: white;
+}
+
 .companyTitle {
   margin-bottom: 3rem;
 }
@@ -84,4 +89,8 @@
   background-color: var(--label-color);
   border-radius: var(--tag-radius);
   padding: 1rem;
+}
+
+.savedBookmark {
+  fill: black;
 }
