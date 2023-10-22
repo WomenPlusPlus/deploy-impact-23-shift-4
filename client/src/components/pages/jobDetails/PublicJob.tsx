@@ -16,6 +16,7 @@ import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { Job, Company } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
+import { get } from "http";
 
 const PublicJob = () => {
   // Job id from url
@@ -27,23 +28,18 @@ const PublicJob = () => {
   const [jobData, setJobData] = useState<Job>();
   const [companyData, setCompanyData] = useState<Company>();
 
-  const getJob = async () => {
-    if (id) {
-      const getJob = await getJobById(id);
+  const getInfo = async (id: string) => {
+    const getJob = await getJobById(id);
+
+    if (getJob) {
+      const getCompany = await getCompanyById(getJob?.company_id ?? "");
+      setCompanyData(getCompany);
       setJobData(getJob);
     }
   };
 
-  const getCompany = async () => {
-    if (jobData) {
-      const getCompany = await getCompanyById(jobData?.company_id);
-      setCompanyData(getCompany);
-    }
-  };
-
   useEffect(() => {
-    getJob();
-    getCompany();
+    getInfo(id ?? "");
   }, [id]);
 
   return (

@@ -1,6 +1,14 @@
-.mainContainer {
-  height: 100dvh;
-  padding: 2rem;
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 3rem;
+}
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .header {

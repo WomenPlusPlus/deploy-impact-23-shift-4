@@ -53,7 +53,7 @@ def login_route(User):
                 else:
                     return jsonify({"message": "Invalid email or password"}), 401
             else:
-                return jsonify({"message": "User is not registered"}), 401
+                return jsonify({"message": "User is not registered"}), 403
         
         if request.method == "GET":
             if current_user.is_authenticated:

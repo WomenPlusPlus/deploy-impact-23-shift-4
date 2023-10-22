@@ -39,6 +39,7 @@ const DashboardCompany = () => {
     const company = await getCompanyById(userId);
 
     const allJobs = await getAllJobs();
+    console.log("allJobs", allJobs);
     const allCandidates = await getAllCandidates();
     const jobs = allJobs.map((job: Record<string, any>) => {
       if (job["company_id"] === userId) {
@@ -108,7 +109,7 @@ const DashboardCompany = () => {
           {jobs &&
             jobs?.map((job: Record<string, any>) => {
               return (
-                <div onClick={() => navigate(`/job/${job.id}`)}>
+                <div onClick={() => navigate(`/job/${job?.id}`)}>
                   <HorizontalCard
                     avatar={false}
                     button="Go to description"
@@ -129,14 +130,14 @@ const DashboardCompany = () => {
           {matchingCandidates.map((candidate: Record<string, any>) => {
             return (
               <div
-                onClick={() => navigate(`/candidate/${candidate.candidateId}`)}
+                onClick={() => navigate(`/candidate/${candidate?.candidateId}`)}
               >
                 <HorizontalCard
                   avatar={true}
-                  firstName={candidate.candidateFirstName}
-                  lastName={candidate.candidateLastName}
-                  title={`Matches ${candidate.candidateScore}% of the skills`}
-                  subtitle={`Great match for ${candidate.jobTitle} job!`}
+                  firstName={candidate?.candidateFirstName}
+                  lastName={candidate?.candidateLastName}
+                  title={`Matches ${candidate?.candidateScore}% of the skills`}
+                  subtitle={`Great match for ${candidate?.jobTitle} job!`}
                 />
               </div>
             );
