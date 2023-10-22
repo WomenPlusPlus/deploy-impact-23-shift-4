@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate, Job } from "../../../types/types";
+import { Candidate, Company, Job } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies } from "../../../api/companies";
@@ -11,7 +11,7 @@ const Shortlist = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState({} as Candidate);
   const [jobs, setJobs] = useState([] as Job[]);
-  const [companies, setCompanies] = useState([] as any);
+  const [companies, setCompanies] = useState([] as Company[]);
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const user_type = JSON.parse(localStorage.getItem("auth") || "{}")?.user
     ?.user_type;
@@ -23,10 +23,10 @@ const Shortlist = () => {
 
       // fetch all jobs from candidate's shortlist
       const jobsIds = candidate?.saved_items;
-      console.log("WHISHLIST", jobsIds);
-      if (jobsIds && jobsIds.length > 0) {
+
+      if (jobsIds && jobsIds?.length > 0) {
         // Use Promise.all to fetch jobs concurrently
-        const jobPromises = jobsIds.map(async (jobId: string) => {
+        const jobPromises = jobsIds?.map(async (jobId: string) => {
           return getJobById(jobId);
         });
         // Wait for all job fetch promises to resolve

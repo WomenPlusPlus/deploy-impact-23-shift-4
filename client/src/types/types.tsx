@@ -32,7 +32,7 @@ export interface Candidate {
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
-  visible_information?: { [key: string]: any };
+  visible_information?: string[];
   experience?: { [key: string]: any }[];
   visa_status?: string[];
   salary_expectation?: string[];
@@ -40,7 +40,7 @@ export interface Candidate {
   type_of_work?: string[];
   saved_items?: string[];
   date_profile_modified?: string;
-  package_requested?: string[];
+  package_requested?: { [key: string]: any }[];
 }
 
 export interface EditInputProps<Candidate> {
@@ -95,8 +95,7 @@ export interface Job {
   skills?: Skill[];
   soft_skills?: string[];
   hiring_process_duration?: string;
-  posting_date?: string; // Use a string or Date type as per your requirements
-  matching_candidates?: Record<string, any>[]; // JSON object
+  matching_candidates?: { [key: string]: any }[];
   salary?: string[]; // array of 2 strings, min and max salary range
   location_city?: string;
   location_country?: string;

@@ -18,6 +18,7 @@ const Jobs = () => {
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
+    console.log("allJobs", allJobs);
     const allCompanies = await getAllCompanies();
     if (auth?.user?.user_type === "candidate") {
       const candidate = await getCandidateById(userId);

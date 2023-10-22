@@ -30,7 +30,6 @@ def init_jobs_model(db):
         hiring_process_duration = db.Column(
             db.String(256)
         )  # Interview process duration as a string
-        posting_date = db.Column(db.Date)  # Posting date as a date
         matching_candidates = db.Column(
             db.JSON
         )  # Matching candidates as an array of foreign keys (integer)
@@ -57,7 +56,6 @@ def init_jobs_model(db):
             skills=None,
             soft_skills=None,
             hiring_process_duration=None,
-            posting_date=None,
             matching_candidates=None,
             salary=None,
             location_city=None,
@@ -80,14 +78,13 @@ def init_jobs_model(db):
             self.skills = skills
             self.soft_skills = soft_skills
             self.hiring_process_duration = hiring_process_duration
-            self.posting_date = posting_date
             self.matching_candidates = matching_candidates
             self.salary = salary
             self.location_city = location_city
             self.location_country = location_country
-            self.date_created = date_created
             self.work_location = work_location
             self.employment_type = employment_type
+            self.date_created = date_created
 
         def to_dict(self):
             """
@@ -103,16 +100,15 @@ def init_jobs_model(db):
                 "skills": self.skills,
                 "soft_skills": self.soft_skills,
                 "hiring_process_duration": self.hiring_process_duration,
-                "posting_date": self.posting_date.isoformat()
-                if self.posting_date
-                else None,
                 "matching_candidates": self.matching_candidates,
-                "salary": float(self.salary) if self.salary is not None else None,
+                "salary": self.salary,
                 "location_city": self.location_city,
                 "location_country": self.location_country,
-                "date_created": self.date_created.isoformat(),
                 "work_location": self.work_location,
                 "employment_type": self.employment_type,
+                "date_created": self.date_created.isoformat()
+                if self.date_created
+                else None,
             }
 
     return Jobs
