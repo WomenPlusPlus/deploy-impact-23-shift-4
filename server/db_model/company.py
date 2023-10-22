@@ -1,7 +1,5 @@
 from flask_login import UserMixin
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
-
+from sqlalchemy import text
 
 def init_company_model(db):
     class Company(db.Model, UserMixin):
@@ -12,7 +10,7 @@ def init_company_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )
@@ -40,6 +38,11 @@ def init_company_model(db):
             db.ARRAY(db.String)
         )  # Positions/job lists as an array of foreign keys (integer)
         company_size = db.Column(db.String(256))  # Company size as a string
+        company_type = db.Column(db.String(256))
+        company_description = db.Column(db.String(3000))
+        company_website = db.Column(db.String(256))
+        company_industry = db.Column(db.String(256))
+        saved_items = db.Column(db.ARRAY(db.String))  # Saved items as an array of strings
         shared_candidate_packages = db.Column(
             db.JSON
         )  # Packages that candidates shared with the company
@@ -63,6 +66,11 @@ def init_company_model(db):
             kununu_url=None,
             open_positions=None,
             company_size=None,
+            company_type=None,
+            company_description=None,
+            company_website=None,
+            company_industry=None,
+            saved_items=None,
             shared_candidate_packages=None,
             interested_candidates=None,
         ):
@@ -86,6 +94,11 @@ def init_company_model(db):
             self.kununu_url = kununu_url
             self.open_positions = open_positions
             self.company_size = company_size
+            self.company_type = company_type
+            self.company_description = company_description
+            self.company_website = company_website
+            self.company_industry = company_industry
+            self.saved_items = saved_items
             self.shared_candidate_packages = shared_candidate_packages
             self.interested_candidates = interested_candidates
 
@@ -109,6 +122,11 @@ def init_company_model(db):
                 "kununu_url": self.kununu_url,
                 "open_positions": self.open_positions,
                 "company_size": self.company_size,
+                "company_type": self.company_type,
+                "company_description": self.company_description,
+                "company_website": self.company_website,
+                "company_industry": self.company_industry,
+                "saved_items": self.saved_items,
                 "shared_candidate_packages": self.shared_candidate_packages,
                 "interested_candidates": self.interested_candidates,
             }

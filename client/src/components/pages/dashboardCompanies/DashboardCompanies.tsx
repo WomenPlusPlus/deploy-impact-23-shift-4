@@ -109,9 +109,8 @@ const DashboardCompany = () => {
           {jobs &&
             jobs?.map((job: Record<string, any>, key: number) => {
               return (
-                <div onClick={() => navigate(`/job/${job?.id}`)}>
+                <div key={key} onClick={() => navigate(`/job/${job?.id}`)}>
                   <HorizontalCard
-                    key={key}
                     avatar={false}
                     button="Go to description"
                     title={job?.title}
@@ -128,26 +127,22 @@ const DashboardCompany = () => {
 
         <CardContainer className={styling.card}>
           <h1>Newest matches</h1>
-          {matchingCandidates.map(
-            (candidate: Record<string, any>, key: number) => {
-              return (
-                <div
-                  onClick={() =>
-                    navigate(`/candidate/${candidate?.candidateId}`)
-                  }
-                >
-                  <HorizontalCard
-                    key={key}
-                    avatar={true}
-                    firstName={candidate?.candidateFirstName}
-                    lastName={candidate?.candidateLastName}
-                    title={`Matches ${candidate?.candidateScore}% of the skills`}
-                    subtitle={`Great match for ${candidate?.jobTitle} job!`}
-                  />
-                </div>
-              );
-            }
-          )}
+          {matchingCandidates?.map((candidate: Record<string, any>, index) => {
+            return (
+              <div
+                key={index}
+                onClick={() => navigate(`/candidate/${candidate?.candidateId}`)}
+              >
+                <HorizontalCard
+                  avatar={true}
+                  firstName={candidate?.candidateFirstName}
+                  lastName={candidate?.candidateLastName}
+                  title={`Matches ${candidate?.candidateScore}% of the skills`}
+                  subtitle={`Great match for ${candidate?.jobTitle} job!`}
+                />
+              </div>
+            );
+          })}
         </CardContainer>
       </div>
     </>

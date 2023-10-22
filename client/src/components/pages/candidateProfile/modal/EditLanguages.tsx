@@ -112,21 +112,27 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
     >
       {candidateValues?.languages?.map((language, index) => (
         <Space key={index} direction="horizontal" className={styling.content}>
-          <div>
+          <div className={styling.languageName}>
             <label>Name:</label>
-            <Input
-              value={language.name || ""}
-              onChange={(e) => {
-                handleChange(index, "name", e.target.value);
+            <Select
+              style={{ minWidth: "150px" }}
+              value={language?.name || ""}
+              onChange={(value) => {
+                handleChange(index, "name", value);
               }}
-            />
+            >
+              <Option value="English">English</Option>
+              <Option value="German">German</Option>
+              <Option value="French">French</Option>
+              <Option value="Italian">Italian</Option>
+            </Select>
           </div>
 
           <div style={{ minWidth: "150px" }}>
             <label>Level:</label>
             <Select
               style={{ minWidth: "100%" }}
-              value={language.level || ""}
+              value={language?.level || ""}
               onChange={(value) => handleChange(index, "level", value)}
             >
               {Object.keys(LanguageLevelText).map((level) => (

@@ -114,12 +114,12 @@ const AddEditJob: React.FC<ModalProps> = ({
 
     return (
       <div className={styling.labelContainer}>
-        {visibleValues?.map((value) => (
+        {visibleValues?.map((value, index) => (
           <Labels
+            key={index}
             customClass={styling.label}
             labelName={value}
             onCloseIcon={() => removeValue(value)}
-            key={value}
           />
         ))}
         {hiddenValueCount > 0 && (
@@ -139,12 +139,12 @@ const AddEditJob: React.FC<ModalProps> = ({
 
     return (
       <div className={styling.labelContainer}>
-        {visibleSkills?.map((skill) => (
+        {visibleSkills?.map((skill, index) => (
           <Labels
+            key={index}
             customClass={styling.label}
             labelName={skill.skill_name}
             onCloseIcon={() => removeSkill(skill.skill_name)}
-            key={skill.skill_name}
           />
         ))}
         {hiddenSkillCount > 0 && (
