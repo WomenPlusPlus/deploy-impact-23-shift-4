@@ -92,6 +92,8 @@ def register_route(User, Candidate, Company, Association, db):
                     db.session.add(new_association)
                     db.session.commit()
 
+                elif user_type == "admin":
+                    pass
                 else:
                     return jsonify({"message": "Invalid user type"}), 400
 
