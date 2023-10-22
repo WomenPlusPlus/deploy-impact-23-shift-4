@@ -52,6 +52,15 @@ const Navbar = () => {
           handleProfileClick={handleProfileClick}
         />
       );
+    } else if (userType === "admin") {
+      setAvatarComponent(
+        <Avatar
+          firstName="Admin"
+          lastName=""
+          size="large"
+          handleProfileClick={handleProfileClick}
+        />
+      );
     } else {
       setAvatarComponent(
         <Avatar

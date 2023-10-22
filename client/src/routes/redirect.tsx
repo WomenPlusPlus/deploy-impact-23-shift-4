@@ -6,6 +6,7 @@ import Register from "../components/pages/register/RegisterCandidate";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
+import DashboardAdmin from "../components/pages/dashboardAdmin/DashboardAdmin";
 
 const RegisterRoute: React.FC = () => {
   const location = useLocation();
@@ -75,6 +76,8 @@ const DashboardRoute: React.FC = () => {
     return <DashboardCompany />;
   } else if (userType === "association") {
     return <DashboardAssociations />;
+  } else if (userType === "admin") {
+    return <DashboardAdmin />;
   } else {
     return <Navigate to="/login" replace />;
   }
