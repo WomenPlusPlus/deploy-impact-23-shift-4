@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal as AntdModal,
-  Input,
-  Select,
-  Divider,
-  AutoComplete,
-  InputNumber,
-} from "antd";
+
+import { Modal as AntdModal, Input, Select, Divider, AutoComplete } from "antd";
 import { Button } from "../../UI/button/Button";
+import { Labels } from "../../UI/labels/Label";
+
+import { Skill } from "../../../types/types";
+
+import { getAllSkills } from "../../../api/skills";
 
 import styling from "./AddEditJob.module.css";
-import { Labels } from "../../UI/labels/Label";
-import { getAllSkills } from "../../../api/skills";
-import { Skill } from "../../../types/types";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -36,6 +32,9 @@ const AddEditJob: React.FC<ModalProps> = ({
   companyValues,
   associations,
 }) => {
+  // Constants
+  const skillLevels = ["beginner", "intermediate", "advanced", "pro"];
+
   // State
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -48,34 +47,19 @@ const AddEditJob: React.FC<ModalProps> = ({
   const [location_country, setLocationCountry] = useState<string>("");
   const [work_location, setWorkLocation] = useState<string>("");
   const [employment_type, setEmploymentType] = useState<string>("");
-
   const [selectedSkill, setSelectedSkill] = useState<string>("");
-
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
-
   const [selectedSkillLevel, setSelectedSkillLevel] =
     useState<string>("beginner");
-
   // Initial state of skills
   const [skillDataSource, setSkillDataSource] = useState<string[]>();
   // Filtered skill through autocomplete
   const [filteredSkills, setFilteredSkills] = useState<string[]>();
 
-  const fetchSkills = async () => {
-    const allSkills = await getAllSkills();
-    const skills = allSkills?.map((skill: any) => skill?.name);
-    setSkillDataSource(skills);
-    setFilteredSkills(skills);
-  };
-
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
   /**
    * Handle the ok button click
    */
-  const handleOk = () => {
+  const handleCreate = () => {
     const currentTimestamp = new Date();
 
     const payload = {
@@ -99,8 +83,9 @@ const AddEditJob: React.FC<ModalProps> = ({
     onOk(payload);
   };
 
-  const skillLevels = ["beginner", "intermediate", "advanced", "pro"];
-
+  /**
+   * Add a skill to the selected skills array
+   */
   const addSkill = () => {
     if (
       selectedSkill &&
@@ -116,20 +101,41 @@ const AddEditJob: React.FC<ModalProps> = ({
     }
   };
 
+  /**
+   * Remove a skill from the selected skills array
+   * @param skillName the name of the skill to remove
+   */
   const removeSkill = (skillName: string) => {
     setSelectedSkills(
       selectedSkills?.filter((skill) => skill?.skill_name !== skillName)
     );
   };
 
+  /**
+   * Fetches all skills from the server
+   */
+  const fetchSkills = async () => {
+    const allSkills = await getAllSkills();
+    const skills = allSkills?.map((skill: any) => skill?.name);
+    setSkillDataSource(skills);
+    setFilteredSkills(skills);
+  };
+
+  /**
+   * Fetches all skills on component mount
+   */
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
   return (
     <AntdModal
       className={styling.modal}
       open={open}
-      onOk={handleOk}
+      onOk={handleCreate}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
-      okText="Save"
+      okText="Create"
     >
       <h2 className={styling.header}>Create new job</h2>
       <Divider>Job Info</Divider>
@@ -161,7 +167,7 @@ const AddEditJob: React.FC<ModalProps> = ({
               popupClassName="scrollable-dropdown"
               popupMatchSelectWidth={false}
               onSearch={(searchText) => {
-                setSelectedSkill(searchText); // Update selectedSkill as the user types
+                setSelectedSkill(searchText);
                 if (searchText === "") {
                   setFilteredSkills(skillDataSource);
                 } else {
