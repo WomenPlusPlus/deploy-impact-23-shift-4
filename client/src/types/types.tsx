@@ -41,6 +41,7 @@ export interface Candidate {
   saved_items?: string[];
   date_profile_modified?: string;
   package_requested?: { [key: string]: any }[];
+  requested_jobs?: string[];
 }
 
 export interface EditInputProps<Candidate> {
@@ -76,7 +77,7 @@ export interface Company {
   company_industry?: string[];
   saved_items?: string[];
   shared_candidate_packages?: string[];
-  interested_candidates?: string[];
+  interested_candidates?: object[];
 }
 
 export interface Experience {
