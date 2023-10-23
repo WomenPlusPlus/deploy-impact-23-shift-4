@@ -29,8 +29,5 @@ if __name__ == "__main__":
     tfidf = vectorizer.fit_transform(skills)
     file_path = os.path.dirname(__file__)
 
-    # print(file_path)
-    # path =
-
     with open(f"{file_path}/vectorizer.pkl", "wb") as file:
         dill.dump(vectorizer, file)
