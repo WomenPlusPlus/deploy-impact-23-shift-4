@@ -118,15 +118,20 @@ const CandidatePublicProfile = () => {
               )}
             </div>
             <div className={styling.row}>
-              <IconMapPin color="black" />
-              {candidate?.city && candidate?.country ? (
-                <p className={styling.location}>
-                  {candidate?.city}, {candidate?.country}
-                </p>
-              ) : (
-                <p className={styling.location}>Not visible</p>
-              )}
-              <p> | </p>
+              <div className={styling.location}>
+                <IconMapPin color="black" />
+                {candidate?.city && candidate?.country ? (
+                  <div>
+                    <p className={styling.locationText}>
+                      {candidate?.city}, {candidate?.country}
+                    </p>
+                    <p> | </p>
+                  </div>
+                ) : (
+                  <p className={styling.locationText}>Not provided</p>
+                )}
+              </div>
+
               {candidate?.links && candidate?.links?.length > 0
                 ? candidate?.links?.map((link, index) => (
                     <div key={index} className={styling.link}>

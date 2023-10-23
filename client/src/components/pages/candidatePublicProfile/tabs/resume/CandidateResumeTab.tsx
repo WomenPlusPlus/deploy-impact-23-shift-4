@@ -12,8 +12,13 @@ import styling from "./CandidateResumeTab.module.css";
 import { IconTags } from "@tabler/icons-react";
 import { SkillsLevelGuide } from "../../../../shared/skillsLevelGuide/SkillsLevelGuide";
 import { RequestAccess } from "../../modal/RequestAccess";
-import { transformExperience } from "../../../candidateProfile/helpers/helper";
+import {
+  transformCandidateDocs,
+  transformCandidateJobPref,
+  transformExperience,
+} from "../../../candidateProfile/helpers/helper";
 import { Button } from "../../../../UI/button/Button";
+import { ProgressBarComponent } from "../../../../UI/progressbar/ProgressBarComponent";
 interface Props {
   candidate: Candidate;
   matchingJobs: Job[];
@@ -21,26 +26,32 @@ interface Props {
 
 const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
   const [sectionsExperience, setSectionsExperience] = useState([] as Section[]);
-  const [isAccessGrantedCV, setIsAccessGrantedCV] = useState(false);
-  const [isAccessGrantedCertificates, setIsAccessGrantedCertificates] =
-    useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isPackageVisible, setIsPackageVisible] = useState(false);
+  const [sectionsJobSearchPref, setSectionsJobSearchPref] = useState([] as any);
+  const [sectionDocuments, setSectionDocuments] = useState([] as Section[]);
+
   console.log("matchingJobs: ", matchingJobs);
+
   useEffect(() => {
     // read if access from local storage
-    const access = JSON.parse(localStorage.getItem("access") || "{}");
-    if (access.cv) {
-      setIsAccessGrantedCV(true);
-    }
-    if (access.certificates) {
-      setIsAccessGrantedCertificates(true);
+    const packageVisible = JSON.parse(
+      localStorage.getItem("package_visible") || "false"
+    );
+    if (packageVisible && packageVisible === "true") {
+      setIsPackageVisible(true);
+    } else {
+      setIsPackageVisible(false);
     }
     console.log("candidate: ", candidate);
     if (candidate) {
       const transformedExperience = transformExperience(
         candidate?.experience as Experience[]
       );
-      console.log("transformedExperience: ", transformedExperience);
+      const transformedVisibleInfo = transformCandidateJobPref(candidate);
+      const transformedData = transformCandidateDocs(candidate);
+      setSectionDocuments(transformedData);
+      setSectionsJobSearchPref(transformedVisibleInfo);
       setSectionsExperience(transformedExperience);
     }
   }, [candidate]);
@@ -71,9 +82,9 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
         </CardContainer>
 
         {/* Type of jobs */}
-        <CardContainer className={styling.cardContainerAboutMe}>
+        <CardContainer className={styling.cardContainerTypeOfJobs}>
           <h1 className={styling.margin}>Type of jobs you're looking for</h1>
-          <div className={styling.aboutMe}>
+          <div className={styling.typeOfJobs}>
             {candidate?.preferred_jobs &&
               candidate?.preferred_jobs?.map((job, index) => (
                 <Labels
@@ -140,20 +151,68 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
           </div>
         </CardContainer>
       </div>
+      {!isPackageVisible ? (
+        <div>
+          {/* Request package */}
+          <CardContainer className={styling.requestPackage}>
+            <h1 className={styling.requestAccessTitle}>
+              Request application package
+            </h1>
+            <Button className={styling.applyButton} onClick={requestAccess}>
+              Request access
+            </Button>
+            <RequestAccess
+              show={isModalVisible}
+              setShow={setIsModalVisible}
+              jobs={matchingJobs}
+            />
+          </CardContainer>
 
-      <CardContainer className={styling.cardCont}>
-        <h1 className={styling.requestAccessTitle}>
-          Request application package
-        </h1>
-        <Button className={styling.applyButton} onClick={requestAccess}>
-          Request access
-        </Button>
-        <RequestAccess
-          show={isModalVisible}
-          setShow={setIsModalVisible}
-          jobs={matchingJobs}
-        />
-      </CardContainer>
+          {/* Package */}
+          <div className={styling.jobPrefDiv}>
+            {/* Job search preferences */}
+            <CardContainer
+              className={`${styling.jobPrefContainer} ${styling.blurredText}`}
+            >
+              <div className={styling.profileCompletedEditIcon}>
+                <h1 className={styling.margin}>Job Search Preferences</h1>
+              </div>
+              <div className={styling.visibleSection}>
+                <ContentBlock sections={sectionsJobSearchPref} />
+              </div>
+            </CardContainer>
+            <div className={styling.oneRow}>
+              {/* Laguages */}
+              <CardContainer
+                className={`${styling.lowerContainer} ${styling.blurredText}`}
+              >
+                <div className={styling.profileCompletedEditIcon}>
+                  <h1 className={styling.margin}>Languages</h1>
+                </div>
+                <ProgressBarComponent
+                  customClass={styling.padding}
+                  candidate={candidate}
+                />
+              </CardContainer>
+
+              {/* Uploaded documents */}
+              <CardContainer
+                className={`${styling.lowerContainer} ${styling.blurredText}`}
+              >
+                <div className={styling.profileCompletedEditIcon}>
+                  <h1 className={styling.margin}>Uploaded documents</h1>
+                </div>
+                <ContentBlock
+                  customClass={styling.padding}
+                  sections={sectionDocuments}
+                />
+              </CardContainer>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
