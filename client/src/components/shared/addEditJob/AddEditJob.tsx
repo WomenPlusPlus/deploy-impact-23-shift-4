@@ -60,8 +60,6 @@ const AddEditJob: React.FC<ModalProps> = ({
    * Handle the ok button click
    */
   const handleCreate = () => {
-    const currentTimestamp = new Date();
-
     const payload = {
       associations: associations,
       company_id: companyId,
@@ -70,7 +68,6 @@ const AddEditJob: React.FC<ModalProps> = ({
       values: companyValues,
       skills: selectedSkills,
       hiring_process_duration: hiring_process_duration,
-      posting_date: currentTimestamp,
       matching_candidates: [],
       salary: [minSalary, maxSalary],
       location_city: location_city,
