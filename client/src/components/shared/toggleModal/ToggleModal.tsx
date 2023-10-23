@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Switch } from "antd";
 import { Button } from "../../UI/button/Button";
 import styling from "./ToggleModal.module.css";
@@ -12,7 +12,10 @@ interface StringSelectorModalProps {
   subtitle?: string;
   buttonText: string;
   onToggle: (index: number) => void;
-  onAcceptWithEnabledStrings: (enabledStrings: string[]) => void;
+  onAcceptWithEnabledStrings: (
+    enabledStrings: string[],
+    textAreaValue: string
+  ) => void;
   onCancel: () => void;
   isTextAreaVisible?: boolean;
 }
@@ -29,9 +32,10 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
   onCancel,
   isTextAreaVisible = true,
 }) => {
+  const [textAreaValue, setTextAreaValue] = useState("");
   const handleOk = () => {
     const enabledStrings = strings.filter((_, index) => selectedStrings[index]);
-    onAcceptWithEnabledStrings(enabledStrings);
+    onAcceptWithEnabledStrings(enabledStrings, textAreaValue);
   };
   return (
     <Modal
@@ -39,7 +43,7 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
       onOk={handleOk}
       onCancel={onCancel}
       footer={[
-        <div className={styling.buttonContainer}>
+        <div className={styling.buttonContainer} key={"footer"}>
           <Button className={styling.button} onClick={handleOk}>
             {buttonText}
           </Button>
@@ -51,7 +55,7 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
         {subtitle}
       </p>
       <div className={styling.center}>
-        {strings.map((string, index) => (
+        {strings?.map((string, index) => (
           <div key={index} className={styling.options}>
             <p className={styling.field}>{string}</p>
             <Switch
@@ -64,6 +68,8 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
           <TextArea
             className={styling.text}
             placeholder="Message to recruiter (optional)"
+            value={textAreaValue}
+            onChange={(e) => setTextAreaValue(e.target.value)}
           />
         )}
       </div>

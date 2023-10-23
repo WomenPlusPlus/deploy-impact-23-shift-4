@@ -1,7 +1,5 @@
 from flask_login import UserMixin
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
-
+from sqlalchemy import text
 
 def init_association_model(db):
     class Association(db.Model, UserMixin):
@@ -12,7 +10,7 @@ def init_association_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )

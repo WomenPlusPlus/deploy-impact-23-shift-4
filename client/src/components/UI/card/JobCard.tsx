@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Avatar } from "antd";
 import { Labels } from "../labels/Label";
 import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
@@ -6,6 +6,7 @@ import { PieChartFilled } from "@ant-design/icons";
 
 import styling from "./JobCard.module.css";
 import { Candidate, Company, Job } from "../../../types/types";
+import { updateCandidateById } from "../../../api/candidates";
 
 interface JobCardProps {
   job: Job;
@@ -22,6 +23,11 @@ const JobCard: React.FC<JobCardProps> = ({
   candidate,
   onClick,
 }) => {
+  // state
+  const [isSaved, setIsSaved] = React.useState(false);
+  const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
+
   const truncatedDescription: string | undefined = job?.description
     ? typeof job?.description === "string" && job?.description?.length > 150
       ? `${job?.description.slice(0, 150)}...`
@@ -56,41 +62,108 @@ const JobCard: React.FC<JobCardProps> = ({
     matchScore = matchScores.reduce((acc: any, score: any) => acc + score, 0);
   }
 
+  const saveJob = async () => {
+    // add to local storage
+    setIsSaved(!isSaved);
+    // if not yet saved
+    if (!isSaved) {
+      // Check if the job is already saved
+      const isJobSaved = candidate?.saved_items?.includes(job?.id);
+      if (isJobSaved) {
+        return;
+      } else {
+        localStorage.setItem(
+          "saved_items",
+          JSON.stringify([...(candidate?.saved_items || []), job?.id])
+        );
+        await updateCandidateById(candidate?.user_id || "", {
+          saved_items: [...(candidate?.saved_items || []), job?.id],
+        });
+      }
+    } else {
+      // if already saved
+      const savedItems = JSON.parse(
+        localStorage.getItem("saved_items") || "[]"
+      );
+      // Check if the job is already saved in local storage
+      const isJobSaved = savedItems.includes(job?.id);
+      if (!isJobSaved) {
+        return;
+      }
+      const filtered = savedItems.filter(
+        (savedItem: string) => savedItem !== job?.id
+      );
+      localStorage.setItem("saved_items", JSON.stringify(filtered));
+      await updateCandidateById(candidate?.user_id || "", {
+        saved_items: filtered,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const savedItems = JSON.parse(localStorage.getItem("saved_items") || "[]");
+    if (savedItems.includes(job?.id)) {
+      setIsSaved(true);
+    }
+  }, []);
+
   return (
     <>
-      <Card className={styling.card} onClick={onClick}>
+      <Card className={styling.card}>
         <div className={styling.jobHeader}>
-          <div>
-            <Avatar className={styling.avatar} src={logo} />
+          <div className={styling.row}>
+            <Avatar
+              className={styling.avatar}
+              src={logo}
+              size={70}
+              onClick={onClick}
+            />
+            <div className={styling.title}>
+              <h2 className={styling.jobTitle} onClick={onClick}>
+                {job?.title}
+              </h2>
+              <p className={styling.companyName} onClick={onClick}>
+                @{company_name}
+              </p>
+            </div>
           </div>
-          <div className={styling.jobTitle}>
-            <h2 className={styling.jobName}>{job?.title}</h2>
-            <p className={styling.companyName}>@{company_name}</p>
-          </div>
-          <div>
-            <IconBookmark />{" "}
-          </div>
+          {userType === "candidate" && (
+            <div>
+              {isSaved ? (
+                <IconBookmark
+                  className={`${styling.bookmark} ${styling.savedBookmark}`}
+                  onClick={saveJob}
+                />
+              ) : (
+                <IconBookmark className={styling.bookmark} onClick={saveJob} />
+              )}
+            </div>
+          )}
         </div>
 
         <div className={styling.jobDescription}>
-          <div className={styling.iconAndText}>
-            {isMatchVisible && matchScore > 0 && (
-              <>
-                <PieChartFilled style={{ color: "#10239E" }} />
-                <span>{matchScore}% Match</span>
-              </>
-            )}
-          </div>
+          {isMatchVisible && matchScore > 0 && (
+            <div className={styling.iconAndText}>
+              <PieChartFilled style={{ color: "#10239E" }} />
+              <span>{matchScore}% Match</span>
+            </div>
+          )}
+
           <div className={styling.iconAndText}>
             <IconMapPin />
-            <span>{job?.location_city}</span>
+            <span>
+              {job?.location_city} ({job?.work_location})
+            </span>
           </div>
           <div className={styling.iconAndText}>
             <IconShoppingBag />
             <span>{job?.employment_type}</span>
           </div>
         </div>
+
         <hr className={styling.horizontalLine} />
+
+        {/* Skills */}
         <div className={styling.skillTag}>
           {job?.skills && (
             <>

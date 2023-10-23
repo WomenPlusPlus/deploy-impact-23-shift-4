@@ -8,7 +8,7 @@ import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 
-import { Company } from "../../../types/types";
+import { Candidate, Company } from "../../../types/types";
 import { getAllJobs } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { getAllCandidates } from "../../../api/candidates";
@@ -29,8 +29,9 @@ const DashboardCompany = () => {
   const navigate = useNavigate();
 
   const [company, setCompany] = useState({} as Company);
-  const [jobs, setJobs] = useState([]);
   const [matchingCandidates, setMatchingCandidates] = useState([]);
+  const [allJobs, setAllJobs] = useState<Record<string, any>[]>();
+  const [allCandidates, setAllCandidates] = useState<Candidate[]>();
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchInfo = async () => {
@@ -41,6 +42,7 @@ const DashboardCompany = () => {
     const allJobs = await getAllJobs();
     console.log("allJobs", allJobs);
     const allCandidates = await getAllCandidates();
+
     const jobs = allJobs.map((job: Record<string, any>) => {
       if (job["company_id"] === userId) {
         return job;
@@ -50,7 +52,8 @@ const DashboardCompany = () => {
     const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
 
     setCompany(company);
-    setJobs(jobs);
+    setAllCandidates(allCandidates);
+    setAllJobs(allJobs);
     setMatchingCandidates(matchingCandidates);
     setIsLoading(true);
   };
@@ -105,31 +108,44 @@ const DashboardCompany = () => {
       {/* Find Jobs */}
       <div className={styling.section}>
         <CardContainer className={styling.card}>
-          <h1>Our listings</h1>
-          {jobs &&
-            jobs?.map((job: Record<string, any>) => {
-              return (
-                <div onClick={() => navigate(`/job/${job?.id}`)}>
-                  <HorizontalCard
-                    avatar={false}
-                    button="Go to description"
-                    title={job?.title}
-                    subtitle={
-                      job?.matching_candidates?.length
-                        ? `${job?.matching_candidates?.length} great match(es)!`
-                        : "No matches yet"
+          <h1>Interested candidates</h1>
+
+          {Array.isArray(company?.interested_candidates) &&
+            company?.interested_candidates.map(
+              (candidate: any, key: number) => {
+                const candidateInfo = allCandidates?.find(
+                  (c) => c?.user_id === candidate?.candidate_id
+                );
+                const jobInfo = allJobs?.find(
+                  (j) => j?.id === candidate?.job_id
+                );
+
+                return (
+                  <div
+                    key={key}
+                    onClick={() =>
+                      navigate(`/candidate/${candidate?.candidate_id}`)
                     }
-                  />
-                </div>
-              );
-            })}
+                  >
+                    <HorizontalCard
+                      avatar={true}
+                      firstName={candidateInfo?.first_name}
+                      lastName={candidateInfo?.last_name}
+                      title={`A new candidate is interested in your ${jobInfo?.title} vancancy!`}
+                      subtitle={`Get in touch with them!`}
+                    />
+                  </div>
+                );
+              }
+            )}
         </CardContainer>
 
         <CardContainer className={styling.card}>
           <h1>Newest matches</h1>
-          {matchingCandidates.map((candidate: Record<string, any>) => {
+          {matchingCandidates?.map((candidate: Record<string, any>, index) => {
             return (
               <div
+                key={index}
                 onClick={() => navigate(`/candidate/${candidate?.candidateId}`)}
               >
                 <HorizontalCard

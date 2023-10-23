@@ -5,14 +5,9 @@ import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
 import { useNavigate } from "react-router-dom";
 import Searchbar from "../../UI/searchbar/Searchbar";
+import { Candidate, Company } from "../../../types/types";
+import { getCompanyById } from "../../../api/companies";
 
-interface Candidate {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  associations: string[];
-  skills: object[];
-}
 
 const Candidates = () => {
   const skillsOptions = ["JavaScript", "React", "Node.js", "SQL"];
@@ -21,9 +16,10 @@ const Candidates = () => {
   const navigate = useNavigate();
 
   //State
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id || "";
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
-
+  const [company, setCompany] = useState({} as Company);
   /**
    * Handle filter change
    * @param filteredCandidates - filtered candidates
@@ -37,8 +33,10 @@ const Candidates = () => {
    */
   const fetchCandidates = async () => {
     const candidates = await getAllCandidates();
+    const company = await getCompanyById(userId);
     setCandidates(candidates);
     setFilteredCandidates(candidates);
+    setCompany(company);
   };
 
   useEffect(() => {
@@ -72,15 +70,18 @@ const Candidates = () => {
         </div>
       </div>
       <div className="cards">
-        {filteredCandidates?.map((candidate) => (
+        {filteredCandidates?.map((candidate, index) => (
           <Card
-            header={`${candidate?.first_name} ${candidate?.last_name}`}
+            key={index}
+            candidate={candidate}
+            company={company}
             subheader="Software Engineer"
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}
+            isBookmarkVisible={true}
           />
         ))}
       </div>

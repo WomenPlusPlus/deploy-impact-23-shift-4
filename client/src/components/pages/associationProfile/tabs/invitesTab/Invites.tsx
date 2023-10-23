@@ -8,6 +8,7 @@ import { useState } from "react";
 import { message } from "antd";
 import { sendInvite } from "../../../../../api/invite";
 import { updateAssociationById } from "../../../../../api/associations";
+import { getAllUsers } from "../../../../../api/user";
 
 interface Invite {
   key: number;
@@ -47,6 +48,22 @@ const InvitesComponent: React.FC<InvitesComponentProps> = ({
       recipient_email: payload.recipient_email,
       association: association.association_name,
     };
+
+    // Check if user already exists in the database
+    const users = await getAllUsers();
+    const user = users.find(
+      (user: any) => user.email === payload.recipient_email
+    );
+
+    if (user) {
+      message.error("User already exists");
+      return;
+    }
+
+    if (!association.invites) {
+      association.invites = [];
+    }
+
     // Send invite
     const isInviteSent = await sendInvite(payloadInvite);
 
