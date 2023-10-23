@@ -25,6 +25,8 @@ const PublicJob = () => {
   // Job id from url
   const { id } = useParams<{ id: string }>();
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
+  const usetType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
   const iconSize = 20;
   const companyIconSize = 15;
   const matchScore = 80;
@@ -46,9 +48,12 @@ const PublicJob = () => {
    */
   const getInfo = async (id: string) => {
     const getJob = await getJobById(id);
-    const candidate = await getCandidateById(userId);
-    const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
-    setIsSaved(fetchIsSaved);
+
+    if (usetType === "candidate") {
+      const candidate = await getCandidateById(userId);
+      const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
+      setIsSaved(fetchIsSaved);
+    }
 
     if (getJob) {
       const getCompany = await getCompanyById(getJob?.company_id ?? "");
@@ -180,15 +185,15 @@ const PublicJob = () => {
       <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
         <h1 className={styling.titles}>Accepting applications</h1>
         <Button className={styling.applyButton} onClick={toggleApplyModal}>
-          Share your interest in the position
+          Show your interest in the position
         </Button>
       </CardContainer>
 
       <ApplyModal
         isApplyModalOpen={isApplyModalOpen}
-        companyId={jobData?.company_id}
+        company={companyData}
         jobId={jobData?.id}
-        candidateId={candidate?.user_id}
+        candidate={candidate}
         callback={toggleApplyModal}
       />
 

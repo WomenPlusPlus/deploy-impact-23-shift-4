@@ -76,7 +76,7 @@ export interface Company {
   company_industry?: string[];
   saved_items?: string[];
   shared_candidate_packages?: string[];
-  interested_candidates?: string[];
+  interested_candidates?: object[];
 }
 
 export interface Experience {

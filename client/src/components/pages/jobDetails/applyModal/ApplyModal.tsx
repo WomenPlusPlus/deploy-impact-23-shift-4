@@ -1,19 +1,20 @@
 import { useState } from "react";
 import ToggleModal from "../../../shared/toggleModal/ToggleModal";
-import { getCompanyById, updateCompanyById } from "../../../../api/companies";
+import { updateCompanyById } from "../../../../api/companies";
+import { Candidate, Company } from "../../../../types/types";
 
 interface ApplyModalProps {
-  companyId: string;
+  company: Company | undefined;
   jobId: string;
-  candidateId: string | undefined;
+  candidate: Candidate | undefined;
   isApplyModalOpen: boolean;
   callback?: () => void;
 }
 
 const ApplyModal: React.FC<ApplyModalProps> = ({
-  companyId,
+  company,
   jobId,
-  candidateId,
+  candidate,
   isApplyModalOpen,
   callback,
 }) => {
@@ -47,22 +48,28 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
    * @param enabledStrings - strings that are enabled
    */
   const handleShare = async (enabledStrings: string[], message: string) => {
-    const company = await getCompanyById(companyId);
-    const existingInterestedCandidates = company?.interested_candidates;
+    let existingInterestedCandidates: object[] | undefined =
+      company?.interested_candidates;
 
     const newInterestedCandidate = {
       job_id: jobId,
-      candidate_id: candidateId,
+      candidate_id: candidate?.user_id,
       visible_informations: enabledStrings,
       message: message,
     };
-    existingInterestedCandidates.push(newInterestedCandidate);
 
-    await updateCompanyById(companyId, {
-      interested_candidates: existingInterestedCandidates,
-    });
+    if (existingInterestedCandidates) {
+      existingInterestedCandidates = [
+        ...existingInterestedCandidates,
+        newInterestedCandidate,
+      ];
 
-    callback?.();
+      await updateCompanyById(company?.user_id ?? "", {
+        interested_candidates: existingInterestedCandidates,
+      });
+      callback?.();
+      return;
+    }
   };
 
   /**
@@ -80,7 +87,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
         selectedStrings={selectedStrings}
         title="Show your interest in the position and share your info"
         subtitle="Select the information you want to share with the company"
-        buttonText="Share interest"
+        buttonText="Share"
         onToggle={handleToggle}
         onAcceptWithEnabledStrings={handleShare}
         onCancel={handleCancel}
