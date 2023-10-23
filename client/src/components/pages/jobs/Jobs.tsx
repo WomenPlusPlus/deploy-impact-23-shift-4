@@ -6,6 +6,10 @@ import { getAllCompanies } from "../../../api/companies";
 import { useNavigate } from "react-router-dom";
 import { Candidate, Company, Job } from "../../../types/types";
 import { getCandidateById } from "../../../api/candidates";
+import SearchJobs from "../../UI/searchbar/SearchJobs";
+import fakeData from "./FakeDataForJobs";
+import { Select } from "antd";
+const { Option } = Select;
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -15,9 +19,12 @@ const Jobs = () => {
   const [companies, setCompanies] = useState([] as Company[]);
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchedScoreVisible, setMatchedScoreVisible] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState("Anywhere"); // Set "Anywhere" as the default
+
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
+    console.log("allJobs", allJobs);
     const allCompanies = await getAllCompanies();
     if (auth?.user?.user_type === "candidate") {
       const candidate = await getCandidateById(userId);
@@ -42,6 +49,7 @@ const Jobs = () => {
 
   useEffect(() => {
     fetchInfo();
+    console.log("isler", jobs);
   }, []);
 
   const header = () => {
@@ -62,9 +70,53 @@ const Jobs = () => {
     }
   };
 
+  //mehtap
+  const searchText = (results: (Company | Job)[]) => {
+    setJobs(jobs);
+    console.log("searctecht", jobs);
+  };
+ //location
+  const locationOptions = Array.from(new Set(fakeData.map((job) => job.location_city)));
+  const handleLocationFilter = (value: string) => {
+    // Use the updated value directly for filtering
+    const filteredJobs = value === "Anywhere"
+      ? jobs
+      : jobs.filter((job) => job.location_city === value);
+  
+    setSelectedLocation(value); // Update the selected location
+    setJobs(filteredJobs); // Update the filtered jobs
+  };
+  
+
+
+
   return (
     <div className={styling.main}>
-      {header()}
+      {/* {header()} */}your jobs
+      <div className={styling.inputContainer}>
+        <div className={styling.inputs}>
+          <div className={styling.searchText}>
+            <SearchJobs onSearch={searchText} data={jobs} />
+          </div>
+          <div>
+            {" "}
+            <Select
+              placeholder="Select location"
+              style={{ width: 200 }}
+              onChange={handleLocationFilter}
+              value={selectedLocation}
+            >
+              {locationOptions.map((location, index) => (
+                <Option key={index} value={location}>
+                  {location}
+                </Option>
+             ) )}
+            </Select>
+          </div>
+          <div>grup</div>
+        </div>
+        <div></div>
+      </div>
       <div className={styling.cardContainer}>
         {jobs &&
           jobs?.map((job) => (

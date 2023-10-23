@@ -161,6 +161,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   type_of_work: "Job Preferences",
   saved_items: "",
   date_profile_modified: "",
+  package_requested:""
 };
 
 const categoryFieldMapping: Record<string, number> = {};
