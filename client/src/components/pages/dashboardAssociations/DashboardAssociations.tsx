@@ -18,6 +18,7 @@ import {
   updateAssociationById,
 } from "../../../api/associations";
 import { sendInvite } from "../../../api/invite";
+import { getAllUsers } from "../../../api/user";
 
 interface Payload {
   name: string;
@@ -40,29 +41,46 @@ const DashboardAssociations = () => {
    */
   const handleSendInvite = async (payload: Payload) => {
     const payloadInvite = {
-      user_type: payload.user_type,
-      recipient_email: payload.recipient_email,
-      association: association.association_name,
+      user_type: payload?.user_type,
+      recipient_email: payload?.recipient_email,
+      association: association?.association_name,
     };
+
+    // Check if user already exists in the database
+    const users = await getAllUsers();
+    const user = users.find(
+      (user: any) => user.email === payload.recipient_email
+    );
+
+    if (user) {
+      message.error("User already exists");
+      return;
+    }
+
+    if (!association.invites) {
+      association.invites = [];
+    }
+
     // Send invite
     const isInviteSent = await sendInvite(payloadInvite);
 
     const payloadInvites = {
-      name: payload.name,
-      email: payload.recipient_email,
-      user_type: payload.user_type,
+      name: payload?.name,
+      email: payload?.recipient_email,
+      user_type: payload?.user_type,
       createdAt: new Date(),
     };
+
     // Update association invites array
     await updateAssociationById(association?.user_id, {
-      invites: [...association.invites, payloadInvites],
+      invites: [...association?.invites, payloadInvites],
     });
 
     setSendInviteOpen(false);
 
     fetchAssociation();
 
-    if (isInviteSent.success) {
+    if (isInviteSent?.success) {
       message.success("Invite sent");
     } else {
       message.error("Error sending invite. Please try again");
@@ -83,7 +101,7 @@ const DashboardAssociations = () => {
    */
   const fetchAssociation = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
+    const userId = auth?.user?.id;
 
     if (userId) {
       const association = await getAssociationById(userId);
@@ -170,17 +188,17 @@ const DashboardAssociations = () => {
   ];
 
   const today = new Date();
-  const dataInvite = association?.invites.map((invite: any, index: number) => {
-    const inviteDate = new Date(invite.createdAt);
+  const dataInvite = association?.invites?.map((invite: any, index: number) => {
+    const inviteDate = new Date(invite?.createdAt);
     const timeDifference = today.getTime() - inviteDate.getTime();
 
     const expiresInDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
     return {
       key: index,
-      name: invite.name,
-      email: invite.email,
-      user_type: invite.user_type,
+      name: invite?.name,
+      email: invite?.email,
+      user_type: invite?.user_type,
       expiresIn: expiresInDays > 0 ? `${expiresInDays} days` : "Expired",
     };
   });
@@ -188,19 +206,20 @@ const DashboardAssociations = () => {
   const [tableData, setTableData] = useState(data);
 
   const handleAccept = (record: any) => {
-    console.log(`Accepted: ${record.candidate}`);
+    console.log(`Accepted: ${record?.candidate}`);
     // Filter out the row with the accepted candidate
-    const updatedData = tableData.filter((item) => item.key !== record.key);
+    const updatedData = tableData.filter((item) => item?.key !== record?.key);
     setTableData(updatedData);
   };
 
   const handleReject = (record: any) => {
-    console.log(`Rejected: ${record.candidate}`);
+    console.log(`Rejected: ${record?.candidate}`);
     // Filter out the row with the rejected candidate
-    const updatedData = tableData.filter((item) => item.key !== record.key);
+    const updatedData = tableData.filter((item) => item?.key !== record?.key);
     setTableData(updatedData);
   };
 
+  console.log(association);
   return (
     <div className={styling.main}>
       {/* Profile component */}

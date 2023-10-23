@@ -37,7 +37,7 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   );
 
   const [description, setDescription] = useState<string>(
-    companyInfo.description || ""
+    companyInfo.company_description || ""
   );
   const [values, setValues] = useState<string[]>(companyInfo.values || []);
   const [address, setAddress] = useState<string>(companyInfo.address || "");
@@ -57,7 +57,7 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
       company_id: companyId,
       company_name: company_name,
       company_size: company_size,
-      description: description,
+      company_description: description,
       company_address: address,
       values: values,
       kununu_url: kununu_url,

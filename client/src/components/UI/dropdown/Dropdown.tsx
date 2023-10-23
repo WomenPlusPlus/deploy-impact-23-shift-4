@@ -5,6 +5,8 @@ import "./Dropdown.css";
 interface DropdownProps {
   icon: any;
   items: ItemType[];
+  width?: number;
+  trigger?: ("click" | "hover" | "contextMenu")[] | undefined;
   placement:
     | "topLeft"
     | "topCenter"
@@ -19,13 +21,16 @@ interface DropdownProps {
 interface ItemType {
   key: string;
   label: React.ReactNode;
+  width?: number;
   onClick?: () => void;
 }
 
 const DropdownComponent: React.FC<DropdownProps> = ({
   icon,
   items,
+  width,
   placement,
+  trigger,
 }) => (
   <ConfigProvider
     theme={{
@@ -39,7 +44,8 @@ const DropdownComponent: React.FC<DropdownProps> = ({
     <Dropdown
       menu={{ items }}
       placement={placement}
-      overlayStyle={{ width: "15rem" }}
+      overlayStyle={{ width: width }}
+      trigger={trigger}
     >
       {icon}
     </Dropdown>

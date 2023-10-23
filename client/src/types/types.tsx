@@ -32,12 +32,16 @@ export interface Candidate {
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
-  visible_information?: { [key: string]: any };
+  visible_information?: string[];
   experience?: { [key: string]: any }[];
   visa_status?: string[];
   salary_expectation?: string[];
   possible_work_locations?: string[];
   type_of_work?: string[];
+  saved_items?: string[];
+  date_profile_modified?: string;
+  package_requested?: { [key: string]: any }[];
+  requested_jobs?: string[];
 }
 
 export interface EditInputProps<Candidate> {
@@ -67,6 +71,13 @@ export interface Company {
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
+  company_type?: string;
+  company_description?: string;
+  company_website?: string;
+  company_industry?: string[];
+  saved_items?: string[];
+  shared_candidate_packages?: string[];
+  interested_candidates?: object[];
 }
 
 export interface Experience {
@@ -85,9 +96,8 @@ export interface Job {
   skills?: Skill[];
   soft_skills?: string[];
   hiring_process_duration?: string;
-  posting_date?: string; // Use a string or Date type as per your requirements
-  matching_candidates?: Record<string, any>[]; // JSON object
-  salary?: number;
+  matching_candidates?: { [key: string]: any }[];
+  salary?: string[]; // array of 2 strings, min and max salary range
   location_city?: string;
   location_country?: string;
   work_location?: string;
@@ -107,7 +117,7 @@ export interface Association {
 }
 export interface Skill {
   skill_name: string;
-  skill_id: string;
+  skill_id?: string;
   skill_level?: string;
   score?: number;
 }

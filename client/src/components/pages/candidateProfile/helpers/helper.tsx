@@ -159,6 +159,10 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   salary_expectation: "Job Preferences",
   possible_work_locations: "Job Preferences",
   type_of_work: "Job Preferences",
+  package_requested: "",
+  saved_items: "",
+  date_profile_modified: "",
+  requested_jobs: "",
 };
 
 const categoryFieldMapping: Record<string, number> = {};

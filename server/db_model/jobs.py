@@ -1,5 +1,4 @@
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
+from sqlalchemy import text
 
 
 def init_jobs_model(db):
@@ -11,7 +10,7 @@ def init_jobs_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )
@@ -25,21 +24,26 @@ def init_jobs_model(db):
             db.ARRAY(db.String)
         )  # Values as an array of foreign keys (integer)
         skills = db.Column(db.JSON)  # Skills as an array of foreign keys (integer)
-        soft_skills = db.Column(db.ARRAY(db.String))  # Soft skills as an array of strings
+        soft_skills = db.Column(
+            db.ARRAY(db.String)
+        )  # Soft skills as an array of strings
         hiring_process_duration = db.Column(
             db.String(256)
         )  # Interview process duration as a string
-        posting_date = db.Column(db.Date)  # Posting date as a date
         matching_candidates = db.Column(
             db.JSON
         )  # Matching candidates as an array of foreign keys (integer)
         salary = db.Column(
-            db.Numeric(10, 2)
-        )  # Salary as a numeric value with 2 decimal places
+            db.ARRAY(db.String)
+        )  # Salary expectation as an array of strings e.g ['50k', '70k']
         location_city = db.Column(db.String(256))  # Location as a string
         location_country = db.Column(db.String(256))  # Location as a string
-        work_location = db.Column(db.String(256))  # Job type as a string (hybrid, remote, etc.)
-        employment_type = db.Column(db.String(256))  # Job type as a string (full-time, part-time, etc.)
+        work_location = db.Column(
+            db.String(256)
+        )  # Job type as a string (hybrid, remote, onsite)
+        employment_type = db.Column(
+            db.String(256)
+        )  # Job type as a string (full-time, part-time, internship)
         date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
         def __init__(
@@ -52,7 +56,6 @@ def init_jobs_model(db):
             skills=None,
             soft_skills=None,
             hiring_process_duration=None,
-            posting_date=None,
             matching_candidates=None,
             salary=None,
             location_city=None,
@@ -75,14 +78,13 @@ def init_jobs_model(db):
             self.skills = skills
             self.soft_skills = soft_skills
             self.hiring_process_duration = hiring_process_duration
-            self.posting_date = posting_date
             self.matching_candidates = matching_candidates
             self.salary = salary
             self.location_city = location_city
             self.location_country = location_country
-            self.date_created = date_created
             self.work_location = work_location
             self.employment_type = employment_type
+            self.date_created = date_created
 
         def to_dict(self):
             """
@@ -98,16 +100,15 @@ def init_jobs_model(db):
                 "skills": self.skills,
                 "soft_skills": self.soft_skills,
                 "hiring_process_duration": self.hiring_process_duration,
-                "posting_date": self.posting_date.isoformat()
-                if self.posting_date
-                else None,
                 "matching_candidates": self.matching_candidates,
-                "salary": float(self.salary) if self.salary is not None else None,
+                "salary": self.salary,
                 "location_city": self.location_city,
                 "location_country": self.location_country,
-                "date_created": self.date_created.isoformat(),
                 "work_location": self.work_location,
                 "employment_type": self.employment_type,
+                "date_created": self.date_created.isoformat()
+                if self.date_created
+                else None,
             }
 
     return Jobs
