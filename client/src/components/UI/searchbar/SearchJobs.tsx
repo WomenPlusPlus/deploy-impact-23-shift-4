@@ -16,9 +16,9 @@ interface SearchableField {
     salary?: string;
   }
 
-const isJob = (item: Company | Job): item is Job => {
-  return (item as Job).title !== undefined;
-};
+// const isJob = (item: Company | Job): item is Job => {
+//   return (item as Job).title !== undefined;
+// };
 
 const SearchJobs: React.FC<SearchJobsProps> = ({ onSearch, data }) => {
   const [query, setQuery] = useState<string>("");
