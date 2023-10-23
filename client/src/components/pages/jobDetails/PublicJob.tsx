@@ -19,6 +19,7 @@ import { TimeAgo } from "../candidateProfile/helpers/helper";
 import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
 import { Labels } from "../../UI/labels/Label";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
+import ApplyModal from "./applyModal/ApplyModal";
 
 const PublicJob = () => {
   // Job id from url
@@ -32,7 +33,17 @@ const PublicJob = () => {
   const [jobData, setJobData] = useState<Job>({} as Job);
   const [companyData, setCompanyData] = useState<Company>();
   const [isSaved, setIsSaved] = useState(false);
+  const [isApplyModalOpen, setApplyModalOpen] = useState(false);
 
+  const toggleApplyModal = () => {
+    setApplyModalOpen(!isApplyModalOpen);
+    console.log("toggle");
+  };
+
+  /**
+   * Get job and company data
+   * @param id - job id
+   */
   const getInfo = async (id: string) => {
     const getJob = await getJobById(id);
     const candidate = await getCandidateById(userId);
@@ -168,8 +179,18 @@ const PublicJob = () => {
       {/* Accepting applications */}
       <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
         <h1 className={styling.titles}>Accepting applications</h1>
-        <Button className={styling.applyButton}>Apply</Button>
+        <Button className={styling.applyButton} onClick={toggleApplyModal}>
+          Share your interest in the position
+        </Button>
       </CardContainer>
+
+      <ApplyModal
+        isApplyModalOpen={isApplyModalOpen}
+        companyId={jobData?.company_id}
+        jobId={jobData?.id}
+        candidateId={candidate?.user_id}
+        callback={toggleApplyModal}
+      />
 
       <CardContainer className={styling.cardCont}>
         <h1 className={styling.titles}>Company details</h1>
