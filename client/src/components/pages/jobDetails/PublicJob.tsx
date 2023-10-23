@@ -20,6 +20,7 @@ import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide
 import { Labels } from "../../UI/labels/Label";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import ApplyModal from "./applyModal/ApplyModal";
+import { get } from "http";
 
 const PublicJob = () => {
   // Job id from url
@@ -39,7 +40,15 @@ const PublicJob = () => {
 
   const toggleApplyModal = () => {
     setApplyModalOpen(!isApplyModalOpen);
-    console.log("toggle");
+    getInfo(id ?? "");
+  };
+
+  const isApplied = () => {
+    const requestedJobs = candidate?.requested_jobs;
+    if (requestedJobs) {
+      return requestedJobs.includes(jobData?.id);
+    }
+    return false;
   };
 
   /**
@@ -53,6 +62,7 @@ const PublicJob = () => {
       const candidate = await getCandidateById(userId);
       const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
       setIsSaved(fetchIsSaved);
+      setCandidate(candidate);
     }
 
     if (getJob) {
@@ -60,7 +70,6 @@ const PublicJob = () => {
       setCompanyData(getCompany);
       setJobData(getJob);
     }
-    setCandidate(candidate);
   };
 
   useEffect(() => {
@@ -104,7 +113,7 @@ const PublicJob = () => {
       });
     }
   };
-
+  console.log("CANDIDATE", candidate);
   return (
     <div className={styling.main}>
       {/* First line */}
@@ -184,8 +193,14 @@ const PublicJob = () => {
       {/* Accepting applications */}
       <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
         <h1 className={styling.titles}>Accepting applications</h1>
-        <Button className={styling.applyButton} onClick={toggleApplyModal}>
-          Show your interest in the position
+        <Button
+          className={styling.applyButton}
+          onClick={toggleApplyModal}
+          disabled={isApplied()}
+        >
+          {isApplied()
+            ? "You have already shown interest in this position"
+            : "Show your interest in the position"}
         </Button>
       </CardContainer>
 

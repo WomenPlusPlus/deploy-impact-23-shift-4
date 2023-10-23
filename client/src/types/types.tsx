@@ -41,6 +41,7 @@ export interface Candidate {
   saved_items?: string[];
   date_profile_modified?: string;
   package_requested?: { [key: string]: any }[];
+  requested_jobs?: string[];
 }
 
 export interface EditInputProps<Candidate> {

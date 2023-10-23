@@ -2,6 +2,7 @@ import { useState } from "react";
 import ToggleModal from "../../../shared/toggleModal/ToggleModal";
 import { updateCompanyById } from "../../../../api/companies";
 import { Candidate, Company } from "../../../../types/types";
+import { updateCandidateById } from "../../../../api/candidates";
 
 interface ApplyModalProps {
   company: Company | undefined;
@@ -48,9 +49,19 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
    * @param enabledStrings - strings that are enabled
    */
   const handleShare = async (enabledStrings: string[], message: string) => {
-    let existingInterestedCandidates: object[] | undefined =
-      company?.interested_candidates;
+    console.log("Enabled Strings:", enabledStrings);
+    const requestedJobs = candidate?.requested_jobs || [];
 
+    console.log("requestedJobs", requestedJobs);
+    console.log("candidate id", candidate);
+    requestedJobs?.push(jobId);
+    await updateCandidateById(candidate?.user_id ?? "", {
+      requested_jobs: requestedJobs,
+    });
+
+    let existingInterestedCandidates = company?.interested_candidates || [];
+
+    console.log(candidate?.user_id);
     const newInterestedCandidate = {
       job_id: jobId,
       candidate_id: candidate?.user_id,
@@ -58,18 +69,15 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
       message: message,
     };
 
-    if (existingInterestedCandidates) {
-      existingInterestedCandidates = [
-        ...existingInterestedCandidates,
-        newInterestedCandidate,
-      ];
+    existingInterestedCandidates = [
+      ...existingInterestedCandidates,
+      newInterestedCandidate,
+    ];
 
-      await updateCompanyById(company?.user_id ?? "", {
-        interested_candidates: existingInterestedCandidates,
-      });
-      callback?.();
-      return;
-    }
+    await updateCompanyById(company?.user_id ?? "", {
+      interested_candidates: existingInterestedCandidates,
+    });
+    callback?.();
   };
 
   /**
