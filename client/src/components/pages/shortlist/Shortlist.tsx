@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
-import { getCandidateById } from "../../../api/candidates";
+import { getAllCandidates, getCandidateById } from "../../../api/candidates";
 import { Candidate, Company, Job } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
-import { getAllCompanies } from "../../../api/companies";
+import { getAllCompanies, getCompanyById } from "../../../api/companies";
+import Card from "../../UI/card/Card";
 
 const Shortlist = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState({} as Candidate);
+  const [company, setCompany] = useState({} as Company);
   const [jobs, setJobs] = useState([] as Job[]);
+  const [candidates, setCandidates] = useState([] as Candidate[]);
   const [companies, setCompanies] = useState([] as Company[]);
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const user_type = JSON.parse(localStorage.getItem("auth") || "{}")?.user
@@ -38,6 +41,33 @@ const Shortlist = () => {
       setCandidate(candidate);
       setCompanies(allCompanies);
     }
+    if (user_type === "company") {
+      const company = await getCompanyById(userId);
+      const allCandidates = await getAllCandidates();
+      setCompany(company);
+      setCandidate(allCandidates);
+
+      // fetch all jobs from company's shortlist
+      const candidatesIds = company?.saved_items;
+
+      if (candidatesIds && candidatesIds?.length > 0) {
+        // Use Promise.all to fetch candidates concurrently
+        try {
+          const candidatePromises = candidatesIds?.map(
+            async (candidateId: string) => {
+              return getCandidateById(candidateId);
+            }
+          );
+          // Wait for all candidate fetch promises to resolve
+          const candidates = await Promise.all(candidatePromises);
+          // candidates is now an array of type Candidate[]
+          console.log(candidates);
+          setCandidates(candidates);
+        } catch (error) {
+          console.log("ERROR:", error);
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -59,6 +89,26 @@ const Shortlist = () => {
                 candidate={candidate}
                 onClick={() => navigate(`/job/${job?.id}`)}
                 isMatchVisible={true}
+              />
+            ))}
+        </div>
+      )}
+      {user_type === "company" && (
+        <div className={styling.cardContainer}>
+          {candidates &&
+            candidates?.length > 0 &&
+            candidates?.map((candidate, index) => (
+              <Card
+                key={index}
+                candidate={candidate}
+                company={company}
+                subheader="Software Engineer"
+                associations={candidate?.associations}
+                skills={candidate?.skills}
+                onClickRedirect={() => {
+                  navigate(`/candidate/${candidate?.user_id}`);
+                }}
+                isBookmarkVisible={true}
               />
             ))}
         </div>

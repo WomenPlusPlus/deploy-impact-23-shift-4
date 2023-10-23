@@ -56,16 +56,21 @@ const Sidebar: React.FC<SidebarProps> = ({
   // Set permissions for sidebar items
   const isCompaniesVisible = auth?.user?.user_type === "company" ? false : true;
   const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
-  const isShortListVisible = auth?.user?.user_type === "association" ? false : true;
+  const isShortListVisible =
+    auth?.user?.user_type === "association" ? false : true;
 
   const items: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
-    getItem("Jobs", "jobs", <IconDeviceLaptop />),
+    isCompaniesVisible
+      ? getItem("Jobs", "jobs", <IconDeviceLaptop />)
+      : getItem("My Jobs", "jobs", <IconDeviceLaptop />),
     isCompaniesVisible
       ? getItem("Companies", "companies", <IconBuildingSkyscraper />)
       : null,
     isTalentVisible ? getItem("Talent", "candidates", <IconStar />) : null,
-    isShortListVisible ? getItem("Short List", "saved", <IconBookmarks />) : null,
+    isShortListVisible
+      ? getItem("Short List", "saved", <IconBookmarks />)
+      : null,
     getItem("Logout", "logout", <IconLogout2 />),
   ];
 
