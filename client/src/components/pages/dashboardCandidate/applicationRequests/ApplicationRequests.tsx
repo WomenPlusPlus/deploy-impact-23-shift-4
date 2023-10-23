@@ -38,7 +38,7 @@ const ApplicationRequests = () => {
     true,
     true,
   ]);
-  const [selectedRecord, setSelectedRecord] = useState<any | null>(null); // Initialize as null
+  const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
 
   const handleOk = (enabledStrings: string[]) => {
     setIsModalOpen(false);

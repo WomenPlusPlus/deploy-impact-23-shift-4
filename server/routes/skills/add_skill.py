@@ -10,11 +10,11 @@ def add_skill_route(Skills, db):
         if request.method == "POST":
             data = request.get_json()
             name = data.get("name")
-            field = data.get("field")
+            category = data.get("category")
 
             new_skill = Skills(
                 name=name,
-                field=field,
+                category=category,
             )
 
             db.session.add(new_skill)

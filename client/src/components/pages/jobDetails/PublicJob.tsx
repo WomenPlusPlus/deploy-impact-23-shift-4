@@ -14,23 +14,56 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
-import { Job, Company } from "../../../types/types";
+import { Job, Company, Candidate } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
 import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
 import { Labels } from "../../UI/labels/Label";
+import { getCandidateById, updateCandidateById } from "../../../api/candidates";
+import ApplyModal from "./applyModal/ApplyModal";
+import { get } from "http";
 
 const PublicJob = () => {
   // Job id from url
   const { id } = useParams<{ id: string }>();
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
+  const usetType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
   const iconSize = 20;
   const companyIconSize = 15;
   const matchScore = 80;
   // state
-  const [jobData, setJobData] = useState<Job>();
+  const [candidate, setCandidate] = useState<Candidate>();
+  const [jobData, setJobData] = useState<Job>({} as Job);
   const [companyData, setCompanyData] = useState<Company>();
+  const [isSaved, setIsSaved] = useState(false);
+  const [isApplyModalOpen, setApplyModalOpen] = useState(false);
 
+  const toggleApplyModal = () => {
+    setApplyModalOpen(!isApplyModalOpen);
+    getInfo(id ?? "");
+  };
+
+  const isApplied = () => {
+    const requestedJobs = candidate?.requested_jobs;
+    if (requestedJobs) {
+      return requestedJobs.includes(jobData?.id);
+    }
+    return false;
+  };
+
+  /**
+   * Get job and company data
+   * @param id - job id
+   */
   const getInfo = async (id: string) => {
     const getJob = await getJobById(id);
+
+    if (usetType === "candidate") {
+      const candidate = await getCandidateById(userId);
+      const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
+      setIsSaved(fetchIsSaved);
+      setCandidate(candidate);
+    }
 
     if (getJob) {
       const getCompany = await getCompanyById(getJob?.company_id ?? "");
@@ -43,6 +76,44 @@ const PublicJob = () => {
     getInfo(id ?? "");
   }, [id]);
 
+  const saveJob = async () => {
+    // add to local storage
+    setIsSaved(!isSaved);
+    // if not yet saved
+    if (!isSaved) {
+      // Check if the job is already saved
+      const isJobSaved = candidate?.saved_items?.includes(jobData?.id);
+      if (isJobSaved) {
+        return;
+      } else {
+        localStorage.setItem(
+          "saved_items",
+          JSON.stringify([...(candidate?.saved_items || []), jobData?.id])
+        );
+        await updateCandidateById(candidate?.user_id || "", {
+          saved_items: [...(candidate?.saved_items || []), jobData?.id],
+        });
+      }
+    } else {
+      // if already saved
+      const savedItems = JSON.parse(
+        localStorage.getItem("saved_items") || "[]"
+      );
+      // Check if the job is already saved in local storage
+      const isJobSaved = savedItems.includes(jobData?.id);
+      if (!isJobSaved) {
+        return;
+      }
+      const filtered = savedItems.filter(
+        (savedItem: string) => savedItem !== jobData?.id
+      );
+      localStorage.setItem("saved_items", JSON.stringify(filtered));
+      await updateCandidateById(candidate?.user_id || "", {
+        saved_items: filtered,
+      });
+    }
+  };
+  console.log("CANDIDATE", candidate);
   return (
     <div className={styling.main}>
       {/* First line */}
@@ -63,8 +134,12 @@ const PublicJob = () => {
           </p>
         </div>
         <div className={styling.row}>
-          <IconBookmark />
-          <Button>Apply</Button>
+          {isSaved ? (
+            <IconBookmark className={styling.savedBookmark} onClick={saveJob} />
+          ) : (
+            <IconBookmark className={styling.bookmark} onClick={saveJob} />
+          )}
+          <Button className={styling.companyButton}>Apply</Button>
         </div>
       </div>
 
@@ -118,8 +193,24 @@ const PublicJob = () => {
       {/* Accepting applications */}
       <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
         <h1 className={styling.titles}>Accepting applications</h1>
-        <Button className={styling.applyButton}>Apply</Button>
+        <Button
+          className={styling.applyButton}
+          onClick={toggleApplyModal}
+          disabled={isApplied()}
+        >
+          {isApplied()
+            ? "You have already shown interest in this position"
+            : "Show your interest in the position"}
+        </Button>
       </CardContainer>
+
+      <ApplyModal
+        isApplyModalOpen={isApplyModalOpen}
+        company={companyData}
+        jobId={jobData?.id}
+        candidate={candidate}
+        callback={toggleApplyModal}
+      />
 
       <CardContainer className={styling.cardCont}>
         <h1 className={styling.titles}>Company details</h1>
@@ -163,12 +254,12 @@ const PublicJob = () => {
             </div>
           </div>
           <div className={styling.row}>
-            <Button>Company Profile</Button>
+            <Button className={styling.companyButton}>View company</Button>
           </div>
-          <div>
-            <h2 className={styling.h2Title}>About us</h2>
-            <p>{companyData?.company_description}</p> 
-          </div>
+        </div>
+        <div>
+          <h2 className={styling.h2Title}>About us</h2>
+          <p>{companyData?.company_description}</p>
         </div>
       </CardContainer>
     </div>

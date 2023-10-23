@@ -25,6 +25,8 @@ const JobCard: React.FC<JobCardProps> = ({
 }) => {
   // state
   const [isSaved, setIsSaved] = React.useState(false);
+  const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
 
   const truncatedDescription: string | undefined = job?.description
     ? typeof job?.description === "string" && job?.description?.length > 150
@@ -59,7 +61,7 @@ const JobCard: React.FC<JobCardProps> = ({
 
     matchScore = matchScores.reduce((acc: any, score: any) => acc + score, 0);
   }
-  // SAVE BASED ON IF CANIDATE OR COMPANY
+
   const saveJob = async () => {
     // add to local storage
     setIsSaved(!isSaved);
@@ -125,16 +127,18 @@ const JobCard: React.FC<JobCardProps> = ({
               </p>
             </div>
           </div>
-          <div>
-            {isSaved ? (
-              <IconBookmark
-                className={`${styling.bookmark} ${styling.savedBookmark}`}
-                onClick={saveJob}
-              />
-            ) : (
-              <IconBookmark className={styling.bookmark} onClick={saveJob} />
-            )}
-          </div>
+          {userType === "candidate" && (
+            <div>
+              {isSaved ? (
+                <IconBookmark
+                  className={`${styling.bookmark} ${styling.savedBookmark}`}
+                  onClick={saveJob}
+                />
+              ) : (
+                <IconBookmark className={styling.bookmark} onClick={saveJob} />
+              )}
+            </div>
+          )}
         </div>
 
         <div className={styling.jobDescription}>

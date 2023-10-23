@@ -16,10 +16,10 @@ def get_all_jobs_route(Jobs):
             if request.method == "GET":
                 jobs = Jobs.query.all()
                 result = []
-
                 for job in jobs:
+                    print("JOB",job.to_dict())
                     result.append(job.to_dict())
-
+                print("RES",result)
             return jsonify({"jobs": result}), 200
         except Exception as e:
             jsonify({"message": f"Error getting jobs: {e}"}), 500

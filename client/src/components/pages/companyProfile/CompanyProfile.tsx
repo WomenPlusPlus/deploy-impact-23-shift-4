@@ -241,6 +241,7 @@ const CompanyProfile = () => {
         onCancel={toggleAddJobModal}
         confirmLoading={confirmLoading}
         companyId={company?.user_id}
+        companyValues={company?.values || []}
         associations={company?.associations}
       />
     </>

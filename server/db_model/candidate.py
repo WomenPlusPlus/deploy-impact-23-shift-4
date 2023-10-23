@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from sqlalchemy import text
 
+
 def init_candidate_model(db):
     class Candidate(db.Model, UserMixin):
         """
@@ -79,6 +80,9 @@ def init_candidate_model(db):
         )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
         date_profile_modified = db.Column(db.DateTime)
         package_requested = db.Column(db.JSON)  # Package requestes from the company
+        requested_jobs = db.Column(
+            db.ARRAY(db.String)
+        )  # Array with ids form jobs requested by the candidate
 
         def __init__(
             self,
@@ -117,6 +121,7 @@ def init_candidate_model(db):
             saved_items=None,
             date_profile_modified=None,
             package_requested=None,
+            requested_jobs=None,
         ):
             """
             Initialize a new candidate object.
@@ -159,6 +164,7 @@ def init_candidate_model(db):
             self.saved_items = saved_items
             self.date_profile_modified = date_profile_modified
             self.package_requested = package_requested
+            self.requested_jobs = requested_jobs
 
         def to_dict(self):
             """
@@ -202,6 +208,7 @@ def init_candidate_model(db):
                 if self.date_profile_modified
                 else None,
                 "package_requested": self.package_requested,
+                "requested_jobs": self.requested_jobs,
             }
 
     return Candidate
