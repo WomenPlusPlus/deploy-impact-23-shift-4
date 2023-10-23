@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ToggleModal from "../../../shared/toggleModal/ToggleModal";
-import { updateCompanyById } from "../../../../api/companies";
+import { getCompanyById, updateCompanyById } from "../../../../api/companies";
 
 interface ApplyModalProps {
   companyId: string;
@@ -47,13 +47,19 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
    * @param enabledStrings - strings that are enabled
    */
   const handleShare = async (enabledStrings: string[], message: string) => {
+    const company = await getCompanyById(companyId);
+    const existingInterestedCandidates = company?.interested_candidates;
+
+    const newInterestedCandidate = {
+      job_id: jobId,
+      candidate_id: candidateId,
+      visible_informations: enabledStrings,
+      message: message,
+    };
+    existingInterestedCandidates.push(newInterestedCandidate);
+
     await updateCompanyById(companyId, {
-      interested_candidates: {
-        job_id: jobId,
-        candidate_id: candidateId,
-        visible_informations: enabledStrings,
-        message: message,
-      },
+      interested_candidates: existingInterestedCandidates,
     });
 
     callback?.();
