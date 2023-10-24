@@ -21,8 +21,8 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
 
   const authCheck = async () => {
     //
-    const { data } = await axios.post("/api/check_authentication", {
-      user_id: JSON.parse(localStorage.getItem("auth") || "{}").user.id,
+    const { data } = await axios.get("/api/check_authentication", {
+      withCredentials: true,
     });
 
     console.log("AUTH", data);
@@ -71,7 +71,8 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
           </AntLayout>
         </Space>
       ) : (
-        <LoginRedirect />
+        // <LoginRedirect />
+        <div>Not Authenticated</div>
       )}
     </>
   );

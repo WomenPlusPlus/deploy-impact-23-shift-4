@@ -106,7 +106,7 @@ app.register_blueprint(logout_bp)
 app.register_blueprint(protected_bp)
 app.register_blueprint(send_invite_bp)
 app.register_blueprint(verify_invite_bp)
-app.register_blueprint(check_auth.check_authentication_route(User))
+app.register_blueprint(check_auth.check_authentication_route())
 app.register_blueprint(get_users.get_all_users_route(User))
 app.register_blueprint(delete_user.delete_user_route(User, Candidate, Company, db))
 app.register_blueprint(get_user_by_id.get_user_by_id_route(User))
@@ -132,20 +132,20 @@ app.register_blueprint(update_job.update_job_route(Jobs, db))
 app.register_blueprint(match_candidates.match_candidates_route())
 
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     """
-#     Load a user by their user ID.
-#     Necessary for logout.
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    Load a user by their user ID.
+    Necessary for logout.
 
-#     Args:
-#         user_id (int): The user's ID.
+    Args:
+        user_id (int): The user's ID.
 
-#     Returns:
-#         User: The User object associated with the provided user ID.
-#     """
-#     print("load_user", user_id)
-#     return User.query.get(User.id == int(user_id))
+    Returns:
+        User: The User object associated with the provided user ID.
+    """
+    print("load_user", user_id)
+    return User.query.get(user_id)
 
 
 @app.after_request
