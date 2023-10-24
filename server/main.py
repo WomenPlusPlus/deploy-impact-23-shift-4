@@ -45,6 +45,7 @@ from routes.jobs import add_job
 from routes.jobs import delete_job
 from routes.jobs import update_job
 from routes.matching import match_candidates
+from routes.matching import match_jobs
 
 # Env
 from dotenv import load_dotenv
@@ -84,7 +85,7 @@ db.Column(UUID(as_uuid=True))
 
 # Login manager
 login_manager = LoginManager(app)
-login_manager.login_view = "auth.login"
+login_manager.login_view = "login.login"
 login_manager.init_app(app)
 
 # Models
@@ -130,6 +131,7 @@ app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
 app.register_blueprint(match_candidates.match_candidates_route())
+app.register_blueprint(match_jobs.match_jobs_route())
 
 
 @login_manager.user_loader
