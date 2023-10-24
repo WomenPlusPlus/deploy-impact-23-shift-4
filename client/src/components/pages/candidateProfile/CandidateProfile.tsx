@@ -297,7 +297,7 @@ const CandidateProfile = () => {
             <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
             <ToggleModal
               visible={showToggleModal}
-              strings={allCategories}
+              allCategories={allCategories}
               selectedStrings={selectedStrings}
               title="Visible Information"
               subtitle="Choose what information you want to be visible to recruiters."

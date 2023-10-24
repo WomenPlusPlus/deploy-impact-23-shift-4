@@ -80,6 +80,7 @@ def init_candidate_model(db):
         )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
         date_profile_modified = db.Column(db.DateTime)
         package_requested = db.Column(db.JSON)  # Package requestes from the company
+        package_accepted = db.Column(db.JSON)  # Package accepted by the candidate
         requested_jobs = db.Column(
             db.ARRAY(db.String)
         )  # Array with ids form jobs requested by the candidate
@@ -121,6 +122,7 @@ def init_candidate_model(db):
             saved_items=None,
             date_profile_modified=None,
             package_requested=None,
+            package_accepted=None,
             requested_jobs=None,
         ):
             """
@@ -164,6 +166,7 @@ def init_candidate_model(db):
             self.saved_items = saved_items
             self.date_profile_modified = date_profile_modified
             self.package_requested = package_requested
+            self.package_accepted = package_accepted
             self.requested_jobs = requested_jobs
 
         def to_dict(self):
@@ -208,6 +211,7 @@ def init_candidate_model(db):
                 if self.date_profile_modified
                 else None,
                 "package_requested": self.package_requested,
+                "package_accepted": self.package_accepted,
                 "requested_jobs": self.requested_jobs,
             }
 

@@ -71,8 +71,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
           </AntLayout>
         </Space>
       ) : (
-        // <LoginRedirect />
-        <div>Not Authenticated</div>
+        <LoginRedirect />
       )}
     </>
   );

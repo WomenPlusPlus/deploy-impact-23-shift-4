@@ -41,6 +41,9 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   );
   const [values, setValues] = useState<string[]>(companyInfo.values || []);
   const [address, setAddress] = useState<string>(companyInfo.address || "");
+  const [company_website, setCompanyWebsite] = useState<string>(
+    companyInfo.company_website || ""
+  );
   const [kununu_url, setKununuUrl] = useState<string>(
     companyInfo.kununu_url || ""
   );
@@ -58,10 +61,11 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
       company_name: company_name,
       company_size: company_size,
       company_description: description,
-      company_address: address,
+      address: address,
       values: values,
       kununu_url: kununu_url,
       linkedin_url: linkedin_url,
+      company_website: company_website,
       logo: logo,
     };
 
@@ -194,6 +198,16 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
           </div>
 
           {renderValueLabels()}
+        </div>
+
+        <div className={styling.section}>
+          <p className={styling.sectionName}>Company URL:</p>
+          <Input
+            className={styling.input}
+            placeholder="Company URL"
+            value={company_website}
+            onChange={(e) => setCompanyWebsite(e.target.value)}
+          />
         </div>
 
         <div className={styling.section}>

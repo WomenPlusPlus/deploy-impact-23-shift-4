@@ -25,6 +25,7 @@ interface Props {
 }
 
 const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
+  const candidateId = candidate?.user_id;
   const [sectionsExperience, setSectionsExperience] = useState([] as Section[]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isPackageVisible, setIsPackageVisible] = useState(false);
@@ -162,6 +163,7 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
               Request access
             </Button>
             <RequestAccess
+              candidateId={candidateId}
               show={isModalVisible}
               setShow={setIsModalVisible}
               jobs={matchingJobs}

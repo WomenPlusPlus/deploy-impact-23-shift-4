@@ -68,9 +68,9 @@ const Jobs = () => {
       {header()}
       <div className={styling.cardContainer}>
         {jobs &&
-          jobs?.map((job) => (
+          jobs?.map((job, index) => (
             <JobCard
-              key={job?.id}
+              key={index}
               job={job}
               companies={companies}
               candidate={candidate}
