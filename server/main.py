@@ -84,7 +84,7 @@ db.Column(UUID(as_uuid=True))
 
 # Login manager
 login_manager = LoginManager(app)
-login_manager.login_view = "login"
+login_manager.login_view = "auth.login"
 login_manager.init_app(app)
 
 # Models
