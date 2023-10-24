@@ -67,11 +67,7 @@ const CompanyProfile = () => {
    * @param payload the job data to add
    */
   const handleAddJobPayload = async (payload: object) => {
-    const newJob = await addJob(payload);
-
-    const match = await getMatchCandidates(newJob?.job_id);
-    console.log(newJob);
-    console.log("MATCH", match);
+    await addJob(payload);
 
     setConfirmLoading(true);
     setOpen(false);

@@ -49,7 +49,7 @@ def match_jobs_route():
                     skill["skill_name"]: skill["skill_level"]
                     for skill in candidate.json()["candidates"]["skills"]
                 }
-                # candidate.json()['candidates']['skills']['technicalSkills']
+                
                 jobs_response = requests.get("http://localhost:5001/api/get_all_jobs")
                 jobs = jobs_response.json()["jobs"]
 
