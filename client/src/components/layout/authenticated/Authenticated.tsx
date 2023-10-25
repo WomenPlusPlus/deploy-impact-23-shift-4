@@ -20,19 +20,22 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const authCheck = async () => {
-    //
-    const { data } = await axios.get("/api/check_authentication", {
-      withCredentials: true,
-    });
+    try {
+      const { data } = await axios.get("/api/check_authentication", {
+        withCredentials: true,
+      });
 
-    console.log("AUTH", data);
-    if (data?.authenticated) {
-      setIsAuth(true);
-    } else {
-      setIsAuth(false);
+      setTimeout(() => {
+        if (data?.authenticated) {
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+        }
+      }, 3000);
+    } catch (error) {
+      console.log("error", error);
     }
   };
-
   useEffect(() => {
     authCheck();
     // Save the selected component in sessionStorage
