@@ -17,7 +17,7 @@ const LoginRedirect: React.FC = () => {
       setCount((currentCount) => --currentCount);
     }, 1000);
     //  redirect once count is equal to 0
-    // count === 0 && navigate(`/login`, { state: location.pathname });
+    count === 0 && navigate(`/login`, { state: location.pathname });
     // cleanup
     return () => clearInterval(interval);
     // eslint-disable-next-line
