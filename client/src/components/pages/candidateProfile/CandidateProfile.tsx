@@ -12,8 +12,12 @@ import { EditExperience } from "./modal/EditExperience";
 import { EditJobSearchPref } from "./modal/EditJobSearchPref";
 import {
   allCategories,
+  allSkill,
+  allTypeOfJob,
+  allValue,
   countNullFieldsByCategory,
-  getFakeData,
+  fieldsToDisplayContactInfo,
+  fieldsToDisplayProfile,
   transformCandidateDocs,
   transformCandidateJobPref,
   transformExperience,
@@ -105,9 +109,9 @@ const CandidateProfile = () => {
 
   useEffect(() => {
     fetchCandidate();
-    setAllSkills(getFakeData().allSkill as []);
-    setAllValues(getFakeData().allValue as []);
-    setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
+    setAllSkills(allSkill as []);
+    setAllValues(allValue as []);
+    setAllTypeOfJobs(allTypeOfJob as []);
   }, []);
 
   // handlers
@@ -251,7 +255,7 @@ const CandidateProfile = () => {
             setVisible={setIsProfileEdit}
             candidate={candidate}
             setValuesToEdit={setCandidate}
-            fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
+            fieldsToDisplay={fieldsToDisplayProfile}
             showModal={editHandlerProfile}
             onSave={handleSaveEdit}
             fieldKeysToEdit={[
@@ -297,7 +301,7 @@ const CandidateProfile = () => {
             <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
             <ToggleModal
               visible={showToggleModal}
-              strings={allCategories}
+              allCategories={allCategories}
               selectedStrings={selectedStrings}
               title="Visible Information"
               subtitle="Choose what information you want to be visible to recruiters."
@@ -496,7 +500,7 @@ const CandidateProfile = () => {
               setVisible={setIsEditContactInfo}
               candidate={candidate}
               setValuesToEdit={setCandidate}
-              fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
+              fieldsToDisplay={fieldsToDisplayContactInfo}
               showModal={editContactInfo}
               onSave={handleSaveEdit}
               fieldKeysToEdit={["phone_number", "email", "address"]}

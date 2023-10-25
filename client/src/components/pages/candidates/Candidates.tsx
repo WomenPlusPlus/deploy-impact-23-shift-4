@@ -8,7 +8,6 @@ import Searchbar from "../../UI/searchbar/Searchbar";
 import { Candidate, Company } from "../../../types/types";
 import { getCompanyById } from "../../../api/companies";
 
-
 const Candidates = () => {
   const skillsOptions = ["JavaScript", "React", "Node.js", "SQL"];
   const associationsOptions = ["Woman++", "Power Coders"];
@@ -16,7 +15,8 @@ const Candidates = () => {
   const navigate = useNavigate();
 
   //State
-  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id || "";
+  const userId =
+    JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id || "";
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
   const [company, setCompany] = useState({} as Company);
@@ -26,6 +26,15 @@ const Candidates = () => {
    */
   const handleFilterChange = (filteredCandidates: Candidate[]) => {
     setFilteredCandidates(filteredCandidates);
+  };
+
+  const takeInitials = (candidate: Candidate) => {
+    const fullName = `${candidate?.first_name} ${candidate?.last_name}`;
+    const initials = fullName
+      .split(" ")
+      .map((name) => name.charAt(0))
+      .join("");
+    return initials;
   };
 
   /**
@@ -75,7 +84,11 @@ const Candidates = () => {
             key={index}
             candidate={candidate}
             company={company}
-            subheader="Software Engineer"
+            header={`${
+              (candidate?.experience && candidate.experience[0]?.role) ||
+              "Software Engineer"
+            }`}
+            // subheader="Software Engineer"
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {

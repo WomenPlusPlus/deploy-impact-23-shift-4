@@ -169,7 +169,7 @@ const JobCard: React.FC<JobCardProps> = ({
             <>
               {job?.skills?.map((skill, index) => (
                 <Labels
-                  key={`technical_${index}`}
+                  key={index}
                   labelName={skill?.skill_name}
                   customClass={styling.label}
                   disableCloseIcon
@@ -177,7 +177,7 @@ const JobCard: React.FC<JobCardProps> = ({
               ))}
               {job?.soft_skills?.map((softSkill, index) => (
                 <Labels
-                  key={`soft_${index}`}
+                  key={index+1}
                   labelName={softSkill}
                   customClass={styling.label}
                   disableCloseIcon

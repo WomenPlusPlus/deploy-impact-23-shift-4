@@ -237,7 +237,7 @@ const PublicJob = () => {
                 <div className={styling.row}>
                   <IconUsers size={companyIconSize} />
                   {companyData?.company_size ? (
-                    <p>companyData?.company_size</p>
+                    <p>{companyData?.company_size}</p>
                   ) : (
                     <p>100-200</p>
                   )}

@@ -79,9 +79,34 @@ const DashboardCompany = () => {
             Welcome back, {company.company_name}
           </h2>
           <div className={styling.subtitle}>
-            <IconMapPin />
-            {company.address} | {company.company_size} employees |
-            <IconBrandLinkedin /> <IconWorldWww />
+            {company?.address ? (
+              <>
+                <IconMapPin />
+                <p className={styling.subtext}>{company?.address}</p>
+              </>
+            ) : (
+              <>
+                <IconMapPin />
+                <p className={styling.subtextNot}>Address not provided</p>
+              </>
+            )}
+            {company.company_size ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <p className={styling.subtext}>
+                  {company.company_size} employees
+                </p>
+              </>
+            ) : null}
+            {company.company_website ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <IconBrandLinkedin
+                  onClick={() => navigate(`${company?.company_website}`)}
+                />{" "}
+                <IconWorldWww />
+              </>
+            ) : null}
           </div>
         </div>
 

@@ -1,36 +1,24 @@
 import { Space, Table } from "antd";
 import { CardContainer } from "../../../UI/container/CardContainer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styling from "./ApplicationRequests.module.scss";
 import ToggleModal from "../../../shared/toggleModal/ToggleModal";
+import { allCategories } from "../../candidateProfile/helpers/helper";
+import { Candidate } from "../../../../types/types";
+import {
+  getCandidateById,
+  updateCandidateById,
+} from "../../../../api/candidates";
+
+interface applicationRequest {
+  key: number;
+  position: string;
+  company: string;
+  companyId?: string;
+}
 
 const ApplicationRequests = () => {
-  const data = [
-    {
-      key: "1",
-      position: "Frontend Developer",
-      company: "The Dream Company",
-    },
-    {
-      key: "2",
-      position: "Fullstack Developer",
-      company: "Yellow Company",
-    },
-    {
-      key: "3",
-      position: "React Developer",
-      company: "Yeezy Company",
-    },
-  ];
-
-  const strings = [
-    "Job search preferences",
-    "Languages ",
-    "Contact info ",
-    "Uploaded documents",
-  ];
-
-  const [tableData, setTableData] = useState(data);
+  const [tableData, setTableData] = useState([] as applicationRequest[]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStrings, setSelectedStrings] = useState<boolean[]>([
     true,
@@ -39,16 +27,107 @@ const ApplicationRequests = () => {
     true,
   ]);
   const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
+  const [candidate, setCandidate] = useState<Candidate | null>({} as Candidate);
 
-  const handleOk = (enabledStrings: string[]) => {
+  const fetchInfo = async () => {
+    const user_type = JSON.parse(localStorage.getItem("auth") || "{}").user
+      ?.user_type;
+    if (user_type !== "candidate") return;
+    const candidateId = JSON.parse(localStorage.getItem("auth") || "{}").user
+      ?.id;
+    const candidate = await getCandidateById(candidateId);
+    setCandidate(candidate);
+    console.log("candidate", candidate);
+
+    if (Array.isArray(candidate?.package_requested)) {
+      console.log("package_requested data:", candidate.package_requested);
+      const newTableData = candidate?.package_requested?.map(
+        (item: any, index: number) => {
+          return {
+            key: index,
+            position:
+              item?.job_title !== ""
+                ? item?.job_title
+                : "No position specified",
+            company: item?.company_name,
+            companyId: item?.company_id,
+          };
+        }
+      );
+      console.log("newTableData:", newTableData);
+      setTableData(newTableData);
+    } else {
+      console.log(
+        "package_requested is not an array:",
+        candidate?.package_requested
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchInfo();
+  }, []);
+
+  const handleOk = async (enabledStrings: string[]) => {
     setIsModalOpen(false);
     if (selectedRecord) {
       console.log(`Accepted: ${selectedRecord.position}`);
       console.log("Enabled Strings:", enabledStrings);
-      const updatedData = tableData.filter(
+
+      // Filter out the selected record from tableData
+      const updatedData = tableData?.filter(
         (item) => item.key !== selectedRecord.key
       );
       setTableData(updatedData);
+
+      // check if **package_accepted** exists
+      const existingCompanyIndex = candidate?.package_accepted?.findIndex(
+        (item: any) => item.companyId === selectedRecord.companyId
+      );
+
+      if (existingCompanyIndex !== undefined && existingCompanyIndex !== -1) {
+        // Clone the candidate and the specific company entry
+        const updatedCandidate = {
+          ...candidate,
+          package_accepted: [...(candidate?.package_accepted || [])],
+        };
+
+        // Update the specific company entry with the new visible_info
+        updatedCandidate.package_accepted[existingCompanyIndex].visible_info =
+          enabledStrings;
+        console.log("Updated candidate data:", updatedCandidate);
+
+        // Update the candidate's data
+        await updateCandidateById(candidate?.user_id!, {
+          package_accepted: updatedCandidate.package_accepted,
+        });
+      } else {
+        // Create a modified package_accepted array with the selectedRecord
+        const updatedPackageAccepted = [
+          ...(candidate?.package_accepted || []),
+          {
+            ...selectedRecord,
+            visible_info: enabledStrings,
+          },
+        ];
+
+        // Create a modified package_requested array without the selectedRecord
+        const updatedPackageRequested = candidate?.package_requested?.filter(
+          // filter out the selected record
+          (item) => item.key === selectedRecord.key
+        );
+        if (updatedPackageRequested && updatedPackageAccepted) {
+          const updatedCandidate = await updateCandidateById(
+            candidate?.user_id!,
+            {
+              package_requested: updatedPackageRequested,
+              package_accepted: updatedPackageAccepted,
+            }
+          );
+          console.log("Updated candidate data:", updatedCandidate);
+        }
+      }
+
       setSelectedRecord(null);
     }
   };
@@ -69,11 +148,25 @@ const ApplicationRequests = () => {
     setIsModalOpen(true);
   };
 
-  const handleReject = (record: any) => {
+  const handleReject = async (record: any) => {
     console.log(`Rejected: ${record.position}`);
-    // Filter out the row with the rejected candidate
+    // Filter out the row with the rejected company
     const updatedData = tableData.filter((item) => item.key !== record.key);
+    // update the candidate data
     setTableData(updatedData);
+
+    // Create a modified package_requested array without the rejected record
+    const updatedPackageRequested = candidate?.package_requested?.filter(
+      (item: any) => item.key !== record.key
+    );
+
+    // Update the candidate's data with the modified package_requested array
+    if (updatedPackageRequested) {
+      const updatedCandidate = await updateCandidateById(candidate?.user_id!, {
+        package_requested: updatedPackageRequested,
+      });
+      console.log("Updated candidate data:", updatedCandidate);
+    }
   };
 
   const headerRequests = [
@@ -108,6 +201,8 @@ const ApplicationRequests = () => {
       ),
     },
   ];
+
+  console.log("tableData", tableData);
   return (
     <>
       <CardContainer className={styling.requests}>
@@ -116,7 +211,7 @@ const ApplicationRequests = () => {
       </CardContainer>
       <ToggleModal
         visible={isModalOpen}
-        strings={strings}
+        allCategories={allCategories}
         selectedStrings={selectedStrings}
         title="Application package"
         subtitle="The Dream company has requested your application package for job Developer, what would you like to share with them?"

@@ -1,7 +1,7 @@
 import bcrypt
 from flask import Blueprint, jsonify, request
 from flask_login import login_user
-
+import logging
 
 def register_route(User, Candidate, Company, Association, db):
     register_bp = Blueprint("register", __name__)
@@ -31,7 +31,7 @@ def register_route(User, Candidate, Company, Association, db):
             password = data.get("password")
             email = data.get("email")
             user_type = data.get("user_type")  # Get user type from the request
-
+            logging.info("Registering user: " + email + " as " + user_type + ".")
             try:
                 # Hash the password before saving it to the appropriate table
                 hashed_password = bcrypt.hashpw(

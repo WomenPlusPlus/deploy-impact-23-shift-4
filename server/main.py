@@ -1,4 +1,4 @@
-import string
+import logging
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -17,9 +17,9 @@ from db_model.values import init_values_model
 from routes.home import home_bp
 from routes.auth import login
 from routes.auth import register
+from routes.auth import check_auth
 from routes.auth.logout import logout_bp
 from routes.auth.protected import protected_bp
-from routes.auth.check_auth import check_auth_bp
 from routes.auth.send_invite import send_invite_bp
 from routes.auth.verify_invite import verify_invite_bp
 from routes.users import get_users
@@ -64,6 +64,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = secret_key
 
+logging.basicConfig(level=logging.DEBUG)
 # Initialize CORS with your Flask app
 CORS(
     app,
@@ -103,10 +104,10 @@ app.register_blueprint(
 )
 app.register_blueprint(login.login_route(User))
 app.register_blueprint(logout_bp)
-app.register_blueprint(check_auth_bp)
 app.register_blueprint(protected_bp)
 app.register_blueprint(send_invite_bp)
 app.register_blueprint(verify_invite_bp)
+app.register_blueprint(check_auth.check_authentication_route())
 app.register_blueprint(get_users.get_all_users_route(User))
 app.register_blueprint(delete_user.delete_user_route(User, Candidate, Company, db))
 app.register_blueprint(get_user_by_id.get_user_by_id_route(User))
@@ -145,6 +146,7 @@ def load_user(user_id):
     Returns:
         User: The User object associated with the provided user ID.
     """
+    print("load_user", user_id)
     return User.query.get(user_id)
 
 
