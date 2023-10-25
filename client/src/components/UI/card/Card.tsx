@@ -114,7 +114,9 @@ const Card: React.FC<CardProps> = ({
           size={50}
         />
         <div>
-          <h2 className={styling.header} onClick={onClickRedirect}>{subheader}</h2>
+          <h2 className={styling.header} onClick={onClickRedirect}>
+            {header}
+          </h2>
           <p className={styling.subheader}>{subheader}</p>
         </div>
         <div className={styling.topRightIcon}>
