@@ -11,9 +11,12 @@ import {
   IconBuildingSkyscraper,
   IconBookmarks,
   IconStar,
+  IconSettings,
+  IconUsers
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
+import { get } from "http";
 const axios = configureAxios();
 
 const { Sider } = AntLayout;
@@ -68,9 +71,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       ? getItem("Companies", "companies", <IconBuildingSkyscraper />)
       : null,
     isTalentVisible ? getItem("Talent", "candidates", <IconStar />) : null,
+    getItem("Associations", "associations", <IconUsers />),
     isShortListVisible
       ? getItem("Short List", "saved", <IconBookmarks />)
       : null,
+    getItem("Settings", "settings", <IconSettings />),
     getItem("Logout", "logout", <IconLogout2 />),
   ];
 

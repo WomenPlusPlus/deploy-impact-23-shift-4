@@ -8,6 +8,10 @@
   margin-bottom: 2rem;
 }
 
+.custom-menu .ant-menu-item:nth-child(6) {
+  position: absolute;
+  bottom: 10rem;
+}
 .custom-menu .ant-menu-item:last-child {
   position: absolute;
   bottom: 5rem;

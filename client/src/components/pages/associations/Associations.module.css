@@ -4,10 +4,6 @@
   background-color: var(--background-color);
 }
 
-.header {
-  color: black;
-}
-
 .filters {
   display: flex;
   justify-content: space-between;
@@ -15,7 +11,7 @@
   padding: 1rem 0;
 }
 
-.filter-dropdown {
+.filterDropdown {
   display: flex;
   gap: 1rem;
 }
@@ -23,5 +19,4 @@
 .cards {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
 }

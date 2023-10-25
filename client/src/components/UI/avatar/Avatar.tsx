@@ -4,6 +4,7 @@ import { Avatar as AntAvatar } from "antd";
 interface AvatarProps {
   firstName?: string;
   lastName?: string;
+  imageSrc?: string;
   size?: "large" | "small" | "default" | number;
   handleProfileClick?: () => void;
 }
@@ -11,6 +12,7 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({
   firstName = "",
   lastName = "",
+  imageSrc,
   size,
   handleProfileClick,
 }) => {
@@ -26,6 +28,7 @@ const Avatar: React.FC<AvatarProps> = ({
           cursor: "pointer",
         }}
         size={size}
+        src={imageSrc}
       >
         {initials}
       </AntAvatar>

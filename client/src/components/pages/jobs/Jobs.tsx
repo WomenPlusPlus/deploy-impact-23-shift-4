@@ -21,19 +21,20 @@ const Jobs = () => {
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
-    if (userType === "candidate") {
-      const allCompanies = await getAllCompanies();
-      const candidate = await getCandidateById(userId);
-      setCandidate(candidate);
-      setJobs(allJobs);
-      setCompanies(allCompanies);
-    }
 
     if (userType === "company") {
       setMatchedScoreVisible(false);
       // filter jobs by company id
       const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
       setCompanyJobs(jobs);
+    } else {
+      if (userType === "candidate") {
+        const candidate = await getCandidateById(userId);
+        setCandidate(candidate);
+      }
+      const allCompanies = await getAllCompanies();
+      setJobs(allJobs);
+      setCompanies(allCompanies);
     }
   };
 

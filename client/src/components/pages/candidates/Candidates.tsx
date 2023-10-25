@@ -5,8 +5,9 @@ import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
 import { useNavigate } from "react-router-dom";
 import Searchbar from "../../UI/searchbar/Searchbar";
-import { Candidate, Company } from "../../../types/types";
+import { Candidate, User } from "../../../types/types";
 import { getCompanyById } from "../../../api/companies";
+import { getAssociationById } from "../../../api/associations";
 
 const Candidates = () => {
   const skillsOptions = ["JavaScript", "React", "Node.js", "SQL"];
@@ -17,9 +18,11 @@ const Candidates = () => {
   //State
   const userId =
     JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id || "";
+  const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
-  const [company, setCompany] = useState({} as Company);
+  const [user, setUser] = useState({} as User);
   /**
    * Handle filter change
    * @param filteredCandidates - filtered candidates
@@ -28,24 +31,26 @@ const Candidates = () => {
     setFilteredCandidates(filteredCandidates);
   };
 
-  const takeInitials = (candidate: Candidate) => {
-    const fullName = `${candidate?.first_name} ${candidate?.last_name}`;
-    const initials = fullName
-      .split(" ")
-      .map((name) => name.charAt(0))
-      .join("");
-    return initials;
-  };
-
   /**
    * Fetches the candidates data object by id
    */
   const fetchCandidates = async () => {
-    const candidates = await getAllCandidates();
-    const company = await getCompanyById(userId);
-    setCandidates(candidates);
-    setFilteredCandidates(candidates);
-    setCompany(company);
+    try {
+      const candidates = await getAllCandidates();
+      // here I fetch or company or association
+      if (userType === "association") {
+        // exclude the association that is logged in
+        const association = await getAssociationById(userId);
+        setUser(association);
+      } else {
+        const company = await getCompanyById(userId);
+        setUser(company);
+      }
+      setCandidates(candidates);
+      setFilteredCandidates(candidates);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -53,7 +58,7 @@ const Candidates = () => {
   }, []);
 
   return (
-    <div className="mainContainer">
+    <div className="main">
       <h1 className="header">The best talent is right here!</h1>
       <div className="filters">
         <Searchbar
@@ -83,7 +88,8 @@ const Candidates = () => {
           <Card
             key={index}
             candidate={candidate}
-            company={company}
+            user={user}
+            user_type={userType}
             header={`${
               (candidate?.experience && candidate.experience[0]?.role) ||
               "Software Engineer"
@@ -94,7 +100,7 @@ const Candidates = () => {
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}
-            isBookmarkVisible={true}
+            isBookmarkVisible={false}
           />
         ))}
       </div>

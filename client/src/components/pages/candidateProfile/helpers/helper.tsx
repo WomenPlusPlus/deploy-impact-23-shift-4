@@ -12,7 +12,6 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
     const secondsAgo = Math.floor(
       (now.getTime() - timestampDate.getTime()) / 1000
     );
-
     if (secondsAgo < 60) {
       return `${secondsAgo} second${secondsAgo !== 1 ? "s" : ""} ago`;
     } else if (secondsAgo < 3600) {
