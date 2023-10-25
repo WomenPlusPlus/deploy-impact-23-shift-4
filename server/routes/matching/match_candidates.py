@@ -75,14 +75,12 @@ def match_candidates_route(domain_name):
                         cand_tech_score = score(job_skills, cand_skills, cand_levels)
                         total_score += 4*cand_tech_score
 
-
                         if job_values:
                             count += 1
                             if candidate["values"]:
                                 cand_val_score = score(job_values, candidate["values"])
                                 total_score += cand_val_score
-                            
-                            
+                        
                         if job_soft_skills:
                             count += 2
                             if candidate['soft_skills']:
