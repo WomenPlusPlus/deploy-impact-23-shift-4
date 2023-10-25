@@ -29,7 +29,7 @@ interface Payload {
 
 const DashboardAssociations = () => {
   const navigate = useNavigate();
-
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   //State
   const [association, setAssociation] = useState<any>(null);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
@@ -245,7 +245,7 @@ const DashboardAssociations = () => {
 
         <IconExternalLink
           color="var(--gray-dark)"
-          onClick={() => navigate("association-profile")}
+          onClick={() => navigate(`/association-profile/${userId}`)}
         />
       </CardContainer>
 

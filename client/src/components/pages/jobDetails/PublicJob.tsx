@@ -20,7 +20,6 @@ import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide
 import { Labels } from "../../UI/labels/Label";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import ApplyModal from "./applyModal/ApplyModal";
-import { get } from "http";
 
 const PublicJob = () => {
   // Job id from url

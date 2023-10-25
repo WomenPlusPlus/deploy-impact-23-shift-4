@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
 import { getAllCandidates, getCandidateById } from "../../../api/candidates";
-import { Candidate, Company, Job } from "../../../types/types";
+import { Association, Candidate, Company, Job, User } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
@@ -11,7 +11,8 @@ import Card from "../../UI/card/Card";
 const Shortlist = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState({} as Candidate);
-  const [company, setCompany] = useState({} as Company);
+  const [user, setUser] = useState({} as User);
+  const [associations, setAssociations] = useState([] as Association[]);
   const [jobs, setJobs] = useState([] as Job[]);
   const [candidates, setCandidates] = useState([] as Candidate[]);
   const [companies, setCompanies] = useState([] as Company[]);
@@ -44,7 +45,7 @@ const Shortlist = () => {
     if (user_type === "company") {
       const company = await getCompanyById(userId);
       const allCandidates = await getAllCandidates();
-      setCompany(company);
+      setUser(company);
       setCandidate(allCandidates);
 
       // fetch all jobs from company's shortlist
@@ -101,7 +102,7 @@ const Shortlist = () => {
               <Card
                 key={index}
                 candidate={candidate}
-                company={company}
+                user={user}
                 subheader="Software Engineer"
                 associations={candidate?.associations}
                 skills={candidate?.skills}

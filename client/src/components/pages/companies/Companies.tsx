@@ -68,9 +68,14 @@ const Companies = () => {
    * Fetch all companies from the database
    */
   const fetchCompanies = async () => {
-    const companies = await getAllCompanies();
-    setCompanies(companies);
-    setFilteredCompanies(companies);
+    try {
+      const companies = await getAllCompanies();
+      setCompanies(companies);
+      setFilteredCompanies(companies);
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -106,12 +111,12 @@ const Companies = () => {
         {filteredCompanies?.map((company, index) => (
           <Card
             key={index}
-            header={company.company_name}
-            subheader={company.address}
-            associations={company.associations}
-            values={company.values}
+            header={company?.company_name}
+            subheader={company?.address}
+            associations={company?.associations}
+            values={company?.values}
             onClickRedirect={() => {
-              navigate(`/company/${company.user_id}`);
+              navigate(`/company/${company?.user_id}`);
             }}
           />
         ))}

@@ -8,7 +8,7 @@ interface HorizontalCardProps {
   firstName?: string;
   lastName?: string;
   title?: string;
-  subtitle?: string;
+  subtitle?: string | JSX.Element;
   onClick?: () => void;
 }
 
