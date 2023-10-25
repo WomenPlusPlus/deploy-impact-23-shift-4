@@ -22,6 +22,7 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./DashboardCompanies.module.css";
+import { getMatchCandidates } from "../../../api/match";
 
 const DashboardCompany = () => {
   const progress = 80;
@@ -47,6 +48,11 @@ const DashboardCompany = () => {
       if (job["company_id"] === userId) {
         return job;
       }
+    });
+
+    jobs?.map(async (job: Record<string, any>) => {
+      console.log("job", job);
+      if (job && job?.id) await getMatchCandidates(job?.id);
     });
 
     const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);

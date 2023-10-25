@@ -4,6 +4,7 @@ import { IconEdit } from "@tabler/icons-react";
 import { Labels } from "../../../UI/labels/Label";
 import styling from "./EditSkills.module.css";
 import { Candidate, Skill } from "../../../../types/types";
+import { getMatchJobs } from "../../../../api/match";
 
 const { Option } = Select;
 
@@ -76,6 +77,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 
   const handleOk = () => {
     setLoading(true);
+
     setTimeout(() => {
       setLoading(false);
       setVisible(false);

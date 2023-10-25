@@ -32,7 +32,7 @@ export async function getMatchJobs(id: string) {
   try {
     const response = await axios.post(
       "/api/match_jobs",
-      { candidate_id: id },
+      { user_id: id },
       { withCredentials: true }
     );
 

@@ -56,6 +56,7 @@ import os
 # Constants
 database_uri = os.environ.get("DATABASE_URI_TEST")
 secret_key = os.environ.get("SECRET_KEY")
+domain_name = os.environ.get("DOMAIN_NAME")
 
 # App config
 app = Flask(__name__)
@@ -130,8 +131,8 @@ app.register_blueprint(get_job_by_id.get_job_by_id_route(Jobs))
 app.register_blueprint(add_job.add_job_route(Jobs, db))
 app.register_blueprint(delete_job.delete_job_route(Jobs, db))
 app.register_blueprint(update_job.update_job_route(Jobs, db))
-app.register_blueprint(match_candidates.match_candidates_route())
-app.register_blueprint(match_jobs.match_jobs_route())
+app.register_blueprint(match_candidates.match_candidates_route(domain_name))
+app.register_blueprint(match_jobs.match_jobs_route(domain_name))
 
 
 @login_manager.user_loader

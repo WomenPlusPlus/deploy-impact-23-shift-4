@@ -9,7 +9,7 @@ import { CardContainer } from "../../UI/container/CardContainer";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
 import { Company } from "../../../types/types";
-import { addJob, getAllJobs } from "../../../api/jobs";
+import { addJob, getAllJobs, getJobById } from "../../../api/jobs";
 import { getCompanyById, updateCompanyById } from "../../../api/companies";
 
 import {
@@ -20,6 +20,8 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./CompanyProfile.module.css";
+import { match } from "assert";
+import { getMatchCandidates } from "../../../api/match";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -53,7 +55,6 @@ const CompanyProfile = () => {
    * @param payload the company data to update
    */
   const handleModalSave = async (payload: object) => {
-    console.log("Received payload from EditCompanyProfile:", payload);
     await updateCompanyById(company?.user_id, payload);
 
     setConfirmEditCompanyLoading(true);
@@ -66,7 +67,6 @@ const CompanyProfile = () => {
    * @param payload the job data to add
    */
   const handleAddJobPayload = async (payload: object) => {
-    console.log("Received payload from AddEditJob:", payload);
     await addJob(payload);
 
     setConfirmLoading(true);
