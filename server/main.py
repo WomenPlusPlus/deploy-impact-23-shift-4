@@ -1,5 +1,6 @@
 import logging
 import string
+from gevent.pywsgi import WSGIServer
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -175,9 +176,9 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    if os.environ.get("FLASK_ENV") == "production":
-        from waitress import serve
+    print("Running in PRODUCTION mode")
+    http_server = WSGIServer(('', 5001), app)
+    http_server.serve_forever()
 
-        serve(app, host="0.0.0.0", port=5001)
-    else:
-        app.run(port=5001, debug=True)
+    # print("Running in DEVELOPMENT mode")
+    # app.run(port=5001, debug=True)
