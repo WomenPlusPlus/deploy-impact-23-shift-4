@@ -12,7 +12,8 @@ import {
   IconBookmarks,
   IconStar,
   IconSettings,
-  IconUsers
+  IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
@@ -75,6 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     isShortListVisible
       ? getItem("Short List", "saved", <IconBookmarks />)
       : null,
+    getItem("FAQ", "faq", <IconInfoCircle />),
     getItem("Settings", "settings", <IconSettings />),
     getItem("Logout", "logout", <IconLogout2 />),
   ];

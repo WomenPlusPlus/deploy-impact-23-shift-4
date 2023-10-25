@@ -19,6 +19,7 @@ import DashboardAssociations from "../components/pages/dashboardAssociations/Das
 import CompanyPublicProfile from "../components/pages/companyPublicProfile/CompanyPublicProfile";
 import AssociationProfile from "../components/pages/associationProfile/AssociationProfile";
 import CandidatePublicProfile from "../components/pages/candidatePublicProfile/CandidatePublicProfile";
+import FAQ from "../components/pages/faq/FAQ";
 
 const Routes: React.FC = () => {
   return (
@@ -79,6 +80,7 @@ const Routes: React.FC = () => {
           path="/settings"
           element={<Authenticated content={<Settings />} />}
         />
+        <Route path="/faq" element={<Authenticated content={<FAQ />} />} />
         <Route path="*" element={<NotFound />} />
       </Routing>
     </BrowserRouter>
