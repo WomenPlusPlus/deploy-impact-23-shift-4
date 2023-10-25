@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import Tabs from "../../UI/tabs/Tabs";
 import { CardContainer } from "../../UI/container/CardContainer";
 import InvitesComponent from "./tabs/invitesTab/Invites";
@@ -22,13 +22,13 @@ import {
 const AssociationProfile = () => {
   //State
   const [association, setAssociation] = useState({} as Association);
-
+  const navigate = useNavigate();
   /**
    * Fetches the association data object by id
    */
   const fetchAssociation = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
+    const userId = auth?.user?.id;
     console.log(userId);
 
     if (userId) {
@@ -55,7 +55,12 @@ const AssociationProfile = () => {
     {
       label: "Iniciatives",
       key: "1",
-      children: <IniciativesComponent association={association} />,
+      children: (
+        <IniciativesComponent
+          association={association}
+          callback={fetchAssociation}
+        />
+      ),
     },
     {
       label: "Invites",
@@ -92,10 +97,19 @@ const AssociationProfile = () => {
 
             <div className={styling.subheader}>
               <IconMapPin />
-              <p>{association?.address}</p>
+              {association?.address ? (
+                <p>{association?.address}</p>
+              ) : (
+                <p>Add address</p>
+              )}
               <p>|</p>
-              <IconBrandLinkedin />
-              <IconWorldWww />
+              {association?.url ? (
+                <a href={association?.url} target="_blank" rel="noreferrer">
+                  <IconWorldWww />
+                </a>
+              ) : (
+                <p>Add url</p>
+              )}
             </div>
           </div>
 

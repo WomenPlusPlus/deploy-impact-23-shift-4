@@ -32,7 +32,7 @@ def score(job_skills, candidate_skills, candidate_levels=False):
     return round(percent_score, 1)
 
 
-def match_jobs_route():
+def match_jobs_route(domain_name):
     match_jobs_bp = Blueprint("match_jobs", __name__)
 
     @match_jobs_bp.route("/api/match_jobs", methods=["POST"])
@@ -47,14 +47,14 @@ def match_jobs_route():
                 cand_json = {"user_id": id}
 
                 candidate = requests.post(
-                    "http://localhost:5001/api/get_candidate_by_id", json=cand_json
+                    f"{domain_name}/api/get_candidate_by_id", json=cand_json
                 )
                 cand_skills = [skill["skill_name"] for skill in candidate.json()["candidates"]["skills"]]
                 cand_levels = [skill["skill_level"] for skill in candidate.json()["candidates"]["skills"]]
                 cand_values = candidate.json()["candidates"]["values"]
                 cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
-                # candidate.json()['candidates']['skills']['technicalSkills']
-                jobs_response = requests.get("http://localhost:5001/api/get_all_jobs")
+                
+                jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
                 jobs = jobs_response.json()["jobs"]
 
                 for job in jobs:
@@ -103,13 +103,13 @@ def match_jobs_route():
                                 "matching_candidates": job["matching_candidates"],
                             }
                             update_job_response = requests.put(
-                                "http://localhost:5001/api/update_job",
+                                f"{domain_name}/api/update_job",
                                 json=update_job_json,
                             )
 
                 update_json = {"user_id": id, "matching_jobs": job_match}
                 update_cand = requests.put(
-                    "http://localhost:5001/api/update_candidate", json=update_json
+                    f"{domain_name}/api/update_candidate", json=update_json
                 )
 
                 if update_cand.status_code == 200:

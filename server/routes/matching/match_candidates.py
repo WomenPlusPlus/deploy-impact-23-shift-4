@@ -32,7 +32,7 @@ def score(job_skills, candidate_skills, candidate_levels=False):
     return round(percent_score, 1)
 
 
-def match_candidates_route():
+def match_candidates_route(domain_name):
     match_candidates_bp = Blueprint("match_candidates", __name__)
 
     @match_candidates_bp.route("/api/match_candidates", methods=["POST"])
@@ -47,7 +47,7 @@ def match_candidates_route():
                 job_json = {"job_id": id}
 
                 job = requests.post(
-                    "http://localhost:5001/api/get_job_by_id", json=job_json
+                    f"{domain_name}/api/get_job_by_id", json=job_json
                 )
                 job_skills = [
                     skill["skill_name"] for skill in job.json()["jobs"]["skills"]
@@ -58,7 +58,7 @@ def match_candidates_route():
                 # if job.json()["jobs"]["soft_skills"]:
                 job_soft_skills = job.json()["jobs"]["soft_skills"]
                 candidates_response = requests.get(
-                    "http://localhost:5001/api/get_all_candidates"
+                    f"{domain_name}/api/get_all_candidates"
                 )
                 candidates = candidates_response.json()["candidates"]
 
@@ -111,14 +111,14 @@ def match_candidates_route():
                                 "matching_jobs": candidate["matching_jobs"],
                             }
                             update_cand_response = requests.put(
-                                "http://localhost:5001/api/update_candidate",
+                                f"{domain_name}/api/update_candidate",
                                 json=update_cand_json,
                             )
                         
 
                 update_json = {"job_id": id, "matching_candidates": cand_match}
                 update_job = requests.put(
-                    "http://localhost:5001/api/update_job", json=update_json
+                    f"{domain_name}/api/update_job", json=update_json
                 )
 
                 if update_job.status_code == 200:

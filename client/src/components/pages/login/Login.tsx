@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import backgroundLogin from "../../../media/login-background.jpg";
 import { ToastContainer, toast } from "react-toastify";
 // import axios from "axios"; // Import Axios for making HTTP requests
 import { useAuth } from "../../../context/auth";
@@ -11,6 +10,7 @@ import BridgeLogo from "../../../media/bridge-logo.png";
 import "./Login.css";
 
 import configureAxios from "./../../../config";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
 const axios = configureAxios();
 
@@ -106,12 +106,14 @@ const Login = () => {
             name="password"
             rules={[{ required: true, message: "Please input your Password!" }]}
           >
-            <Input
+            <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
               name="password"
               value={formData.password}
               placeholder="Password"
+              iconRender={(visible) =>
+                visible ? <IconEyeOff size={20} /> : <IconEye size={20} />
+              }
               onChange={handleInputChange}
             />
           </Form.Item>

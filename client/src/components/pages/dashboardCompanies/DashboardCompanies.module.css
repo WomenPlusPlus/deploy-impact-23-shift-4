@@ -27,12 +27,13 @@
 }
 
 .title {
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .subtitle {
   display: flex;
   align-items: center;
+  gap: 0.8rem;
   font-size: 2rem;
   font-weight: 600;
   color: var(--gray-medium);
@@ -77,4 +78,13 @@
   width: 100%;
   padding: 3rem;
   min-height: 60rem;
+}
+
+.subtextNot {
+  color: var(--gray-light);
+  font-size: 1.5rem;
+}
+
+.subtext {
+  font-size: 1.5rem;
 }

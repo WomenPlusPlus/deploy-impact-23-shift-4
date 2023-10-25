@@ -9,7 +9,7 @@ import { CardContainer } from "../../UI/container/CardContainer";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
 import { Company } from "../../../types/types";
-import { addJob, getAllJobs } from "../../../api/jobs";
+import { addJob, getAllJobs, getJobById } from "../../../api/jobs";
 import { getCompanyById, updateCompanyById } from "../../../api/companies";
 
 import {
@@ -20,6 +20,8 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./CompanyProfile.module.css";
+import { match } from "assert";
+import { getMatchCandidates } from "../../../api/match";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -53,7 +55,6 @@ const CompanyProfile = () => {
    * @param payload the company data to update
    */
   const handleModalSave = async (payload: object) => {
-    console.log("Received payload from EditCompanyProfile:", payload);
     await updateCompanyById(company?.user_id, payload);
 
     setConfirmEditCompanyLoading(true);
@@ -66,7 +67,6 @@ const CompanyProfile = () => {
    * @param payload the job data to add
    */
   const handleAddJobPayload = async (payload: object) => {
-    console.log("Received payload from AddEditJob:", payload);
     await addJob(payload);
 
     setConfirmLoading(true);
@@ -206,9 +206,34 @@ const CompanyProfile = () => {
             <h1 className={styling.title}>{company.company_name}</h1>
 
             <div className={styling.subtitle}>
-              <IconMapPin />
-              {company.address} | {company.company_size} employees |
-              <IconBrandLinkedin /> <IconWorldWww />
+              {company?.address ? (
+                <>
+                  <IconMapPin />
+                  <p className={styling.subtext}>{company?.address}</p>
+                </>
+              ) : (
+                <>
+                  <IconMapPin />
+                  <p className={styling.subtextNot}>Address not provided</p>
+                </>
+              )}
+              {company.company_size ? (
+                <>
+                  <p className={styling.subtext}> | </p>
+                  <p className={styling.subtext}>
+                    {company.company_size} employees
+                  </p>
+                </>
+              ) : null}
+              {company.company_website ? (
+                <>
+                  <p className={styling.subtext}> | </p>
+                  <IconBrandLinkedin
+                    onClick={() => navigate(`${company?.company_website}`)}
+                  />{" "}
+                  <IconWorldWww />
+                </>
+              ) : null}
             </div>
           </div>
 

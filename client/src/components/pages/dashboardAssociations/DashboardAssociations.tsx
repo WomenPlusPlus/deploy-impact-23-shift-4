@@ -29,7 +29,7 @@ interface Payload {
 
 const DashboardAssociations = () => {
   const navigate = useNavigate();
-
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   //State
   const [association, setAssociation] = useState<any>(null);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
@@ -234,18 +234,27 @@ const DashboardAssociations = () => {
           <h2 className={styling.headerTitle}>
             Welcome back, {association?.association_name}
           </h2>
-          <div className={styling.location}>
+          <div className={styling.subheader}>
             <IconMapPin />
-            <p>{association?.address}</p>
+            {association?.address ? (
+              <p>{association?.address}</p>
+            ) : (
+              <p>Add address</p>
+            )}
             <p>|</p>
-            <IconBrandLinkedin />
-            <IconWorldWww />
+            {association?.url ? (
+              <a href={association?.url} target="_blank" rel="noreferrer">
+                <IconWorldWww />
+              </a>
+            ) : (
+              <p>Add url</p>
+            )}
           </div>
         </div>
 
         <IconExternalLink
           color="var(--gray-dark)"
-          onClick={() => navigate("association-profile")}
+          onClick={() => navigate(`/association-profile/${userId}`)}
         />
       </CardContainer>
 

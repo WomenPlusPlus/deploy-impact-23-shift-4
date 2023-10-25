@@ -3,11 +3,13 @@ import styling from "./Card.module.css";
 import { IconBookmark, IconExternalLink } from "@tabler/icons-react";
 import { Labels } from "../labels/Label";
 import Avatar from "../avatar/Avatar";
-import { Candidate, Company } from "../../../types/types";
+import { Candidate, User } from "../../../types/types";
 import { updateCompanyById } from "../../../api/companies";
+import { updateAssociationById } from "../../../api/associations";
 
 interface CardProps {
-  company?: Company;
+  user?: User;
+  user_type?: string;
   candidate?: Candidate;
   logo?: string;
   header?: string;
@@ -23,7 +25,8 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({
   logo,
   header,
-  company,
+  user,
+  user_type,
   candidate,
   subheader,
   description,
@@ -33,7 +36,7 @@ const Card: React.FC<CardProps> = ({
   isBookmarkVisible = false,
   onClickRedirect,
 }) => {
-  // pass company, pass candidateID
+  // pass user, pass candidateID
   // state
   const [isSaved, setIsSaved] = React.useState(false);
 
@@ -45,7 +48,7 @@ const Card: React.FC<CardProps> = ({
       // if not yet saved
       if (!isSaved) {
         // Check if the job is already saved
-        const isJobSaved = company?.saved_items?.includes(
+        const isJobSaved = user?.saved_items?.includes(
           candidate?.user_id || ""
         );
         if (isJobSaved) {
@@ -53,14 +56,21 @@ const Card: React.FC<CardProps> = ({
         } else {
           localStorage.setItem(
             "saved_items",
-            JSON.stringify([
-              ...(company?.saved_items || []),
-              candidate?.user_id,
-            ])
+            JSON.stringify([...(user?.saved_items || []), candidate?.user_id])
           );
-          await updateCompanyById(company?.user_id || "", {
-            saved_items: [...(company?.saved_items || []), candidate?.user_id],
-          });
+          try {
+            if (user_type === "company") {
+              await updateCompanyById(user?.user_id || "", {
+                saved_items: [...(user?.saved_items || []), candidate?.user_id],
+              });
+            } else if (user_type === "association") {
+              await updateAssociationById(user?.user_id || "", {
+                saved_items: [...(user?.saved_items || []), candidate?.user_id],
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       } else {
         // if already saved
@@ -76,16 +86,26 @@ const Card: React.FC<CardProps> = ({
           (savedItem: string) => savedItem !== candidate?.user_id
         );
         localStorage.setItem("saved_items", JSON.stringify(filtered));
-        await updateCompanyById(company?.user_id || "", {
-          saved_items: filtered,
-        });
+        try {
+          if (user_type === "company") {
+            await updateCompanyById(user?.user_id || "", {
+              saved_items: filtered,
+            });
+          } else if (user_type === "association") {
+            await updateAssociationById(user?.user_id || "", {
+              saved_items: filtered,
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
 
   const renderBookmark = () => {
     if (isBookmarkVisible) {
-      if (isSaved || company?.saved_items?.includes(candidate?.user_id || "")) {
+      if (isSaved || user?.saved_items?.includes(candidate?.user_id || "")) {
         return (
           <IconBookmark
             className={styling.savedBookmark}
@@ -114,7 +134,9 @@ const Card: React.FC<CardProps> = ({
           size={50}
         />
         <div>
-          <h2 className={styling.header} onClick={onClickRedirect}>{subheader}</h2>
+          <h2 className={styling.header} onClick={onClickRedirect}>
+            {header}
+          </h2>
           <p className={styling.subheader}>{subheader}</p>
         </div>
         <div className={styling.topRightIcon}>

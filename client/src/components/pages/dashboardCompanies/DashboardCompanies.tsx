@@ -22,6 +22,7 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./DashboardCompanies.module.css";
+import { getMatchCandidates } from "../../../api/match";
 
 const DashboardCompany = () => {
   const progress = 80;
@@ -47,6 +48,11 @@ const DashboardCompany = () => {
       if (job["company_id"] === userId) {
         return job;
       }
+    });
+
+    jobs?.map(async (job: Record<string, any>) => {
+      console.log("job", job);
+      if (job && job?.id) await getMatchCandidates(job?.id);
     });
 
     const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
@@ -79,9 +85,34 @@ const DashboardCompany = () => {
             Welcome back, {company.company_name}
           </h2>
           <div className={styling.subtitle}>
-            <IconMapPin />
-            {company.address} | {company.company_size} employees |
-            <IconBrandLinkedin /> <IconWorldWww />
+            {company?.address ? (
+              <>
+                <IconMapPin />
+                <p className={styling.subtext}>{company?.address}</p>
+              </>
+            ) : (
+              <>
+                <IconMapPin />
+                <p className={styling.subtextNot}>Address not provided</p>
+              </>
+            )}
+            {company.company_size ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <p className={styling.subtext}>
+                  {company.company_size} employees
+                </p>
+              </>
+            ) : null}
+            {company.company_website ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <IconBrandLinkedin
+                  onClick={() => navigate(`${company?.company_website}`)}
+                />{" "}
+                <IconWorldWww />
+              </>
+            ) : null}
           </div>
         </div>
 

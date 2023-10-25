@@ -4,6 +4,19 @@ export interface Language {
   score: number; // Allow null for initial values
 }
 
+export interface PackageAccepted {
+  visible_info: string[];
+  position: string | null;
+  key: number | null;
+  company: string;
+  companyId: string;
+}
+
+export interface User {
+  user_id: string;
+  saved_items: string[];
+}
+
 export interface Candidate {
   id: string;
   user_id: string;
@@ -41,6 +54,7 @@ export interface Candidate {
   saved_items?: string[];
   date_profile_modified?: string;
   package_requested?: { [key: string]: any }[];
+  package_accepted?: PackageAccepted[];
   requested_jobs?: string[];
 }
 
@@ -105,16 +119,39 @@ export interface Job {
   date_created?: string;
 }
 
+export interface Iniciatives {
+  id?: string;
+  associations: string[];
+  title?: string;
+  description?: string;
+  skills?: Skill[];
+  participants?: string[];
+  location_address?: string;
+  work_location?: string;
+  link: string;
+  date_created?: string;
+}
+
 export interface Association {
   id: string;
   user_id: string;
+  password: string;
+  email: string;
   association_name: string;
   logo: string;
   address: string;
+  url: string;
+  contact_details: {
+    [key: string]: any;
+  };
   description: string;
-  iniciatives: Object[];
-  invites: Object[];
+  iniciatives: Iniciatives[];
+  invites: {
+    [key: string]: any;
+  }[];
+  size: string;
 }
+
 export interface Skill {
   skill_name: string;
   skill_id?: string;

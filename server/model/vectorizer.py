@@ -20,8 +20,10 @@ def tokens(skill):
 
 
 if __name__ == "__main__":
-    skills = requests.get("http://localhost:5001/api/get_all_skills")
-    values = requests.get("http://localhost:5001/api/get_all_values")
+    domain_name = os.environ.get("DOMAIN_NAME")
+
+    skills = requests.get(f"{domain_name}/api/get_all_skills")
+    values = requests.get(f"{domain_name}/api/get_all_values")
 
     skills = [skill["name"] for skill in skills.json()["skills"]]
     values = [value["name"] for value in values.json()["values"]]

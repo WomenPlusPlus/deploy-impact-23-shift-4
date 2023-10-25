@@ -3,7 +3,9 @@ import { BrowserRouter, Routes as Routing, Route } from "react-router-dom";
 import Login from "../components/pages/login/Login";
 import { RegisterRoute, DashboardRoute } from "./redirect";
 import Candidates from "../components/pages/candidates/Candidates";
+import Associations from "../components/pages/associations/Associations";
 import Authenticated from "../components/layout/authenticated/Authenticated";
+import Settings from "../components/pages/settings/Settings";
 
 import Jobs from "../components/pages/jobs/Jobs";
 import PublicJob from "../components/pages/jobDetails/PublicJob";
@@ -50,7 +52,11 @@ const Routes: React.FC = () => {
           element={<Authenticated content={<CompanyProfile />} />}
         />
         <Route
-          path="/association-profile"
+          path="/associations"
+          element={<Authenticated content={<Associations />} />}
+        />
+        <Route
+          path="/association-profile/:id" //TODO
           element={<Authenticated content={<AssociationProfile />} />}
         />
         <Route
@@ -68,6 +74,10 @@ const Routes: React.FC = () => {
         <Route
           path="/candidate/:id"
           element={<Authenticated content={<CandidatePublicProfile />} />}
+        />
+        <Route
+          path="/settings"
+          element={<Authenticated content={<Settings />} />}
         />
         <Route path="*" element={<NotFound />} />
       </Routing>

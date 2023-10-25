@@ -10,6 +10,7 @@ export async function getAllAssociations() {
   try {
     const response = await axios.get("/api/get_all_associations");
     if (response.status === 200) {
+      console.log(response.data.associations);
       return response.data.associations;
     } else {
       throw new Error("Failed to fetch associations");

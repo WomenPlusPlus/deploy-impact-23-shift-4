@@ -20,7 +20,6 @@ import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide
 import { Labels } from "../../UI/labels/Label";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import ApplyModal from "./applyModal/ApplyModal";
-import { get } from "http";
 
 const PublicJob = () => {
   // Job id from url
@@ -237,7 +236,7 @@ const PublicJob = () => {
                 <div className={styling.row}>
                   <IconUsers size={companyIconSize} />
                   {companyData?.company_size ? (
-                    <p>companyData?.company_size</p>
+                    <p>{companyData?.company_size}</p>
                   ) : (
                     <p>100-200</p>
                   )}

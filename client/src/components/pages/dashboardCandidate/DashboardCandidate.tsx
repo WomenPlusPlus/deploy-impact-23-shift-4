@@ -8,7 +8,7 @@ import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import { getCandidateById } from "../../../api/candidates";
-import { Candidate } from "../../../types/types";
+import { Candidate, Job } from "../../../types/types";
 
 import React from "react";
 import {
@@ -17,10 +17,13 @@ import {
   percentage,
 } from "../candidateProfile/helpers/helper";
 import ApplicationRequests from "./applicationRequests/ApplicationRequests";
+import { getAllJobs } from "../../../api/jobs";
+import { getMatchJobs } from "../../../api/match";
 
 const DashboardCandidate: React.FC = () => {
   // state
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [progress, setProgress] = useState(0);
 
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -29,10 +32,17 @@ const DashboardCandidate: React.FC = () => {
   const fetchInfo = async (user_id: string) => {
     try {
       const candidateFetched = await getCandidateById(user_id);
-      console.log("candidateFetched", candidateFetched);
+      const allJobs = await getAllJobs();
+
       setCandidate(candidateFetched);
+      setJobs(allJobs);
+
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
+
+      if (candidateFetched && candidateFetched?.skills?.length > 0) {
+        await getMatchJobs(candidateFetched.user_id);
+      }
     } catch (error) {
       console.log("error", error);
     }
@@ -46,7 +56,7 @@ const DashboardCandidate: React.FC = () => {
       ).length,
       totalCategories: allCategories.length,
     });
-    console.log("PROGRESS", countProgress);
+
     return countProgress;
   };
 
@@ -131,24 +141,34 @@ const DashboardCandidate: React.FC = () => {
         <div className={styling.section}>
           <CardContainer className={styling.matches}>
             <h1 className={styling.matchesTitle}>Your matches</h1>
-            <HorizontalCard
-              avatar={true}
-              button="Go to description"
-              firstName="Laura"
-              lastName="Purcaro"
-            />
-            <HorizontalCard
-              avatar={true}
-              button="Go to description"
-              firstName="Laura"
-              lastName="Purcaro"
-            />
-            <HorizontalCard
-              avatar={true}
-              button="Go to description"
-              firstName="Laura"
-              lastName="Purcaro"
-            />
+            {candidate.matching_jobs?.map((matchedJob: any) => {
+              let description = "";
+
+              if (matchedJob?.score >= 90) {
+                description = "Your dream job is waiting for you! 🌟";
+              } else if (matchedJob?.score >= 75) {
+                description = "Great match for this role! 🚀";
+              } else {
+                description = "You might be interested in this job 💪🏽";
+              }
+
+              return jobs.map((job: Job) => {
+                // Use `return` to return the JSX elements
+                if (matchedJob.id === job.id) {
+                  return (
+                    <HorizontalCard
+                      key={job.id} // Add a unique key for each card
+                      avatar={false}
+                      button="Go to job"
+                      title={job.title}
+                      subtitle={description}
+                      onClick={() => navigate(`/job/${job.id}`)}
+                    />
+                  );
+                }
+                return null; // Return null for unmatched jobs
+              });
+            })}
           </CardContainer>
           <ApplicationRequests />
         </div>
