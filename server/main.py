@@ -1,5 +1,6 @@
 import string
 import logging
+import string
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -73,6 +74,7 @@ CORS(
     origins=[
         "http://localhost:3000",
         "https://banana-builders-client.vercel.app",
+        "https://banana-builders-client.vercel.app/*",
         "https://banana-builders-client*.vercel.app",
     ],
     supports_credentials=True,
@@ -174,4 +176,9 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    app.run(port=5001, debug=True)
+    if os.environ.get("FLASK_ENV") == "production":
+        from waitress import serve
+
+        serve(app, host="0.0.0.0", port=5001)
+    else:
+        app.run(port=5001, debug=True)

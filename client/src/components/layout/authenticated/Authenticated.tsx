@@ -32,7 +32,8 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
               setIsAuth(true);
               setIsLoading(false);
             } else {
-              setIsAuth(false);
+              setIsAuth(true);
+              setIsLoading(false);
             }
           } else {
             console.log("error", response);
