@@ -21,12 +21,16 @@ def tokens(skill):
 
 if __name__ == "__main__":
     skills = requests.get("http://localhost:5001/api/get_all_skills")
+    values = requests.get("http://localhost:5001/api/get_all_values")
 
     skills = [skill["name"] for skill in skills.json()["skills"]]
+    values = [value["name"] for value in values.json()["values"]]
+
+    total = skills + values
 
     vectorizer = TfidfVectorizer(tokenizer=tokens, token_pattern=None)
 
-    tfidf = vectorizer.fit_transform(skills)
+    tfidf = vectorizer.fit_transform(total)
     file_path = os.path.dirname(__file__)
 
     with open(f"{file_path}/vectorizer.pkl", "wb") as file:
