@@ -16,22 +16,31 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
   });
   //  state
   const [isAuth, setIsAuth] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [collapsed, setCollapsed] = useState(true);
 
   const authCheck = async () => {
     try {
-      const { data } = await axios.get("/api/check_authentication", {
-        withCredentials: true,
-      });
-
-      setTimeout(() => {
-        if (data?.authenticated) {
-          setIsAuth(true);
-        } else {
-          setIsAuth(false);
-        }
-      }, 3000);
+      await axios
+        .get("/api/check_authentication", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          if (response) {
+            if (response.data.authenticated) {
+              setIsAuth(true);
+              setIsLoading(false);
+            } else {
+              setIsAuth(false);
+            }
+          } else {
+            console.log("error", response);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
     } catch (error) {
       console.log("error", error);
     }
@@ -41,6 +50,14 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     // Save the selected component in sessionStorage
     window.sessionStorage.setItem("selectedComponent", selectedComponent);
   }, [selectedComponent]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoginRedirect />
+      </div>
+    );
+  }
 
   const contentStyle: React.CSSProperties = {
     minHeight: 120,
@@ -56,26 +73,22 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
 
   return (
     <>
-      {isAuth ? (
-        <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
-          <AntLayout>
-            <Navbar />
-            <AntLayout hasSider>
-              <Sidebar
-                selectedKey={selectedComponent}
-                setSelectedKey={setSelectedComponent}
-                collapsed={collapsed}
-                setCollapsed={setCollapsed}
-              />
-              <ToastContainer theme="light" />
-              <Content style={contentStyle}>{content}</Content>
-            </AntLayout>
-            {/* <Footer style={footerStyle}>Footer</Footer> */}
+      <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
+        <AntLayout>
+          <Navbar />
+          <AntLayout hasSider>
+            <Sidebar
+              selectedKey={selectedComponent}
+              setSelectedKey={setSelectedComponent}
+              collapsed={collapsed}
+              setCollapsed={setCollapsed}
+            />
+            <ToastContainer theme="light" />
+            <Content style={contentStyle}>{content}</Content>
           </AntLayout>
-        </Space>
-      ) : (
-        <LoginRedirect />
-      )}
+          {/* <Footer style={footerStyle}>Footer</Footer> */}
+        </AntLayout>
+      </Space>
     </>
   );
 };
