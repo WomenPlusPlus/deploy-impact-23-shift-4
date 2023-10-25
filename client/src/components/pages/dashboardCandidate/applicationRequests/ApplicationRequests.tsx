@@ -80,31 +80,54 @@ const ApplicationRequests = () => {
       );
       setTableData(updatedData);
 
-      // Create a modified package_accepted array with the selectedRecord
-      const updatedPackageAccepted = [
-        ...candidate?.package_accepted || [],
-        {
-          ...selectedRecord,
-          visible_info: enabledStrings,
-        },
-      ];
-
-      // Create a modified package_requested array without the selectedRecord
-      const updatedPackageRequested = candidate?.package_requested?.filter(
-        // filter out the selected record
-        (item) => item.key === selectedRecord.key
+      // check if **package_accepted** exists
+      const existingCompanyIndex = candidate?.package_accepted?.findIndex(
+        (item: any) => item.companyId === selectedRecord.companyId
       );
 
-      if (updatedPackageRequested && updatedPackageAccepted) {
-        const updatedCandidate = await updateCandidateById(
-          candidate?.user_id!,
-          {
-            package_requested: updatedPackageRequested,
-            package_accepted: updatedPackageAccepted,
-          }
-        );
+      if (existingCompanyIndex !== undefined && existingCompanyIndex !== -1) {
+        // Clone the candidate and the specific company entry
+        const updatedCandidate = {
+          ...candidate,
+          package_accepted: [...(candidate?.package_accepted || [])],
+        };
+
+        // Update the specific company entry with the new visible_info
+        updatedCandidate.package_accepted[existingCompanyIndex].visible_info =
+          enabledStrings;
         console.log("Updated candidate data:", updatedCandidate);
+
+        // Update the candidate's data
+        await updateCandidateById(candidate?.user_id!, {
+          package_accepted: updatedCandidate.package_accepted,
+        });
+      } else {
+        // Create a modified package_accepted array with the selectedRecord
+        const updatedPackageAccepted = [
+          ...(candidate?.package_accepted || []),
+          {
+            ...selectedRecord,
+            visible_info: enabledStrings,
+          },
+        ];
+
+        // Create a modified package_requested array without the selectedRecord
+        const updatedPackageRequested = candidate?.package_requested?.filter(
+          // filter out the selected record
+          (item) => item.key === selectedRecord.key
+        );
+        if (updatedPackageRequested && updatedPackageAccepted) {
+          const updatedCandidate = await updateCandidateById(
+            candidate?.user_id!,
+            {
+              package_requested: updatedPackageRequested,
+              package_accepted: updatedPackageAccepted,
+            }
+          );
+          console.log("Updated candidate data:", updatedCandidate);
+        }
       }
+
       setSelectedRecord(null);
     }
   };

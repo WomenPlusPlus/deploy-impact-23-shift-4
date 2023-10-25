@@ -4,6 +4,14 @@ export interface Language {
   score: number; // Allow null for initial values
 }
 
+export interface PackageAccepted {
+  visible_info: string[];
+  position: string | null;
+  key: number | null;
+  company: string;
+  companyId: string;
+}
+
 export interface Candidate {
   id: string;
   user_id: string;
@@ -41,7 +49,7 @@ export interface Candidate {
   saved_items?: string[];
   date_profile_modified?: string;
   package_requested?: { [key: string]: any }[];
-  package_accepted?: { [key: string]: any }[];
+  package_accepted?: PackageAccepted[];
   requested_jobs?: string[];
 }
 

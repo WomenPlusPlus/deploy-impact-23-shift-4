@@ -6,9 +6,10 @@ import {
   Candidate,
   Experience,
   Job,
+  PackageAccepted,
   Section,
 } from "../../../../../types/types";
-import styling from "./CandidateResumeTab.module.css";
+import styling from "./CandidateResumeTab.module.scss";
 import { IconTags } from "@tabler/icons-react";
 import { SkillsLevelGuide } from "../../../../shared/skillsLevelGuide/SkillsLevelGuide";
 import { RequestAccess } from "../../modal/RequestAccess";
@@ -19,35 +20,40 @@ import {
 } from "../../../candidateProfile/helpers/helper";
 import { Button } from "../../../../UI/button/Button";
 import { ProgressBarComponent } from "../../../../UI/progressbar/ProgressBarComponent";
-interface Props {
+import { allCategories } from "../../../../../components/pages/candidateProfile/helpers/helper";
+
+interface CandidateResumeTabProps {
   candidate: Candidate;
   matchingJobs: Job[];
 }
 
-const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
+const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
+  candidate,
+  matchingJobs,
+}) => {
   const candidateId = candidate?.user_id;
+  const companyId = JSON.parse(localStorage.getItem("auth") || "{}").user?.id;
   const [sectionsExperience, setSectionsExperience] = useState([] as Section[]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isPackageVisible, setIsPackageVisible] = useState(false);
   const [sectionsJobSearchPref, setSectionsJobSearchPref] = useState([] as any);
   const [sectionDocuments, setSectionDocuments] = useState([] as Section[]);
-
-  console.log("matchingJobs: ", matchingJobs);
+  const [companyVisibleInfo, setCompanyVisibleInfo] = useState([] as string[]);
+  const [jobPreferences, setJobPreferences] = useState(false);
+  const [experience, setExperience] = useState(false);
+  const [skills, setSkills] = useState(false);
+  const [values, setValues] = useState(false);
+  const [languages, setLanguages] = useState(false);
+  const [personalInfo, setPersonalInfo] = useState(false);
+  const [contactInfo, setContactInfo] = useState(false);
+  const [typeOfJobs, setTypeOfJobs] = useState(false);
+  const [documents, setDocuments] = useState(false);
 
   useEffect(() => {
     // read if access from local storage
-    const packageVisible = JSON.parse(
-      localStorage.getItem("package_visible") || "false"
-    );
-    if (packageVisible && packageVisible === "true") {
-      setIsPackageVisible(true);
-    } else {
-      setIsPackageVisible(false);
-    }
-    console.log("candidate: ", candidate);
     if (candidate) {
       const transformedExperience = transformExperience(
-        candidate?.experience as Experience[]
+        candidate.experience as Experience[]
       );
       const transformedVisibleInfo = transformCandidateJobPref(candidate);
       const transformedData = transformCandidateDocs(candidate);
@@ -55,13 +61,37 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
       setSectionsJobSearchPref(transformedVisibleInfo);
       setSectionsExperience(transformedExperience);
     }
+
+    const packageCandidateAccepted = candidate?.package_accepted as
+      | PackageAccepted[]
+      | undefined;
+
+    if (packageCandidateAccepted && packageCandidateAccepted.length > 0) {
+      setIsPackageVisible(true);
+      // Find company id in package accepted
+      const matchingObject = packageCandidateAccepted.find(
+        (obj) => obj.companyId === companyId
+      );
+
+      if (matchingObject) {
+        const visibleInfoArray: string[] = matchingObject.visible_info;
+        setCompanyVisibleInfo(visibleInfoArray);
+      } else {
+        console.log("No matching object found for the specified companyId.");
+      }
+    } else {
+      setIsPackageVisible(false);
+    }
+
+    console.log("candidate: ", candidate);
   }, [candidate]);
 
   const requestAccess = () => {
     console.log("request access for document: ");
     setIsModalVisible(true);
   };
-
+  console.log("jobPreferences: ", jobPreferences);
+  console.log("companyIdsVisibleInfo: ", companyVisibleInfo);
   return (
     <div className={styling.main}>
       {/* Assosiactions */}
@@ -183,6 +213,7 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
                 <ContentBlock sections={sectionsJobSearchPref} />
               </div>
             </CardContainer>
+
             <div className={styling.oneRow}>
               {/* Laguages */}
               <CardContainer
@@ -213,7 +244,62 @@ const CandidateResumeTab: React.FC<Props> = ({ candidate, matchingJobs }) => {
           </div>
         </div>
       ) : (
-        <div></div>
+        <div>
+          {/* Package */}
+          <div className={styling.jobPrefDiv}>
+            {/* Job search preferences */}
+            <CardContainer
+              className={
+                companyVisibleInfo.includes("Job Preferences")
+                  ? styling.jobPrefContainer
+                  : styling.jobPrefBlur
+              }
+            >
+              <div className={styling.profileCompletedEditIcon}>
+                <h1 className={styling.margin}>Job Search Preferences</h1>
+              </div>
+              <div className={styling.visibleSection}>
+                <ContentBlock sections={sectionsJobSearchPref} />
+              </div>
+            </CardContainer>
+
+            <div className={styling.oneRow}>
+              {/* Laguages */}
+              <CardContainer
+                className={
+                  companyVisibleInfo.includes("Languages")
+                    ? styling.lowerContainer
+                    : styling.blurredText
+                }
+              >
+                <div className={styling.profileCompletedEditIcon}>
+                  <h1 className={styling.margin}>Languages</h1>
+                </div>
+                <ProgressBarComponent
+                  customClass={styling.padding}
+                  candidate={candidate}
+                />
+              </CardContainer>
+
+              {/* Uploaded documents */}
+              <CardContainer
+                className={
+                  companyVisibleInfo.includes("Documents")
+                    ? styling.lowerContainer
+                    : styling.blurredText
+                }
+              >
+                <div className={styling.profileCompletedEditIcon}>
+                  <h1 className={styling.margin}>Uploaded documents</h1>
+                </div>
+                <ContentBlock
+                  customClass={styling.padding}
+                  sections={sectionDocuments}
+                />
+              </CardContainer>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

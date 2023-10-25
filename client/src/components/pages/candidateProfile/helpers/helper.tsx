@@ -30,87 +30,39 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   return <span>{getTimeAgo(timestamp)}</span>;
 };
 
-const getFakeData = () => {
-  const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
-  const fieldsToDisplayProfile = [
-    "First name",
-    "Last name",
-    "Job status",
-    "City",
-    "Country",
-  ];
-  const allTypeOfJob = [
-    { job_name: "Full-time", job_id: "Full-time" },
-    { job_name: "Part-time", job_id: "Part-time" },
-    { job_name: "Internship", job_id: "Internship" },
-    { job_name: "Freelance", job_id: "Freelance" },
-    { job_name: "Remote", job_id: "Remote" },
-  ];
-  const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
-  const allValue = [
-    "Teamwork", // Add more values as neede
-    "Communication",
-    "Problem solving",
-    "Creativity",
-    "Work ethic",
-    "Interpersonal skills",
-    "Adaptability",
-  ];
-  const allSkill = [
-    { skill_name: "React", skill_id: "React", score: 20 },
-    { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
-    { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
-    { skill_name: "JavaScript", skill_id: "JavaScript", score: 20 },
-    { skill_name: "HTML/CSS", skill_id: "HTML/CSS", score: 20 },
-    { skill_name: "Python", skill_id: "Python", score: 20 },
-  ];
-  const user = {
-    first_name: "John",
-    last_name: "Doe",
-    status: "Looking for a job",
-    city: "Zurich",
-    country: "CH",
-    progress: 80,
-    list: [
-      "PersonalDetails",
-      "Skills",
-      "Values",
-      "Documents",
-      "Privacy",
-      "TypeOfJobs",
-      "Languages",
-    ],
-    associations: ["Woman++", "proFemmes", "Coders", "Kpi"],
-    typeOfJobs: ["Full-time", "Part-time", "Internship", "Freelance"],
-    skills: [
-      { skill_name: "React", skill_id: "React", score: 20 },
-      { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
-      { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
-    ],
-    values: ["Teamwork", "Communication", "Problem solving"],
-    languages: [
-      { name: "English", levelName: "Beginner", score: 20 },
-      { name: "Italian", levelName: "Native", score: 100 },
-      // Add more languages as needed
-    ],
-    contactInfo: {
-      phoneNumber: "123-456-7890",
-      email: "laura@gmail.com",
-      address: "123 Street Name, City, Country",
-    },
-    job_status: "Looking for a job",
-    preferred_jobs: [{ job_name: "Full-time", job_id: "Full-time" }],
-  };
-  return {
-    user,
-    fieldsToDisplayContactInfo,
-    fieldsToDisplayProfile,
-    allTypeOfJob,
-    allTypeOfJobStatus,
-    allValue,
-    allSkill,
-  };
-};
+const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
+const fieldsToDisplayProfile = [
+  "First name",
+  "Last name",
+  "Job status",
+  "City",
+  "Country",
+];
+const allTypeOfJob = [
+  { job_name: "Full-time", job_id: "Full-time" },
+  { job_name: "Part-time", job_id: "Part-time" },
+  { job_name: "Internship", job_id: "Internship" },
+  { job_name: "Freelance", job_id: "Freelance" },
+  { job_name: "Remote", job_id: "Remote" },
+];
+const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
+const allValue = [
+  "Teamwork", // Add more values as neede
+  "Communication",
+  "Problem solving",
+  "Creativity",
+  "Work ethic",
+  "Interpersonal skills",
+  "Adaptability",
+];
+const allSkill = [
+  { skill_name: "React", skill_id: "React", score: 20 },
+  { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
+  { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
+  { skill_name: "JavaScript", skill_id: "JavaScript", score: 20 },
+  { skill_name: "HTML/CSS", skill_id: "HTML/CSS", score: 20 },
+  { skill_name: "Python", skill_id: "Python", score: 20 },
+];
 
 const allCategories = [
   "Job Preferences",
@@ -340,7 +292,12 @@ export const employmentTypes: string[] = [
 ];
 
 export {
-  getFakeData,
+  fieldsToDisplayContactInfo,
+  fieldsToDisplayProfile,
+  allTypeOfJob,
+  allTypeOfJobStatus,
+  allValue,
+  allSkill,
   countNullFieldsByCategory,
   percentage,
   fieldCategoryMapping,

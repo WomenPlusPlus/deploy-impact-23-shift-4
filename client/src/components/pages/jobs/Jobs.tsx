@@ -11,34 +11,30 @@ const Jobs = () => {
   const navigate = useNavigate();
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const userId = auth?.user?.id;
+  const userType = auth?.user?.user_type;
+
   const [jobs, setJobs] = useState([] as Job[]);
+  const [companyJobs, setCompanyJobs] = useState([] as Job[]);
   const [companies, setCompanies] = useState([] as Company[]);
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchedScoreVisible, setMatchedScoreVisible] = useState(true);
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
-    console.log("allJobs", allJobs);
-    const allCompanies = await getAllCompanies();
-    if (auth?.user?.user_type === "candidate") {
+    if (userType === "candidate") {
+      const allCompanies = await getAllCompanies();
       const candidate = await getCandidateById(userId);
       setCandidate(candidate);
+      setJobs(allJobs);
+      setCompanies(allCompanies);
     }
 
-    // If user is a company, only show jobs that belong to that company
-    if (auth?.user?.user_type === "company") {
+    if (userType === "company") {
       setMatchedScoreVisible(false);
-      const jobs = allJobs?.map((job: Record<string, any>) => {
-        // get all jobs that belong to this company
-        if (job["company_id"] === userId) {
-          return job;
-        }
-      });
-      setJobs(jobs);
-    } else {
-      setJobs(allJobs);
+      // filter jobs by company id
+      const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
+      setCompanyJobs(jobs);
     }
-    setCompanies(allCompanies);
   };
 
   useEffect(() => {
@@ -46,7 +42,7 @@ const Jobs = () => {
   }, []);
 
   const header = () => {
-    if (auth?.user?.user_type === "company") {
+    if (userType === "company") {
       return (
         <div className={styling.header}>
           <h1>My jobs</h1>
@@ -63,22 +59,46 @@ const Jobs = () => {
     }
   };
 
+  const content = () => {
+    if (userType === "company") {
+      return (
+        <div className={styling.cardContainer}>
+          {companyJobs.length > 0 &&
+            companyJobs?.map((job, index) => (
+              <JobCard
+                key={index}
+                job={job}
+                companies={companies}
+                candidate={candidate}
+                onClick={() => navigate(`/job/${job?.id}`)}
+                isMatchVisible={matchedScoreVisible}
+              />
+            ))}
+        </div>
+      );
+    } else {
+      return (
+        <div className={styling.cardContainer}>
+          {jobs.length > 0 &&
+            jobs?.map((job, index) => (
+              <JobCard
+                key={index}
+                job={job}
+                companies={companies}
+                candidate={candidate}
+                onClick={() => navigate(`/job/${job?.id}`)}
+                isMatchVisible={matchedScoreVisible}
+              />
+            ))}
+        </div>
+      );
+    }
+  };
+
   return (
     <div className={styling.main}>
       {header()}
-      <div className={styling.cardContainer}>
-        {jobs &&
-          jobs?.map((job, index) => (
-            <JobCard
-              key={index}
-              job={job}
-              companies={companies}
-              candidate={candidate}
-              onClick={() => navigate(`/job/${job?.id}`)}
-              isMatchVisible={matchedScoreVisible}
-            />
-          ))}
-      </div>
+      {content()}
     </div>
   );
 };

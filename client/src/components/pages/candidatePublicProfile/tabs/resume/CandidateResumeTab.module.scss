@@ -174,8 +174,16 @@
   background-color: var(--color-button);
 }
 
+.lowerContainer {
+  min-height: 30rem;
+  padding: 3rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
 .blurredText {
-  filter: blur(5px); /* Adjust the blur amount as needed */
+  @extend .lowerContainer;
+  filter: blur(5px);
 }
 
 .requestAccessTitle {
@@ -189,6 +197,11 @@
 .jobPrefContainer {
   padding: 3rem;
   width: 100%;
+}
+
+.jobPrefBlur {
+  @extend .jobPrefContainer;
+  filter: blur(5px);
 }
 
 .profileCompletedEditIcon {
@@ -210,13 +223,6 @@
   justify-content: center;
   gap: 2rem;
   font-size: medium;
-}
-
-.lowerContainer {
-  min-height: 30rem;
-  padding: 3rem;
-  width: 100%;
-  margin-top: 2rem;
 }
 
 .oneRow {
