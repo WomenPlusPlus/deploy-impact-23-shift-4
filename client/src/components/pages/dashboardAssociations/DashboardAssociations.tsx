@@ -234,12 +234,21 @@ const DashboardAssociations = () => {
           <h2 className={styling.headerTitle}>
             Welcome back, {association?.association_name}
           </h2>
-          <div className={styling.location}>
+          <div className={styling.subheader}>
             <IconMapPin />
-            <p>{association?.address}</p>
+            {association?.address ? (
+              <p>{association?.address}</p>
+            ) : (
+              <p>Add address</p>
+            )}
             <p>|</p>
-            <IconBrandLinkedin />
-            <IconWorldWww />
+            {association?.url ? (
+              <a href={association?.url} target="_blank" rel="noreferrer">
+                <IconWorldWww />
+              </a>
+            ) : (
+              <p>Add url</p>
+            )}
           </div>
         </div>
 

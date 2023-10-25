@@ -58,7 +58,7 @@ const Candidates = () => {
   }, []);
 
   return (
-    <div className="mainContainer">
+    <div className="main">
       <h1 className="header">The best talent is right here!</h1>
       <div className="filters">
         <Searchbar

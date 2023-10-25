@@ -1,5 +1,5 @@
-.mainContainer {
-  padding: 2rem;
+.main {
+  padding: 2rem 4rem;
   min-height: 100vh;
   background-color: var(--background-color);
 }
