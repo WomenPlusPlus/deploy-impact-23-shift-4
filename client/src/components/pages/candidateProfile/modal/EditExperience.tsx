@@ -1,7 +1,8 @@
 import { IconEdit } from "@tabler/icons-react";
-import { Candidate } from "../../../../types/types";
-import { Button, Input, Modal } from "antd";
+import { Candidate, Experience } from "../../../../types/types";
+import { Button, Input, Modal, Divider } from "antd";
 import { useEffect, useState } from "react";
+import styling from "./EditExperience.module.css";
 
 interface EditExperienceProps {
   candidate: Candidate;
@@ -12,12 +13,6 @@ interface EditExperienceProps {
   visible: boolean;
   setVisible: (arg: boolean) => void;
   showModal?: () => void;
-}
-
-interface Experience {
-  role: string;
-  industries: string;
-  years_of_experience?: number;
 }
 
 const EditExperience: React.FC<EditExperienceProps> = ({
@@ -34,9 +29,7 @@ const EditExperience: React.FC<EditExperienceProps> = ({
   const [currentRole, setCurrentRole] = useState("");
   const [currentIndustries, setCurrentIndustries] = useState("");
   const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState("");
-  const [experienceToDelete, setExperienceToDelete] = useState<number | null>(
-    null
-  );
+  const [saveDisabled, setSaveDisabled] = useState(true);
 
   useEffect(() => {
     if (candidate && candidate.experience) {
@@ -51,10 +44,12 @@ const EditExperience: React.FC<EditExperienceProps> = ({
       onSave(updatedCandidate);
     }
     setVisible(false);
+    setSaveDisabled(true);
   };
 
   const onCancel = () => {
     setVisible(false);
+    setSaveDisabled(true);
   };
 
   const addExperience = () => {
@@ -64,15 +59,13 @@ const EditExperience: React.FC<EditExperienceProps> = ({
         industries: currentIndustries,
       };
       if (currentYearsOfExperience) {
-        newExperience.years_of_experience = parseInt(
-          currentYearsOfExperience,
-          10
-        );
+        newExperience.years_of_experience = currentYearsOfExperience;
       }
       setExperience((prevExperience) => [...prevExperience, newExperience]);
       setCurrentRole("");
       setCurrentIndustries("");
       setCurrentYearsOfExperience("");
+      setSaveDisabled(false);
     }
   };
 
@@ -81,7 +74,7 @@ const EditExperience: React.FC<EditExperienceProps> = ({
     updatedExperience[index] = {
       role: currentRole,
       industries: currentIndustries,
-      years_of_experience: parseInt(currentYearsOfExperience, 10) || undefined,
+      years_of_experience: currentYearsOfExperience || "",
     };
     setExperience(updatedExperience);
     handleSave();
@@ -109,7 +102,7 @@ const EditExperience: React.FC<EditExperienceProps> = ({
           <Button key="cancel" onClick={onCancel}>
             Cancel
           </Button>,
-          <Button key="save" type="primary" onClick={handleSave}>
+          <Button key="save" type="primary" onClick={handleSave} disabled={saveDisabled}>
             Save
           </Button>,
         ]}
@@ -118,6 +111,8 @@ const EditExperience: React.FC<EditExperienceProps> = ({
         {experience &&
           experience?.map((exp, index) => (
             <div key={index}>
+              <Divider>Experience {index + 1}</Divider>
+              <h4 className={styling.margin}>Role:</h4>
               <Input
                 placeholder="Role"
                 value={exp.role}
@@ -125,56 +120,88 @@ const EditExperience: React.FC<EditExperienceProps> = ({
                   const updatedExperience = [...experience];
                   updatedExperience[index].role = e.target.value;
                   setExperience(updatedExperience);
+                  setSaveDisabled(false);
                 }}
               />
-              <Input
-                placeholder="Industries"
-                value={exp.industries}
-                onChange={(e) => {
-                  const updatedExperience = [...experience];
-                  updatedExperience[index].industries = e.target.value;
-                  setExperience(updatedExperience);
-                }}
-              />
-              <Input
-                placeholder="Years of Experience"
-                value={exp.years_of_experience?.toString() || ""}
-                onChange={(e) => {
-                  const updatedExperience = [...experience];
-                  updatedExperience[index].years_of_experience =
-                    parseInt(e.target.value, 10) || undefined;
-                  setExperience(updatedExperience);
-                }}
-              />
+              <div className={styling.row}>
+                <div className={styling.rowContainer}>
+                  <h4 className={styling.margin}>Industries:</h4>
+                  <Input
+                    placeholder="Industries"
+                    value={exp.industries}
+                    onChange={(e) => {
+                      const updatedExperience = [...experience];
+                      updatedExperience[index].industries = e.target.value;
+                      setExperience(updatedExperience);
+                      setSaveDisabled(false);
+                    }}
+                  />
+                </div>
+                <div className={styling.rowContainer}>
+                  <h4 className={styling.margin}>Years of Experience:</h4>
+                  <Input
+                    placeholder="Years of Experience"
+                    value={exp.years_of_experience?.toString() || ""}
+                    onChange={(e) => {
+                      const updatedExperience = [...experience];
+                      updatedExperience[index].years_of_experience =
+                        e.target.value;
+                      setExperience(updatedExperience);
+                      setSaveDisabled(false);
+                    }}
+                  />
+                </div>
+              </div>
               <div key={index}>
                 {/* ... (other input fields) */}
-                <Button onClick={() => deleteExperience(index)}>
-                  Delete Experience
-                </Button>
-                <Button onClick={() => updateExperience(index)}>
+                <Button
+                  className={styling.buttonExperience}
+                  onClick={() => updateExperience(index)}
+                  type="primary"
+                  ghost
+                >
                   Update Experience
+                </Button>
+                <Button
+                  className={styling.buttonExperience}
+                  onClick={() => deleteExperience(index)}
+                  danger
+                >
+                  Delete Experience
                 </Button>
               </div>
             </div>
           ))}
-        <hr />
+        {experience && experience.length > 0 && <hr />}
         {/* Add new experience */}
+        <Divider>Add New Experience</Divider>
+        <h4 className={styling.margin}>Role:</h4>
         <Input
           placeholder="Role"
           value={currentRole}
           onChange={(e) => setCurrentRole(e.target.value)}
         />
-        <Input
-          placeholder="Industries"
-          value={currentIndustries}
-          onChange={(e) => setCurrentIndustries(e.target.value)}
-        />
-        <Input
-          placeholder="Years of Experience"
-          value={currentYearsOfExperience}
-          onChange={(e) => setCurrentYearsOfExperience(e.target.value)}
-        />
-        <Button onClick={addExperience}>Add Experience</Button>
+        <div className={styling.row}>
+          <div className={styling.rowContainer}>
+            <h4 className={styling.margin}>Industries:</h4>
+            <Input
+              placeholder="Industries"
+              value={currentIndustries}
+              onChange={(e) => setCurrentIndustries(e.target.value)}
+            />
+          </div>
+          <div className={styling.rowContainer}>
+            <h4 className={styling.margin}>Years of Experience:</h4>
+            <Input
+              placeholder="Experience. e.g 6 months"
+              value={currentYearsOfExperience}
+              onChange={(e) => setCurrentYearsOfExperience(e.target.value)}
+            />
+          </div>
+        </div>
+        <Button className={styling.buttonExperience} onClick={addExperience}>
+          Add Experience
+        </Button>
       </Modal>
     </>
   );

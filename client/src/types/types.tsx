@@ -31,9 +31,9 @@ export interface Candidate {
   cv_reference?: string | null;
   address?: string;
   phone_number?: string;
-  birth_date?: string; // You may want to use a Date type, or ISO string
-  work_permit: string;
-  notice_period?: string;
+  birth_date?: string;
+  work_permit: string | null;
+  notice_period?: string | null;
   job_status?: string;
   preferred_jobs?: { [key: string]: any }[];
   company_type?: string[];
@@ -46,17 +46,17 @@ export interface Candidate {
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
   visible_information?: string[];
-  experience?: { [key: string]: any }[];
-  visa_status?: string[];
-  salary_expectation?: string[];
-  possible_work_locations?: string[];
-  type_of_work?: string[];
-  saved_items?: string[];
+  experience?: { [key: string]: any }[] | null;
+  visa_status?: string[] | null;
+  salary_expectation?: string[] | null;
+  possible_work_locations?: string[] | null;
+  type_of_work?: string[] | null;
+  saved_items?: string[] | null;
   date_profile_modified?: string;
-  package_requested?: { [key: string]: any }[];
+  package_requested?: { [key: string]: any }[] | null;
   package_accepted?: PackageAccepted[];
-  requested_jobs?: string[];
-  initiatives_accepted?: { [key: string]: any }[];
+  requested_jobs?: string[] | null;
+  initiatives_accepted?: { [key: string]: any }[] | null;
 }
 
 export interface EditInputProps<Candidate> {
@@ -82,7 +82,7 @@ export interface Company {
   linkedin_url?: string;
   values?: string[];
   job_types?: string[];
-  contact_details?: Record<string, any>; // JSON object
+  contact_details?: Record<string, any>;
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
@@ -98,7 +98,7 @@ export interface Company {
 export interface Experience {
   role: string;
   industries: string;
-  years_of_experience?: number;
+  years_of_experience?: string;
 }
 
 export interface Job {

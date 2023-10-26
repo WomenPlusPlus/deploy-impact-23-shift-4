@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Input, Select, Space } from "antd";
-import { Button } from "../../../UI/button/Button";
+import { Modal, Input, Select, Space, Button } from "antd";
 import styling from "./EditLanguages.module.css";
 import { Candidate } from "../../../../types/types";
 
@@ -145,6 +144,7 @@ const EditLanguages: React.FC<EditLanguagesProps> = ({
           <Button
             key={`deleteLanguage${index}`}
             onClick={() => deleteLanguage(index)}
+            danger
           >
             Delete
           </Button>

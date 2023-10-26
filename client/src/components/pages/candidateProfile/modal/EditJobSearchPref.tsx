@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Input, Select } from "antd";
+import { Modal, Input, Select, Button } from "antd";
 import { Candidate } from "../../../../types/types";
 import { IconEdit } from "@tabler/icons-react";
-import { Button } from "../../../UI/button/Button";
 import styling from "./EditJobSearchPref.module.css";
 
 const { Option } = Select;
@@ -23,12 +22,9 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   onSave,
 }) => {
   const [selectedField, setSelectedField] = useState<string>("");
-  const [editedSections, setEditedSections] = useState<string[]>([]);
   const [additionalFields, setAdditionalFields] = useState<string[]>([]);
-  const [minSalary, setMinSalary] = useState<string>("");
-  const [maxSalary, setMaxSalary] = useState<string>("");
+  const [salaryRange, setSalaryRange] = useState<string[]>([]);
   const [notice, setNotice] = useState<string>("");
-  const [visaStatus, setVisaStatus] = useState<string>("");
   const [visaFields, setVisaFields] = useState<string[]>([]);
   const [workLocation, setWorkLocation] = useState<string[]>([]);
   const [typeOfWork, setTypeOfWork] = useState<string[]>([]);
@@ -42,102 +38,110 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   ];
 
   useEffect(() => {
-    if (candidate?.visible_information) {
-      setEditedSections(candidate?.visible_information as string[]);
+    // Clear additionalFields when the component mounts
+    setAdditionalFields([]);
+
+    if (
+      candidate?.salary_expectation &&
+      candidate?.salary_expectation.length > 0 &&
+      candidate?.salary_expectation[0] !== ""
+    ) {
+      setSalaryRange(candidate?.salary_expectation);
+      setAdditionalFields(["Salary range"]);
     }
-    if (candidate?.salary_expectation) {
-      setMinSalary(candidate?.salary_expectation[0] || "");
-    }
-    if (candidate?.salary_expectation) {
-      setMaxSalary(candidate?.salary_expectation[1] || "");
-    }
-    if (candidate?.notice_period) {
+    if (candidate?.notice_period && candidate?.notice_period.length > 0) {
       setNotice(candidate?.notice_period);
+      setAdditionalFields(["Notice"]);
     }
-    if (candidate?.visa_status) {
+    if (candidate?.visa_status && candidate?.visa_status.length > 0) {
       setVisaFields(candidate?.visa_status as string[]);
+      setAdditionalFields(["Visa Status"]);
     }
-    if (candidate?.possible_work_locations) {
-      setWorkLocation(candidate?.possible_work_locations || []);
+    if (
+      candidate?.possible_work_locations &&
+      candidate?.possible_work_locations.length > 0
+    ) {
+      setWorkLocation(candidate?.possible_work_locations);
+      setAdditionalFields(["Possible Work Locations"]);
     }
-    if (candidate?.type_of_work) {
-      setTypeOfWork(candidate?.type_of_work || []);
+    if (candidate?.type_of_work && candidate?.type_of_work.length > 0) {
+      setTypeOfWork(candidate?.type_of_work);
+      setAdditionalFields(["Type of work"]);
     }
   }, [candidate]);
 
   const handleAddField = () => {
     if (selectedField) {
-      if (
-        (selectedField === "Salary range" || selectedField === "Notice") &&
-        additionalFields.includes(selectedField)
-      ) {
-        return; // Allow adding Salary and Notice only once
-      } else if (
-        selectedField === "Visa Status" &&
-        !visaFields.includes(visaStatus)
-      ) {
-        setVisaFields([...visaFields, visaStatus]);
-        setVisaStatus(""); // Clear Visa Status input field
+      console.log("selectedField", selectedField, "add", additionalFields);
+      if (additionalFields.includes(selectedField)) {
+        return; // Allow fields to be added only once
       }
       setAdditionalFields([...additionalFields, selectedField]);
       setSelectedField("");
     }
   };
 
-  const handleSave = () => {
-    if (onSave) {
-      let updatedCandidate: Candidate = { ...candidate };
+  const handleUpdateField = () => {
+    let updatedCandidate: Candidate = { ...candidate };
 
-      if (additionalFields.includes("Salary range")) {
-        updatedCandidate = {
-          ...updatedCandidate,
-          salary_expectation: [minSalary, maxSalary],
-        };
-      }
-      if (additionalFields.includes("Notice")) {
-        updatedCandidate = {
-          ...updatedCandidate,
-          notice_period: notice,
-        };
-      }
-      if (visaFields) {
-        updatedCandidate = {
-          ...updatedCandidate,
-          visa_status: visaFields,
-        };
-      }
-      if (workLocation) {
-        updatedCandidate = {
-          ...updatedCandidate,
-          possible_work_locations: workLocation,
-        };
-      }
-      if (typeOfWork) {
-        updatedCandidate = {
-          ...updatedCandidate,
-          type_of_work: typeOfWork,
-        };
-      }
+    updatedCandidate = {
+      ...updatedCandidate,
+      salary_expectation: salaryRange,
+      notice_period: notice,
+      visa_status: visaFields,
+      possible_work_locations: workLocation,
+      type_of_work: typeOfWork,
+    };
 
-      updatedCandidate.visible_information =
-        editedSections.concat(additionalFields);
+    console.log("updatedCandidate", updatedCandidate);
+    handleSave(updatedCandidate, true);
+  };
 
-      onSave(updatedCandidate);
+  const handleSave = (updatedCandidate: Candidate, isOnCancel: boolean) => {
+    onSave && onSave(updatedCandidate);
+
+    if (isOnCancel) {
+      onCancel();
     }
-    onCancel();
   };
 
   const onCancel = () => {
     setAdditionalFields([]);
-    setMinSalary("");
-    setMaxSalary("");
+    setSalaryRange([]);
     setNotice("");
-    setVisaStatus("");
     setSelectedField("");
+    setTypeOfWork([]);
     setVisible(false);
   };
 
-  const renderFields = (field: string) => {
+  const handleDeleteField = (field: string) => {
+    console.log("field", field);
+
+    // set states
+    switch (field) {
+      case "Salary range":
+        setSalaryRange([]);
+        break;
+      case "Notice":
+        setNotice("");
+        break;
+      case "Visa Status":
+        setVisaFields([]);
+        break;
+      case "Possible Work Locations":
+        setWorkLocation([]);
+        break;
+      case "Type of work":
+        setTypeOfWork([]);
+        break;
+      default:
+        break;
+    }
+    setAdditionalFields(additionalFields.filter((f) => f !== field));
+    console.log("additionalFields", additionalFields);
+  };
+
+  const renderFields = (field: string, showDeleteButton: boolean) => {
     switch (field) {
       case "Salary range":
         return (
@@ -146,16 +150,30 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
             <div className={styling.row}>
               <p>Min: </p>
               <Input
-                value={minSalary}
-                onChange={(e) => setMinSalary(e.target.value)}
+                value={salaryRange[0]}
+                onChange={(e) =>
+                  setSalaryRange([e.target.value, salaryRange[1]])
+                }
                 placeholder="Min Salary"
               />
               <p>Max: </p>
               <Input
-                value={maxSalary}
-                onChange={(e) => setMaxSalary(e.target.value)}
+                value={salaryRange[1]}
+                onChange={(e) =>
+                  setSalaryRange([salaryRange[0], e.target.value])
+                }
                 placeholder="Max Salary"
               />
+              {showDeleteButton && (
+                <Button
+                  type="default"
+                  danger
+                  className={styling.deleteButton}
+                  onClick={() => handleDeleteField(field)}
+                >
+                  Delete
+                </Button>
+              )}
             </div>
           </div>
         );
@@ -172,27 +190,44 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
               <Option value="2 weeks">2 weeks</Option>
               <Option value="1 month">1 month</Option>
             </Select>
+            {showDeleteButton && (
+              <Button
+                type="default"
+                danger
+                className={styling.deleteButton}
+                onClick={() => handleDeleteField(field)}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         );
       case "Visa Status":
-        return visaFields.map((visa, index) => (
-          <div key={index}>
+        return (
+          <div>
             <h3>{field}</h3>
             <Select
-              value={visa}
-              onChange={(value) => {
-                const updatedVisaFields = [...visaFields];
-                updatedVisaFields[index] = value;
-                setVisaFields(updatedVisaFields);
-              }}
+              value={visaFields}
+              onChange={(value) => setVisaFields(value)}
               style={{ minWidth: "100%" }}
+              mode="tags"
             >
               <Option value="EU">EU valid visa</Option>
               <Option value="CH">CH valid visa</Option>
               <Option value="US">US valid visa</Option>
             </Select>
+            {showDeleteButton && (
+              <Button
+                type="default"
+                danger
+                className={styling.deleteButton}
+                onClick={() => handleDeleteField(field)}
+              >
+                Delete
+              </Button>
+            )}
           </div>
-        ));
+        );
       case "Possible Work Locations":
         return (
           <div>
@@ -212,6 +247,16 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
               <Option value="Luzern">Luzern</Option>
               <Option value="St. Gallen">St. Gallen</Option>
             </Select>
+            {showDeleteButton && (
+              <Button
+                type="default"
+                danger
+                className={styling.deleteButton}
+                onClick={() => handleDeleteField(field)}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         );
       case "Type of work":
@@ -229,6 +274,16 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
               <Option value="mostly-home">Mostly Home</Option>
               <Option value="in-office">In office</Option>
             </Select>
+            {showDeleteButton && (
+              <Button
+                type="default"
+                danger
+                className={styling.deleteButton}
+                onClick={() => handleDeleteField(field)}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         );
       default:
@@ -248,28 +303,34 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
         title="Edit Information"
         onCancel={onCancel}
         footer={[
-          <Button key="cancel" onClick={onCancel} className={styling.cancel}>
+          <Button key="cancel" onClick={onCancel}>
             Cancel
           </Button>,
-          <Button key="save" onClick={handleSave} className={styling.button}>
+          <Button
+            key="save"
+            type="primary"
+            onClick={handleUpdateField}
+            className={styling.button}
+          >
             Save
           </Button>,
         ]}
       >
         {/* Display existing fields */}
-        {editedSections?.map((field) => (
-          <div key={field}>
-            {renderFields(field)}
+        {/* {editedSections?.map((field, index) => (
+          <div key={index}>
+            {renderFields(field, true)}
             <hr />
           </div>
-        ))}
+        ))} */}
         {/* Display fields */}
-        {additionalFields?.map((field) => (
-          <div key={field}>
-            {renderFields(field)}
-            <hr />
-          </div>
-        ))}
+        {additionalFields.length > 0 &&
+          additionalFields?.map((field, index) => (
+            <div key={index + 1}>
+              {renderFields(field, true)}
+              <hr />
+            </div>
+          ))}
         {/* Add fields */}
         <div className={styling.row}>
           <Select
@@ -277,8 +338,8 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
             onChange={(value) => setSelectedField(value)}
             style={{ minWidth: "35rem", marginBottom: "1rem" }}
           >
-            {fieldsToShow.map((field) => (
-              <Option key={field} value={field}>
+            {fieldsToShow.map((field, index) => (
+              <Option key={index + 2} value={field}>
                 {field}
               </Option>
             ))}

@@ -23,6 +23,7 @@ interface ProfileCompletedProps {
   editTypeOfJobs?: () => void;
   editDocuments?: () => void;
   editVisibleInformation?: () => void;
+  editJobSearchPref?: () => void;
   hidden?: boolean;
 }
 
@@ -39,6 +40,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   editTypeOfJobs,
   editDocuments,
   editVisibleInformation,
+  editJobSearchPref,
   hidden,
 }) => {
   // state
@@ -114,6 +116,11 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
       case "Visible Information":
         if (editVisibleInformation) {
           editVisibleInformation();
+        }
+        break;
+      case "Job Preferences":
+        if (editJobSearchPref) {
+          editJobSearchPref();
         }
         break;
       default:

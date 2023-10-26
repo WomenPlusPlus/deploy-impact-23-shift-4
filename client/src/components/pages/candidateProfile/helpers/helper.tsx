@@ -248,15 +248,22 @@ function transformExperience(experience: Experience[]) {
     if (firstExperience.role) {
       subtext = experience
         .map((exp, index) =>
-          index === 0 ? "" : ` ${exp.years_of_experience} years in ${exp.role}`
+          index === 0 ? "" : ` ${exp.years_of_experience} in ${exp.role}`
         )
         .join(" ");
 
-      sectionsExperience.push({
-        title: "Roles",
-        text: `${firstExperience.years_of_experience} years ${firstExperience.role}`,
-        subtext: `+ ${subtext},`,
-      });
+      if (experience.length > 1) {
+        sectionsExperience.push({
+          title: "Roles",
+          text: `${firstExperience.years_of_experience} ${firstExperience.role}`,
+          subtext: `+ ${subtext},`,
+        });
+      } else {
+        sectionsExperience.push({
+          title: "Role",
+          text: `${firstExperience.years_of_experience} ${firstExperience.role}`,
+        });
+      }
     }
 
     if (firstExperience.industries) {
@@ -264,11 +271,18 @@ function transformExperience(experience: Experience[]) {
         .map((exp, index) => (index === 0 ? "" : `${exp.industries}`))
         .join(" ");
 
-      sectionsExperience.push({
-        title: "Industries",
-        text: `${firstExperience.industries}`,
-        subtext: `+ ${subtext} ,`,
-      });
+      if (experience.length > 1) {
+        sectionsExperience.push({
+          title: "Industries",
+          text: `${firstExperience.industries}`,
+          subtext: `+ ${subtext},`,
+        });
+      } else {
+        sectionsExperience.push({
+          title: "Industry",
+          text: `${firstExperience.industries}`,
+        });
+      }
     }
   }
 
