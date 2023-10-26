@@ -103,6 +103,7 @@ def match_jobs_route(domain_name):
 
                         job_score = round(total_score / count, 1)
 
+                        # TODO: increase threshold to 60
                         if job_score >= 20:
                             job_match.append({"id": job_id, "score": job_score})
                             if job["matching_candidates"]:
@@ -135,7 +136,7 @@ def match_jobs_route(domain_name):
                                 json=update_job_json,
                             )
 
-                if job_match:
+                if len(job_match) == 0:
                     return jsonify({"message": "No matching jobs"}), 200
 
                 update_json = {"user_id": id, "matching_jobs": job_match}
