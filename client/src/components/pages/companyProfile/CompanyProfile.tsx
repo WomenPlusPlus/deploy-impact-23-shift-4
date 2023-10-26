@@ -9,7 +9,7 @@ import { CardContainer } from "../../UI/container/CardContainer";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
 import { Company } from "../../../types/types";
-import { addJob, getAllJobs, getJobById } from "../../../api/jobs";
+import { addJob, getAllJobs } from "../../../api/jobs";
 import { getCompanyById, updateCompanyById } from "../../../api/companies";
 
 import {
@@ -20,8 +20,6 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./CompanyProfile.module.css";
-import { match } from "assert";
-import { getMatchCandidates } from "../../../api/match";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -83,11 +81,8 @@ const CompanyProfile = () => {
 
     const company = await getCompanyById(userId);
     const allJobs = await getAllJobs();
-    const jobs = allJobs?.map((job: Record<string, any>) => {
-      // get all jobs that belong to this company
-      if (job["company_id"] === userId) {
-        return job;
-      }
+    const jobs = allJobs?.filter((job: Record<string, any>) => {
+      return job["company_id"] === userId;
     });
 
     setJobs(jobs);

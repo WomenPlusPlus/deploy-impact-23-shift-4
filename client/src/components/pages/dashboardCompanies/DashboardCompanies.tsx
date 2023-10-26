@@ -41,17 +41,14 @@ const DashboardCompany = () => {
     const company = await getCompanyById(userId);
 
     const allJobs = await getAllJobs();
-    console.log("allJobs", allJobs);
+
     const allCandidates = await getAllCandidates();
 
-    const jobs = allJobs.map((job: Record<string, any>) => {
-      if (job["company_id"] === userId) {
-        return job;
-      }
+    const jobs = allJobs?.filter((job: Record<string, any>) => {
+      return job["company_id"] === userId;
     });
 
     jobs?.map(async (job: Record<string, any>) => {
-      console.log("job", job);
       if (job && job?.id) await getMatchCandidates(job?.id);
     });
 
