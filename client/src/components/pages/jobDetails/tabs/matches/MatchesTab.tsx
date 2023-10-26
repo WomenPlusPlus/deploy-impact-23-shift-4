@@ -49,6 +49,7 @@ const JobMatchesTab: React.FC<Props> = ({ job }) => {
                   header={candidate.experience[0]?.role}
                   skills={candidate?.skills}
                   values={candidate?.values}
+                  associations={candidate?.associations}
                   onClickRedirect={() =>
                     navigate(`/candidate/${candidate?.user_id}`)
                   }

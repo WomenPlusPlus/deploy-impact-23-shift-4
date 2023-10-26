@@ -145,15 +145,18 @@ const Card: React.FC<CardProps> = ({
         </div>
       </div>
 
-      <div className={styling.description}>
-        <p>{description}</p>
-      </div>
+      {description && (
+        <div className={styling.description}>
+          <p>{description}</p>
+        </div>
+      )}
 
       <div className={styling.container}>
         <div className={styling.labelContainer}>
           {associations?.map((association, index) => (
             <Labels
               key={index}
+              color="var(--association-label)"
               labelName={association}
               customClass={styling.associationLabel}
               disableCloseIcon
@@ -165,6 +168,7 @@ const Card: React.FC<CardProps> = ({
           {skills?.map((skill: any, index) => (
             <Labels
               key={index}
+              color="var(--skills-label)"
               labelName={skill?.skill_name}
               customClass={styling.label}
               disableCloseIcon
@@ -176,6 +180,7 @@ const Card: React.FC<CardProps> = ({
           {values?.map((value, index) => (
             <Labels
               key={index}
+              color="var(--values-label)"
               labelName={value}
               customClass={styling.label}
               disableCloseIcon

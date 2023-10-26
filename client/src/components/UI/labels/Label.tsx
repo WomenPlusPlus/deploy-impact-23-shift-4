@@ -11,6 +11,7 @@ interface LabelProps {
   onClickHandle?: () => void;
   isSkill?: boolean;
   skillLevel?: string;
+  color?: string;
 }
 
 const Labels: React.FC<LabelProps> = ({
@@ -22,11 +23,13 @@ const Labels: React.FC<LabelProps> = ({
   onClickHandle,
   isSkill,
   skillLevel,
+  color,
 }) => {
   return (
     <div
       className={`${styling.labelContainer} ${customClass}`}
       onClick={onClickHandle}
+      style={{ backgroundColor: color }}
     >
       {!isSkill ? (
         <div className={styling.labelIcon}>

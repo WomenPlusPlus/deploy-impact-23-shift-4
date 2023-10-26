@@ -20,6 +20,9 @@
   --gray-dark: #141414;
   --label-color: #e4e4e4;
   --line-color: #ccc;
+  --association-label: #c59ffd;
+  --skills-label: #a6d7c2;
+  --values-label: #a4c4e4;
 }
 
 html {
