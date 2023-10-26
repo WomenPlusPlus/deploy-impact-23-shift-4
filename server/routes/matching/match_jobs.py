@@ -62,24 +62,13 @@ def match_jobs_route(domain_name):
                 cand_values = candidate.json()["candidates"]["values"]
                 cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
 
-                existing_matching_jobs = candidate.json()["candidates"].get(
-                    "matching_jobs", []
-                )
-
                 jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
                 jobs = jobs_response.json()["jobs"]
 
                 for job in jobs:
+                    job_skills = [skill["skill_name"] for skill in job["skills"]]
                     # if cand_skills and any(item in cand_skills for item in job_skills_ids):
                     job_id = job["id"]
-
-                    if any(
-                        matching_job["id"] == job_id
-                        for matching_job in existing_matching_jobs
-                    ):
-                        continue
-
-                    job_skills = [skill["skill_name"] for skill in job["skills"]]
 
                     count = 4
                     total_score = 0

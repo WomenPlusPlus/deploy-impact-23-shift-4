@@ -62,10 +62,6 @@ def match_candidates_route(domain_name):
                 )
                 candidates = candidates_response.json()["candidates"]
 
-                existing_matching_candidates = job.json()["jobs"].get(
-                    "matching_candidates", []
-                )
-
                 for candidate in candidates:
                     cand_skills = [skill["skill_name"] for skill in candidate["skills"]]
                     cand_levels = [
@@ -73,13 +69,7 @@ def match_candidates_route(domain_name):
                     ]
                     # if cand_skills and any(item in cand_skills for item in job_skills_ids):
                     cand_id = candidate["user_id"]
-
-                    if any(
-                        matching_candidate["id"] == cand_id
-                        for matching_candidate in existing_matching_candidates
-                    ):
-                        continue
-
+                    # print("LEVELS", cand_levels)
                     count = 4
                     total_score = 0
 
