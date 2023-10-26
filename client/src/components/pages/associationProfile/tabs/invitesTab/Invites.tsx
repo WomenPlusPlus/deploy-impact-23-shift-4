@@ -1,4 +1,9 @@
-import { Association } from "../../../../../types/types";
+import {
+  Association,
+  Invite,
+  InvitesComponentProps,
+  Payload,
+} from "../../../../../types/types";
 import { CardContainer } from "../../../../UI/container/CardContainer";
 import { Button } from "../../../../UI/button/Button";
 import Table from "../../../../UI/table/Table";
@@ -9,26 +14,6 @@ import { message } from "antd";
 import { sendInvite } from "../../../../../api/invite";
 import { updateAssociationById } from "../../../../../api/associations";
 import { getAllUsers } from "../../../../../api/user";
-
-interface Invite {
-  key: number;
-  name: string;
-  email: string;
-  user_type: string;
-  expiresIn: string;
-}
-
-interface Payload {
-  name: string;
-  user_type: string | null;
-  recipient_email: string;
-  association: string;
-}
-
-interface InvitesComponentProps {
-  association: Association;
-  callback?: () => void;
-}
 
 const InvitesComponent: React.FC<InvitesComponentProps> = ({
   association,
@@ -46,7 +31,7 @@ const InvitesComponent: React.FC<InvitesComponentProps> = ({
     const payloadInvite = {
       user_type: payload.user_type,
       recipient_email: payload.recipient_email,
-      association: association.association_name,
+      association_name: association.association_name,
     };
 
     // Check if user already exists in the database

@@ -14,7 +14,7 @@ email_from = os.environ.get("SMTPLIB_EMAIL")
 api_key = os.environ.get("SENDGRID_API_KEY")
 
 
-def func_send_email(recipient_email, user_type, association):
+def func_send_email(recipient_email, user_type, association_name):
     # Initialize the SendGrid client
     sg = sendgrid.SendGridAPIClient(api_key=api_key)
 
@@ -23,7 +23,7 @@ def func_send_email(recipient_email, user_type, association):
     # expiration_time = int(time.time()) + 2 * 60 # 2 minutes in seconds
 
     temporary_link = generate_temporary_link_signed(
-        user_type, expiration_time, association
+        user_type, expiration_time, association_name
     )
 
     subject = "Invitation to Join Shift Software - Empowering Refugees in Switzerland"

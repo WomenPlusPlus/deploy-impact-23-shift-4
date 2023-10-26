@@ -67,7 +67,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = secret_key
 
-logging.basicConfig(level=logging.DEBUG)
 # Initialize CORS with your Flask app
 CORS(
     app,
@@ -176,9 +175,10 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    print("Running in PRODUCTION mode")
-    http_server = WSGIServer(('', 5001), app)
-    http_server.serve_forever()
-
-    # print("Running in DEVELOPMENT mode")
-    # app.run(port=5001, debug=True)
+    if os.environ.get("FLASK_ENV") == "production":
+        print("Running in PRODUCTION mode")
+        http_server = WSGIServer(("", 5001), app)
+        http_server.serve_forever()
+    else:
+        print("Running in DEVELOPMENT mode")
+        app.run(port=5001, debug=True)

@@ -36,8 +36,8 @@ const Associations = () => {
     setFilteredAssociations(filteredAssociations);
   };
 
-  const onClickRedirect = () => {
-    console.log("redirect");
+  const onClickRedirect = (userId: string) => {
+    navigate(`/association/${userId}`);
   }
 
   useEffect(() => {
@@ -71,6 +71,7 @@ const Associations = () => {
             key={index}
             association={association}
             subheader={association?.email}
+            onClickRedirect={() => onClickRedirect(association?.user_id)}
           />
         ))}
       </div>

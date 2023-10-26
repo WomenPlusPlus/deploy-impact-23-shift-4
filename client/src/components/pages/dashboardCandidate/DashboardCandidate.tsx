@@ -22,6 +22,7 @@ import { getMatchJobs } from "../../../api/match";
 
 const DashboardCandidate: React.FC = () => {
   // state
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [progress, setProgress] = useState(0);
@@ -89,7 +90,7 @@ const DashboardCandidate: React.FC = () => {
           <div className={styling.icon}>
             <IconExternalLink
               color="var(--gray-dark)"
-              onClick={() => navigate("/candidate-profile")}
+              onClick={() => navigate(`/candidate-profile/${userId}`)}
               style={{ cursor: "pointer" }}
             />
           </div>
