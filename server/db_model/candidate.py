@@ -62,7 +62,7 @@ def init_candidate_model(db):
         )  # Visible information as an array of strings e.g ['Salary range', 'Visa status']
         experience = db.Column(
             db.JSON
-        )  # Experience as e.g [{'industries': 'IT', 'role': 'Software engineer', 'years_of_experience': 3}]
+        )  # Experience as e.g [{'industries': 'IT', 'role': 'Software engineer', 'years_of_experience': '3 years'}]
         visa_status = db.Column(
             db.ARRAY(db.String)
         )  # Visa status as an array of strings e.g ['EU citizen', 'Work permit']

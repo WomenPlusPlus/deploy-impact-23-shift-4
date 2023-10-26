@@ -31,7 +31,7 @@ export interface Candidate {
   cv_reference?: string | null;
   address?: string;
   phone_number?: string;
-  birth_date?: string; // You may want to use a Date type, or ISO string
+  birth_date?: string;
   work_permit: string;
   notice_period?: string;
   job_status?: string;
@@ -82,7 +82,7 @@ export interface Company {
   linkedin_url?: string;
   values?: string[];
   job_types?: string[];
-  contact_details?: Record<string, any>; // JSON object
+  contact_details?: Record<string, any>;
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
@@ -98,7 +98,7 @@ export interface Company {
 export interface Experience {
   role: string;
   industries: string;
-  years_of_experience?: number;
+  years_of_experience?: string;
 }
 
 export interface Job {

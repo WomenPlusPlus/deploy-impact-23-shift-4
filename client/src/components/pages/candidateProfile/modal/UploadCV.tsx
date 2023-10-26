@@ -56,7 +56,7 @@ const CV: React.FC<CVProps> = ({
         </>
       ) : (
         <>
-          <p>Upload your CV:</p>
+          <h3>Upload your CV:</h3>
           <Upload {...cvProps} showUploadList={false}>
             {cvFile ? (
               <p>{cvFile}</p>

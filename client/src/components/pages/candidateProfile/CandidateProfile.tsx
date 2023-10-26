@@ -284,6 +284,7 @@ const CandidateProfile = () => {
           editExperience={editExperience}
           editDocuments={editDocuments}
           editVisibleInformation={editHandlerJobSearchPref}
+          editJobSearchPref={editHandlerJobSearchPref}
           getProgress={getProgress}
           hidden={isCompleteProfile}
         />

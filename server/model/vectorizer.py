@@ -6,6 +6,7 @@ import dill
 
 
 def tokens(skill):
+    global init_list
     init_list = skill.lower().split(" ")
     if len(init_list) > 1:
         init_list.append("_".join(skill.lower().split(" ")))
