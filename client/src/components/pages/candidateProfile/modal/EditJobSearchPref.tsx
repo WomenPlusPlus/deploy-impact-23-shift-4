@@ -22,10 +22,7 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   onSave,
 }) => {
   const [selectedField, setSelectedField] = useState<string>("");
-  const [editedSections, setEditedSections] = useState<string[]>([]);
   const [additionalFields, setAdditionalFields] = useState<string[]>([]);
-  const [minSalary, setMinSalary] = useState<string | null>(null);
-  const [maxSalary, setMaxSalary] = useState<string | null>(null);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
   const [notice, setNotice] = useState<string>("");
   const [visaFields, setVisaFields] = useState<string[]>([]);
