@@ -1,6 +1,9 @@
-import logging
 import string
+
+import logging
+
 from gevent.pywsgi import WSGIServer
+
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
