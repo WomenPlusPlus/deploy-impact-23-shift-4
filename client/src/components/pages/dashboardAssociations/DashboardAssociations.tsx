@@ -1,6 +1,5 @@
 import styling from "./DashboardAssociations.module.scss";
 import {
-  IconBrandLinkedin,
   IconExternalLink,
   IconMapPin,
   IconWorldWww,
@@ -19,19 +18,15 @@ import {
 } from "../../../api/associations";
 import { sendInvite } from "../../../api/invite";
 import { getAllUsers } from "../../../api/user";
-
-interface Payload {
-  name: string;
-  user_type: string | null;
-  recipient_email: string;
-  association: string;
-}
+import RequestsComponent from "../associationProfile/tabs/requestsTab/Requests";
+import { Association, Payload } from "../../../types/types";
+import ApprovalTable from "../associationProfile/tabs/requestsTab/components/ApprovalTable";
 
 const DashboardAssociations = () => {
   const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   //State
-  const [association, setAssociation] = useState<any>(null);
+  const [association, setAssociation] = useState({} as Association);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
   const [defaultOption, setDefaultOption] = useState("");
 
@@ -43,7 +38,7 @@ const DashboardAssociations = () => {
     const payloadInvite = {
       user_type: payload?.user_type,
       recipient_email: payload?.recipient_email,
-      association: association?.association_name,
+      association_name: association?.association_name,
     };
 
     // Check if user already exists in the database
@@ -300,15 +295,17 @@ const DashboardAssociations = () => {
         handleSend={handleSendInvite}
       />
 
+      {/* Already invited */}
       <div className={styling.tables}>
         <CardContainer className={styling.requests}>
           <h1 className={styling.titleTables}>Already invited</h1>
           <Table columns={headerInvited} data={dataInvite} />
         </CardContainer>
 
+        {/* Approval requests */}
         <CardContainer className={styling.requests}>
           <h1 className={styling.titleTables}>Approval requests</h1>
-          <Table columns={headerRequests} data={tableData} />
+          <ApprovalTable association={association} />
         </CardContainer>
       </div>
     </div>

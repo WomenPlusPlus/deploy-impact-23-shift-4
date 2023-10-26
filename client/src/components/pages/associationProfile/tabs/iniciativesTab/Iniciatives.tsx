@@ -17,6 +17,10 @@ const IniciativesComponent = ({
   const [visible, setVisible] = useState(false);
   console.log("ASSO", association);
 
+  const onClick = (link: string) => {
+    window.open(link, "_blank");
+  }
+
   return (
     <CardContainer>
       <div className={styling.mainSection}>
@@ -39,6 +43,8 @@ const IniciativesComponent = ({
             firstName={association?.association_name}
             title={iniciative?.title}
             subtitle={<TimeAgo timestamp={iniciative?.date_created} />}
+            onClick={() => onClick(iniciative?.link)}
+            onTitleClick={() => onClick(iniciative?.link)}
           />
         ))}
       </div>
