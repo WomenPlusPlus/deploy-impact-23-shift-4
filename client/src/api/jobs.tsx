@@ -12,7 +12,6 @@ export async function getAllJobs() {
       withCredentials: true,
     });
     if (response.status === 200) {
-      console.log("JOB", response.data);
       return response.data.jobs;
     } else {
       throw new Error("Failed to fetch jobs");

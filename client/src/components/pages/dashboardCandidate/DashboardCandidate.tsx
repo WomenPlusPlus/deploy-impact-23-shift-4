@@ -32,18 +32,16 @@ const DashboardCandidate: React.FC = () => {
 
   const fetchInfo = async (user_id: string) => {
     try {
-      const candidateFetched = await getCandidateById(user_id);
       const allJobs = await getAllJobs();
-
-      setCandidate(candidateFetched);
       setJobs(allJobs);
+
+      await getMatchJobs(auth.user.id);
+
+      const candidateFetched = await getCandidateById(user_id);
+      setCandidate(candidateFetched);
 
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
-
-      if (candidateFetched && candidateFetched?.skills?.length > 0) {
-        await getMatchJobs(candidateFetched.user_id);
-      }
     } catch (error) {
       console.log("error", error);
     }
@@ -155,7 +153,11 @@ const DashboardCandidate: React.FC = () => {
 
               return jobs.map((job: Job) => {
                 // Use `return` to return the JSX elements
-                if (matchedJob.id === job.id) {
+                if (
+                  matchedJob.id === job.id &&
+                  candidate?.skills?.length !== undefined &&
+                  candidate.skills.length > 0
+                ) {
                   return (
                     <HorizontalCard
                       key={job.id} // Add a unique key for each card
