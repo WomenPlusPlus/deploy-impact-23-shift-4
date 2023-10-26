@@ -29,6 +29,7 @@ const DashboardCompany = () => {
 
   const navigate = useNavigate();
 
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const [company, setCompany] = useState({} as Company);
   const [matchingCandidates, setMatchingCandidates] = useState([]);
   const [allJobs, setAllJobs] = useState<Record<string, any>[]>();
@@ -36,32 +37,34 @@ const DashboardCompany = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchInfo = async () => {
-    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
-    const company = await getCompanyById(userId);
+    try {
+      const allJobs = await getAllJobs();
+      const allCandidates = await getAllCandidates();
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        return job["company_id"] === userId;
+      });
 
-    const allJobs = await getAllJobs();
-    console.log("allJobs", allJobs);
-    const allCandidates = await getAllCandidates();
+      await Promise.all(
+        jobs?.map(async (job: Record<string, any>) => {
+          if (job && job?.id) {
+            return getMatchCandidates(job?.id);
+          }
+        })
+      );
 
-    const jobs = allJobs.map((job: Record<string, any>) => {
-      if (job["company_id"] === userId) {
-        return job;
-      }
-    });
+      const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
 
-    jobs?.map(async (job: Record<string, any>) => {
-      console.log("job", job);
-      if (job && job?.id) await getMatchCandidates(job?.id);
-    });
+      const company = await getCompanyById(userId);
 
-    const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
-
-    setCompany(company);
-    setAllCandidates(allCandidates);
-    setAllJobs(allJobs);
-    setMatchingCandidates(matchingCandidates);
-    setIsLoading(true);
+      setAllCandidates(allCandidates);
+      setAllJobs(allJobs);
+      setMatchingCandidates(matchingCandidates);
+      setCompany(company);
+      setIsLoading(true);
+    } catch (error) {
+      // Handle errors here, e.g., log the error or show an error message.
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -119,7 +122,7 @@ const DashboardCompany = () => {
         <IconExternalLink
           className={styling.icon}
           color="black"
-          onClick={() => navigate("/company-profile")}
+          onClick={() => navigate(`/company-profile/${userId}`)}
         />
       </CardContainer>
 
@@ -132,7 +135,9 @@ const DashboardCompany = () => {
             <ProgressBar progress={progress} />
           </div>
 
-          <Button>Complete your profile</Button>
+          <Button onClick={() => navigate(`/company-profile/${userId}`)}>
+            Complete your profile
+          </Button>
         </div>
       </CardContainer>
 

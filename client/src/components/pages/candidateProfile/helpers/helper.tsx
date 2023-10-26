@@ -115,6 +115,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   saved_items: "",
   date_profile_modified: "",
   requested_jobs: "",
+  initiatives_accepted: "",
 };
 
 const categoryFieldMapping: Record<string, number> = {};

@@ -5,24 +5,25 @@ import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 const FAQ = () => {
   const faqData = [
     {
-      question: "What is Ant Design?",
+      question: "What do I need to set up in my profile?",
       answer:
-        "Ant Design is a design system for enterprise-level applications. It provides a set of high-quality React components and layout templates for building modern, responsive web applications.",
+        "Set up your profile with your personal and professional information for recruiters to see your skills and values. At Bridge, we believe that skills are the most important aspect of your professional experience for recruiters to look at. That’s why we recommend that you add in as many skills as you can come up with. Next to that, most recruiters find it convenient to see where you are (willing to) live and what languages you speak. Also make sure to add some additional information, like your salary expectations and experience you’ve built up over the years.",
+    },
+
+    {
+      question: "Why do I need to add in my values?",
+      answer:
+        "Many companies these days are looking for new talent that doens’t only match their required skills, but are also a culturally good fit. For this, companies work with their own values and belief systems, often employees get more recognition for following along these value systems. To also already do the first cultural check, Bridge has added this to your profile and to the profiles of the companies so that it can be compared. For you, it’s key to select the 5 most important values to you!",
     },
     {
-      question: "How can I get started with Ant Design?",
+      question: "What can recruiters see?",
       answer:
-        "To get started with Ant Design, you can install the Ant Design library using npm or yarn and import the components you need in your React application. Visit the official documentation for detailed instructions.",
+        "Bridge wants to fight the bias that happens when hiring and seeing candidate profiles for the first time. That’s why we don’t ask you to upload any picture and don’t even show your full name to recruiters, they just see your initials. " +
+        "A lot of the personal information that you add in your profile will be hidden for recruiters until you accept their request to see it. This means that they have to select based on your skill set instead of your face, gender, or the university you went to.",
     },
     {
-      question: "Is Ant Design free to use?",
-      answer:
-        "Yes, Ant Design is open-source and free to use. It is released under the MIT license, which allows you to use it in both open-source and commercial projects.",
-    },
-    {
-      question: "Can I customize the Ant Design styles?",
-      answer:
-        "Yes, you can customize Ant Design styles to match your project's branding. Ant Design provides a theming system that allows you to change colors, fonts, and other design elements easily.",
+      question: "How does the matching work?",
+      answer: "",
     },
   ];
 

@@ -12,13 +12,7 @@ import { getAllAssociations } from "../../../api/associations";
 import { getAllCandidates } from "../../../api/candidates";
 import { getAllCompanies } from "../../../api/companies";
 import { getAllUsers } from "../../../api/user";
-
-interface Payload {
-  name: string;
-  user_type: string | null;
-  recipient_email: string;
-  association: string;
-}
+import { Payload } from "../../../types/types";
 
 const DashboardAdmin = () => {
   //State
@@ -36,7 +30,7 @@ const DashboardAdmin = () => {
     const payloadInvite = {
       user_type: payload.user_type,
       recipient_email: payload.recipient_email,
-      association: "default", // TODO: Update send invite modal to allow for a payload without association
+      association_name: "default", // TODO: Update send invite modal to allow for a payload without association
     };
 
     // Check if user already exists in the database

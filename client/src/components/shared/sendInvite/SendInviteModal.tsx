@@ -13,19 +13,7 @@ import Dragger from "antd/es/upload/Dragger";
 import TextArea from "antd/es/input/TextArea";
 
 import styling from "./SendInviteModal.module.css";
-
-interface SendInviteModalProps {
-  isOpen: boolean;
-  defaultOption: string;
-  handleSend: (payload: Payload) => void;
-  onClose: () => void;
-}
-interface Payload {
-  user_type: string | null;
-  name: string;
-  recipient_email: string;
-  association: string;
-}
+import { SendInviteModalProps } from "../../../types/types";
 
 const SendInviteModal: React.FC<SendInviteModalProps> = ({
   isOpen,
@@ -54,7 +42,7 @@ const SendInviteModal: React.FC<SendInviteModalProps> = ({
     const payload = {
       user_type: checked?.toLowerCase()!,
       recipient_email: email,
-      association: "",
+      association_name: "",
       name: name,
     };
     return payload;

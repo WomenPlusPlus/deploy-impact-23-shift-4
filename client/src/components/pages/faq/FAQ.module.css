@@ -20,7 +20,11 @@
 }
 
 .answer {
+  width: 90%;
   font-size: medium;
   font-weight: 500;
-  padding: 2rem;
+  padding: 2rem 1rem;
+  line-height: 2.5rem;
+  text-align: justify;
+  text-justify: inter-word;
 }

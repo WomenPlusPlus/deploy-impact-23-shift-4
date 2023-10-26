@@ -18,7 +18,7 @@ const Associations = () => {
   >([]);
 
   const navigate = useNavigate();
-  
+
   const fetchInfo = async () => {
     const associations = await getAllAssociations();
     if (userType === "association") {
@@ -36,9 +36,9 @@ const Associations = () => {
     setFilteredAssociations(filteredAssociations);
   };
 
-  const onClickRedirect = () => {
-    console.log("redirect");
-  }
+  const onClickRedirect = (userId: string) => {
+    navigate(`/association/${userId}`);
+  };
 
   useEffect(() => {
     fetchInfo();
@@ -69,8 +69,10 @@ const Associations = () => {
         {filteredAssociations.map((association: Association, index) => (
           <AssociationCard
             key={index}
+            avatar={association?.association_name}
             association={association}
             subheader={association?.email}
+            onClickRedirect={() => onClickRedirect(association?.user_id)}
           />
         ))}
       </div>

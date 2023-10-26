@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-import Register from "../components/pages/register/RegisterCandidate";
+import Register from "../components/pages/register/Register";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";

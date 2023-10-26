@@ -56,6 +56,7 @@ export interface Candidate {
   package_requested?: { [key: string]: any }[];
   package_accepted?: PackageAccepted[];
   requested_jobs?: string[];
+  initiatives_accepted?: { [key: string]: any }[];
 }
 
 export interface EditInputProps<Candidate> {
@@ -149,6 +150,9 @@ export interface Association {
   invites: {
     [key: string]: any;
   }[];
+  requests: {
+    [key: string]: any;
+  }[];
   size: string;
 }
 
@@ -166,4 +170,39 @@ export interface Section {
   subtext?: string;
   icon?: JSX.Element;
   type?: string;
+}
+
+export interface Payload {
+  name: string;
+  user_type: string | null;
+  recipient_email: string;
+  association_name: string;
+}
+
+export interface SendInviteModalProps {
+  isOpen: boolean;
+  defaultOption: string;
+  handleSend: (payload: Payload) => void;
+  onClose: () => void;
+}
+
+export interface Invite {
+  key: number;
+  name: string;
+  email: string;
+  user_type: string;
+  expiresIn: string;
+}
+
+export interface InvitesComponentProps {
+  association: Association;
+  callback?: () => void;
+}
+
+export interface TableRecord {
+  key: string;
+  candidate: string;
+  candidateId: string;
+  project: string;
+  associationId: string;
 }

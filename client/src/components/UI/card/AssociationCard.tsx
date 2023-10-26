@@ -13,6 +13,7 @@ interface CardProps {
   description?: string;
   skills?: object[] | undefined;
   values?: string[];
+  avatar?: string;
   onClickRedirect?: () => void;
 }
 
@@ -24,6 +25,7 @@ const AssociationCard: React.FC<CardProps> = ({
   description,
   skills,
   values,
+  avatar,
   onClickRedirect,
 }) => {
   // pass company, pass candidateID
@@ -33,7 +35,11 @@ const AssociationCard: React.FC<CardProps> = ({
   return (
     <div className={styling.candidateCard}>
       <div className={styling.cardHeader}>
-        {logo ? <Avatar size={50} imageSrc={logo} /> : <Avatar size={50} />}
+        {logo ? (
+          <Avatar size={50} imageSrc={logo} firstName={avatar} />
+        ) : (
+          <Avatar size={50} firstName={avatar} />
+        )}
         <div>
           <h2 className={styling.header} onClick={onClickRedirect}>
             {association?.association_name || header}
@@ -54,6 +60,7 @@ const AssociationCard: React.FC<CardProps> = ({
           {association?.iniciatives?.map((initiative, index) => (
             <Labels
               key={index}
+              color="var(--association-label)"
               labelName={initiative?.title!}
               customClass={styling.label}
               disableCloseIcon
