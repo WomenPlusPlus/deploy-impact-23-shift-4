@@ -58,6 +58,7 @@ const Certificates: React.FC<CertificatesProps> = ({
             <strong>Reference:</strong> {certificate.reference}
           </p>
           <Button
+            style={{ marginTop: "1rem" }}
             onClick={() =>
               setCertificates(
                 certificates.filter((cert) => cert.name !== certificate.name)
@@ -74,7 +75,9 @@ const Certificates: React.FC<CertificatesProps> = ({
         onChange={(e) => setCurrentCertificateTitle(e.target.value)}
       />
       <Upload {...certificateProps} showUploadList={false}>
-        <Button icon={<UploadOutlined />}>Upload Certificate</Button>
+        <Button style={{ marginTop: "1rem" }} icon={<UploadOutlined />}>
+          Upload Certificate
+        </Button>
       </Upload>
     </>
   );
