@@ -110,6 +110,7 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                     return (
                       <Select
                         style={{ width: "100%" }}
+                        placeholder="Job Status"
                         value={(values && values[field]) || ""}
                         onChange={(value) => {
                           setValues((prevValues) => ({
@@ -133,7 +134,7 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                         {links && links.length > 0 && <p>Links:</p>}
                         {links &&
                           links?.map((link, index) => (
-                            <div key={index}>
+                            <div key={index} className={styling.buttonAddLink}>
                               {/* Show existing links */}
                               <Input
                                 value={link.name}
@@ -142,18 +143,22 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                                   updatedLinks[index].name = e.target.value;
                                   setLinks(updatedLinks);
                                 }}
+                                placeholder="Link Name"
                                 disabled={true}
                               />
                               <Input
                                 value={link.url}
+                                placeholder="Link URL"
                                 onChange={(e) => {
                                   const updatedLinks = [...links];
                                   updatedLinks[index].url = e.target.value;
                                   setLinks(updatedLinks);
                                 }}
                               />
-                              <button
-                                type="button"
+
+                              <Button
+                                danger
+                                className={styling.buttonAddLink}
                                 onClick={() => {
                                   // Handle link deletion here
                                   const updatedLinks = [...links];
@@ -165,14 +170,14 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                                   }));
                                 }}
                               >
-                                <CloseCircleOutlined />
-                              </button>
+                                Delete Link
+                              </Button>
                             </div>
                           ))}
                         <div>
                           <p>Additional Link:</p>
                           <Select
-                            placeholder="Name"
+                            placeholder="Link Name"
                             value={selectedLinkName}
                             onChange={(value) => {
                               setSelectedLinkName(value);
@@ -213,6 +218,7 @@ const EditInput: React.FC<EditInputProps<Candidate>> = ({
                             (values[field as keyof Candidate] as string)) ||
                           ""
                         }
+                        placeholder={fieldsToDisplay[index]}
                         onChange={(e) => {
                           setValues((prevValues) => ({
                             ...prevValues,

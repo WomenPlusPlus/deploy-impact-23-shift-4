@@ -480,11 +480,11 @@ const CandidateProfile = () => {
               onSave={handleSaveEdit}
             />
           </div>
-          <ContentBlock sections={sectionsExperience} />
+          <ContentBlock sections={sectionsExperience} width="22rem"/>
         </CardContainer>
       </div>
 
-      {/* Contact info, languages, experience */}
+      {/* Contact info, languages, Documents */}
       {/* Contact info */}
       <div className={styling.inOneRow}>
         <CardContainer
@@ -507,14 +507,14 @@ const CandidateProfile = () => {
               fieldKeysToEdit={["phone_number", "email", "address"]}
             />
           </div>
-          <div>
-            <p>
+          <div className={styling.padding}>
+            <p className={styling.contactParagraph}>
               <strong>Phone number:</strong> {candidate?.phone_number}
             </p>
-            <p>
+            <p className={styling.contactParagraph}>
               <strong>Email:</strong> {candidate?.email}
             </p>
-            <p>
+            <p className={styling.contactParagraph}>
               <strong>Address:</strong> {candidate?.address}
             </p>
           </div>
@@ -587,7 +587,7 @@ const CandidateProfile = () => {
           />
         </div>
         <div className={styling.visibleSection}>
-          <ContentBlock sections={sectionsJobSearchPref} />
+          <ContentBlock sections={sectionsJobSearchPref} width="16rem"/>
         </div>
       </CardContainer>
     </div>

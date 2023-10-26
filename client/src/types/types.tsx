@@ -32,8 +32,8 @@ export interface Candidate {
   address?: string;
   phone_number?: string;
   birth_date?: string;
-  work_permit: string;
-  notice_period?: string;
+  work_permit: string | null;
+  notice_period?: string | null;
   job_status?: string;
   preferred_jobs?: { [key: string]: any }[];
   company_type?: string[];
@@ -46,17 +46,17 @@ export interface Candidate {
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
   visible_information?: string[];
-  experience?: { [key: string]: any }[];
-  visa_status?: string[];
-  salary_expectation?: string[];
-  possible_work_locations?: string[];
-  type_of_work?: string[];
-  saved_items?: string[];
+  experience?: { [key: string]: any }[] | null;
+  visa_status?: string[] | null;
+  salary_expectation?: string[] | null;
+  possible_work_locations?: string[] | null;
+  type_of_work?: string[] | null;
+  saved_items?: string[] | null;
   date_profile_modified?: string;
-  package_requested?: { [key: string]: any }[];
+  package_requested?: { [key: string]: any }[] | null;
   package_accepted?: PackageAccepted[];
-  requested_jobs?: string[];
-  initiatives_accepted?: { [key: string]: any }[];
+  requested_jobs?: string[] | null;
+  initiatives_accepted?: { [key: string]: any }[] | null;
 }
 
 export interface EditInputProps<Candidate> {
