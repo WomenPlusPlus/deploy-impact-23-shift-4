@@ -62,14 +62,15 @@ def match_jobs_route(domain_name):
                 cand_values = candidate.json()["candidates"]["values"]
                 cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
 
+                jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
+                jobs = jobs_response.json()["jobs"]
+
                 existing_matching_jobs = candidate.json()["candidates"].get(
                     "matching_jobs", []
                 )
 
-                jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
-                jobs = jobs_response.json()["jobs"]
-
                 for job in jobs:
+                    job_skills = [skill["skill_name"] for skill in job["skills"]]
                     # if cand_skills and any(item in cand_skills for item in job_skills_ids):
                     job_id = job["id"]
 
@@ -78,8 +79,6 @@ def match_jobs_route(domain_name):
                         for matching_job in existing_matching_jobs
                     ):
                         continue
-
-                    job_skills = [skill["skill_name"] for skill in job["skills"]]
 
                     count = 4
                     total_score = 0
@@ -104,6 +103,7 @@ def match_jobs_route(domain_name):
 
                         job_score = round(total_score / count, 1)
 
+                        # TODO: increase threshold to 60
                         if job_score >= 20:
                             job_match.append({"id": job_id, "score": job_score})
                             if job["matching_candidates"]:
@@ -135,6 +135,9 @@ def match_jobs_route(domain_name):
                                 f"{domain_name}/api/update_job",
                                 json=update_job_json,
                             )
+
+                if len(job_match) == 0:
+                    return jsonify({"message": "No matching jobs"}), 200
 
                 update_json = {"user_id": id, "matching_jobs": job_match}
                 update_cand = requests.put(

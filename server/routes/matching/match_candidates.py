@@ -73,6 +73,7 @@ def match_candidates_route(domain_name):
                     ]
                     # if cand_skills and any(item in cand_skills for item in job_skills_ids):
                     cand_id = candidate["user_id"]
+                    # print("LEVELS", cand_levels)
 
                     if any(
                         matching_candidate["id"] == cand_id
@@ -103,6 +104,7 @@ def match_candidates_route(domain_name):
 
                         cand_score = round(total_score / count, 1)
 
+                        # TODO: increase threshold to 60
                         if cand_score >= 20:
                             cand_match.append({"id": cand_id, "score": cand_score})
                             if candidate["matching_jobs"]:
@@ -132,6 +134,9 @@ def match_candidates_route(domain_name):
                                 f"{domain_name}/api/update_candidate",
                                 json=update_cand_json,
                             )
+
+                if len(cand_match) == 0:
+                    return jsonify({"message": "No matching candidates"}), 200
 
                 update_json = {"job_id": id, "matching_candidates": cand_match}
                 update_job = requests.put(
