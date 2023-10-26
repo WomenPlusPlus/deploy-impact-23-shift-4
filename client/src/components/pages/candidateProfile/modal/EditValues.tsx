@@ -5,18 +5,12 @@ import { Labels } from "../../../UI/labels/Label";
 import styling from "./EditValues.module.css";
 import { Candidate } from "../../../../types/types";
 
-interface Value {
-  value_name: string;
-  value_id: string;
-  score: number;
-}
-
 interface EditValuesProps {
   candidate: Candidate;
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: string[]; // Change the type to an array of strings
+  allLabels: string[];
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
@@ -36,44 +30,58 @@ const EditValues: React.FC<EditValuesProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [labelsToDeleteState, setLabelsToDeleteState] = useState<string[]>([]); // Change the type to an array of strings
+  const [candidateLabels, setCandidateLabels] = useState<string[]>([]); // Change the type to an array of strings
   const [filteredValues, setFilteredValues] = useState<string[]>([]); // Change the type to an array of strings
 
   useEffect(() => {
-    setLabelsToDeleteState(candidate?.values as string[]);
+    setCandidateLabels(candidate?.values as string[]);
+    setFilteredValues(allLabels);
     updateFilteredValues(candidate?.values as string[]);
-  }, [candidate?.values]);
+  }, [candidate, allLabels]);
 
-  const updateFilteredValues = (valuesToDelete: string[]) => {
+  const handleSearchTextChange = (searchText: string) => {
+    setSearchText(searchText);
+    updateFilteredValues(candidateLabels, searchText);
+  };
+
+  const updateFilteredValues = (
+    valuesToDelete: string[],
+    searchText?: string
+  ) => {
     const updatedFilteredValues = allLabels?.filter((value) => {
       const isValueInCandidate = valuesToDelete?.every(
         (candidateValue) => candidateValue !== value
       );
-      return (
-        isValueInCandidate &&
-        value.toLowerCase().includes(searchText.toLowerCase())
-      );
+      if (!searchText) {
+        return isValueInCandidate;
+      } else {
+        return (
+          (isValueInCandidate &&
+            value?.toLowerCase().startsWith(searchText.toLowerCase())) ||
+          value?.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
     });
     setFilteredValues(updatedFilteredValues);
   };
 
   const handleCloseValue = (valueToRemove: string) => {
-    const updatedValues = labelsToDeleteState.filter(
+    const updatedValues = candidateLabels.filter(
       (value) => value !== valueToRemove
     );
-    setLabelsToDeleteState(updatedValues);
+    setCandidateLabels(updatedValues);
     updateFilteredValues(updatedValues); // Update filteredValues
   };
 
   const addSkillToDeleteState = (skillToAdd: string) => {
-    // Check if labelsToDeleteState is not empty
-    if (labelsToDeleteState) {
-      const updatedValues = [...labelsToDeleteState, skillToAdd];
-      setLabelsToDeleteState(updatedValues);
+    // Check if candidateLabels is not empty
+    if (candidateLabels) {
+      const updatedValues = [...candidateLabels, skillToAdd];
+      setCandidateLabels(updatedValues);
       updateFilteredValues(updatedValues); // Update filteredValues
     } else {
-      // If it's empty, initialize labelsToDeleteState with an array containing the skillToAdd
-      setLabelsToDeleteState([skillToAdd]);
+      // If it's empty, initialize candidateLabels with an array containing the skillToAdd
+      setCandidateLabels([skillToAdd]);
       updateFilteredValues([skillToAdd]); // Update filteredValues
     }
   };
@@ -83,16 +91,15 @@ const EditValues: React.FC<EditValuesProps> = ({
     setTimeout(() => {
       setLoading(false);
       setVisible(false);
-      setCandidate({ ...candidate, values: labelsToDeleteState });
-      onSave &&
-        onSave({ ...candidate, values: labelsToDeleteState } as Candidate);
+      setCandidate({ ...candidate, values: candidateLabels });
+      onSave && onSave({ ...candidate, values: candidateLabels } as Candidate);
       setSearchText("");
     }, 300);
   };
 
   const handleCancel = () => {
     setVisible(false);
-    setLabelsToDeleteState(candidate.values as string[]); // Change the type to an array of strings
+    setCandidateLabels(candidate.values as string[]); // Change the type to an array of strings
     setSearchText("");
   };
 
@@ -124,8 +131,8 @@ const EditValues: React.FC<EditValuesProps> = ({
       >
         {/* Candidates values */}
         <div className={styling.elementInOneRow}>
-          {labelsToDeleteState &&
-            labelsToDeleteState?.map((value, index) => (
+          {candidateLabels &&
+            candidateLabels?.map((value, index) => (
               <Labels
                 key={index}
                 icon={icon}
@@ -138,23 +145,35 @@ const EditValues: React.FC<EditValuesProps> = ({
         </div>
         <Input
           className={styling.searchInput}
-          placeholder="Search values"
+          placeholder="Search Values"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => handleSearchTextChange(e.target.value)}
         />
         {/* All values */}
         <div className={styling.elementInOneRow}>
-          {allLabels &&
-            allLabels?.map((value, index) => (
-              <Labels
-                key={index}
-                icon={icon}
-                labelName={value}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-                onClickHandle={() => addSkillToDeleteState(value)}
-              />
-            ))}
+          {filteredValues && (
+            <>
+              {filteredValues?.slice(0, 10).map((value, index) => (
+                <Labels
+                  key={index}
+                  icon={icon}
+                  labelName={value}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                  onClickHandle={() => addSkillToDeleteState(value)}
+                />
+              ))}
+              {filteredValues.length > 10 && (
+                <Labels
+                  key="more-label"
+                  icon={icon}
+                  labelName={`+ ${filteredValues.length - 10} more`}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />
+              )}
+            </>
+          )}
         </div>
       </Modal>
     </>

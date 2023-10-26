@@ -14,9 +14,7 @@ def init_values_model(db):
             unique=True,
             nullable=False,
         )
-        name = db.Column(
-            db.String(1000), nullable=False
-        )  # Name of the value as a string (maximum length 1000 characters)
+        name = db.Column(db.String(1000), nullable=False, unique=True)
 
         def __init__(self, name):
             """

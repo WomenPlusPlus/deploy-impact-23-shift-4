@@ -160,7 +160,17 @@ export interface Skill {
   skill_name: string;
   skill_id?: string;
   skill_level?: string;
-  score?: number;
+}
+
+export interface AllValues {
+  name: string;
+  id: string;
+}
+
+export interface AllSkill {
+  name: string;
+  id: string;
+  category: string;
 }
 
 export interface Section {

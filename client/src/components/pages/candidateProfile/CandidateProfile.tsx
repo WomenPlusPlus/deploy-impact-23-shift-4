@@ -12,9 +12,7 @@ import { EditExperience } from "./modal/EditExperience";
 import { EditJobSearchPref } from "./modal/EditJobSearchPref";
 import {
   allCategories,
-  allSkill,
   allTypeOfJob,
-  allValue,
   countNullFieldsByCategory,
   fieldsToDisplayContactInfo,
   fieldsToDisplayProfile,
@@ -37,11 +35,13 @@ import {
 import { DocumentUploadModal } from "./modal/EditUploadDocuments";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
-import { Candidate } from "../../../types/types";
+import { Candidate, AllSkill, AllValues } from "../../../types/types";
 
 import styling from "./CandidateProfile.module.css";
 import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
 import ToggleModal from "../../shared/toggleModal/ToggleModal";
+import { getAllSkills } from "../../../api/skills";
+import { getAllValues } from "../../../api/values";
 
 const CandidateProfile = () => {
   // State
@@ -87,7 +87,17 @@ const CandidateProfile = () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     console.log("user_id", auth.user.id);
     try {
-      const candidateFetched = await getCandidateById(auth.user.id);
+      const skills = await getAllSkills();
+      const values = await getAllValues();
+      const candidateFetched = await getCandidateById(auth?.user?.id);
+      const allSkill = skills.map((skill: AllSkill) => {
+        return skill.name;
+      });
+      const allValues = values.map((value: AllValues) => {
+        return value.name;
+      });
+      setAllValues(allValues);
+      setAllSkills(allSkill);
       setCandidate(candidateFetched);
       const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
@@ -109,8 +119,6 @@ const CandidateProfile = () => {
 
   useEffect(() => {
     fetchCandidate();
-    setAllSkills(allSkill as []);
-    setAllValues(allValue as []);
     setAllTypeOfJobs(allTypeOfJob as []);
   }, []);
 
@@ -480,7 +488,7 @@ const CandidateProfile = () => {
               onSave={handleSaveEdit}
             />
           </div>
-          <ContentBlock sections={sectionsExperience} width="22rem"/>
+          <ContentBlock sections={sectionsExperience} width="22rem" />
         </CardContainer>
       </div>
 
@@ -587,7 +595,7 @@ const CandidateProfile = () => {
           />
         </div>
         <div className={styling.visibleSection}>
-          <ContentBlock sections={sectionsJobSearchPref} width="16rem"/>
+          <ContentBlock sections={sectionsJobSearchPref} width="16rem" />
         </div>
       </CardContainer>
     </div>
