@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_user
 import logging
 
-def register_route(User, Candidate, Company, Association, db):
+def register_route(User, Candidate, Company, Association, Admin, db):
     register_bp = Blueprint("register", __name__)
 
     @register_bp.route("/api/register", methods=["POST"])
@@ -31,7 +31,6 @@ def register_route(User, Candidate, Company, Association, db):
             password = data.get("password")
             email = data.get("email")
             user_type = data.get("user_type")  # Get user type from the request
-            logging.info("Registering user: " + email + " as " + user_type + ".")
             try:
                 # Hash the password before saving it to the appropriate table
                 hashed_password = bcrypt.hashpw(
@@ -94,7 +93,16 @@ def register_route(User, Candidate, Company, Association, db):
                     db.session.commit()
 
                 elif user_type == "admin":
-                    pass
+                    admin_name = data.get("admin_name")
+                    # Save the user also in the "admin" table
+                    new_admin = Admin(
+                        user_id=user_id,
+                        password=hashed_password,
+                        email=email,
+                        admin_name=admin_name,
+                    )
+                    db.session.add(new_admin)
+                    db.session.commit()
                 else:
                     return jsonify({"message": "Invalid user type"}), 400
 

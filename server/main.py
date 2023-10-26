@@ -14,6 +14,7 @@ from db_model.association import init_association_model
 from db_model.jobs import init_jobs_model
 from db_model.skills import init_skills_model
 from db_model.values import init_values_model
+from db_model.admin import init_admin_model
 
 # Blueprints
 from routes.home import home_bp
@@ -100,11 +101,12 @@ Association = init_association_model(db)
 Jobs = init_jobs_model(db)
 Skills = init_skills_model(db)
 Values = init_values_model(db)
+Admin = init_admin_model(db)
 
 # Blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(
-    register.register_route(User, Candidate, Company, Association, db)
+    register.register_route(User, Candidate, Company, Association, Admin, db)
 )
 app.register_blueprint(login.login_route(User))
 app.register_blueprint(logout_bp)
