@@ -4,7 +4,6 @@ import { IconEdit } from "@tabler/icons-react";
 import { Labels } from "../../../UI/labels/Label";
 import styling from "./EditSkills.module.css";
 import { Candidate, Skill } from "../../../../types/types";
-import { getMatchJobs } from "../../../../api/match";
 
 const { Option } = Select;
 
@@ -13,7 +12,7 @@ interface EditSkillsProps {
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: Skill[];
+  allLabels: string[];
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
@@ -31,47 +30,68 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   setVisible,
   showModal,
 }) => {
+  console.log(allLabels);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [candidateLabels, setCandidateLabels] = useState<Skill[]>([]);
-  const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
+  const [filteredSkills, setFilteredSkills] = useState<string[]>([]);
 
   useEffect(() => {
     setCandidateLabels(candidate?.skills as Skill[]);
+    setFilteredSkills(allLabels);
     updateFilteredSkills(candidate?.skills as Skill[]);
-  }, [candidate?.skills]);
+  }, [candidate, allLabels]);
 
-  const updateFilteredSkills = (skillsToDelete: Skill[]) => {
+  const handleSearchTextChange = (searchText: string) => {
+    setSearchText(searchText);
+    updateFilteredSkills(candidateLabels, searchText);
+  };
+
+  const updateFilteredSkills = (
+    skillsToDelete: Skill[],
+    searchText?: string
+  ) => {
     const updatedFilteredSkills = allLabels?.filter((skill) => {
       const isSkillInCandidate = skillsToDelete?.every(
-        (candidateSkill) => candidateSkill.skill_id !== skill.skill_id
+        (candidateSkill) => candidateSkill.skill_name !== skill
       );
-      return (
-        isSkillInCandidate &&
-        skill.skill_name.toLowerCase().includes(searchText.toLowerCase())
-      );
+      if (!searchText) {
+        return isSkillInCandidate;
+      } else {
+        return (
+          (isSkillInCandidate &&
+            skill?.toLowerCase().startsWith(searchText.toLowerCase())) ||
+          skill?.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
     });
     setFilteredSkills(updatedFilteredSkills);
   };
 
-  const handleCloseSkill = (skillToRemove: Skill) => {
+  const handleCloseSkill = (skillToRemove: string) => {
     const updatedSkills = candidateLabels.filter(
-      (skill) => skill.skill_id !== skillToRemove.skill_id
+      (skill) => skill.skill_name !== skillToRemove
     );
     setCandidateLabels(updatedSkills as Skill[]);
-    updateFilteredSkills(updatedSkills); // Update filteredSkills
+    updateFilteredSkills(updatedSkills);
   };
 
-  const addSkillToCandidateSkills = (skillToAdd: Skill) => {
+  const addSkillToCandidateSkills = (skillToAdd: string) => {
     // Check if candidateLabels is not empty
+    const candidateSkill = {
+      skill_id: "",
+      skill_name: skillToAdd,
+      skill_level: "",
+    };
+
     if (candidateLabels) {
-      const updatedSkills = [...candidateLabels, skillToAdd];
+      const updatedSkills = [...candidateLabels, candidateSkill];
       setCandidateLabels(updatedSkills);
-      updateFilteredSkills(updatedSkills); // Update filteredSkills
+      updateFilteredSkills(updatedSkills);
     } else {
       // If it's empty, initialize candidateLabels with an array containing the skillToAdd
-      setCandidateLabels([skillToAdd]);
-      updateFilteredSkills([skillToAdd]); // Update filteredSkills
+      setCandidateLabels([candidateSkill]);
+      updateFilteredSkills([candidateSkill]);
     }
   };
 
@@ -90,6 +110,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   const handleCancel = () => {
     setVisible(false);
     setCandidateLabels(candidate.skills as Skill[]);
+    setFilteredSkills(allLabels);
     setSearchText("");
   };
 
@@ -127,7 +148,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                 <Labels
                   icon={icon}
                   labelName={skill.skill_name}
-                  onCloseIcon={() => handleCloseSkill(skill)}
+                  onCloseIcon={() => handleCloseSkill(skill.skill_name)}
                   disableCloseIcon={false}
                   customClass={styling.labelClassSelected}
                 />
@@ -145,10 +166,10 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                     setCandidateLabels(updatedSkills);
                   }}
                 >
-                  <Option value="beginner">🌱 Novice Explorer</Option>
-                  <Option value="intermediate">🌟 Adventurous Learner</Option>
-                  <Option value="advanced">🚀 Skilled Pioneer</Option>
-                  <Option value="pro">🌌 Master Voyager</Option>
+                  <Option value="beginner">🌱 Beginner</Option>
+                  <Option value="intermediate">🌟 Intermediate</Option>
+                  <Option value="advanced">🚀 Advanced</Option>
+                  <Option value="pro">🌌 Pro</Option>
                 </Select>
               </div>
             ))}
@@ -157,20 +178,31 @@ const EditSkills: React.FC<EditSkillsProps> = ({
           className={styling.searchInput}
           placeholder="Search Skills"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => handleSearchTextChange(e.target.value)}
         />
         <div className={styling.elementInOneRow}>
-          {allLabels &&
-            allLabels?.map((skill, index) => (
-              <Labels
-                key={index}
-                icon={icon}
-                labelName={skill.skill_name}
-                disableCloseIcon={true}
-                customClass={styling.labelClass}
-                onClickHandle={() => addSkillToCandidateSkills(skill)}
-              />
-            ))}
+          {filteredSkills && (
+            <>
+              {filteredSkills.slice(0, 10).map((skill, index) => (
+                <Labels
+                  key={index}
+                  icon={icon}
+                  labelName={skill}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                  onClickHandle={() => addSkillToCandidateSkills(skill)}
+                />
+              ))}
+              {filteredSkills.length > 10 && (
+                <Labels
+                  key="more-label"
+                  labelName={`+ ${filteredSkills.length - 10} more`}
+                  customClass={styling.labelClass}
+                  disableCloseIcon={true}
+                />
+              )}
+            </>
+          )}
         </div>
       </Modal>
     </>
