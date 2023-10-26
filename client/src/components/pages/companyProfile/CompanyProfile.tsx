@@ -107,11 +107,10 @@ const CompanyProfile = () => {
             Create new job
           </Button>
         </div>
-        {jobs.map((job: Record<string, any>, index: number) => {
+        {jobs?.map((job: Record<string, any>, index: number) => {
           return (
-            <div onClick={() => navigate(`/job/${job?.id}`)}>
+            <div onClick={() => navigate(`/job/${job?.id}`)} key={index}>
               <HorizontalCard
-                key={index}
                 avatar={true}
                 button="Go to description"
                 firstName={company?.company_name}

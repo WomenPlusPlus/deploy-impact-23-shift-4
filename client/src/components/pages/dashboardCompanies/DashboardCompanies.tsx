@@ -49,9 +49,13 @@ const DashboardCompany = () => {
       return job["company_id"] === userId;
     });
 
-    jobs?.map(async (job: Record<string, any>) => {
-      if (job && job?.id) await getMatchCandidates(job?.id);
-    });
+    try {
+      jobs?.map(async (job: Record<string, any>) => {
+        if (job && job?.id) await getMatchCandidates(job?.id);
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
 
@@ -130,7 +134,9 @@ const DashboardCompany = () => {
             <ProgressBar progress={progress} />
           </div>
 
-          <Button>Complete your profile</Button>
+          <Button onClick={() => navigate(`/company-profile/${userId}`)}>
+            Complete your profile
+          </Button>
         </div>
       </CardContainer>
 

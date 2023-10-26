@@ -7,6 +7,7 @@ import dill
 
 def tokens(skill):
     init_list = skill.lower().split(" ")
+
     if len(init_list) > 1:
         init_list.append("_".join(skill.lower().split(" ")))
 
@@ -20,7 +21,7 @@ def tokens(skill):
 
 
 if __name__ == "__main__":
-    domain_name = os.environ.get("DOMAIN_NAME")
+    domain_name = "http://localhost:5001"
 
     skills = requests.get(f"{domain_name}/api/get_all_skills")
     values = requests.get(f"{domain_name}/api/get_all_values")
