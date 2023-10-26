@@ -15,7 +15,6 @@ export async function getMatchCandidates(id: string) {
     );
 
     if (response.status === 200) {
-      console.log("Matching candidates result:", response.data);
     } else {
       throw new Error("Error matching candidates");
     }

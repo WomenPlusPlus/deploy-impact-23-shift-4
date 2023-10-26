@@ -37,33 +37,34 @@ const DashboardCompany = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchInfo = async () => {
-    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
-    const company = await getCompanyById(userId);
-
-    const allJobs = await getAllJobs();
-
-    const allCandidates = await getAllCandidates();
-
-    const jobs = allJobs?.filter((job: Record<string, any>) => {
-      return job["company_id"] === userId;
-    });
-
     try {
-      jobs?.map(async (job: Record<string, any>) => {
-        if (job && job?.id) await getMatchCandidates(job?.id);
+      const allJobs = await getAllJobs();
+      const allCandidates = await getAllCandidates();
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        return job["company_id"] === userId;
       });
+
+      await Promise.all(
+        jobs?.map(async (job: Record<string, any>) => {
+          if (job && job?.id) {
+            return getMatchCandidates(job?.id);
+          }
+        })
+      );
+
+      const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
+
+      const company = await getCompanyById(userId);
+
+      setAllCandidates(allCandidates);
+      setAllJobs(allJobs);
+      setMatchingCandidates(matchingCandidates);
+      setCompany(company);
+      setIsLoading(true);
     } catch (error) {
-      console.log(error);
+      // Handle errors here, e.g., log the error or show an error message.
+      console.error("Error fetching data:", error);
     }
-
-    const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
-
-    setCompany(company);
-    setAllCandidates(allCandidates);
-    setAllJobs(allJobs);
-    setMatchingCandidates(matchingCandidates);
-    setIsLoading(true);
   };
 
   useEffect(() => {
