@@ -19,6 +19,7 @@ import DashboardAssociations from "../components/pages/dashboardAssociations/Das
 import CompanyPublicProfile from "../components/pages/companyPublicProfile/CompanyPublicProfile";
 import AssociationProfile from "../components/pages/associationProfile/AssociationProfile";
 import CandidatePublicProfile from "../components/pages/candidatePublicProfile/CandidatePublicProfile";
+import AssociationPublicProfile from "../components/pages/associationPublicProfile/AssociationPublicProfile";
 
 const Routes: React.FC = () => {
   return (
@@ -44,11 +45,11 @@ const Routes: React.FC = () => {
           element={<Authenticated content={<Candidates />} />}
         />
         <Route
-          path="/candidate-profile"
+          path="/candidate-profile/:id"
           element={<Authenticated content={<CandidateProfile />} />}
         />
         <Route
-          path="/company-profile"
+          path="/company-profile/:id"
           element={<Authenticated content={<CompanyProfile />} />}
         />
         <Route
@@ -58,6 +59,10 @@ const Routes: React.FC = () => {
         <Route
           path="/association-profile/:id" //TODO
           element={<Authenticated content={<AssociationProfile />} />}
+        />
+        <Route
+          path="/association/:id"
+          element={<Authenticated content={<AssociationPublicProfile />} />}
         />
         <Route
           path="/dashboard-association"

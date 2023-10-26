@@ -80,8 +80,8 @@ const Navbar = () => {
 
   const handleProfileClick = () => {
     const user = JSON.parse(localStorage.getItem("auth") || "{}")?.user;
-    if (user?.user_type === "company") navigate("/company-profile");
-    else if (user?.user_type === "candidate") navigate("/candidate-profile");
+    if (user?.user_type === "company") navigate(`/company-profile/${user?.id}`);
+    else if (user?.user_type === "candidate") navigate(`/candidate-profile/${user?.id}`);
     else if (user?.user_type === "association")
       navigate(`/association-profile/${user?.id}`);
   };

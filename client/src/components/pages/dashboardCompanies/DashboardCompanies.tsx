@@ -29,6 +29,7 @@ const DashboardCompany = () => {
 
   const navigate = useNavigate();
 
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const [company, setCompany] = useState({} as Company);
   const [matchingCandidates, setMatchingCandidates] = useState([]);
   const [allJobs, setAllJobs] = useState<Record<string, any>[]>();
@@ -116,7 +117,7 @@ const DashboardCompany = () => {
         <IconExternalLink
           className={styling.icon}
           color="black"
-          onClick={() => navigate("/company-profile")}
+          onClick={() => navigate(`/company-profile/${userId}`)}
         />
       </CardContainer>
 

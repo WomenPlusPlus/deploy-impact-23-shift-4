@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
 import { getAllCandidates, getCandidateById } from "../../../api/candidates";
-import { Association, Candidate, Company, Job, User } from "../../../types/types";
+import {
+  Association,
+  Candidate,
+  Company,
+  Job,
+  User,
+} from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
@@ -78,7 +84,6 @@ const Shortlist = () => {
   return (
     <div className={styling.main}>
       <h1>Shortlist</h1>
-      <p>Shortlist page</p>
       {user_type === "candidate" && (
         <div className={styling.cardContainer}>
           {jobs &&

@@ -17,6 +17,7 @@ from db_model.association import init_association_model
 from db_model.jobs import init_jobs_model
 from db_model.skills import init_skills_model
 from db_model.values import init_values_model
+from db_model.admin import init_admin_model
 
 # Blueprints
 from routes.home import home_bp
@@ -70,7 +71,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = secret_key
 
-logging.basicConfig(level=logging.DEBUG)
 # Initialize CORS with your Flask app
 CORS(
     app,
@@ -103,11 +103,12 @@ Association = init_association_model(db)
 Jobs = init_jobs_model(db)
 Skills = init_skills_model(db)
 Values = init_values_model(db)
+Admin = init_admin_model(db)
 
 # Blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(
-    register.register_route(User, Candidate, Company, Association, db)
+    register.register_route(User, Candidate, Company, Association, Admin, db)
 )
 app.register_blueprint(login.login_route(User))
 app.register_blueprint(logout_bp)
@@ -179,9 +180,10 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    print("Running in PRODUCTION mode")
-    http_server = WSGIServer(('', 5001), app)
-    http_server.serve_forever()
-
-    # print("Running in DEVELOPMENT mode")
-    # app.run(port=5001, debug=True)
+    if os.environ.get("FLASK_ENV") == "production":
+        print("Running in PRODUCTION mode")
+        http_server = WSGIServer(("", 5001), app)
+        http_server.serve_forever()
+    else:
+        print("Running in DEVELOPMENT mode")
+        app.run(port=5001, debug=True)
