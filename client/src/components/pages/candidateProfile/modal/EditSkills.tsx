@@ -30,7 +30,6 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   setVisible,
   showModal,
 }) => {
-  console.log(allLabels);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [candidateLabels, setCandidateLabels] = useState<Skill[]>([]);

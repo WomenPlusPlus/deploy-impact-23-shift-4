@@ -33,7 +33,7 @@ export async function getCandidateById(userId: string) {
       { user_id: userId },
       { withCredentials: true }
     );
-    console.log("response", response);
+
     if (response.status === 200) {
       return response.data.candidates;
     } else if (response.status === 404) {
@@ -54,7 +54,7 @@ export async function getCandidateById(userId: string) {
  */
 export async function updateCandidateById(userId: string, updateData: object) {
   try {
-    console.log("updateData", updateData);
+
     const response = await axios.put(
       "/api/update_candidate",
       { user_id: userId, ...updateData },

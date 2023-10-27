@@ -37,10 +37,8 @@ const ApplicationRequests = () => {
       ?.id;
     const candidate = await getCandidateById(candidateId);
     setCandidate(candidate);
-    console.log("candidate", candidate);
 
     if (Array.isArray(candidate?.package_requested)) {
-      console.log("package_requested data:", candidate.package_requested);
       const newTableData = candidate?.package_requested?.map(
         (item: any, index: number) => {
           return {
@@ -54,7 +52,6 @@ const ApplicationRequests = () => {
           };
         }
       );
-      console.log("newTableData:", newTableData);
       setTableData(newTableData);
     } else {
       console.log(
@@ -71,9 +68,6 @@ const ApplicationRequests = () => {
   const handleOk = async (enabledStrings: string[]) => {
     setIsModalOpen(false);
     if (selectedRecord) {
-      console.log(`Accepted: ${selectedRecord.position}`);
-      console.log("Enabled Strings:", enabledStrings);
-
       // Filter out the selected record from tableData
       const updatedData = tableData?.filter(
         (item) => item.key !== selectedRecord.key
@@ -95,7 +89,6 @@ const ApplicationRequests = () => {
         // Update the specific company entry with the new visible_info
         updatedCandidate.package_accepted[existingCompanyIndex].visible_info =
           enabledStrings;
-        console.log("Updated candidate data:", updatedCandidate);
 
         // Update the candidate's data
         await updateCandidateById(candidate?.user_id!, {
@@ -124,7 +117,6 @@ const ApplicationRequests = () => {
               package_accepted: updatedPackageAccepted,
             }
           );
-          console.log("Updated candidate data:", updatedCandidate);
         }
       }
 
@@ -149,7 +141,6 @@ const ApplicationRequests = () => {
   };
 
   const handleReject = async (record: any) => {
-    console.log(`Rejected: ${record.position}`);
     // Filter out the row with the rejected company
     const updatedData = tableData.filter((item) => item.key !== record.key);
     // update the candidate data
@@ -165,7 +156,6 @@ const ApplicationRequests = () => {
       const updatedCandidate = await updateCandidateById(candidate?.user_id!, {
         package_requested: updatedPackageRequested,
       });
-      console.log("Updated candidate data:", updatedCandidate);
     }
   };
 
@@ -202,7 +192,6 @@ const ApplicationRequests = () => {
     },
   ];
 
-  console.log("tableData", tableData);
   return (
     <>
       <CardContainer className={styling.requests}>

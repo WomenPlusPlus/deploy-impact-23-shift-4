@@ -82,16 +82,12 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
     } else {
       setIsPackageVisible(false);
     }
-
-    console.log("candidate: ", candidate);
   }, [candidate]);
 
   const requestAccess = () => {
-    console.log("request access for document: ");
     setIsModalVisible(true);
   };
-  console.log("jobPreferences: ", jobPreferences);
-  console.log("companyIdsVisibleInfo: ", companyVisibleInfo);
+
   return (
     <div className={styling.main}>
       {/* Assosiactions */}

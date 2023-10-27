@@ -6,6 +6,7 @@ import { getAllCompanies } from "../../../api/companies";
 import { useNavigate } from "react-router-dom";
 import { Candidate, Company, Job } from "../../../types/types";
 import { getCandidateById } from "../../../api/candidates";
+import Spinner from "../../UI/spinner/Spinner";
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Jobs = () => {
   const [companies, setCompanies] = useState([] as Company[]);
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchedScoreVisible, setMatchedScoreVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
@@ -27,6 +29,7 @@ const Jobs = () => {
       // filter jobs by company id
       const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
       setCompanyJobs(jobs);
+      setIsLoading(false);
     } else {
       if (userType === "candidate") {
         const candidate = await getCandidateById(userId);
@@ -35,6 +38,7 @@ const Jobs = () => {
       const allCompanies = await getAllCompanies();
       setJobs(allJobs);
       setCompanies(allCompanies);
+      setIsLoading(false);
     }
   };
 
@@ -95,6 +99,10 @@ const Jobs = () => {
       );
     }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

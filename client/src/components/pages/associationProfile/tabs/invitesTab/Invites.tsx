@@ -145,7 +145,7 @@ const InvitesComponent: React.FC<InvitesComponentProps> = ({
       key: "expiresIn",
     },
   ];
-  console.log(association);
+
   return (
     <CardContainer className={styling.invitesTab}>
       <div className={styling.invites}>

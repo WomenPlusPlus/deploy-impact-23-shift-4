@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../../UI/oauth/GoogleButton";
 import TermsAndConditions from "./TermsAndConditions";
 import BridgeLogo from "../../../media/bridge-logo.png";
+import { SpinnerGlobal } from "../../layout/authenticated/SpinnerGlobal";
 
 interface RegisterProps {
   token: string;
@@ -23,18 +24,9 @@ const Register: React.FC<RegisterProps> = ({
   signature,
   associations,
 }) => {
-  console.log(
-    "Token:",
-    token,
-    "Expires:",
-    expires,
-    "User type:",
-    user_type,
-    "Signature:",
-    signature
-  );
   // state
   const [formData, setFormData] = useState({} as any);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [agree, setAgree] = useState(false);
 
@@ -48,7 +40,8 @@ const Register: React.FC<RegisterProps> = ({
 
   const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
+  const onClickRegister = (values: any) => {
+    setIsLoading(true);
     // add associations to the form data
     const data = {
       ...formData,
@@ -58,10 +51,15 @@ const Register: React.FC<RegisterProps> = ({
     axios
       .post("/api/register", data, { withCredentials: true }) // Replace with your registration endpoint
       .then((response) => {
-        // Handle the backend response here (e.g., show a success message)
-        console.log("Registration Successful!");
-        console.log(`${response.data}`);
-        navigate("/login"); // Redirect to the login page after successful registration
+        const { data } = response;
+        if (data.message === "User registered successfully") {
+          console.log("Registration Successful!");
+          setIsLoading(false);
+          navigate("/login");
+        } else {
+          console.log("Registration Failed!");
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         // Handle any errors here (e.g., display error messages)
@@ -74,6 +72,10 @@ const Register: React.FC<RegisterProps> = ({
       });
   };
 
+  if (isLoading) {
+    return <SpinnerGlobal />;
+  }
+
   return (
     <div className={styling.registerContainer}>
       <div className={styling.registerBox}>
@@ -83,7 +85,7 @@ const Register: React.FC<RegisterProps> = ({
           name="register_form"
           className={styling.registerForm}
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={onClickRegister}
         >
           {user_type === "candidate" && (
             <>

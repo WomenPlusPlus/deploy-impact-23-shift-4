@@ -19,6 +19,7 @@ import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 import { Tabs } from "antd";
 import DetailsTab from "./tabs/details/DetailsTab";
 import JobMatchesTab from "./tabs/matches/MatchesTab";
+import Spinner from "../../UI/spinner/Spinner";
 
 const PublicJob = () => {
   // Job id from url
@@ -34,6 +35,7 @@ const PublicJob = () => {
   const [companyData, setCompanyData] = useState<Company>();
   const [isSaved, setIsSaved] = useState(false);
   const [matchScore, setMatchScore] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Get job and company data
@@ -61,6 +63,7 @@ const PublicJob = () => {
       setCompanyData(getCompany);
       setJobData(getJob);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -125,6 +128,10 @@ const PublicJob = () => {
       children: <JobMatchesTab job={jobData} />,
     },
   ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

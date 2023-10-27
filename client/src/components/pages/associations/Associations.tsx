@@ -6,6 +6,7 @@ import { getAllAssociations } from "../../../api/associations";
 import { Association } from "../../../types/types";
 import AssociationCard from "../../UI/card/AssociationCard";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../UI/spinner/Spinner";
 
 const Associations = () => {
   const associationsOptions = ["Woman++", "Power Coders"];
@@ -16,6 +17,7 @@ const Associations = () => {
   const [filteredAssociations, setFilteredAssociations] = useState<
     Association[]
   >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
@@ -27,8 +29,10 @@ const Associations = () => {
         (association: Association) => association?.user_id !== userId
       );
       setFilteredAssociations(filteredAssociations);
+      setIsLoading(false);
     } else {
       setFilteredAssociations(associations);
+      setIsLoading(false);
     }
   };
 
@@ -43,7 +47,10 @@ const Associations = () => {
   useEffect(() => {
     fetchInfo();
   }, []);
-  console.log(filteredAssociations);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

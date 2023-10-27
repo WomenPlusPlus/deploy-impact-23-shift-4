@@ -8,6 +8,7 @@ import Searchbar from "../../UI/searchbar/Searchbar";
 import { Candidate, User } from "../../../types/types";
 import { getCompanyById } from "../../../api/companies";
 import { getAssociationById } from "../../../api/associations";
+import Spinner from "../../UI/spinner/Spinner";
 
 const Candidates = () => {
   const skillsOptions = ["JavaScript", "React", "Node.js", "SQL"];
@@ -23,6 +24,7 @@ const Candidates = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
   const [user, setUser] = useState({} as User);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   /**
    * Handle filter change
    * @param filteredCandidates - filtered candidates
@@ -48,6 +50,7 @@ const Candidates = () => {
       }
       setCandidates(candidates);
       setFilteredCandidates(candidates);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -56,6 +59,10 @@ const Candidates = () => {
   useEffect(() => {
     fetchCandidates();
   }, []);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="main">

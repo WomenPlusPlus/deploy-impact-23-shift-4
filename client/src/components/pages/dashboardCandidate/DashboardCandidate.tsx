@@ -27,7 +27,7 @@ const DashboardCandidate: React.FC = () => {
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const DashboardCandidate: React.FC = () => {
     } catch (error) {
       console.log("await getCandidateById error:", error);
     }
-    setLoading(false);
+    setIsLoading(false);
   };
 
   const calculateProgress = (candidate: Candidate) => {
@@ -189,7 +189,7 @@ const DashboardCandidate: React.FC = () => {
     </div>
   );
 
-  return <>{loading ? <Spinner /> : content}</>;
+  return <>{isLoading ? <Spinner /> : content}</>;
 };
 
 export default DashboardCandidate;

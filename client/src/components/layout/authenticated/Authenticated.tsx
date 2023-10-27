@@ -5,7 +5,6 @@ import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { LoginRedirect } from "./LoginRedirect";
 
 const { Content } = AntLayout;
 

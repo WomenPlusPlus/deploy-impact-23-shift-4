@@ -13,12 +13,13 @@ import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
 import Card from "../../UI/card/Card";
+import Spinner from "../../UI/spinner/Spinner";
 
 const Shortlist = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState({} as Candidate);
   const [user, setUser] = useState({} as User);
-  const [associations, setAssociations] = useState([] as Association[]);
+  const [isLoading, setIsLoading] = useState(true);
   const [jobs, setJobs] = useState([] as Job[]);
   const [candidates, setCandidates] = useState([] as Candidate[]);
   const [companies, setCompanies] = useState([] as Company[]);
@@ -42,18 +43,15 @@ const Shortlist = () => {
         // Wait for all job fetch promises to resolve
         const jobs = await Promise.all(jobPromises);
         // jobs is now an array of type Job[]
-        console.log(jobs);
         setJobs(jobs);
       }
       setCandidate(candidate);
       setCompanies(allCompanies);
+      setIsLoading(false);
     }
     if (user_type === "company") {
       const company = await getCompanyById(userId);
       const allCandidates = await getAllCandidates();
-      setUser(company);
-      setCandidate(allCandidates);
-
       // fetch all jobs from company's shortlist
       const candidatesIds = company?.saved_items;
 
@@ -68,18 +66,24 @@ const Shortlist = () => {
           // Wait for all candidate fetch promises to resolve
           const candidates = await Promise.all(candidatePromises);
           // candidates is now an array of type Candidate[]
-          console.log(candidates);
           setCandidates(candidates);
         } catch (error) {
           console.log("ERROR:", error);
         }
       }
+      setUser(company);
+      setCandidate(allCandidates);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchInfo();
   }, []);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>
