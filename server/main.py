@@ -4,7 +4,7 @@ import logging
 
 from gevent.pywsgi import WSGIServer
 
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -162,10 +162,13 @@ def load_user(user_id):
 @app.after_request
 def after_request(response):
     if os.environ.get("FLASK_ENV") == "production":
-        response.headers.add(
-            "Access-Control-Allow-Origin",
-            "*",
-        )
+        allowed_origins = [
+            "https://banana-builders-client.vercel.app",
+            "https://banana-builders-client-albas-projects.vercel.app",
+        ]
+        origin = request.headers.get("Origin")
+        if origin in allowed_origins:
+            response.headers.add("Access-Control-Allow-Origin", origin)
     else:
         response.headers.add(
             "Access-Control-Allow-Origin",
