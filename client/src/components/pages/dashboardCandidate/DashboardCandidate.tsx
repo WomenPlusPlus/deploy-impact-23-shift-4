@@ -36,18 +36,23 @@ const DashboardCandidate: React.FC = () => {
     try {
       const allJobs = await getAllJobs();
       setJobs(allJobs);
-
-      await getMatchJobs(auth.user.id);
-
+    } catch (error) {
+      console.log("await getAllJobs error:", error);
+    }
+    try {
       const candidateFetched = await getCandidateById(user_id);
       setCandidate(candidateFetched);
-
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
-      setLoading(false);
     } catch (error) {
-      console.log("error", error);
+      console.log("await getCandidateById error:", error);
     }
+    try {
+      await getMatchJobs(auth?.user?.id);
+    } catch (error) {
+      console.log("await getCandidateById error:", error);
+    }
+    setLoading(false);
   };
 
   const calculateProgress = (candidate: Candidate) => {
@@ -79,7 +84,7 @@ const DashboardCandidate: React.FC = () => {
                 Welcome back, {candidate?.first_name}
               </h2>
             ) : (
-              <h2 className={styling.headerTitle}>Welcome</h2>
+              <h2 className={styling.headerTitle}>Welcome!</h2>
             )}
             {candidate?.experience ? (
               <p> {candidate?.experience[0]?.role}</p>
