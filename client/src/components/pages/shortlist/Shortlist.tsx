@@ -6,7 +6,7 @@ import { Candidate, Company, Job, User } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
-import Card from "../../UI/card/Card";
+import { CandidateCard } from "../../UI/CandidateCard/CandidateCard";
 import Spinner from "../../UI/spinner/Spinner";
 
 const Shortlist = () => {
@@ -113,7 +113,7 @@ const Shortlist = () => {
           {candidates &&
             candidates?.length > 0 &&
             candidates?.map((candidate, index) => (
-              <Card
+              <CandidateCard
                 key={index}
                 candidate={candidate}
                 user={user}

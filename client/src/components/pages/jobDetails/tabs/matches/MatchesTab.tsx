@@ -1,6 +1,6 @@
 import { Job } from "../../../../../types/types";
 import { useNavigate } from "react-router-dom";
-import Card from "../../../../UI/card/Card";
+import { CandidateCard } from "../../../../UI/CandidateCard/CandidateCard";
 
 import styling from "./MatchesTab.module.css";
 import { getAllCandidates } from "../../../../../api/candidates";
@@ -42,7 +42,7 @@ const JobMatchesTab: React.FC<Props> = ({ job }) => {
           <div className={styling.cardContainer}>
             {matchingCandidates &&
               matchingCandidates?.map((candidate: any) => (
-                <Card
+                <CandidateCard
                   key={candidate?.id}
                   candidate={candidate}
                   header={candidate.experience[0]?.role}

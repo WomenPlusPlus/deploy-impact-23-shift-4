@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Card from "../../UI/card/Card";
+import { CandidateCard } from "../../UI/CandidateCard/CandidateCard";
 import "./Candidates.css";
 import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
@@ -92,7 +92,7 @@ const Candidates = () => {
       </div>
       <div className="cards">
         {filteredCandidates?.map((candidate, index) => (
-          <Card
+          <CandidateCard
             key={index}
             candidate={candidate}
             user={user}

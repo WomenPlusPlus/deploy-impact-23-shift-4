@@ -5,7 +5,7 @@ import Avatar from "../avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
 import { updateCompanyById } from "../../../api/companies";
 import { updateAssociationById } from "../../../api/associations";
-import styling from "./Card.module.css";
+import styling from "./CandidateCard.module.css";
 
 interface CardProps {
   user?: User;
@@ -22,7 +22,7 @@ interface CardProps {
   onClickRedirect?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({
+const CandidateCard: React.FC<CardProps> = ({
   logo,
   header,
   user,
@@ -193,4 +193,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export { CandidateCard };
