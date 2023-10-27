@@ -54,7 +54,6 @@ export async function getCandidateById(userId: string) {
  */
 export async function updateCandidateById(userId: string, updateData: object) {
   try {
-
     const response = await axios.put(
       "/api/update_candidate",
       { user_id: userId, ...updateData },

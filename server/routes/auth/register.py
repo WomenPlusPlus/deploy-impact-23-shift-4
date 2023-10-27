@@ -1,7 +1,6 @@
 import bcrypt
 from flask import Blueprint, jsonify, request
 from flask_login import login_user
-import logging
 
 def register_route(User, Candidate, Company, Association, Admin, db):
     register_bp = Blueprint("register", __name__)

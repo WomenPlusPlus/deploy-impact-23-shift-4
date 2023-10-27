@@ -66,8 +66,10 @@ const Register: React.FC<RegisterProps> = ({
         if (error.response) {
           console.error("HTTP Status Code:", error.response.status);
           console.error("Response Data:", error.response.data);
+          setIsLoading(false);
         } else {
           console.error("Network Error:", error.message);
+          setIsLoading(false);
         }
       });
   };
