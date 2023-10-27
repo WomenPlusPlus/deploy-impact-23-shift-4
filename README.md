@@ -48,7 +48,7 @@ View our designs created using Figma [here](https://www.figma.com/file/GabIGkFDg
 | Alba Romero     | Full Stack Developer| [albarkauss](https://github.com/albarkauss)  |
 | Mehtapy Yildiz | Full Stack Developer | [mehtapy](https://github.com/mehtapy)        |
 | Isaac Omolayo | Data Science          | [IzicTemi](https://github.com/IzicTemi)      |
-| Maria Reis | UX designer         | [uxreis](https://github.com/uxreis) |
+| Maria Reis | UX designer         | [uxreis](https://github.com/uxmreis) |
 | Petra Slits | Project Manager          | [petrajanna](https://github.com/petrajanna) |
 | Noor Halta | SCRUM Master          | [noorhalta](https://github.com/noorhalta) |
 
