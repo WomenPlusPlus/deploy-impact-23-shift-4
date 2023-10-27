@@ -45,25 +45,34 @@ const PublicJob = () => {
     const getJob = await getJobById(id);
 
     if (userType === "candidate") {
-      const candidate = await getCandidateById(userId);
-      const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
-      setIsSaved(fetchIsSaved);
-      setCandidate(candidate);
+      try {
+        const candidate = await getCandidateById(userId);
+        const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
+        setIsSaved(fetchIsSaved);
+        setCandidate(candidate);
 
-      const matchScore = candidate?.matching_jobs.find(
-        (job: Job) => job.id === getJob?.id
-      )?.match_score;
-      if (matchScore) {
-        setMatchScore(matchScore);
+        const matchScore = candidate?.matching_jobs.find(
+          (job: Job) => job.id === getJob?.id
+        )?.match_score;
+        if (matchScore) {
+          setMatchScore(matchScore);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
       }
     }
 
     if (getJob) {
-      const getCompany = await getCompanyById(getJob?.company_id ?? "");
-      setCompanyData(getCompany);
-      setJobData(getJob);
+      try {
+        const getCompany = await getCompanyById(getJob?.company_id ?? "");
+        setCompanyData(getCompany);
+        setJobData(getJob);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
