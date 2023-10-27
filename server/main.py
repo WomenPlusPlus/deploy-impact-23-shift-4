@@ -2,7 +2,7 @@ import string
 
 import logging
 
-from gevent.pywsgi import WSGIServer
+from waitress import serve
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -144,7 +144,7 @@ app.register_blueprint(match_jobs.match_jobs_route(domain_name))
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(id):
     """
     Load a user by their user ID.
     Necessary for logout.
@@ -155,8 +155,8 @@ def load_user(user_id):
     Returns:
         User: The User object associated with the provided user ID.
     """
-    print("load_user", user_id)
-    return User.query.get(user_id)
+    print("load_user", id)
+    return User.query.get(id)
 
 
 @app.after_request
@@ -186,8 +186,7 @@ if __name__ == "__main__":
     # Start the server
     if os.environ.get("FLASK_ENV") == "production":
         print("Running in PRODUCTION mode")
-        http_server = WSGIServer(("", 5001), app)
-        http_server.serve_forever()
+        serve(app, listen="*:5001", expose_tracebacks=False, threads=6)
     else:
         print("Running in DEVELOPMENT mode")
         app.run(port=5001, debug=True)
