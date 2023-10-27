@@ -11,10 +11,8 @@ def score(job_skills, candidate_skills, candidate_levels=False):
         vectorizer = dill.load(file)
 
         job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
-        print("JOB SKILLS", job_skills)
         job_skills_vector = vectorizer.transform(job_skills)
         # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
-        print("CANDIDATE SKILLS", candidate_skills)
         candidate_skills = [
             "_".join(skill.lower().split(" ")) for skill in candidate_skills
         ]
@@ -82,99 +80,104 @@ async def match_jobs_logic(domain_name, data):
             existing_matching_jobs = candidate.get("candidates").get(
                 "matching_jobs", []
             )
-            print("EXISTING MATCHING JOBS", existing_matching_jobs)
-            cand_skills = [
-                skill["skill_name"] for skill in candidate["candidates"]["skills"]
-            ]
-            print("CAND SKILLS", cand_skills)
-            cand_levels = [
-                skill["skill_level"] for skill in candidate["candidates"]["skills"]
-            ]
-            cand_values = candidate["candidates"]["values"]
-            cand_soft_skills = candidate["candidates"]["soft_skills"]
+            if candidate["candidates"]["skills"] is not None:
+                cand_skills = [
+                    skill["skill_name"] for skill in candidate["candidates"]["skills"]
+                ]
+                cand_levels = [
+                    skill["skill_level"] for skill in candidate["candidates"]["skills"]
+                ]
+                cand_values = candidate["candidates"]["values"]
+                cand_soft_skills = candidate["candidates"]["soft_skills"]
 
-            for job in jobs:
-                print("JOB")
-                job_skills = [skill["skill_name"] for skill in job.get("skills")]
-                job_id = job["id"]
+                for job in jobs:
+                    if job.get("skills") is not None:
+                        job_skills = [skill["skill_name"] for skill in job.get("skills")]
+                        job_id = job["id"]
 
-                if (
-                    existing_matching_jobs
-                    and len(existing_matching_jobs) > 0
-                    and any(
-                        matching_job["id"] == job_id
-                        for matching_job in existing_matching_jobs
-                    )
-                ):
-                    continue
+                        if (
+                            existing_matching_jobs
+                            and len(existing_matching_jobs) > 0
+                            and any(
+                                matching_job["id"] == job_id
+                                for matching_job in existing_matching_jobs
+                            )
+                        ):
+                            # skip to next job
+                            continue
 
-                count = 4
-                total_score = 0
-                print("YES")
+                        count = 4
+                        total_score = 0
+                        print("YES")
 
-                if job_skills:
-                    print("JOB SKILL")
-                    job_tech_score = score(job_skills, cand_skills, cand_levels)
-                    total_score += 4 * job_tech_score
+                        if job_skills:
+                            print("JOB SKILL")
+                            job_tech_score = score(job_skills, cand_skills, cand_levels)
+                            total_score += 4 * job_tech_score
 
-                    if job.get("values"):
-                        print("VALUES")
-                        print("VALUES", job.get("values"))
-                        count += 1
-                        if cand_values:
-                            job_val_score = score(job["values"], cand_values)
-                            total_score += job_val_score
+                            if job.get("values"):
+                                print("VALUES")
+                                print("VALUES", job.get("values"))
+                                count += 1
+                                if cand_values:
+                                    job_val_score = score(job["values"], cand_values)
+                                    total_score += job_val_score
 
-                    if job.get("soft_skills"):
-                        print("SOFT SKILLS")
-                        count += 2
-                        if cand_soft_skills:
-                            job_soft_score = score(job["soft_skills"], cand_soft_skills)
-                            total_score += 2 * job_soft_score
+                            if job.get("soft_skills"):
+                                print("SOFT SKILLS")
+                                count += 2
+                                if cand_soft_skills:
+                                    job_soft_score = score(job["soft_skills"], cand_soft_skills)
+                                    total_score += 2 * job_soft_score
 
-                    job_score = round(total_score / count, 1)
+                            job_score = round(total_score / count, 1)
 
-                    # TODO: increase threshold to 60
-                    print("JOB SCORE", job_score)
-                    if job_score >= 20:
-                        job_match.append({"id": job_id, "score": job_score})
+                            # TODO: increase threshold to 60
+                            print("JOB SCORE", job_score)
+                            if job_score >= 20:
+                                job_match.append({"id": job_id, "score": job_score})
 
-                        if job.get("matching_candidates"):
-                            duplicate = next(
-                                (
-                                    ix
-                                    for ix, cand in enumerate(
-                                        job.get("matching_candidates", [])
+                                if job.get("matching_candidates"):
+                                    duplicate = next(
+                                        (
+                                            ix
+                                            for ix, cand in enumerate(
+                                                job.get("matching_candidates", [])
+                                            )
+                                            if cand.get("id") == id
+                                        ),
+                                        None,
                                     )
-                                    if cand.get("id") == id
-                                ),
-                                None,
-                            )
-                            if duplicate is not None:
-                                job["matching_candidates"][duplicate][
-                                    "score"
-                                ] = job_score
-                            else:
-                                job["matching_candidates"].append(
-                                    {"id": id, "score": job_score}
+                                    if duplicate is not None:
+                                        job["matching_candidates"][duplicate][
+                                            "score"
+                                        ] = job_score
+                                    else:
+                                        job["matching_candidates"].append(
+                                            {"id": id, "score": job_score}
+                                        )
+                                else:
+                                    job["matching_candidates"] = []
+                                    job["matching_candidates"].append(
+                                        {"id": id, "score": job_score}
+                                    )
+
+                                update_job, update_job_response = await fetch_update_job(
+                                    session,
+                                    domain_name,
+                                    job_id,
+                                    job.get("matching_candidates"),
                                 )
-                        else:
-                            job["matching_candidates"] = []
-                            job["matching_candidates"].append(
-                                {"id": id, "score": job_score}
-                            )
+                                print("UPDATE JOB", update_job_response)
 
-                        update_job, update_job_response = await fetch_update_job(
-                            session,
-                            domain_name,
-                            job_id,
-                            job.get("matching_candidates"),
-                        )
-                        print("UPDATE JOB", update_job_response)
-
-            print("JOB MATCH", job_match)
-            if not job_match:
-                return jsonify({"message": "No matching jobs"}), 200
+                print("JOB MATCH", job_match)
+                if not job_match:
+                    print("NO JOB MATCH")
+                    return jsonify({"message": "No matching jobs"}), 200
+            
+            else:
+                print("No candidates skills available")
+                return jsonify({"message": "No candidates skills available"}), 200
 
             update_json = {"user_id": id, "matching_jobs": job_match}
             update_cand, update_cand_response = await fetch_update_candidate_data(
