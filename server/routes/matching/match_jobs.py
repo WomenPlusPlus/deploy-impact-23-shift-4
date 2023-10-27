@@ -39,7 +39,7 @@ def match_jobs_route(domain_name):
 
     @match_jobs_bp.route("/api/match_jobs", methods=["POST"])
     def match_jobs():
-        """ """
+        print("DOMAIN", domain_name)
         try:
             if request.method == "POST":
                 data = request.get_json()

@@ -1,4 +1,3 @@
-import string
 import os
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -6,6 +5,8 @@ import dill
 
 
 def tokens(skill):
+    import string
+
     global init_list
     init_list = skill.lower().split(" ")
 
