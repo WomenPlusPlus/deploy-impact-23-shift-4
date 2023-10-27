@@ -44,10 +44,10 @@ const Candidates = () => {
         // exclude the association that is logged in
         const association = await getAssociationById(userId);
         setUser(association);
-      } else {
+      } else if (userType === "company") {
         const company = await getCompanyById(userId);
         setUser(company);
-      }
+      } 
       setCandidates(candidates);
       setFilteredCandidates(candidates);
       setIsLoading(false);
@@ -101,7 +101,6 @@ const Candidates = () => {
               (candidate?.experience && candidate.experience[0]?.role) ||
               "Not specified"
             }`}
-            // subheader="Software Engineer"
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {
