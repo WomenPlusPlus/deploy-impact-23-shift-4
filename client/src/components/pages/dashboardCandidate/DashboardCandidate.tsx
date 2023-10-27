@@ -143,38 +143,39 @@ const DashboardCandidate: React.FC = () => {
         <div className={styling.section}>
           <CardContainer className={styling.matches}>
             <h1 className={styling.matchesTitle}>Your matches</h1>
-            {candidate.matching_jobs?.map((matchedJob: any) => {
-              let description = "";
+            {candidate &&
+              candidate?.matching_jobs?.map((matchedJob: any) => {
+                let description = "";
 
-              if (matchedJob?.score >= 90) {
-                description = "Your dream job is waiting for you! 🌟";
-              } else if (matchedJob?.score >= 75) {
-                description = "Great match for this role! 🚀";
-              } else {
-                description = "You might be interested in this job 💪🏽";
-              }
-
-              return jobs.map((job: Job) => {
-                // Use `return` to return the JSX elements
-                if (
-                  matchedJob.id === job.id &&
-                  candidate?.skills?.length !== undefined &&
-                  candidate.skills.length > 0
-                ) {
-                  return (
-                    <HorizontalCard
-                      key={job.id} // Add a unique key for each card
-                      avatar={false}
-                      button="Go to job"
-                      title={job.title}
-                      subtitle={description}
-                      onClick={() => navigate(`/job/${job.id}`)}
-                    />
-                  );
+                if (matchedJob?.score >= 90) {
+                  description = "Your dream job is waiting for you! 🌟";
+                } else if (matchedJob?.score >= 75) {
+                  description = "Great match for this role! 🚀";
+                } else {
+                  description = "You might be interested in this job 💪🏽";
                 }
-                return null; // Return null for unmatched jobs
-              });
-            })}
+
+                return jobs.map((job: Job) => {
+                  // Use `return` to return the JSX elements
+                  if (
+                    matchedJob.id === job.id &&
+                    candidate?.skills?.length !== undefined &&
+                    candidate.skills.length > 0
+                  ) {
+                    return (
+                      <HorizontalCard
+                        key={job.id} // Add a unique key for each card
+                        avatar={false}
+                        button="Go to job"
+                        title={job.title}
+                        subtitle={description}
+                        onClick={() => navigate(`/job/${job.id}`)}
+                      />
+                    );
+                  }
+                  return null; // Return null for unmatched jobs
+                });
+              })}
           </CardContainer>
           <ApplicationRequests />
         </div>
