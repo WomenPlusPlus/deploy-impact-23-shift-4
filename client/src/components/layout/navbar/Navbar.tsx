@@ -11,6 +11,7 @@ import { getCompanyById } from "../../../api/companies";
 import { getAssociationById } from "../../../api/associations";
 import { getCandidateById } from "../../../api/candidates";
 import Notifications from "../../shared/notifications/Notifications";
+import UnderConstruction from "../../shared/underConstruction/UnderConstruction";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const Navbar = () => {
   const userType = auth.user.user_type;
 
   const [avatarComponent, setAvatarComponent] = useState<React.ReactNode>();
+  const [isUnderConstruction, setIsUnderConstruction] =
+    useState<boolean>(false);
 
   const loadAvatar = async () => {
     if (userType === "company") {
@@ -80,9 +83,14 @@ const Navbar = () => {
   const handleProfileClick = () => {
     const user = JSON.parse(localStorage.getItem("auth") || "{}")?.user;
     if (user?.user_type === "company") navigate(`/company-profile/${user?.id}`);
-    else if (user?.user_type === "candidate") navigate(`/candidate-profile/${user?.id}`);
+    else if (user?.user_type === "candidate")
+      navigate(`/candidate-profile/${user?.id}`);
     else if (user?.user_type === "association")
       navigate(`/association-profile/${user?.id}`);
+  };
+
+  const hanldeConstructionModal = () => {
+    setIsUnderConstruction(!isUnderConstruction);
   };
 
   return (
@@ -100,8 +108,15 @@ const Navbar = () => {
               <Search
                 placeholder="Enter a job title, name o keyword"
                 style={{ position: "relative", width: 400 }}
+                onClick={hanldeConstructionModal}
               />
             </div>
+
+            <UnderConstruction
+              isOpen={isUnderConstruction}
+              onClose={hanldeConstructionModal}
+              subtitle="Global search coming soon!"
+            />
 
             <div className="rightMenu">
               <Notifications />

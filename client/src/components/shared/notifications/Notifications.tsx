@@ -2,6 +2,8 @@ import { IconBell, IconMail } from "@tabler/icons-react";
 import { DropdownComponent } from "../../UI/dropdown/Dropdown";
 import styling from "./Notifications.module.css";
 import { Badge } from "antd";
+import { useState } from "react";
+import UnderConstruction from "../underConstruction/UnderConstruction";
 
 const userData: any = {
   company: [
@@ -48,13 +50,19 @@ const userData: any = {
 };
 
 const Notifications = () => {
+  const [isUnderConstruction, setIsUnderConstruction] =
+    useState<boolean>(false);
+
+  const hanldeConstructionModal = () => {
+    setIsUnderConstruction(!isUnderConstruction);
+  };
   const userType = localStorage.getItem("user_type");
   if (userType === "company" || userType === "candidate") {
     const items = userData[userType].map((data: any) => ({
       key: data.key,
       label: (
         <div className={styling.container}>
-          <div>
+          <div onClick={hanldeConstructionModal}>
             <h3 className={styling.title}>{data.title}</h3>
             <p className={styling.subtitle}>{data.subtitle}</p>
           </div>
@@ -64,7 +72,6 @@ const Notifications = () => {
     }));
 
     return (
-      // TODO: Implement notifications functionality
       <Badge color={"orange"} size="small" count={items.length}>
         <DropdownComponent
           icon={<IconBell />}
@@ -72,6 +79,11 @@ const Notifications = () => {
           width={400}
           trigger={["click"]}
           placement="bottomRight"
+        />
+        <UnderConstruction
+          isOpen={isUnderConstruction}
+          onClose={hanldeConstructionModal}
+          subtitle="Notifications coming soon!"
         />
       </Badge>
     );
