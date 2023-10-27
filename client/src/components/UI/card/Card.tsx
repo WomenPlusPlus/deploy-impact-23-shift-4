@@ -21,8 +21,6 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({
-  logo,
-  header,
   company,
   candidate,
   subheader,
@@ -33,18 +31,12 @@ const Card: React.FC<CardProps> = ({
   isBookmarkVisible = false,
   onClickRedirect,
 }) => {
-  // pass company, pass candidateID
-  // state
   const [isSaved, setIsSaved] = React.useState(false);
 
-  // functions
   const handleSaveShortlist = async () => {
     if (isBookmarkVisible) {
-      // add to local storage
       setIsSaved(!isSaved);
-      // if not yet saved
       if (!isSaved) {
-        // Check if the job is already saved
         const isJobSaved = company?.saved_items?.includes(
           candidate?.user_id || ""
         );
@@ -63,11 +55,9 @@ const Card: React.FC<CardProps> = ({
           });
         }
       } else {
-        // if already saved
         const savedItems = JSON.parse(
           localStorage.getItem("saved_items") || "[]"
         );
-        // Check if the job is already saved in local storage
         const isJobSaved = savedItems.includes(candidate?.user_id);
         if (!isJobSaved) {
           return;

@@ -43,7 +43,6 @@
 }
 
 .jobTitle:hover {
-  /* underline */
   text-decoration: underline;
 }
 
@@ -74,7 +73,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--grey-8, #595959);
-  /* Body/regular */
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -114,4 +112,10 @@
 
 .savedBookmark {
   fill: black;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
 }

@@ -8,6 +8,7 @@
 .cardContainer {
   display: flex;
   flex-wrap: wrap;
+  column-gap: 4.3rem;
 }
 
 .header {
@@ -23,6 +24,8 @@
 .inputContainer {
   display: flex;
   flex-direction: column;
+  margin-bottom: 2rem;
+  width: 99%;
 }
 
 .inputs {
@@ -45,14 +48,20 @@
 }
 .searchText {
   width: 80rem;
+  max-width: 100%;
 }
 .sortByDate {
   display: flex;
   justify-content: space-between;
-  font-size: 3rem;
+  font-size: 1.4rem;
+  color: var(--grey-8, #595959);
+  margin-bottom: -1rem;
+  margin-top: 2rem;
+  width: 99%;
 }
-.sortByDate span {
-  color: rgb(16, 35, 158);
+.count {
+  color: var(--color-button);
+  font-size: 2rem;
   font-weight: bolder;
 }
 
@@ -61,12 +70,26 @@
   align-items: center;
 }
 
+button {
+  background: none;
+  border: none;
+  color: var(--grey-8, #595959);
+  text-decoration: none;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
-  .inputContainer {
-    display: flex;
-  }
   .inputs {
     display: flex;
+    flex-direction: column;
+  }
+
+  .jobHeader {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .multiFilter {
     flex-direction: column;
   }
 }

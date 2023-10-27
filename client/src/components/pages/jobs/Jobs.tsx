@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import { getAllJobs } from "../../../api/jobs";
 import styling from "./Jobs.module.css";
@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { Candidate, Company, Job } from "../../../types/types";
 import { getCandidateById } from "../../../api/candidates";
 import SearchJobs from "../../UI/searchbar/SearchJobs";
-import fakeData from "./FakeDataForJobs";
+import FilterSelect from "../../UI/filter/FilterSelect";
+import DisplayMultiFilter from "../../UI/filter/DisplayMultiFilter";
 import { Select } from "antd";
-const { Option } = Select;
+import SortBy from "../../UI/filter/SortBy";
+import { IconMapPin } from "@tabler/icons-react";
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -19,23 +21,22 @@ const Jobs = () => {
   const [companies, setCompanies] = useState([] as Company[]);
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchedScoreVisible, setMatchedScoreVisible] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState("Anywhere"); // Set "Anywhere" as the default
-
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [sortOrder, setSortOrder] = useState<string | undefined>(undefined);
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
-    console.log("allJobs", allJobs);
     const allCompanies = await getAllCompanies();
     if (auth?.user?.user_type === "candidate") {
       const candidate = await getCandidateById(userId);
       setCandidate(candidate);
     }
 
-    // If user is a company, only show jobs that belong to that company
     if (auth?.user?.user_type === "company") {
       setMatchedScoreVisible(false);
       const jobs = allJobs?.map((job: Record<string, any>) => {
-        // get all jobs that belong to this company
         if (job["company_id"] === userId) {
           return job;
         }
@@ -49,7 +50,6 @@ const Jobs = () => {
 
   useEffect(() => {
     fetchInfo();
-    console.log("isler", jobs);
   }, []);
 
   const header = () => {
@@ -70,56 +70,145 @@ const Jobs = () => {
     }
   };
 
-  //mehtap
-  const searchText = (results: (Company | Job)[]) => {
-    setJobs(jobs);
-    console.log("searctecht", jobs);
-  };
- //location
-  const locationOptions = Array.from(new Set(fakeData.map((job) => job.location_city)));
-  const handleLocationFilter = (value: string) => {
-    // Use the updated value directly for filtering
-    const filteredJobs = value === "Anywhere"
-      ? jobs
-      : jobs.filter((job) => job.location_city === value);
-  
-    setSelectedLocation(value); // Update the selected location
-    setJobs(filteredJobs); // Update the filtered jobs
-  };
-  
+  const locationOptions = Array.from(
+    new Set(jobs.map((job) => job.location_city))
+  );
 
+  const handleLocationChange = (selected: string[]) => {
+    setSelectedLocations(selected);
+  };
+  const handleSearch = (results: (Job | Company)[]) => {
+    const jobResults = results.filter((item) => "company_id" in item) as Job[];
+    setFilteredJobs(jobResults);
+  };
+  const handleSelectChange = (selectedValues: string[]) => {
+    setSelectedValues(selectedValues);
+  };
 
+  const filterData = (
+    selectedOptions: string[],
+    data: (Company | Job)[]
+  ): (Company | Job)[] => {
+    return data.filter((item) => {
+      if ("work_location" in item && "employment_type" in item) {
+        const matches = selectedOptions.some((option) => {
+          const lowercaseOption = option.toLowerCase();
+          const lowercaseWorkLocation =
+            item["work_location"]?.toLowerCase() || "";
+          const lowercaseEmploymentType =
+            item["employment_type"]?.toLowerCase() || "";
+          return (
+            lowercaseWorkLocation === lowercaseOption ||
+            lowercaseEmploymentType === lowercaseOption
+          );
+        });
+        return matches;
+      }
+      return false;
+    });
+  };
+
+  useEffect(() => {
+    const applyFilters = () => {
+      const filteredJobs = jobs.filter(
+        (job) =>
+          (selectedLocations.length === 0 ||
+            selectedLocations.includes(job.location_city || "")) &&
+          (selectedValues.length === 0 ||
+            selectedValues.some(
+              (value) =>
+                job.work_location?.toLowerCase() === value.toLowerCase() ||
+                job.employment_type?.toLowerCase() === value.toLowerCase()
+            ))
+      );
+      setFilteredJobs(filteredJobs);
+    };
+
+    if (selectedValues.length === 0 && selectedLocations.length === 0) {
+      setFilteredJobs(jobs);
+    } else {
+      applyFilters();
+    }
+  }, [selectedLocations, selectedValues, jobs]);
+  const handleSortChange = (order: string) => {
+    setSortOrder(order);
+    const sortedJobs = [...jobs].sort(sortJobsByDate);
+    setJobs(sortedJobs);
+  };
+
+  const sortJobsByDate = (a: Job, b: Job) => {
+    const dateA = new Date(a.date_created ?? "");
+    const dateB = new Date(b.date_created ?? "");
+    if (dateA < dateB) {
+      return sortOrder === "asc" ? -1 : 1;
+    } else if (dateA > dateB) {
+      return sortOrder === "asc" ? 1 : -1;
+    } else {
+      return 0;
+    }
+  };
 
   return (
     <div className={styling.main}>
-      {/* {header()} */}your jobs
+      {header()}
       <div className={styling.inputContainer}>
         <div className={styling.inputs}>
           <div className={styling.searchText}>
-            <SearchJobs onSearch={searchText} data={jobs} />
+            <SearchJobs data={jobs} onSearch={handleSearch} />
           </div>
           <div>
             {" "}
             <Select
-              placeholder="Select location"
+              placeholder="Anywhere"
               style={{ width: 200 }}
-              onChange={handleLocationFilter}
-              value={selectedLocation}
+              mode="multiple"
+              value={selectedLocations}
+              onChange={handleLocationChange}
+              maxTagCount={1}
+              suffixIcon={<IconMapPin />}
             >
-              {locationOptions.map((location, index) => (
-                <Option key={index} value={location}>
-                  {location}
-                </Option>
-             ) )}
+              {locationOptions.map((location, index) => {
+                return (
+                  <Select.Option key={index} value={location}>
+                    {location}
+                  </Select.Option>
+                );
+              })}
             </Select>
           </div>
-          <div>grup</div>
+          <div>
+            {" "}
+            <FilterSelect
+              filterData={filterData}
+              data={jobs}
+              onSearch={handleSearch}
+              onSelectChange={handleSelectChange}
+              selectedValues={selectedValues}
+            />
+          </div>
         </div>
-        <div></div>
+        <div className={styling.multiFilter}>
+          <DisplayMultiFilter
+            filterData={filterData}
+            data={jobs}
+            selectedValues={selectedValues}
+            onSelectChange={handleSelectChange}
+            onSearch={handleSearch}
+          />
+        </div>
+      </div>
+      <div className={styling.sortByDate}>
+        <div>
+          We have found{" "}
+          <span className={styling.count}>{filteredJobs.length}</span> jobs!
+        </div>
+        <div className={styling.sortBy}>
+          <SortBy onChange={handleSortChange} />
+        </div>
       </div>
       <div className={styling.cardContainer}>
-        {jobs &&
-          jobs?.map((job) => (
+        {filteredJobs &&
+          filteredJobs?.map((job) => (
             <JobCard
               key={job?.id}
               job={job}

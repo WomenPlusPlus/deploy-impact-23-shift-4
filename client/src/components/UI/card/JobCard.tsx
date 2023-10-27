@@ -3,7 +3,6 @@ import { Card, Avatar } from "antd";
 import { Labels } from "../labels/Label";
 import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
 import { PieChartFilled } from "@ant-design/icons";
-
 import styling from "./JobCard.module.css";
 import { Candidate, Company, Job } from "../../../types/types";
 import { updateCandidateById } from "../../../api/candidates";
@@ -23,18 +22,10 @@ const JobCard: React.FC<JobCardProps> = ({
   candidate,
   onClick,
 }) => {
-  // state
   const [isSaved, setIsSaved] = React.useState(false);
   const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
     ?.user_type;
 
-  const truncatedDescription: string | undefined = job?.description
-    ? typeof job?.description === "string" && job?.description?.length > 150
-      ? `${job?.description.slice(0, 150)}...`
-      : job?.description
-    : undefined;
-
-  // Return the company name for a given job
   const getCompanyName = (job: Job) => {
     const company = companies?.find(
       (company) => company?.user_id === job?.company_id
@@ -47,7 +38,6 @@ const JobCard: React.FC<JobCardProps> = ({
   )?.logo;
   const company_name = getCompanyName(job);
 
-  // Get the matching score for a given job
   const matchingJobs = candidate?.matching_jobs;
   let matchScore = 0;
   if (matchingJobs) {
@@ -63,11 +53,8 @@ const JobCard: React.FC<JobCardProps> = ({
   }
 
   const saveJob = async () => {
-    // add to local storage
     setIsSaved(!isSaved);
-    // if not yet saved
     if (!isSaved) {
-      // Check if the job is already saved
       const isJobSaved = candidate?.saved_items?.includes(job?.id);
       if (isJobSaved) {
         return;
@@ -81,11 +68,9 @@ const JobCard: React.FC<JobCardProps> = ({
         });
       }
     } else {
-      // if already saved
       const savedItems = JSON.parse(
         localStorage.getItem("saved_items") || "[]"
       );
-      // Check if the job is already saved in local storage
       const isJobSaved = savedItems.includes(job?.id);
       if (!isJobSaved) {
         return;
@@ -112,12 +97,14 @@ const JobCard: React.FC<JobCardProps> = ({
       <Card className={styling.card}>
         <div className={styling.jobHeader}>
           <div className={styling.row}>
-            <Avatar
-              className={styling.avatar}
-              src={logo}
-              size={70}
-              onClick={onClick}
-            />
+            <div>
+              <Avatar
+                className={styling.avatar}
+                src={logo}
+                size={70}
+                onClick={onClick}
+              />
+            </div>
             <div className={styling.title}>
               <h2 className={styling.jobTitle} onClick={onClick}>
                 {job?.title}
