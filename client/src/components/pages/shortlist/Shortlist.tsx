@@ -3,7 +3,6 @@ import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
 import { getAllCandidates, getCandidateById } from "../../../api/candidates";
 import {
-  Association,
   Candidate,
   Company,
   Job,
@@ -29,52 +28,62 @@ const Shortlist = () => {
 
   const fetchInfo = async () => {
     if (user_type === "candidate") {
-      const candidate = await getCandidateById(userId);
-      const allCompanies = await getAllCompanies();
+      try {
+        const candidate = await getCandidateById(userId);
+        const allCompanies = await getAllCompanies();
 
-      // fetch all jobs from candidate's shortlist
-      const jobsIds = candidate?.saved_items;
+        // fetch all jobs from candidate's shortlist
+        const jobsIds = candidate?.saved_items;
 
-      if (jobsIds && jobsIds?.length > 0) {
-        // Use Promise.all to fetch jobs concurrently
-        const jobPromises = jobsIds?.map(async (jobId: string) => {
-          return getJobById(jobId);
-        });
-        // Wait for all job fetch promises to resolve
-        const jobs = await Promise.all(jobPromises);
-        // jobs is now an array of type Job[]
-        setJobs(jobs);
+        if (jobsIds && jobsIds?.length > 0) {
+          // Use Promise.all to fetch jobs concurrently
+          const jobPromises = jobsIds?.map(async (jobId: string) => {
+            return getJobById(jobId);
+          });
+          // Wait for all job fetch promises to resolve
+          const jobs = await Promise.all(jobPromises);
+          // jobs is now an array of type Job[]
+          setJobs(jobs);
+        }
+        setCandidate(candidate);
+        setCompanies(allCompanies);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("ERROR:", error);
+        setIsLoading(false);
       }
-      setCandidate(candidate);
-      setCompanies(allCompanies);
-      setIsLoading(false);
     }
     if (user_type === "company") {
-      const company = await getCompanyById(userId);
-      const allCandidates = await getAllCandidates();
-      // fetch all jobs from company's shortlist
-      const candidatesIds = company?.saved_items;
-      console.log(candidatesIds);
+      try {
+        const company = await getCompanyById(userId);
+        const allCandidates = await getAllCandidates();
+        // fetch all jobs from company's shortlist
+        const candidatesIds = company?.saved_items;
+        console.log(candidatesIds);
 
-      if (candidatesIds && candidatesIds?.length > 0) {
-        // Use Promise.all to fetch candidates concurrently
-        try {
-          const candidatePromises = candidatesIds?.map(
-            async (candidateId: string) => {
-              return getCandidateById(candidateId);
-            }
-          );
-          // Wait for all candidate fetch promises to resolve
-          const candidates = await Promise.all(candidatePromises);
-          // candidates is now an array of type Candidate[]
-          setCandidates(candidates);
-        } catch (error) {
-          console.log("ERROR:", error);
+        if (candidatesIds && candidatesIds?.length > 0) {
+          // Use Promise.all to fetch candidates concurrently
+          try {
+            const candidatePromises = candidatesIds?.map(
+              async (candidateId: string) => {
+                return getCandidateById(candidateId);
+              }
+            );
+            // Wait for all candidate fetch promises to resolve
+            const candidates = await Promise.all(candidatePromises);
+            // candidates is now an array of type Candidate[]
+            setCandidates(candidates);
+          } catch (error) {
+            console.log("ERROR:", error);
+          }
         }
+        setUser(company);
+        setCandidate(allCandidates);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("ERROR:", error);
+        setIsLoading(false);
       }
-      setUser(company);
-      setCandidate(allCandidates);
-      setIsLoading(false);
     }
   };
 
