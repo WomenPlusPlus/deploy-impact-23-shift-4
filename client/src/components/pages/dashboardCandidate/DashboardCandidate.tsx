@@ -19,6 +19,7 @@ import {
 import ApplicationRequests from "./applicationRequests/ApplicationRequests";
 import { getAllJobs } from "../../../api/jobs";
 import { getMatchJobs } from "../../../api/match";
+import Spinner from "../../UI/spinner/Spinner";
 
 const DashboardCandidate: React.FC = () => {
   // state
@@ -26,6 +27,7 @@ const DashboardCandidate: React.FC = () => {
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const navigate = useNavigate();
@@ -34,17 +36,24 @@ const DashboardCandidate: React.FC = () => {
     try {
       const allJobs = await getAllJobs();
       setJobs(allJobs);
-
-      await getMatchJobs(auth.user.id);
-
+    } catch (error) {
+      console.log("await getAllJobs error:", error);
+    }
+    try {
       const candidateFetched = await getCandidateById(user_id);
       setCandidate(candidateFetched);
-
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
     } catch (error) {
-      console.log("error", error);
+      console.log("await getCandidateById error:", error);
     }
+    try {
+      const response = await getMatchJobs(auth?.user?.id);
+      console.log("Matching jobs result:", response);
+    } catch (error) {
+      console.log("await getCandidateById error:", error);
+    }
+    setLoading(false);
   };
 
   const calculateProgress = (candidate: Candidate) => {
@@ -63,7 +72,7 @@ const DashboardCandidate: React.FC = () => {
     fetchInfo(auth?.user?.id);
   }, [auth?.user?.id]);
 
-  return (
+  const content = (
     <div className={styling.main}>
       <div className={styling.grid}>
         {/* Profile component */}
@@ -76,7 +85,7 @@ const DashboardCandidate: React.FC = () => {
                 Welcome back, {candidate?.first_name}
               </h2>
             ) : (
-              <h2 className={styling.headerTitle}>Welcome</h2>
+              <h2 className={styling.headerTitle}>Welcome!</h2>
             )}
             {candidate?.experience ? (
               <p> {candidate?.experience[0]?.role}</p>
@@ -140,44 +149,47 @@ const DashboardCandidate: React.FC = () => {
         <div className={styling.section}>
           <CardContainer className={styling.matches}>
             <h1 className={styling.matchesTitle}>Your matches</h1>
-            {candidate.matching_jobs?.map((matchedJob: any) => {
-              let description = "";
+            {candidate &&
+              candidate?.matching_jobs?.map((matchedJob: any) => {
+                let description = "";
 
-              if (matchedJob?.score >= 90) {
-                description = "Your dream job is waiting for you! 🌟";
-              } else if (matchedJob?.score >= 75) {
-                description = "Great match for this role! 🚀";
-              } else {
-                description = "You might be interested in this job 💪🏽";
-              }
-
-              return jobs.map((job: Job) => {
-                // Use `return` to return the JSX elements
-                if (
-                  matchedJob.id === job.id &&
-                  candidate?.skills?.length !== undefined &&
-                  candidate.skills.length > 0
-                ) {
-                  return (
-                    <HorizontalCard
-                      key={job.id} // Add a unique key for each card
-                      avatar={false}
-                      button="Go to job"
-                      title={job.title}
-                      subtitle={description}
-                      onClick={() => navigate(`/job/${job.id}`)}
-                    />
-                  );
+                if (matchedJob?.score >= 90) {
+                  description = "Your dream job is waiting for you! 🌟";
+                } else if (matchedJob?.score >= 75) {
+                  description = "Great match for this role! 🚀";
+                } else {
+                  description = "You might be interested in this job 💪🏽";
                 }
-                return null; // Return null for unmatched jobs
-              });
-            })}
+
+                return jobs.map((job: Job) => {
+                  // Use `return` to return the JSX elements
+                  if (
+                    matchedJob.id === job.id &&
+                    candidate?.skills?.length !== undefined &&
+                    candidate.skills.length > 0
+                  ) {
+                    return (
+                      <HorizontalCard
+                        key={job.id} // Add a unique key for each card
+                        avatar={false}
+                        button="Go to job"
+                        title={job.title}
+                        subtitle={description}
+                        onClick={() => navigate(`/job/${job.id}`)}
+                      />
+                    );
+                  }
+                  return null; // Return null for unmatched jobs
+                });
+              })}
           </CardContainer>
           <ApplicationRequests />
         </div>
       </div>
     </div>
   );
+
+  return <>{loading ? <Spinner /> : content}</>;
 };
 
 export default DashboardCandidate;

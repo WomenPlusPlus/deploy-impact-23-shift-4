@@ -1,10 +1,4 @@
-import string
-
-import logging
-
-from gevent.pywsgi import WSGIServer
-
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -51,7 +45,7 @@ from routes.jobs import add_job
 from routes.jobs import delete_job
 from routes.jobs import update_job
 from routes.matching import match_candidates
-from routes.matching import match_jobs
+from routes.matching import match_jobs_async as match_jobs
 
 # Env
 from dotenv import load_dotenv
@@ -79,6 +73,7 @@ CORS(
         "https://banana-builders-client.vercel.app",
         "https://banana-builders-client.vercel.app/*",
         "https://banana-builders-client*.vercel.app",
+        "https://banana-builders-client-albas-projects.vercel.app/",
     ],
     supports_credentials=True,
 )
@@ -143,7 +138,7 @@ app.register_blueprint(match_jobs.match_jobs_route(domain_name))
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(id):
     """
     Load a user by their user ID.
     Necessary for logout.
@@ -154,17 +149,20 @@ def load_user(user_id):
     Returns:
         User: The User object associated with the provided user ID.
     """
-    print("load_user", user_id)
-    return User.query.get(user_id)
+    print("load_user", id)
+    return User.query.get(id)
 
 
 @app.after_request
 def after_request(response):
     if os.environ.get("FLASK_ENV") == "production":
-        response.headers.add(
-            "Access-Control-Allow-Origin",
+        allowed_origins = [
             "https://banana-builders-client.vercel.app",
-        )
+            "https://banana-builders-client-albas-projects.vercel.app",
+        ]
+        origin = request.headers.get("Origin")
+        if origin in allowed_origins:
+            response.headers.add("Access-Control-Allow-Origin", origin)
     else:
         response.headers.add(
             "Access-Control-Allow-Origin",
@@ -180,10 +178,5 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    if os.environ.get("FLASK_ENV") == "production":
-        print("Running in PRODUCTION mode")
-        http_server = WSGIServer(("", 5001), app)
-        http_server.serve_forever()
-    else:
-        print("Running in DEVELOPMENT mode")
-        app.run(port=5001, debug=True)
+    print("Server started")
+    app.run(port=5001, debug=True)

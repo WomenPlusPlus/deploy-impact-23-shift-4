@@ -39,7 +39,7 @@ def match_jobs_route(domain_name):
 
     @match_jobs_bp.route("/api/match_jobs", methods=["POST"])
     def match_jobs():
-        """ """
+        print("DOMAIN", domain_name)
         try:
             if request.method == "POST":
                 data = request.get_json()
@@ -51,112 +51,116 @@ def match_jobs_route(domain_name):
                 candidate = requests.post(
                     f"{domain_name}/api/get_candidate_by_id", json=cand_json
                 )
-                cand_skills = [
-                    skill["skill_name"]
-                    for skill in candidate.json()["candidates"]["skills"]
-                ]
-                cand_levels = [
-                    skill["skill_level"]
-                    for skill in candidate.json()["candidates"]["skills"]
-                ]
-                cand_values = candidate.json()["candidates"]["values"]
-                cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
+                print("CANDIDATE", candidate.json())
+                if candidate.status_code == 200:
+                    cand_skills = [
+                        skill["skill_name"]
+                        for skill in candidate.json()["candidates"]["skills"]
+                    ]
+                    cand_levels = [
+                        skill["skill_level"]
+                        for skill in candidate.json()["candidates"]["skills"]
+                    ]
+                    cand_values = candidate.json()["candidates"]["values"]
+                    cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
 
                 jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
-                jobs = jobs_response.json()["jobs"]
+                print("JOBS", jobs_response.json())
+                if jobs_response.status_code == 200:
+                    jobs = jobs_response.json()["jobs"]
 
-                existing_matching_jobs = candidate.json()["candidates"].get(
-                    "matching_jobs", []
-                )
+                    existing_matching_jobs = candidate.json()["candidates"].get(
+                        "matching_jobs", []
+                    )
 
-                for job in jobs:
-                    job_skills = [skill["skill_name"] for skill in job["skills"]]
-                    # if cand_skills and any(item in cand_skills for item in job_skills_ids):
-                    job_id = job["id"]
+                    for job in jobs:
+                        job_skills = [skill["skill_name"] for skill in job["skills"]]
+                        # if cand_skills and any(item in cand_skills for item in job_skills_ids):
+                        job_id = job["id"]
 
-                    if any(
-                        matching_job["id"] == job_id
-                        for matching_job in existing_matching_jobs
-                    ):
-                        continue
+                        if any(
+                            matching_job["id"] == job_id
+                            for matching_job in existing_matching_jobs
+                        ):
+                            continue
 
-                    count = 4
-                    total_score = 0
+                        count = 4
+                        total_score = 0
 
-                    if job_skills:
-                        job_tech_score = score(job_skills, cand_skills, cand_levels)
-                        total_score += 4 * job_tech_score
+                        if job_skills:
+                            job_tech_score = score(job_skills, cand_skills, cand_levels)
+                            total_score += 4 * job_tech_score
 
-                        if job["values"]:
-                            count += 1
-                            if cand_values:
-                                job_val_score = score(job["values"], cand_values)
-                                total_score += job_val_score
+                            if job["values"]:
+                                count += 1
+                                if cand_values:
+                                    job_val_score = score(job["values"], cand_values)
+                                    total_score += job_val_score
 
-                        if job["soft_skills"]:
-                            count += 2
-                            if cand_soft_skills:
-                                job_soft_score = score(
-                                    job["soft_skills"], cand_soft_skills
-                                )
-                                total_score += 2 * job_soft_score
-
-                        job_score = round(total_score / count, 1)
-
-                        # TODO: increase threshold to 60
-                        if job_score >= 20:
-                            job_match.append({"id": job_id, "score": job_score})
-                            if job["matching_candidates"]:
-                                duplicate = [
-                                    ix
-                                    for ix, cand in enumerate(
-                                        job["matching_candidates"]
+                            if job["soft_skills"]:
+                                count += 2
+                                if cand_soft_skills:
+                                    job_soft_score = score(
+                                        job["soft_skills"], cand_soft_skills
                                     )
-                                    if cand["id"] == id
-                                ]
-                                if duplicate:
-                                    job["matching_candidates"][duplicate[0]][
-                                        "score"
-                                    ] = job_score
+                                    total_score += 2 * job_soft_score
+
+                            job_score = round(total_score / count, 1)
+
+                            # TODO: increase threshold to 60
+                            if job_score >= 20:
+                                job_match.append({"id": job_id, "score": job_score})
+                                if job["matching_candidates"]:
+                                    duplicate = [
+                                        ix
+                                        for ix, cand in enumerate(
+                                            job["matching_candidates"]
+                                        )
+                                        if cand["id"] == id
+                                    ]
+                                    if duplicate:
+                                        job["matching_candidates"][duplicate[0]][
+                                            "score"
+                                        ] = job_score
+                                    else:
+                                        job["matching_candidates"].append(
+                                            {"id": id, "score": job_score}
+                                        )
                                 else:
+                                    job["matching_candidates"] = []
                                     job["matching_candidates"].append(
                                         {"id": id, "score": job_score}
                                     )
-                            else:
-                                job["matching_candidates"] = []
-                                job["matching_candidates"].append(
-                                    {"id": id, "score": job_score}
+                                update_job_json = {
+                                    "job_id": job_id,
+                                    "matching_candidates": job["matching_candidates"],
+                                }
+                                update_job_response = requests.put(
+                                    f"{domain_name}/api/update_job",
+                                    json=update_job_json,
                                 )
-                            update_job_json = {
-                                "job_id": job_id,
-                                "matching_candidates": job["matching_candidates"],
-                            }
-                            update_job_response = requests.put(
-                                f"{domain_name}/api/update_job",
-                                json=update_job_json,
-                            )
 
-                if len(job_match) == 0:
-                    return jsonify({"message": "No matching jobs"}), 200
+                    if len(job_match) == 0:
+                        return jsonify({"message": "No matching jobs"}), 200
 
-                update_json = {"user_id": id, "matching_jobs": job_match}
-                update_cand = requests.put(
-                    f"{domain_name}/api/update_candidate", json=update_json
-                )
-
-                if update_cand.status_code == 200:
-                    return (
-                        jsonify(
-                            {
-                                "message": "Update Candidate successfully",
-                                "matching_jobs": job_match,
-                            }
-                        ),
-                        200,
+                    update_json = {"user_id": id, "matching_jobs": job_match}
+                    update_cand = requests.put(
+                        f"{domain_name}/api/update_candidate", json=update_json
                     )
+                    print("UPDATE", update_cand.json())
+                    if update_cand.status_code == 200:
+                        return (
+                            jsonify(
+                                {
+                                    "message": "Update Candidate successfully",
+                                    "matching_jobs": job_match,
+                                }
+                            ),
+                            200,
+                        )
 
-                else:
-                    return jsonify({"message": f"Error matching jobs"}), 500
+                    else:
+                        return jsonify({"message": f"Error matching jobs"}), 417
 
         except Exception as e:
             return jsonify({"message": f"Error matching jobs: {e}"}), 500

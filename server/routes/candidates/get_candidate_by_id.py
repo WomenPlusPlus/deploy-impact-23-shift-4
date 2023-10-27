@@ -18,7 +18,7 @@ def get_candidate_by_id_route(Candidate):
 
                 if not candidate:
                     return jsonify({"message": "Candidate not found"}), 404
-                print(candidate.to_dict())
+                
                 return jsonify({"candidates": candidate.to_dict()}), 200
 
         except Exception as e:
