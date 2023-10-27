@@ -12,7 +12,8 @@ import {
   IconBookmarks,
   IconStar,
   IconSettings,
-  IconUsers
+  IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
@@ -61,6 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
   const isShortListVisible =
     auth?.user?.user_type === "association" ? false : true;
+  const isFaqVisible =
+    auth?.user?.user_type === ("association" || "admin") ? false : true;
 
   const items: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
@@ -75,6 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     isShortListVisible
       ? getItem("Short List", "saved", <IconBookmarks />)
       : null,
+    isFaqVisible ? getItem("FAQ", "faq", <IconInfoCircle />) : null,
     getItem("Settings", "settings", <IconSettings />),
     getItem("Logout", "logout", <IconLogout2 />),
   ];
