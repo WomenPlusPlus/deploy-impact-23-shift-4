@@ -16,7 +16,8 @@ COPY . .
 # Expose a port if your Flask app is listening on a specific port (e.g., 5000)
 EXPOSE 5001
 
-ENV FLASK_APP=main.py
+# Set the environment variable for Gunicorn
+ENV GUNICORN_CMD_ARGS="--bind 0.0.0.0:5001 -w 4"
 
-# Define the command to run your Flask application
-CMD ["flask", "run", "--host", "0.0.0.0"]
+# Define the command to run your Flask application with Gunicorn
+CMD ["gunicorn", "main:app"]
