@@ -185,109 +185,117 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
         return (
           <div>
             <h3>{field}</h3>
-            <Select
-              value={notice}
-              onChange={(value) => setNotice(value)}
-              style={{ minWidth: "100%" }}
-            >
-              <Option value="1 week">1 week</Option>
-              <Option value="2 weeks">2 weeks</Option>
-              <Option value="1 month">1 month</Option>
-            </Select>
-            {showDeleteButton && (
-              <Button
-                type="default"
-                danger
-                className={styling.deleteButton}
-                onClick={() => handleDeleteField(field)}
+            <div className={`${styling.row} ${styling.inputButton}`}>
+              <Select
+                value={notice}
+                onChange={(value) => setNotice(value)}
+                style={{ minWidth: "100%" }}
               >
-                Delete
-              </Button>
-            )}
+                <Option value="1 week">1 week</Option>
+                <Option value="2 weeks">2 weeks</Option>
+                <Option value="1 month">1 month</Option>
+              </Select>
+              {showDeleteButton && (
+                <Button
+                  type="default"
+                  danger
+                  className={styling.deleteButton}
+                  onClick={() => handleDeleteField(field)}
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </div>
         );
       case "Visa Status":
         return (
           <div>
             <h3>{field}</h3>
-            <Select
-              value={visaFields}
-              onChange={(value) => setVisaFields(value)}
-              style={{ minWidth: "100%" }}
-              mode="tags"
-            >
-              <Option value="EU">EU valid visa</Option>
-              <Option value="CH">CH valid visa</Option>
-              <Option value="US">US valid visa</Option>
-            </Select>
-            {showDeleteButton && (
-              <Button
-                type="default"
-                danger
-                className={styling.deleteButton}
-                onClick={() => handleDeleteField(field)}
+            <div className={`${styling.row} ${styling.inputButton}`}>
+              <Select
+                value={visaFields}
+                onChange={(value) => setVisaFields(value)}
+                style={{ minWidth: "100%" }}
+                mode="tags"
               >
-                Delete
-              </Button>
-            )}
+                <Option value="EU">EU valid visa</Option>
+                <Option value="CH">CH valid visa</Option>
+                <Option value="US">US valid visa</Option>
+              </Select>
+              {showDeleteButton && (
+                <Button
+                  type="default"
+                  danger
+                  className={styling.deleteButton}
+                  onClick={() => handleDeleteField(field)}
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </div>
         );
       case "Possible Work Locations":
         return (
           <div>
             <h3>{field}</h3>
-            <Select
-              value={workLocation}
-              onChange={(value) => setWorkLocation(value)}
-              style={{ minWidth: "100%" }}
-              mode="tags"
-            >
-              <Option value="Zurich">Zurich</Option>
-              <Option value="Bern">Bern</Option>
-              <Option value="Basel">Basel</Option>
-              <Option value="Geneva">Geneva</Option>
-              <Option value="Lausanne">Lausanne</Option>
-              <Option value="Lugano">Lugano</Option>
-              <Option value="Luzern">Luzern</Option>
-              <Option value="St. Gallen">St. Gallen</Option>
-            </Select>
-            {showDeleteButton && (
-              <Button
-                type="default"
-                danger
-                className={styling.deleteButton}
-                onClick={() => handleDeleteField(field)}
+            <div className={`${styling.row} ${styling.inputButton}`}>
+              <Select
+                value={workLocation}
+                onChange={(value) => setWorkLocation(value)}
+                style={{ minWidth: "100%" }}
+                mode="tags"
               >
-                Delete
-              </Button>
-            )}
+                <Option value="Zurich">Zurich</Option>
+                <Option value="Bern">Bern</Option>
+                <Option value="Basel">Basel</Option>
+                <Option value="Geneva">Geneva</Option>
+                <Option value="Lausanne">Lausanne</Option>
+                <Option value="Lugano">Lugano</Option>
+                <Option value="Luzern">Luzern</Option>
+                <Option value="St. Gallen">St. Gallen</Option>
+              </Select>
+              {showDeleteButton && (
+                <Button
+                  type="default"
+                  danger
+                  className={styling.deleteButton}
+                  onClick={() => handleDeleteField(field)}
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </div>
         );
       case "Type of work":
         return (
           <div>
             <h3>{field}</h3>
-            <Select
-              value={typeOfWork}
-              onChange={(value) => setTypeOfWork(value)}
-              style={{ minWidth: "100%" }}
-              mode="tags"
-            >
-              <Option value="remote">Remote</Option>
-              <Option value="partly-home">Partly Home</Option>
-              <Option value="mostly-home">Mostly Home</Option>
-              <Option value="in-office">In office</Option>
-            </Select>
-            {showDeleteButton && (
-              <Button
-                type="default"
-                danger
-                className={styling.deleteButton}
-                onClick={() => handleDeleteField(field)}
+            <div className={`${styling.row} ${styling.inputButton}`}>
+              <Select
+                value={typeOfWork}
+                onChange={(value) => setTypeOfWork(value)}
+                style={{ minWidth: "100%" }}
+                mode="tags"
               >
-                Delete
-              </Button>
-            )}
+                <Option value="remote">Remote</Option>
+                <Option value="partly-home">Partly Home</Option>
+                <Option value="mostly-home">Mostly Home</Option>
+                <Option value="in-office">In office</Option>
+              </Select>
+              {showDeleteButton && (
+                <Button
+                  type="default"
+                  danger
+                  className={styling.deleteButton}
+                  onClick={() => handleDeleteField(field)}
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </div>
         );
       default:
@@ -336,8 +344,9 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
             </div>
           ))}
         {/* Add fields */}
-        <div className={styling.row}>
+        <div className={`${styling.row} ${styling.marginBottom}`}>
           <Select
+            className={styling.select}
             value={selectedField}
             onChange={(value) => setSelectedField(value)}
             style={{ minWidth: "35rem", marginBottom: "1rem" }}
