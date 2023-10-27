@@ -1,59 +1,58 @@
-# SHIFT-4
+# Bridge Project “Empowering Underrepresented Groups in Switzerland“ (from SHIFT4)
 
-Welcome to the SHIFT-4 repository! This repository is dedicated to our exclusive recruiting platform designed to support underrepresented groups in tech to secure entry-level jobs and internships. Additionally, it aids companies in finding tech talent for their entry-level positions and internships.
 
-## Branching Strategy
+## Our Vision 🔭
+Bridge is a nonprofit, comprehensive platform dedicated to empowering underrepresented communities to land a great tech job in Switzerland. Our mission is to equip them with the essential tools, resources, and unwavering support needed to secure jobs in the dynamic tech industry. Through innovation and inclusivity, we aim to bridge the gap between the skills of these communities and the demands of the Swiss tech job market, ultimately fostering integration, self-sufficiency, and economic independence. 
 
-- **Main Branch:** The `main` branch contains the production-ready code. This branch should always reflect the latest stable version of the application.
+At Bridge, we envision a future where underrepresented communities in Switzerland harness their skills, gain meaningful employment within the tech sector, and contribute not only to their personal success but also to the prosperity of the Swiss economy. Our platform embodies the principles of diversity and innovation, paving the way for a brighter future for both the targeted communities and the Swiss tech industry.
 
-- **Development Branch:** When working on new features or bug fixes, always create a branch from the `development` branch. Use descriptive and meaningful branch names to clarify the purpose of your work.
 
-## Getting Started
+## Tech Stack 🖥️
 
-To get started with the project, follow these steps:
+| Technology        | Stack                                       |
+|-------------------|---------------------------------------------------|
+| Frontend          | TypeScript with React                              |
+| Backend           | Python with Flask                                  |
+| Database          | AWS RDS (PostgreSQL)                               |
+| Frontend Deployment | Vercel                                         |
+| Backend Deployment | Render                                          |
 
-`IMPORTANT`
+## Designs 🎨
 
-For the first pull run this in the terminal:
+View our designs created using Figma [here](https://www.figma.com/file/GabIGkFDgeU7GrXLqDsT9T/Shift?type=design&mode=design&t=HVz8AfCQZmmdwH4S-0).
 
-```
-git config pull.rebase false --global
-```
 
-1. Clone the repository to your local machine.
+## Get Started 🚀
 
-   ```
-   git clone [<repository_url>](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4.git)
-   ```
+### Frontend
 
-2. Create a new branch for your feature or bug fix from the remote development branch.
+1. Clone the repository.
+2. Navigate to the `client` directory.
+3. Run `npm install` to install dependencies.
+4. Run `npm start` to start the frontend application.
 
-   ```
-   git checkout -b contributor-name/your-branch-name origin/development
-   ```
+### Backend
 
-3. Add and check your changes, and commit them to your branch.
+1. Clone the repository.
+2. Navigate to the `server` directory.
+3. Run `pip3 install -r requirements.txt` to install Python dependencies.
+4. To configure environment variables please contact [Laura Purcaro](https://github.com/gitadventurer241).
+6. Run `python3 main.py` to start the backend server.
 
-   ```
-   git add .
-   git status
-   git commit -m "Add your commit message here"
-   ```
 
-4. Push your branch to the remote repository.
+## Our Team 👥
 
-   ```
-   git push origin contributor-name/your-branch-name
-   ```
+| Name             | Role              | GitHub Profile                                |
+|------------------|-------------------|-----------------------------------------------|
+| Laura Purcaro   | Full Stack Developer| [gitadventurer241](https://github.com/gitadventurer241)|
+| Alba Romero     | Full Stack Developer| [albarkauss](https://github.com/albarkauss)  |
+| Mehtapy Yildiz | Full Stack Developer | [mehtapy](https://github.com/mehtapy)        |
+| Isaac Omolayo | Data Science          | [IzicTemi](https://github.com/IzicTemi)      |
+| Maria Reis | UX designer         | [uxreis](https://github.com/uxreis) |
+| Petra Slits | Project Manager          | [petrajanna](https://github.com/petrajanna) |
+| Noor Halta | SCRUM Master          | [noorhalta](https://github.com/noorhalta) |
 
-5. When your feature or fix is ready, create a pull request from your branch to the `development` branch. Ensure that your code follows the project's coding standards.
 
-6. Once the pull request is reviewed and approved, it will be merged into the `development` branch.
+## License 📃
 
-7. Periodically, the changes in the `development` branch will be tested, and when deemed stable, they will be merged into the `main` branch for production deployment.
-
-## Contributing
-
-We welcome contributions from the community. If you'd like to contribute to this project, please follow the steps mentioned in the "Getting Started" section and make sure to adhere to our coding guidelines and best practices.
-
-Thank you for being a part of SHIFT-4, and together, we can make a positive impact in the tech industry by promoting diversity and connecting talent with opportunities.
+This project is licensed under the GNU General Public License, Version 3 (GPL-3.0).
