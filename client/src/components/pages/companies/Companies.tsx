@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CompanyCard from "../../UI/companyCard/CompanyCard";
+import CompanyCard from "../../shared/companyCard/CompanyCard";
 import styling from "./Companies.module.css";
 import Filter from "../../UI/filter/Filter";
 import { useNavigate } from "react-router-dom";

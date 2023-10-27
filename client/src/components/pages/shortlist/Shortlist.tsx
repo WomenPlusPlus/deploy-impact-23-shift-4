@@ -6,7 +6,7 @@ import { Candidate, Company, Job, User } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
-import { CandidateCard } from "../../UI/CandidateCard/CandidateCard";
+import { CandidateCard } from "../../shared/CandidateCard/CandidateCard";
 import Spinner from "../../UI/spinner/Spinner";
 
 const Shortlist = () => {

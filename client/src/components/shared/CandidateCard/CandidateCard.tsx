@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { IconBookmark, IconExternalLink } from "@tabler/icons-react";
-import { Labels } from "../labels/Label";
-import Avatar from "../avatar/Avatar";
+import { Labels } from "../../UI/labels/Label";
+import Avatar from "../../UI/avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
 import { updateCompanyById } from "../../../api/companies";
 import { updateAssociationById } from "../../../api/associations";

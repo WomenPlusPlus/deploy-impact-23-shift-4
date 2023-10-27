@@ -1,6 +1,6 @@
 import { Job } from "../../../../../types/types";
 import { useNavigate } from "react-router-dom";
-import { CandidateCard } from "../../../../UI/CandidateCard/CandidateCard";
+import { CandidateCard } from "../../../../shared/CandidateCard/CandidateCard";
 
 import styling from "./MatchesTab.module.css";
 import { getAllCandidates } from "../../../../../api/candidates";

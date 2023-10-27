@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CandidateCard } from "../../UI/CandidateCard/CandidateCard";
+import { CandidateCard } from "../../shared/CandidateCard/CandidateCard";
 import "./Candidates.css";
 import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
