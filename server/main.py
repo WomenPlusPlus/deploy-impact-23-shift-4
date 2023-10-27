@@ -164,10 +164,7 @@ def after_request(response):
     if os.environ.get("FLASK_ENV") == "production":
         response.headers.add(
             "Access-Control-Allow-Origin",
-            [
-                "https://banana-builders-client.vercel.app",
-                "https://banana-builders-client-albas-projects.vercel.app/",
-            ],
+            "*",
         )
     else:
         response.headers.add(
