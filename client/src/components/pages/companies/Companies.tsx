@@ -75,8 +75,7 @@ const Companies = () => {
       setCompanies(companies);
       setFilteredCompanies(companies);
       setIsLoading(false);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };

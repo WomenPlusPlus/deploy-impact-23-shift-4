@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Avatar } from "antd";
+import { Card } from "antd";
 import { Labels } from "../../UI/labels/Label";
 import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
 import { PieChartFilled } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import { PieChartFilled } from "@ant-design/icons";
 import styling from "./JobCard.module.css";
 import { Candidate, Company, Job } from "../../../types/types";
 import { updateCandidateById } from "../../../api/candidates";
+import Avatar from "../../UI/avatar/Avatar";
 
 interface JobCardProps {
   job: Job;
@@ -105,12 +106,7 @@ const JobCard: React.FC<JobCardProps> = ({
       <Card className={styling.card}>
         <div className={styling.jobHeader}>
           <div className={styling.row}>
-            <Avatar
-              className={styling.avatar}
-              src={logo}
-              size={70}
-              onClick={onClick}
-            />
+            <Avatar size={50} firstName={getCompanyName(job)} />
             <div className={styling.title}>
               <h2 className={styling.jobTitle} onClick={onClick}>
                 {job?.title}

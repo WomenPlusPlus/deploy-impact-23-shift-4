@@ -30,6 +30,12 @@ const Jobs = () => {
       const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
       setCompanyJobs(jobs);
       setIsLoading(false);
+    } else if (userType === "association") {
+      setJobs(allJobs);
+      setIsLoading(false);
+    } else if (userType === "admin") {
+      setJobs(allJobs);
+      setIsLoading(false);
     } else {
       // userType === "candidate"
       const candidate = await getCandidateById(userId);
