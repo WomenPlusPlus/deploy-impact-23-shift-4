@@ -56,7 +56,7 @@ async def fetch_jobs_data(session, domain_name):
         return await response.json(), response.status
 
 
-async def update_job(session, domain_name, job_id, matching_candidates):
+async def fetch_update_job(session, domain_name, job_id, matching_candidates):
     update_job_json = {
         "job_id": job_id,
         "matching_candidates": matching_candidates,
@@ -164,7 +164,7 @@ async def match_jobs_logic(domain_name, data):
                                 {"id": id, "score": job_score}
                             )
 
-                        update_job, update_job_response = await update_job(
+                        update_job, update_job_response = await fetch_update_job(
                             session,
                             domain_name,
                             job_id,
