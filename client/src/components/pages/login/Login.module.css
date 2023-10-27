@@ -1,0 +1,33 @@
+.loginForm {
+  max-width: 600px;
+  height: 300px;
+  width: 400px;
+}
+
+.forgotButton {
+  float: right;
+}
+
+.loginButton {
+  height: 40px;
+  width: 100%;
+}
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.loginBox {
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.logo {
+  width: 20rem;
+  margin-left: 20%;
+}
