@@ -19,7 +19,7 @@ const Shortlist = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState({} as Candidate);
   const [user, setUser] = useState({} as User);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [jobs, setJobs] = useState([] as Job[]);
   const [candidates, setCandidates] = useState([] as Candidate[]);
   const [companies, setCompanies] = useState([] as Company[]);

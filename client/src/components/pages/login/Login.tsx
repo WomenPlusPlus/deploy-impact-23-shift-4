@@ -11,12 +11,13 @@ import "./Login.css";
 
 import configureAxios from "./../../../config";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { SpinnerGlobal } from "../../layout/authenticated/SpinnerGlobal";
 
 const axios = configureAxios();
 
 const Login = () => {
   // state
-  const { auth, setAuth } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,7 +33,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
+  const onClickLogin = (values: any) => {
+    setIsLoading(true);
     // Send login data to the backend (you'll need to replace the URL and method)
     axios
       .post(`/api/login`, formData, {
@@ -47,7 +49,7 @@ const Login = () => {
         // Set auth, user_type in local storage
         localStorage.setItem("user_type", user.user_type);
         localStorage.setItem("auth", JSON.stringify({ user: user }));
-        setAuth({ user: user });
+        setIsLoading(false);
         // Navigate to the dashboard
         navigate("/");
       })
@@ -70,6 +72,10 @@ const Login = () => {
       });
   };
 
+  if (isLoading) {
+    return <SpinnerGlobal />;
+  }
+
   return (
     <div className="login-container">
       <ToastContainer theme="light" />
@@ -86,7 +92,7 @@ const Login = () => {
           name="normal_login"
           className="login-form"
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={onClickLogin}
         >
           <Form.Item
             name="email"

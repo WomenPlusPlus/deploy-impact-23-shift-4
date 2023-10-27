@@ -13,7 +13,8 @@ import Tabs from "../../UI/tabs/Tabs";
 import { CandidateMatchesTab } from "./tabs/matches/CandidateMatchesTab";
 import { CandidateResumeTab } from "./tabs/resume/CandidateResumeTab";
 import { getAllJobs } from "../../../api/jobs";
-import { getAllCompanies, getCompanyById } from "../../../api/companies";
+import { getAllCompanies } from "../../../api/companies";
+import Spinner from "../../UI/spinner/Spinner";
 
 const CandidatePublicProfile = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const CandidatePublicProfile = () => {
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchingJobs, setMatchingJobs] = useState([] as Job[]);
   const [companies, setCompanies] = useState([] as Company[]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchInfo = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -55,8 +57,8 @@ const CandidatePublicProfile = () => {
       const matchedJobs = filterMatchingJobs(candidateFetched, filteredJobs);
       setMatchingJobs(matchedJobs);
     }
-
     setCandidate(candidateFetched);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -96,6 +98,10 @@ const CandidatePublicProfile = () => {
       ),
     },
   ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>

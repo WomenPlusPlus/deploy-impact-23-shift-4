@@ -21,6 +21,7 @@ import { getAllUsers } from "../../../api/user";
 import RequestsComponent from "../associationProfile/tabs/requestsTab/Requests";
 import { Association, Payload } from "../../../types/types";
 import ApprovalTable from "../associationProfile/tabs/requestsTab/components/ApprovalTable";
+import Spinner from "../../UI/spinner/Spinner";
 
 const DashboardAssociations = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const DashboardAssociations = () => {
   const [association, setAssociation] = useState({} as Association);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
   const [defaultOption, setDefaultOption] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
    * Sends the invite to the backend
@@ -101,45 +103,13 @@ const DashboardAssociations = () => {
     if (userId) {
       const association = await getAssociationById(userId);
       setAssociation(association);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchAssociation();
   }, []);
-
-  const headerRequests = [
-    {
-      title: "Candidate",
-      dataIndex: "candidate",
-      key: "candidate",
-    },
-    {
-      title: "Project / Certification",
-      dataIndex: "project",
-      key: "project",
-    },
-    {
-      title: "Appproval",
-      key: "approval",
-      render: (_: any, record: any) => (
-        <Space>
-          <button
-            className={styling.accept}
-            onClick={() => handleAccept(record)}
-          >
-            Accept
-          </button>
-          <button
-            className={styling.reject}
-            onClick={() => handleReject(record)}
-          >
-            Decline
-          </button>
-        </Space>
-      ),
-    },
-  ];
 
   const headerInvited = [
     {
@@ -164,24 +134,6 @@ const DashboardAssociations = () => {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      candidate: "Anna Brown",
-      project: "deploy(impact)",
-    },
-    {
-      key: "2",
-      candidate: "Roger Nilsen",
-      project: "deploy(impact)",
-    },
-    {
-      key: "3",
-      candidate: "Joe Black",
-      project: "deploy(impact)",
-    },
-  ];
-
   const today = new Date();
   const dataInvite = association?.invites?.map((invite: any, index: number) => {
     const inviteDate = new Date(invite?.createdAt);
@@ -198,19 +150,9 @@ const DashboardAssociations = () => {
     };
   });
 
-  const [tableData, setTableData] = useState(data);
-
-  const handleAccept = (record: any) => {
-    // Filter out the row with the accepted candidate
-    const updatedData = tableData.filter((item) => item?.key !== record?.key);
-    setTableData(updatedData);
-  };
-
-  const handleReject = (record: any) => {
-    // Filter out the row with the rejected candidate
-    const updatedData = tableData.filter((item) => item?.key !== record?.key);
-    setTableData(updatedData);
-  };
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

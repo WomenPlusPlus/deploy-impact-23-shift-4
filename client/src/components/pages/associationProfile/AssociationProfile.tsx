@@ -18,10 +18,12 @@ import {
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
+import Spinner from "../../UI/spinner/Spinner";
 
 const AssociationProfile = () => {
   //State
   const [association, setAssociation] = useState({} as Association);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   /**
    * Fetches the association data object by id
    */
@@ -32,6 +34,7 @@ const AssociationProfile = () => {
     if (userId) {
       const association = await getAssociationById(userId);
       setAssociation(association);
+      setIsLoading(false);
     }
   };
 
@@ -81,6 +84,10 @@ const AssociationProfile = () => {
       children: about,
     },
   ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>
