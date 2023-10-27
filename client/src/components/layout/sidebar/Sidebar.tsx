@@ -61,9 +61,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isCompaniesVisible = auth?.user?.user_type === "company" ? false : true;
   const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
   const isShortListVisible =
-    auth?.user?.user_type === "association" ? false : true;
+    auth?.user?.user_type === "association" || "admin" ? false : true;
   const isFaqVisible =
-    auth?.user?.user_type === ("association" || "admin") ? false : true;
+    auth?.user?.user_type === "association" || "admin" ? false : true;
 
   const topItems: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
