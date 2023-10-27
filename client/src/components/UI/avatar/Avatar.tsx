@@ -23,7 +23,7 @@ const Avatar: React.FC<AvatarProps> = ({
       <AntAvatar
         onClick={handleProfileClick}
         style={{
-          backgroundColor: `var(--background-avatar)`,
+          backgroundColor: `var(--blue-darker)`,
           verticalAlign: "middle",
           cursor: "pointer",
         }}

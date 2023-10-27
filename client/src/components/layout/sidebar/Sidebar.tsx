@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isFaqVisible =
     auth?.user?.user_type === ("association" || "admin") ? false : true;
 
-  const items: MenuItem[] = [
+  const topItems: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
     isCompaniesVisible
       ? getItem("Jobs", "jobs", <IconDeviceLaptop />)
@@ -79,6 +79,9 @@ const Sidebar: React.FC<SidebarProps> = ({
       ? getItem("Short List", "saved", <IconBookmarks />)
       : null,
     isFaqVisible ? getItem("FAQ", "faq", <IconInfoCircle />) : null,
+  ];
+
+  const bottomItems: MenuItem[] = [
     getItem("Settings", "settings", <IconSettings />),
     getItem("Logout", "logout", <IconLogout2 />),
   ];
@@ -137,7 +140,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           <Menu
             className="custom-menu"
             mode="inline"
-            items={items ?? []}
+            items={topItems ?? []}
+            onClick={(item) => {
+              setSelectedKey(item.key.toString());
+              handleButtonClick(item.key.toString(), navigate);
+              return item.key.toString();
+            }}
+            selectedKeys={[selectedKey]}
+          />
+
+          <Menu
+            className="bottom-menu"
+            mode="inline"
+            items={bottomItems ?? []}
             onClick={(item) => {
               setSelectedKey(item.key.toString());
               handleButtonClick(item.key.toString(), navigate);

@@ -55,7 +55,6 @@ const AddInitiatives: React.FC<AddInitiativesProps> = ({
     );
 
     if (initiativeExists && initiativeExists.length > 0) {
-      console.log("initiative already exists");
       return;
     }
 

@@ -16,7 +16,7 @@
 }
 
 .buttonSave {
-  background-color: var(--color-button);
+  background-color: var(--blue-dark);
   border: none;
   color: var(--white);
   text-align: center;

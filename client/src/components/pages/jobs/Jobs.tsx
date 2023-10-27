@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { JobCard } from "../../UI/card/JobCard";
+import { JobCard } from "../../shared/jobCard/JobCard";
 import { getAllJobs } from "../../../api/jobs";
 import styling from "./Jobs.module.css";
 import { getAllCompanies } from "../../../api/companies";

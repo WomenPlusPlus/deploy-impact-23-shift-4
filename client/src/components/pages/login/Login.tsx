@@ -61,7 +61,7 @@ const Login = () => {
               toast.error("Invalid email or password");
               setIsLoading(false);
             } else if (response.status === 403) {
-              toast.error("User is not registered");
+              toast.error("Invalid email");
               setIsLoading(false);
             } else if (response.status === 417) {
               toast.error("Login unsuccessful");

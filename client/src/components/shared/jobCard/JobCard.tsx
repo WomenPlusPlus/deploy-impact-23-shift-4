@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, Avatar } from "antd";
-import { Labels } from "../labels/Label";
+import { Labels } from "../../UI/labels/Label";
 import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
 import { PieChartFilled } from "@ant-design/icons";
 
@@ -177,7 +177,7 @@ const JobCard: React.FC<JobCardProps> = ({
               ))}
               {job?.soft_skills?.map((softSkill, index) => (
                 <Labels
-                  key={index+1}
+                  key={index + 1}
                   labelName={softSkill}
                   customClass={styling.label}
                   disableCloseIcon
