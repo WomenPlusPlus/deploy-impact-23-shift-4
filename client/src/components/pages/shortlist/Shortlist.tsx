@@ -54,6 +54,7 @@ const Shortlist = () => {
       const allCandidates = await getAllCandidates();
       // fetch all jobs from company's shortlist
       const candidatesIds = company?.saved_items;
+      console.log(candidatesIds);
 
       if (candidatesIds && candidatesIds?.length > 0) {
         // Use Promise.all to fetch candidates concurrently
@@ -112,7 +113,7 @@ const Shortlist = () => {
                 key={index}
                 candidate={candidate}
                 user={user}
-                subheader="Software Engineer"
+                // subheader="Software Engineer"
                 associations={candidate?.associations}
                 skills={candidate?.skills}
                 onClickRedirect={() => {

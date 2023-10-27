@@ -88,7 +88,7 @@ const DashboardCandidate: React.FC = () => {
               <h2 className={styling.headerTitle}>Welcome!</h2>
             )}
             {candidate?.experience ? (
-              <p> {candidate?.experience[0]?.role}</p>
+              <p className={styling.roleYes}> {candidate?.experience[0]?.role}</p>
             ) : (
               <p className={styling.role}>Add your current role</p>
             )}

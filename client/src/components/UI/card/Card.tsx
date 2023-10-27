@@ -51,6 +51,7 @@ const Card: React.FC<CardProps> = ({
         const isJobSaved = user?.saved_items?.includes(
           candidate?.user_id || ""
         );
+        console.log(isJobSaved);
         if (isJobSaved) {
           return;
         } else {

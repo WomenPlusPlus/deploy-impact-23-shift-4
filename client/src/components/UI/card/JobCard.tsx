@@ -28,12 +28,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
     ?.user_type;
 
-  const truncatedDescription: string | undefined = job?.description
-    ? typeof job?.description === "string" && job?.description?.length > 150
-      ? `${job?.description.slice(0, 150)}...`
-      : job?.description
-    : undefined;
-
   // Return the company name for a given job
   const getCompanyName = (job: Job) => {
     const company = companies?.find(
@@ -45,7 +39,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const logo = companies?.find(
     (company) => company?.user_id === job?.company_id
   )?.logo;
-  const company_name = getCompanyName(job);
 
   // Get the matching score for a given job
   const matchingJobs = candidate?.matching_jobs;
@@ -123,7 +116,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 {job?.title}
               </h2>
               <p className={styling.companyName} onClick={onClick}>
-                @{company_name}
+                @{getCompanyName(job)}
               </p>
             </div>
           </div>
@@ -177,7 +170,7 @@ const JobCard: React.FC<JobCardProps> = ({
               ))}
               {job?.soft_skills?.map((softSkill, index) => (
                 <Labels
-                  key={index+1}
+                  key={index + 1}
                   labelName={softSkill}
                   customClass={styling.label}
                   disableCloseIcon

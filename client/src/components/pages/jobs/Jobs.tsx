@@ -31,15 +31,14 @@ const Jobs = () => {
       setCompanyJobs(jobs);
       setIsLoading(false);
     } else {
-      if (userType === "candidate") {
-        const candidate = await getCandidateById(userId);
-        setCandidate(candidate);
-      }
-      const allCompanies = await getAllCompanies();
-      setJobs(allJobs);
-      setCompanies(allCompanies);
-      setIsLoading(false);
+      // userType === "candidate"
+      const candidate = await getCandidateById(userId);
+      setCandidate(candidate);
     }
+    const allCompanies = await getAllCompanies();
+    setJobs(allJobs);
+    setCompanies(allCompanies);
+    setIsLoading(false);
   };
 
   useEffect(() => {

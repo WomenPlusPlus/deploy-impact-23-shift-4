@@ -107,7 +107,7 @@ const Candidates = () => {
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}
-            isBookmarkVisible={false}
+            isBookmarkVisible={userType === "company"}
           />
         ))}
       </div>
