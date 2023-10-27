@@ -48,7 +48,8 @@ const DashboardCandidate: React.FC = () => {
       console.log("await getCandidateById error:", error);
     }
     try {
-      await getMatchJobs(auth?.user?.id);
+      const response = await getMatchJobs(auth?.user?.id);
+      console.log("Matching jobs result:", response);
     } catch (error) {
       console.log("await getCandidateById error:", error);
     }
