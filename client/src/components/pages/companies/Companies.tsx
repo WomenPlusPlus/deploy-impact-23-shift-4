@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Card from "../../UI/card/Card";
+import CompanyCard from "../../shared/companyCard/CompanyCard";
 import styling from "./Companies.module.css";
 import Filter from "../../UI/filter/Filter";
 import { useNavigate } from "react-router-dom";
@@ -75,8 +75,7 @@ const Companies = () => {
       setCompanies(companies);
       setFilteredCompanies(companies);
       setIsLoading(false);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -115,9 +114,10 @@ const Companies = () => {
       </div>
       <div className={styling.cards}>
         {filteredCompanies?.map((company, index) => (
-          <Card
+          <CompanyCard
             key={index}
             header={company?.company_name}
+            companyName={company?.company_name}
             subheader={company?.address}
             associations={company?.associations}
             values={company?.values}

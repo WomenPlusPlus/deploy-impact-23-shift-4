@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Card from "../../UI/card/Card";
+import { CandidateCard } from "../../shared/CandidateCard/CandidateCard";
 import "./Candidates.css";
 import Filter from "../../UI/filter/Filter";
 import { getAllCandidates } from "../../../api/candidates";
@@ -44,10 +44,10 @@ const Candidates = () => {
         // exclude the association that is logged in
         const association = await getAssociationById(userId);
         setUser(association);
-      } else {
+      } else if (userType === "company") {
         const company = await getCompanyById(userId);
         setUser(company);
-      }
+      } 
       setCandidates(candidates);
       setFilteredCandidates(candidates);
       setIsLoading(false);
@@ -92,22 +92,21 @@ const Candidates = () => {
       </div>
       <div className="cards">
         {filteredCandidates?.map((candidate, index) => (
-          <Card
+          <CandidateCard
             key={index}
             candidate={candidate}
             user={user}
             user_type={userType}
             header={`${
               (candidate?.experience && candidate.experience[0]?.role) ||
-              "Software Engineer"
+              "Not specified"
             }`}
-            // subheader="Software Engineer"
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}
-            isBookmarkVisible={false}
+            isBookmarkVisible={userType === "company"}
           />
         ))}
       </div>

@@ -6,7 +6,7 @@
 }
 
 .panel {
-  background-color: var(--background-color);
+  background-color: var(--blue-lighter);
   border: none;
   font-size: large;
   font-weight: 700;

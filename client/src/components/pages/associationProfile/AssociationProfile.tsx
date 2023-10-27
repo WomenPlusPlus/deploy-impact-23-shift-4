@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Tabs from "../../UI/tabs/Tabs";
 import { CardContainer } from "../../UI/container/CardContainer";
 import InvitesComponent from "./tabs/invitesTab/Invites";
 import RequestsComponent from "./tabs/requestsTab/Requests";
 import IniciativesComponent from "./tabs/iniciativesTab/Iniciatives";
 
-import { getAssociationById } from "../../../api/associations";
+import {
+  getAssociationById,
+  updateAssociationById,
+} from "../../../api/associations";
 
 import { Association } from "../../../types/types";
 
@@ -19,11 +21,29 @@ import {
   IconWorldWww,
 } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
+import EditAssociationProfile from "../../shared/editAssociationProfile/EditAssociationProfile";
+import Avatar from "../../UI/avatar/Avatar";
 
 const AssociationProfile = () => {
   //State
   const [association, setAssociation] = useState({} as Association);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [confirmEditAssociationLoading, setConfirmEditAssociationLoading] =
+    useState(false);
+
+  const handleEditModal = () => {
+    setEditModalOpen(!editModalOpen);
+  };
+
+  const handleModalSave = async (payload: object) => {
+    await updateAssociationById(association?.user_id, payload);
+
+    setConfirmEditAssociationLoading(true);
+    setEditModalOpen(false);
+    fetchAssociation();
+  };
+
   /**
    * Fetches the association data object by id
    */
@@ -93,7 +113,15 @@ const AssociationProfile = () => {
     <div className={styling.main}>
       <div className={styling.container}>
         <div className={styling.header}>
-          <img className={styling.logo} src={association?.logo} alt="Avatar" />
+          {association.logo ? (
+            <img
+              className={styling.logo}
+              src={association?.logo}
+              alt="Avatar"
+            />
+          ) : (
+            <Avatar size={80} firstName={association?.association_name} />
+          )}
 
           <div>
             <h1 className={styling.headerTitle}>
@@ -119,7 +147,11 @@ const AssociationProfile = () => {
           </div>
 
           <div className={styling.icon}>
-            <IconEdit color="black" style={{ cursor: "pointer" }} />
+            <IconEdit
+              color="black"
+              style={{ cursor: "pointer" }}
+              onClick={handleEditModal}
+            />
           </div>
         </div>
       </div>
@@ -127,6 +159,15 @@ const AssociationProfile = () => {
       <div className={styling.container}>
         <Tabs centered={false} items={tabs} />
       </div>
+
+      <EditAssociationProfile
+        open={editModalOpen}
+        onOk={handleModalSave}
+        onCancel={handleEditModal}
+        confirmLoading={confirmEditAssociationLoading}
+        associationId={association?.user_id}
+        associationInfo={association}
+      />
     </div>
   );
 };

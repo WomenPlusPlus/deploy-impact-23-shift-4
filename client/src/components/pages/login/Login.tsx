@@ -5,7 +5,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
 import BridgeLogo from "../../../media/bridge-logo.png";
 
-import "./Login.css";
+import styling from "./Login.module.css";
 
 import configureAxios from "./../../../config";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
@@ -61,7 +61,7 @@ const Login = () => {
               toast.error("Invalid email or password");
               setIsLoading(false);
             } else if (response.status === 403) {
-              toast.error("User is not registered");
+              toast.error("Invalid email");
               setIsLoading(false);
             } else if (response.status === 417) {
               toast.error("Login unsuccessful");
@@ -81,20 +81,14 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      {/* <img
-        className="backgroud-image"
-        alt="background"
-        // style={{ width: 160 }}
-        src={String(backgroundLogin)}
-      /> */}
-      <div className="login-box">
-        <img src={BridgeLogo} alt="Bridge Logo" className="logo" />
+    <div className={styling.loginContainer}>
+      <div className={styling.loginBox}>
+        <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
         <h1>Login</h1>
         <ToastContainer theme="light" />
         <Form
           name="normal_login"
-          className="login-form"
+          className={styling.loginForm}
           initialValues={{ remember: true }}
           onFinish={onClickLogin}
         >
@@ -103,7 +97,7 @@ const Login = () => {
             rules={[{ required: true, message: "Please input your email!" }]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
+              prefix={<UserOutlined className={styling.icon} />}
               type="text"
               name="email"
               value={formData.email}
@@ -116,7 +110,7 @@ const Login = () => {
             rules={[{ required: true, message: "Please input your Password!" }]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined className={styling.icon} />}
               name="password"
               value={formData.password}
               placeholder="Password"
@@ -130,8 +124,8 @@ const Login = () => {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
-            {/* add backend route */}
-            <a className="login-form-forgot" href="">
+
+            <a className={styling.forgotButton} href="">
               Forgot password
             </a>
           </Form.Item>
@@ -140,7 +134,7 @@ const Login = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className="login-form-button"
+              className={styling.loginButton}
             >
               {isLoading ? <SpinnerLogin /> : "Log in"}
             </Button>

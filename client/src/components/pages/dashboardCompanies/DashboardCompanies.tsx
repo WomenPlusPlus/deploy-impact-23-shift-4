@@ -34,12 +34,14 @@ const DashboardCompany = () => {
   const [matchingCandidates, setMatchingCandidates] = useState([]);
   const [allJobs, setAllJobs] = useState<Record<string, any>[]>();
   const [allCandidates, setAllCandidates] = useState<Candidate[]>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchInfo = async () => {
     try {
-      const allJobs = await getAllJobs();
       const allCandidates = await getAllCandidates();
+      setAllCandidates(allCandidates);
+      const allJobs = await getAllJobs();
+      setAllJobs(allJobs);
       const jobs = allJobs?.filter((job: Record<string, any>) => {
         return job["company_id"] === userId;
       });
@@ -51,19 +53,19 @@ const DashboardCompany = () => {
           }
         })
       );
-
       const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
-
-      const company = await getCompanyById(userId);
-
-      setAllCandidates(allCandidates);
-      setAllJobs(allJobs);
       setMatchingCandidates(matchingCandidates);
-      setCompany(company);
-      setIsLoading(true);
+      setIsLoading(false);
     } catch (error) {
-      // Handle errors here, e.g., log the error or show an error message.
-      console.error("Error fetching data:", error);
+      console.log("Matching error: ", error);
+    }
+
+    try {
+      const company = await getCompanyById(userId);
+      setCompany(company);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Company error: ", error);
     }
   };
 
@@ -76,6 +78,10 @@ const DashboardCompany = () => {
   ) : (
     <Avatar firstName={company.company_name} size={80} />
   );
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   const content = (
     <>
@@ -185,7 +191,7 @@ const DashboardCompany = () => {
   );
 
   return (
-    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
+    <div className={styling.main}>{content}</div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { JobCard } from "../../UI/card/JobCard";
+import { JobCard } from "../../shared/jobCard/JobCard";
 import { getAllJobs } from "../../../api/jobs";
 import styling from "./Jobs.module.css";
 import { getAllCompanies } from "../../../api/companies";
@@ -30,16 +30,21 @@ const Jobs = () => {
       const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
       setCompanyJobs(jobs);
       setIsLoading(false);
-    } else {
-      if (userType === "candidate") {
-        const candidate = await getCandidateById(userId);
-        setCandidate(candidate);
-      }
-      const allCompanies = await getAllCompanies();
+    } else if (userType === "association") {
       setJobs(allJobs);
-      setCompanies(allCompanies);
       setIsLoading(false);
+    } else if (userType === "admin") {
+      setJobs(allJobs);
+      setIsLoading(false);
+    } else {
+      // userType === "candidate"
+      const candidate = await getCandidateById(userId);
+      setCandidate(candidate);
     }
+    const allCompanies = await getAllCompanies();
+    setJobs(allJobs);
+    setCompanies(allCompanies);
+    setIsLoading(false);
   };
 
   useEffect(() => {

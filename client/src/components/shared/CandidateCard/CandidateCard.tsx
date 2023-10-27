@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import styling from "./Card.module.css";
 import { IconBookmark, IconExternalLink } from "@tabler/icons-react";
-import { Labels } from "../labels/Label";
-import Avatar from "../avatar/Avatar";
+import { Labels } from "../../UI/labels/Label";
+import Avatar from "../../UI/avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
 import { updateCompanyById } from "../../../api/companies";
 import { updateAssociationById } from "../../../api/associations";
+import styling from "./CandidateCard.module.css";
 
 interface CardProps {
   user?: User;
@@ -22,7 +22,7 @@ interface CardProps {
   onClickRedirect?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({
+const CandidateCard: React.FC<CardProps> = ({
   logo,
   header,
   user,
@@ -51,6 +51,7 @@ const Card: React.FC<CardProps> = ({
         const isJobSaved = user?.saved_items?.includes(
           candidate?.user_id || ""
         );
+        console.log(isJobSaved);
         if (isJobSaved) {
           return;
         } else {
@@ -192,4 +193,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export { CandidateCard };

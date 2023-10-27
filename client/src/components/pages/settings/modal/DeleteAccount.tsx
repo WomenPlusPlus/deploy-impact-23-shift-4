@@ -30,7 +30,6 @@ const DeleteAccount = ({
       const response_status = await deleteUser(userId);
       setTimeout(() => {
         if (response_status === 200) {
-          console.log("User deleted successfully");
           localStorage.removeItem("user_type");
           localStorage.removeItem("auth");
           localStorage.removeItem("saved_items");
@@ -39,7 +38,6 @@ const DeleteAccount = ({
           toast.error("Error deleting user");
         }
         navigate(`/login`);
-        console.log("User deleted successfully");
       }, 3000);
     } catch (error) {
       console.error("Error:", error);
