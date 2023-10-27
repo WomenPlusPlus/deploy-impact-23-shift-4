@@ -31,7 +31,6 @@ const JobMatchesTab: React.FC<Props> = ({ job }) => {
     });
   });
 
-  console.log(matchingCandidates);
   return (
     <div className={styling.main}>
       {matchingCandidates.length > 0 ? (

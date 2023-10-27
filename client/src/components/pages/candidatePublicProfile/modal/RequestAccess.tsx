@@ -24,12 +24,10 @@ const RequestAccess: React.FC<RequestAccessProps> = ({
   const companyId = JSON.parse(localStorage.getItem("auth") || "{}").user?.id;
 
   const onCancel = () => {
-    console.log("onCancel");
     setShow(false);
   };
 
   const onRequestAccess = async () => {
-    console.log("onRequestAccess");
     toast.success(`Access requested`, {
       position: "top-right",
       autoClose: 5000,
@@ -61,7 +59,6 @@ const RequestAccess: React.FC<RequestAccessProps> = ({
     const updatedCandidate = await updateCandidateById(candidateId, {
       package_requested: updatedPackageRequested,
     });
-    console.log("updatedCandidate: ", updatedCandidate);
     setShow(false);
   };
 

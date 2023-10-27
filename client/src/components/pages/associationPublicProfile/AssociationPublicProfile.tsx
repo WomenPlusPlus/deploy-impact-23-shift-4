@@ -11,11 +11,13 @@ import { Association } from "../../../types/types";
 import styling from "./AssociationPublicProfile.module.scss";
 
 import { IconMapPin, IconWorldWww } from "@tabler/icons-react";
+import Spinner from "../../UI/spinner/Spinner";
 
 const AssociationPublicProfile = () => {
   //State
-  const [association, setAssociation] = useState({} as Association);
   const { id } = useParams();
+  const [association, setAssociation] = useState({} as Association);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   /**
    * Fetches the association data object by id
    */
@@ -23,6 +25,7 @@ const AssociationPublicProfile = () => {
     if (userId) {
       const association = await getAssociationById(userId);
       setAssociation(association);
+      setIsLoading(false);
     }
   };
 
@@ -52,6 +55,10 @@ const AssociationPublicProfile = () => {
       children: <PublicIniciativesComponent association={association} />,
     },
   ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

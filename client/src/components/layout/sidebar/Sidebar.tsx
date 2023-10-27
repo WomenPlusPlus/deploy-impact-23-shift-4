@@ -83,18 +83,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     getItem("Logout", "logout", <IconLogout2 />),
   ];
 
-  const logoutError = () =>
-    toast.error("Logout error", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-
   const handleButtonClick = async (
     button: string,
     navigate: any
@@ -104,14 +92,22 @@ const Sidebar: React.FC<SidebarProps> = ({
         try {
           // Send logout request to the backend (you'll need to replace the URL and method)
           await axios.get("/api/logout", { withCredentials: true });
-          console.log("Logout Successful");
           // Remove user_type, auth from local storage
           localStorage.removeItem("user_type");
           localStorage.removeItem("auth");
           // Navigate to the login page
           navigate("/login");
         } catch (error) {
-          logoutError();
+          toast.error("Logout error", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       } else {
         navigate(`/${button}`);

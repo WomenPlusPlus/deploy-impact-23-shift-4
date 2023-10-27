@@ -5,6 +5,7 @@ import Filter from "../../UI/filter/Filter";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies } from "../../../api/companies";
 import Searchbar from "../../UI/searchbar/Searchbar";
+import Spinner from "../../UI/spinner/Spinner";
 
 interface Company {
   user_id: string;
@@ -24,6 +25,7 @@ const Companies = () => {
   // State
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
    * Handle filter change
@@ -72,6 +74,7 @@ const Companies = () => {
       const companies = await getAllCompanies();
       setCompanies(companies);
       setFilteredCompanies(companies);
+      setIsLoading(false);
     }
     catch (error) {
       console.log(error);
@@ -82,7 +85,10 @@ const Companies = () => {
     fetchCompanies();
   }, []);
 
-  console.log(filteredCompanies);
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div className={styling.main}>
       <h1 className={styling.header}>Our partner companies</h1>

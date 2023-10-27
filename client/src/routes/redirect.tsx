@@ -17,7 +17,6 @@ const RegisterRoute: React.FC = () => {
   const user_type = searchParams.get("user_type") || "";
   const signature = searchParams.get("signature") || "";
   const associations = searchParams.get("associations") || "";
-  console.log("link", link);
 
   // Use a state variable to manage the component's state
   const [validURL, setValidURL] = useState(false);
@@ -33,7 +32,6 @@ const RegisterRoute: React.FC = () => {
       )
       .then((response) => {
         // If the URL is valid, set the validURL state to true
-        console.log("response", response.data);
         const status_code = response.data.response;
         if (status_code === 200) {
           setValidURL(true);

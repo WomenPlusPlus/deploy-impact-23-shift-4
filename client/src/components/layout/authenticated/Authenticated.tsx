@@ -5,7 +5,6 @@ import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { LoginRedirect } from "./LoginRedirect";
 
 const { Content } = AntLayout;
 
@@ -52,13 +51,13 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     window.sessionStorage.setItem("selectedComponent", selectedComponent);
   }, [selectedComponent]);
 
-  if (isLoading) {
-    return (
-      <div>
-        <LoginRedirect />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div>
+  //       <LoginRedirect />
+  //     </div>
+  //   );
+  // }
 
   const contentStyle: React.CSSProperties = {
     minHeight: 120,

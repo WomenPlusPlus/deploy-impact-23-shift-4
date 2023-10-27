@@ -13,6 +13,7 @@ import { getAllCandidates } from "../../../api/candidates";
 import { getAllCompanies } from "../../../api/companies";
 import { getAllUsers } from "../../../api/user";
 import { Payload } from "../../../types/types";
+import Spinner from "../../UI/spinner/Spinner";
 
 const DashboardAdmin = () => {
   //State
@@ -21,6 +22,7 @@ const DashboardAdmin = () => {
   const [candidates, setCandidates] = useState<any>(null);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
   const [defaultOption, setDefaultOption] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
    * Sends the invite to the backend
@@ -73,9 +75,7 @@ const DashboardAdmin = () => {
     setAssociations(associations);
     setCandidates(candidates);
     setCompanies(companies);
-    console.log("associations", associations);
-    console.log("candidates", candidates);
-    console.log("companies", companies);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -128,6 +128,10 @@ const DashboardAdmin = () => {
       relatedCandidates: relatedCandidatesCount,
     };
   });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>
