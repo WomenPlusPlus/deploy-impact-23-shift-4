@@ -56,7 +56,11 @@ def match_candidates_route(domain_name):
                 # if job.json()["jobs"]["values"]:
                 job_values = job.json()["jobs"]["values"]
                 # if job.json()["jobs"]["soft_skills"]:
-                job_soft_skills = job.json()["jobs"]["soft_skills"]
+                job_soft_skills = (
+                    job.json()["jobs"]["soft_skills"]
+                    if job.json()["jobs"]["soft_skills"] is not None
+                    else []
+                )
                 candidates_response = requests.get(
                     f"{domain_name}/api/get_all_candidates"
                 )
@@ -67,73 +71,91 @@ def match_candidates_route(domain_name):
                 )
 
                 for candidate in candidates:
-                    cand_skills = [skill["skill_name"] for skill in candidate["skills"]]
-                    cand_levels = [
-                        skill["skill_level"] for skill in candidate["skills"]
-                    ]
-                    # if cand_skills and any(item in cand_skills for item in job_skills_ids):
-                    cand_id = candidate["user_id"]
-                    # print("LEVELS", cand_levels)
+                    # Check if candidate has skills
+                    if candidate["skills"] is not None:
+                        cand_skills = [
+                            skill["skill_name"] for skill in candidate["skills"]
+                        ]
+                        cand_levels = [
+                            skill["skill_level"] for skill in candidate["skills"]
+                        ]
+                        # if cand_skills and any(item in cand_skills for item in job_skills_ids):
+                        cand_id = candidate["user_id"]
+                        # print("LEVELS", cand_levels)
 
-                    if any(
-                        matching_candidate["id"] == cand_id
-                        for matching_candidate in existing_matching_candidates
-                    ):
-                        continue
+                        if (
+                            existing_matching_candidates
+                            and len(existing_matching_candidates) > 0
+                            and any(
+                                matching_candidate["id"] == cand_id
+                                for matching_candidate in existing_matching_candidates
+                            )
+                        ):
+                            # skip to next candidate
+                            continue
 
-                    count = 4
-                    total_score = 0
+                        count = 4
+                        total_score = 0
 
-                    if cand_skills:
-                        cand_tech_score = score(job_skills, cand_skills, cand_levels)
-                        total_score += 4 * cand_tech_score
+                        if cand_skills:
+                            cand_tech_score = score(
+                                job_skills, cand_skills, cand_levels
+                            )
+                            total_score += 4 * cand_tech_score
 
-                        if job_values:
-                            count += 1
-                            if candidate["values"]:
-                                cand_val_score = score(job_values, candidate["values"])
-                                total_score += cand_val_score
+                            if job_values:
+                                count += 1
+                                if candidate["values"]:
+                                    cand_val_score = score(
+                                        job_values, candidate["values"]
+                                    )
+                                    total_score += cand_val_score
 
-                        if job_soft_skills:
-                            count += 2
-                            if candidate["soft_skills"]:
-                                cand_soft_score = score(
-                                    job_soft_skills, candidate["soft_skills"]
-                                )
-                                total_score += 2 * cand_soft_score
+                            if job_soft_skills:
+                                count += 2
+                                if candidate["soft_skills"]:
+                                    cand_soft_score = score(
+                                        job_soft_skills, candidate["soft_skills"]
+                                    )
+                                    total_score += 2 * cand_soft_score
 
-                        cand_score = round(total_score / count, 1)
+                            cand_score = round(total_score / count, 1)
 
-                        # TODO: increase threshold to 60
-                        if cand_score >= 20:
-                            cand_match.append({"id": cand_id, "score": cand_score})
-                            if candidate["matching_jobs"]:
-                                duplicate = [
-                                    ix
-                                    for ix, job in enumerate(candidate["matching_jobs"])
-                                    if job["id"] == id
-                                ]
-                                if duplicate:
-                                    candidate["matching_jobs"][duplicate[0]][
-                                        "score"
-                                    ] = cand_score
+                            # TODO: increase threshold to 60
+                            if cand_score >= 20:
+                                cand_match.append({"id": cand_id, "score": cand_score})
+                                if candidate["matching_jobs"]:
+                                    duplicate = [
+                                        ix
+                                        for ix, job in enumerate(
+                                            candidate["matching_jobs"]
+                                        )
+                                        if job["id"] == id
+                                    ]
+                                    if duplicate:
+                                        candidate["matching_jobs"][duplicate[0]][
+                                            "score"
+                                        ] = cand_score
+                                    else:
+                                        candidate["matching_jobs"].append(
+                                            {"id": id, "score": cand_score}
+                                        )
                                 else:
+                                    candidate["matching_jobs"] = []
                                     candidate["matching_jobs"].append(
                                         {"id": id, "score": cand_score}
                                     )
-                            else:
-                                candidate["matching_jobs"] = []
-                                candidate["matching_jobs"].append(
-                                    {"id": id, "score": cand_score}
+                                update_cand_json = {
+                                    "user_id": cand_id,
+                                    "matching_jobs": candidate["matching_jobs"],
+                                }
+                                update_cand_response = requests.put(
+                                    f"{domain_name}/api/update_candidate",
+                                    json=update_cand_json,
                                 )
-                            update_cand_json = {
-                                "user_id": cand_id,
-                                "matching_jobs": candidate["matching_jobs"],
-                            }
-                            update_cand_response = requests.put(
-                                f"{domain_name}/api/update_candidate",
-                                json=update_cand_json,
-                            )
+                    else:
+                        print("No candidates skills available")
+                        continue
 
                 if len(cand_match) == 0:
                     return jsonify({"message": "No matching candidates"}), 200

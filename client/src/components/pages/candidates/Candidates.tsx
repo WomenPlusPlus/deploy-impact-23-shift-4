@@ -99,7 +99,7 @@ const Candidates = () => {
             user_type={userType}
             header={`${
               (candidate?.experience && candidate.experience[0]?.role) ||
-              "Software Engineer"
+              "Not specified"
             }`}
             // subheader="Software Engineer"
             associations={candidate?.associations}
@@ -107,7 +107,7 @@ const Candidates = () => {
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}
-            isBookmarkVisible={false}
+            isBookmarkVisible={userType === "company"}
           />
         ))}
       </div>

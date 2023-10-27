@@ -68,7 +68,7 @@ const CandidatePublicProfile = () => {
   function filterMatchingJobs(candidate: Candidate, jobs: Job[]): Job[] {
     const matchedJobs: Job[] = [];
     jobs.map((job) => {
-      candidate.matching_jobs?.forEach((matchingJob: Job) => {
+      candidate?.matching_jobs?.forEach((matchingJob: Job) => {
         if (matchingJob?.id === job?.id) {
           matchedJobs.push(job);
         }
@@ -127,20 +127,19 @@ const CandidatePublicProfile = () => {
               <div className={styling.location}>
                 <IconMapPin color="black" />
                 {candidate?.city && candidate?.country ? (
-                  <div>
-                    <p className={styling.locationText}>
+                  <div className={styling.row}>
+                    <p className={styling.locationTextYes}>
                       {candidate?.city}, {candidate?.country}
                     </p>
-                    <p> | </p>
                   </div>
                 ) : (
                   <p className={styling.locationText}>Not provided</p>
                 )}
               </div>
-
+              {candidate?.links && candidate?.links?.length > 0 && <p> | </p>}
               {candidate?.links && candidate?.links?.length > 0
                 ? candidate?.links?.map((link, index) => (
-                    <div key={index} className={styling.link}>
+                    <div key={index} className={`${styling.link}`}>
                       {link.name === "LinkedIn" ? (
                         <a href={link.url} target="_blank" rel="noreferrer">
                           <IconBrandLinkedin color="black" />
