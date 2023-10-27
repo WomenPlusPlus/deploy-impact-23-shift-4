@@ -18,6 +18,7 @@ from routes.home import home_bp
 from routes.auth import login
 from routes.auth import register
 from routes.auth import check_auth
+from routes.auth import check_passwords
 from routes.auth.logout import logout_bp
 from routes.auth.protected import protected_bp
 from routes.auth.send_invite import send_invite_bp
@@ -112,7 +113,10 @@ app.register_blueprint(send_invite_bp)
 app.register_blueprint(verify_invite_bp)
 app.register_blueprint(check_auth.check_authentication_route())
 app.register_blueprint(get_users.get_all_users_route(User))
-app.register_blueprint(delete_user.delete_user_route(User, Candidate, Company, db))
+app.register_blueprint(
+    delete_user.delete_user_route(User, Candidate, Company, Admin, Association, db)
+)
+app.register_blueprint(check_passwords.change_password_route(User, db))
 app.register_blueprint(get_user_by_id.get_user_by_id_route(User))
 app.register_blueprint(get_candidates.get_all_candidates_route(Candidate))
 app.register_blueprint(update_candidate.update_candidate_route(Candidate, db))
