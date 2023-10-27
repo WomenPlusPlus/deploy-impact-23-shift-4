@@ -23,6 +23,7 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
 }) => {
   const [selectedField, setSelectedField] = useState<string>("");
   const [additionalFields, setAdditionalFields] = useState<string[]>([]);
+  const [candidateFields, setCandidateFields] = useState<string[]>([]);
   const [salaryRange, setSalaryRange] = useState<string[]>([]);
   const [notice, setNotice] = useState<string>("");
   const [visaFields, setVisaFields] = useState<string[]>([]);
@@ -40,40 +41,47 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
   useEffect(() => {
     // Clear additionalFields when the component mounts
     setAdditionalFields([]);
+    // Initialize candidateFields with the relevant data
+    const initialCandidateFields = [];
 
     if (
       candidate?.salary_expectation &&
-      candidate?.salary_expectation.length > 0 &&
-      candidate?.salary_expectation[0] !== ""
+      candidate?.salary_expectation.length > 0
     ) {
       setSalaryRange(candidate?.salary_expectation);
-      setAdditionalFields(["Salary range"]);
+      initialCandidateFields.push("Salary range");
     }
     if (candidate?.notice_period && candidate?.notice_period.length > 0) {
       setNotice(candidate?.notice_period);
-      setAdditionalFields(["Notice"]);
+      initialCandidateFields.push("Notice");
     }
     if (candidate?.visa_status && candidate?.visa_status.length > 0) {
       setVisaFields(candidate?.visa_status as string[]);
-      setAdditionalFields(["Visa Status"]);
+      initialCandidateFields.push("Visa Status");
     }
     if (
       candidate?.possible_work_locations &&
       candidate?.possible_work_locations.length > 0
     ) {
       setWorkLocation(candidate?.possible_work_locations);
-      setAdditionalFields(["Possible Work Locations"]);
+      initialCandidateFields.push("Possible Work Locations");
     }
     if (candidate?.type_of_work && candidate?.type_of_work.length > 0) {
       setTypeOfWork(candidate?.type_of_work);
-      setAdditionalFields(["Type of work"]);
+      initialCandidateFields.push("Type of work");
     }
-  }, [candidate]);
+
+    setCandidateFields(initialCandidateFields);
+  }, []);
+
+  console.log("candidateFields", candidateFields);
 
   const handleAddField = () => {
     if (selectedField) {
-      console.log("selectedField", selectedField, "add", additionalFields);
-      if (additionalFields.includes(selectedField)) {
+      if (
+        additionalFields.includes(selectedField) ||
+        candidateFields.includes(selectedField)
+      ) {
         return; // Allow fields to be added only once
       }
       setAdditionalFields([...additionalFields, selectedField]);
@@ -93,7 +101,6 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
       type_of_work: typeOfWork,
     };
 
-    console.log("updatedCandidate", updatedCandidate);
     handleSave(updatedCandidate, true);
   };
 
@@ -107,16 +114,14 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
 
   const onCancel = () => {
     setAdditionalFields([]);
-    setSalaryRange([]);
-    setNotice("");
-    setSelectedField("");
-    setTypeOfWork([]);
+    // setSalaryRange([]);
+    // setNotice("");
+    // setSelectedField("");
+    // setTypeOfWork([]);
     setVisible(false);
   };
 
   const handleDeleteField = (field: string) => {
-    console.log("field", field);
-
     // set states
     switch (field) {
       case "Salary range":
@@ -138,7 +143,6 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
         break;
     }
     setAdditionalFields(additionalFields.filter((f) => f !== field));
-    console.log("additionalFields", additionalFields);
   };
 
   const renderFields = (field: string, showDeleteButton: boolean) => {
@@ -317,12 +321,12 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
         ]}
       >
         {/* Display existing fields */}
-        {/* {editedSections?.map((field, index) => (
+        {candidateFields?.map((field, index) => (
           <div key={index}>
             {renderFields(field, true)}
             <hr />
           </div>
-        ))} */}
+        ))}
         {/* Display fields */}
         {additionalFields.length > 0 &&
           additionalFields?.map((field, index) => (

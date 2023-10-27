@@ -24,7 +24,6 @@ const Navbar = () => {
   const loadAvatar = async () => {
     if (userType === "company") {
       const company = await getCompanyById(auth?.user?.id);
-      console.log(company);
       setAvatarComponent(
         <Avatar
           firstName={company?.company_name}

@@ -14,7 +14,6 @@ const Filter = ({ options, data, criteria, onFilterChange }: FilterProps) => {
   const [selectedCriteria, setSelectedCriteria] = useState<string[]>([]);
 
   const handleChange = (value: any) => {
-    console.log(value);
     setSelectedCriteria(value);
   };
 

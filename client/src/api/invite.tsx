@@ -8,7 +8,7 @@ export async function sendInvite(invite: object) {
       { withCredentials: true }
     );
     if (response.status === 200) {
-      console.log(response);
+
       return response.data;
     } else {
       return response.data;

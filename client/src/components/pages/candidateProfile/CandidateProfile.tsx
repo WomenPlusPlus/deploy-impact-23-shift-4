@@ -42,6 +42,7 @@ import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide
 import ToggleModal from "../../shared/toggleModal/ToggleModal";
 import { getAllSkills } from "../../../api/skills";
 import { getAllValues } from "../../../api/values";
+import Spinner from "../../UI/spinner/Spinner";
 
 const CandidateProfile = () => {
   // State
@@ -60,6 +61,8 @@ const CandidateProfile = () => {
   const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
   const [isExperienceEdit, setIsExperienceEdit] = useState(false);
   const [isDocumentsEdit, setIsDocumentsEdit] = useState(false);
+  // loading
+  const [isLoading, setIsLoading] = useState(true);
 
   const [allSkills, setAllSkills] = useState([]);
   const [allValues, setAllValues] = useState([]);
@@ -85,7 +88,7 @@ const CandidateProfile = () => {
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    console.log("user_id", auth.user.id);
+
     try {
       const skills = await getAllSkills();
       const values = await getAllValues();
@@ -108,10 +111,7 @@ const CandidateProfile = () => {
         candidateFetched.experience
       );
       setSectionsExperience(transformedExperience);
-      // Count the number of null categories
-      const countFields = countNullFieldsByCategory(candidate, allCategories);
-      setCountNullCategories(countFields);
-      console.log("countFields", countFields);
+      setIsLoading(false);
     } catch (error) {
       console.log("error", error);
     }
@@ -183,14 +183,16 @@ const CandidateProfile = () => {
       candidateUpdated
     );
     await fetchCandidate();
-    console.log("is_updated", is_updated);
   };
 
   const handleSaveToggleModal = (enabledStrings: string[]) => {
     setShowToggleModal(false);
     handleSaveEdit({ visible_information: enabledStrings });
-    console.log("Enabled Strings:", enabledStrings);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>
@@ -281,6 +283,7 @@ const CandidateProfile = () => {
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
         <ProfileComplete
+          setCountNullCategories={setCountNullCategories}
           className={styling.profileCompletedElement}
           candidate={candidate}
           editContactInfo={editContactInfo}

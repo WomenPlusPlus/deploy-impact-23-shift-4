@@ -82,7 +82,6 @@ const Companies = () => {
     fetchCompanies();
   }, []);
 
-  console.log(filteredCompanies);
   return (
     <div className={styling.main}>
       <h1 className={styling.header}>Our partner companies</h1>

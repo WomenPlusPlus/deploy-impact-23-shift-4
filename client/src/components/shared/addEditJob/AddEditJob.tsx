@@ -76,7 +76,6 @@ const AddEditJob: React.FC<ModalProps> = ({
       employment_type: employment_type,
     };
 
-    console.log(payload);
     onOk(payload);
   };
 

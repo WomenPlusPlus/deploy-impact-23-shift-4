@@ -206,8 +206,6 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
                 setSelectedValue(searchText);
 
                 if (searchText === "") {
-                  console.log("allValues", allValues);
-
                   setValueDataSource(allValues);
                 } else {
                   const filteredValues = valueDataSource?.filter((value) =>

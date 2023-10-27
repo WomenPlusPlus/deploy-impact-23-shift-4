@@ -15,7 +15,6 @@ const IniciativesComponent = ({
   callback?: () => void;
 }) => {
   const [visible, setVisible] = useState(false);
-  console.log("ASSO", association);
 
   const onClick = (link: string) => {
     window.open(link, "_blank");

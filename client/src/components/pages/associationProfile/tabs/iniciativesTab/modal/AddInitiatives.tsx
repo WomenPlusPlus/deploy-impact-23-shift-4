@@ -71,7 +71,6 @@ const AddInitiatives: React.FC<AddInitiativesProps> = ({
     };
 
     const updatedIniciatives = [...iniciatives, payload];
-    console.log("updatedIniciatives", updatedIniciatives);
     const updateAssociation = {
       ...association,
       iniciatives: updatedIniciatives,
@@ -98,8 +97,6 @@ const AddInitiatives: React.FC<AddInitiativesProps> = ({
   useEffect(() => {
     fetchInitiatives();
   }, []);
-
-  console.log("initiatives", iniciatives);
 
   return (
     <Modal

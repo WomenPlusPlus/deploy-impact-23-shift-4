@@ -22,14 +22,12 @@ import {
 const AssociationProfile = () => {
   //State
   const [association, setAssociation] = useState({} as Association);
-  const navigate = useNavigate();
   /**
    * Fetches the association data object by id
    */
   const fetchAssociation = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const userId = auth?.user?.id;
-    console.log(userId);
 
     if (userId) {
       const association = await getAssociationById(userId);

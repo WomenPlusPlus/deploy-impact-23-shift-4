@@ -73,9 +73,6 @@ const DashboardAdmin = () => {
     setAssociations(associations);
     setCandidates(candidates);
     setCompanies(companies);
-    console.log("associations", associations);
-    console.log("candidates", candidates);
-    console.log("companies", companies);
   };
 
   useEffect(() => {

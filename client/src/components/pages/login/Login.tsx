@@ -41,7 +41,6 @@ const Login = () => {
       .then((response) => {
         // Handle the backend response here
         const { user } = response.data;
-        console.log("Response", response.status);
         if (response.status === 200) {
           toast.success("Login Success");
         }

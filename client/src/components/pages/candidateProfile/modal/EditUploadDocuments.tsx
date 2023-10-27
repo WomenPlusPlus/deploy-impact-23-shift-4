@@ -47,7 +47,6 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
 
   const handleSave = () => {
     if (onSave) {
-      console.log("certificates", { certificates });
       if (cvFile) {
         if (candidate) {
           candidate.cv_reference = cvFile;

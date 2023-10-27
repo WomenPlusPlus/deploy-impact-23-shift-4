@@ -43,7 +43,6 @@ const Associations = () => {
   useEffect(() => {
     fetchInfo();
   }, []);
-  console.log(filteredAssociations);
 
   return (
     <div className={styling.main}>

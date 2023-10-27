@@ -44,11 +44,8 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
    * @param enabledStrings - strings that are enabled
    */
   const handleShare = async (enabledStrings: string[], message: string) => {
-    console.log("Enabled Strings:", enabledStrings);
     const requestedJobs = candidate?.requested_jobs || [];
 
-    console.log("requestedJobs", requestedJobs);
-    console.log("candidate id", candidate);
     requestedJobs?.push(jobId);
     await updateCandidateById(candidate?.user_id ?? "", {
       requested_jobs: requestedJobs,
@@ -56,7 +53,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
 
     let existingInterestedCandidates = company?.interested_candidates || [];
 
-    console.log(candidate?.user_id);
     const newInterestedCandidate = {
       job_id: jobId,
       candidate_id: candidate?.user_id,

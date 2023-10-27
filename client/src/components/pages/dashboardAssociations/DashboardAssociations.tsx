@@ -201,20 +201,17 @@ const DashboardAssociations = () => {
   const [tableData, setTableData] = useState(data);
 
   const handleAccept = (record: any) => {
-    console.log(`Accepted: ${record?.candidate}`);
     // Filter out the row with the accepted candidate
     const updatedData = tableData.filter((item) => item?.key !== record?.key);
     setTableData(updatedData);
   };
 
   const handleReject = (record: any) => {
-    console.log(`Rejected: ${record?.candidate}`);
     // Filter out the row with the rejected candidate
     const updatedData = tableData.filter((item) => item?.key !== record?.key);
     setTableData(updatedData);
   };
 
-  console.log(association);
   return (
     <div className={styling.main}>
       {/* Profile component */}

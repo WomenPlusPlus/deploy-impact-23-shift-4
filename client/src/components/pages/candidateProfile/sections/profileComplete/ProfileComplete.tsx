@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 interface ProfileCompletedProps {
   candidate: Candidate;
   className?: string;
+  setCountNullCategories?: (arg: Record<string, number>) => void;
   getProgress?: (arg: number) => void;
   editContactInfo?: () => void;
   editLanguages?: () => void;
@@ -30,6 +31,7 @@ interface ProfileCompletedProps {
 const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   candidate,
   className,
+  setCountNullCategories,
   getProgress,
   editContactInfo,
   editLanguages,
@@ -53,6 +55,7 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   const fetchData = () => {
     const countFields = countNullFieldsByCategory(candidate, allCategories);
     setFieldsByCategory(countFields);
+    setCountNullCategories && setCountNullCategories(countFields);
     setCategories(allCategories);
     const countProgress = percentage({
       completedCategories: Object.values(countFields).filter(
@@ -60,7 +63,6 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
       ).length,
       totalCategories: allCategories.length,
     });
-    console.log("PROGRESS", countProgress);
 
     getProgress && getProgress(countProgress);
     setProgress(countProgress);
@@ -71,7 +73,6 @@ const ProfileComplete: React.FC<ProfileCompletedProps> = ({
   }, [candidate, allCategories]);
 
   const handleAddClick = (category: string) => {
-    console.log("ADD CLICK", category);
     switch (category) {
       case "Contact info":
         if (editContactInfo) {

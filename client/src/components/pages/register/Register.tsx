@@ -23,16 +23,6 @@ const Register: React.FC<RegisterProps> = ({
   signature,
   associations,
 }) => {
-  console.log(
-    "Token:",
-    token,
-    "Expires:",
-    expires,
-    "User type:",
-    user_type,
-    "Signature:",
-    signature
-  );
   // state
   const [formData, setFormData] = useState({} as any);
 
@@ -60,7 +50,6 @@ const Register: React.FC<RegisterProps> = ({
       .then((response) => {
         // Handle the backend response here (e.g., show a success message)
         console.log("Registration Successful!");
-        console.log(`${response.data}`);
         navigate("/login"); // Redirect to the login page after successful registration
       })
       .catch((error) => {
