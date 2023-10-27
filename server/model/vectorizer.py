@@ -5,18 +5,16 @@ import dill
 
 
 def tokens(skill):
-    import string
-
-    global init_list
     init_list = skill.lower().split(" ")
 
     if len(init_list) > 1:
-        init_list.append("_".join(skill.lower().split(" ")))
+        init_list.append("_".join(init_list))
 
     final_list = [
         token
         for token in init_list
-        if token not in string.punctuation and not token.isnumeric()
+        if not all(c in "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" for c in token)
+        and not token.isnumeric()
     ]
 
     return final_list

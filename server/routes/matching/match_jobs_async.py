@@ -1,39 +1,40 @@
 import dill
-import string
 import numpy as np
 from flask import Blueprint, jsonify, request
 from sklearn.metrics.pairwise import cosine_similarity
 import aiohttp
 import asyncio
 
-with open("model/vectorizer.pkl", "rb") as file:
-    vectorizer = dill.load(file)
-
 
 def score(job_skills, candidate_skills, candidate_levels=False):
-    job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
-    print("JOB SKILLS", job_skills)
-    job_skills_vector = vectorizer.transform(job_skills)
-    # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
-    print("CANDIDATE SKILLS", candidate_skills)
-    candidate_skills = [
-        "_".join(skill.lower().split(" ")) for skill in candidate_skills
-    ]
-    candidate_skills_vector = vectorizer.transform(candidate_skills)
-    similarity_matrix = cosine_similarity(candidate_skills_vector, job_skills_vector)
-    similarity_matrix_resolved = (similarity_matrix > 0.7).astype("int32")
+    with open("model/vectorizer.pkl", "rb") as file:
+        vectorizer = dill.load(file)
 
-    if candidate_levels:
-        skills_dict = {"beginner": 1, "intermediate": 2, "advanced": 3, "pro": 4}
-        candidate_levels = [[skills_dict[level]] for level in candidate_levels]
-        total_score = 4 * len(job_skills)
-        candidate_score = np.multiply(
-            similarity_matrix_resolved, candidate_levels
-        ).sum()
-        percent_score = (candidate_score / total_score) * 100
-    else:
-        percent_score = similarity_matrix_resolved.sum() / len(job_skills)
-    return round(percent_score, 1)
+        job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
+        print("JOB SKILLS", job_skills)
+        job_skills_vector = vectorizer.transform(job_skills)
+        # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
+        print("CANDIDATE SKILLS", candidate_skills)
+        candidate_skills = [
+            "_".join(skill.lower().split(" ")) for skill in candidate_skills
+        ]
+        candidate_skills_vector = vectorizer.transform(candidate_skills)
+        similarity_matrix = cosine_similarity(
+            candidate_skills_vector, job_skills_vector
+        )
+        similarity_matrix_resolved = (similarity_matrix > 0.7).astype("int32")
+
+        if candidate_levels:
+            skills_dict = {"beginner": 1, "intermediate": 2, "advanced": 3, "pro": 4}
+            candidate_levels = [[skills_dict[level]] for level in candidate_levels]
+            total_score = 4 * len(job_skills)
+            candidate_score = np.multiply(
+                similarity_matrix_resolved, candidate_levels
+            ).sum()
+            percent_score = (candidate_score / total_score) * 100
+        else:
+            percent_score = similarity_matrix_resolved.sum() / len(job_skills)
+        return round(percent_score, 1)
 
 
 async def fetch_candidate_data(session, domain_name, id):
@@ -81,6 +82,7 @@ async def match_jobs_logic(domain_name, data):
             existing_matching_jobs = candidate.get("candidates").get(
                 "matching_jobs", []
             )
+            print("EXISTING MATCHING JOBS", existing_matching_jobs)
             cand_skills = [
                 skill["skill_name"] for skill in candidate["candidates"]["skills"]
             ]
@@ -96,7 +98,7 @@ async def match_jobs_logic(domain_name, data):
                 job_skills = [skill["skill_name"] for skill in job.get("skills")]
                 job_id = job["id"]
 
-                if existing_matching_jobs and any(
+                if len(existing_matching_jobs) > 0 and any(
                     matching_job["id"] == job_id
                     for matching_job in existing_matching_jobs
                 ):
@@ -129,6 +131,7 @@ async def match_jobs_logic(domain_name, data):
                     job_score = round(total_score / count, 1)
 
                     # TODO: increase threshold to 60
+                    print("JOB SCORE", job_score)
                     if job_score >= 20:
                         job_match.append({"id": job_id, "score": job_score})
 
