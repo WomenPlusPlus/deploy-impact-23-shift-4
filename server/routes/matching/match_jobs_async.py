@@ -98,9 +98,13 @@ async def match_jobs_logic(domain_name, data):
                 job_skills = [skill["skill_name"] for skill in job.get("skills")]
                 job_id = job["id"]
 
-                if len(existing_matching_jobs) > 0 and any(
-                    matching_job["id"] == job_id
-                    for matching_job in existing_matching_jobs
+                if (
+                    existing_matching_jobs
+                    and len(existing_matching_jobs) > 0
+                    and any(
+                        matching_job["id"] == job_id
+                        for matching_job in existing_matching_jobs
+                    )
                 ):
                     continue
 
