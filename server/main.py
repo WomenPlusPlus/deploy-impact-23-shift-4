@@ -1,9 +1,3 @@
-import string
-
-import logging
-
-from waitress import serve
-
 from flask import Flask, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -184,9 +178,5 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    if os.environ.get("FLASK_ENV") == "production":
-        print("Running in PRODUCTION mode")
-        serve(app, listen="*:5001", expose_tracebacks=False, threads=6)
-    else:
-        print("Running in DEVELOPMENT mode")
-        app.run(port=5001, debug=True)
+    print("Server started")
+    app.run(port=5001, debug=True)
