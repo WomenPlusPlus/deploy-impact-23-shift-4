@@ -52,13 +52,13 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     window.sessionStorage.setItem("selectedComponent", selectedComponent);
   }, [selectedComponent]);
 
-  if (isLoading) {
-    return (
-      <div>
-        <LoginRedirect />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div>
+  //       <LoginRedirect />
+  //     </div>
+  //   );
+  // }
 
   const contentStyle: React.CSSProperties = {
     minHeight: 120,

@@ -19,6 +19,7 @@ import {
 import ApplicationRequests from "./applicationRequests/ApplicationRequests";
 import { getAllJobs } from "../../../api/jobs";
 import { getMatchJobs } from "../../../api/match";
+import Spinner from "../../UI/spinner/Spinner";
 
 const DashboardCandidate: React.FC = () => {
   // state
@@ -26,6 +27,7 @@ const DashboardCandidate: React.FC = () => {
   const [candidate, setCandidate] = useState<Candidate>({} as Candidate);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ const DashboardCandidate: React.FC = () => {
 
       const isProgress = calculateProgress(candidateFetched as Candidate);
       setProgress(isProgress);
+      setLoading(false);
     } catch (error) {
       console.log("error", error);
     }
@@ -63,7 +66,7 @@ const DashboardCandidate: React.FC = () => {
     fetchInfo(auth?.user?.id);
   }, [auth?.user?.id]);
 
-  return (
+  const content = (
     <div className={styling.main}>
       <div className={styling.grid}>
         {/* Profile component */}
@@ -178,6 +181,8 @@ const DashboardCandidate: React.FC = () => {
       </div>
     </div>
   );
+
+  return <>{loading ? <Spinner /> : content}</>;
 };
 
 export default DashboardCandidate;
