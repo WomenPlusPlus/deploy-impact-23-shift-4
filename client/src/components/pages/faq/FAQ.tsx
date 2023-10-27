@@ -109,7 +109,9 @@ const FAQ = () => {
     },
   ];
 
-  const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
+  const [activeIndexes, setActiveIndexes] = useState<number[]>(
+    Array.from({ length: faqDataCandidates.length }, (_, i) => i)
+  );
 
   const togglePanel = (index: number) => {
     if (activeIndexes.includes(index)) {
@@ -119,11 +121,11 @@ const FAQ = () => {
     }
   };
 
-  const userType: { userType: string } = JSON.parse(
-    localStorage.getItem("user_type") || "{}"
-  );
+  const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+  const userType = auth.user.user_type;
+
   const faqContent =
-    userType.userType === "candidate" ? faqDataCandidates : faqDataCompanies;
+    userType === "candidate" ? faqDataCandidates : faqDataCompanies;
 
   return (
     <div className={styling.main}>
