@@ -20,6 +20,7 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./CompanyProfile.module.css";
+import Avatar from "../../UI/avatar/Avatar";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -194,7 +195,11 @@ const CompanyProfile = () => {
     <>
       <div className={styling.container}>
         <div className={styling.header}>
-          <img className={styling.logo} src={company.logo} alt="Avatar" />
+          {company.logo ? (
+            <img className={styling.logo} src={company.logo} alt="Avatar" />
+          ) : (
+            <Avatar firstName={company.company_name} size={80} />
+          )}
 
           <div>
             <h1 className={styling.title}>{company.company_name}</h1>

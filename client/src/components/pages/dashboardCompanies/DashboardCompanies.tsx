@@ -132,21 +132,6 @@ const DashboardCompany = () => {
         />
       </CardContainer>
 
-      {/* Progress bar */}
-      <CardContainer className={styling.progress}>
-        <p>You've completed {progress}% </p>
-
-        <div className={styling.progressSection}>
-          <div className={styling.progressBar}>
-            <ProgressBar progress={progress} />
-          </div>
-
-          <Button onClick={() => navigate(`/company-profile/${userId}`)}>
-            Complete your profile
-          </Button>
-        </div>
-      </CardContainer>
-
       {/* Find Jobs */}
       <div className={styling.section}>
         <CardContainer className={styling.card}>

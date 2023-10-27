@@ -34,7 +34,9 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
 }) => {
   const [textAreaValue, setTextAreaValue] = useState("");
   const handleOk = () => {
-    const enabledStrings = allCategories.filter((_, index) => selectedStrings[index]);
+    const enabledStrings = allCategories.filter(
+      (_, index) => selectedStrings[index]
+    );
     onAcceptWithEnabledStrings(enabledStrings, textAreaValue);
   };
   return (
