@@ -12,8 +12,10 @@ with open("model/vectorizer.pkl", "rb") as file:
 
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
+    print("JOB SKILLS", job_skills)
     job_skills_vector = vectorizer.transform(job_skills)
     # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
+    print("CANDIDATE SKILLS", candidate_skills)
     candidate_skills = [
         "_".join(skill.lower().split(" ")) for skill in candidate_skills
     ]
@@ -38,19 +40,19 @@ async def fetch_candidate_data(session, domain_name, id):
     async with session.post(
         f"{domain_name}/api/get_candidate_by_id", json={"user_id": id}
     ) as response:
-        return await response
+        return await response.json(), response.status
 
 
 async def fetch_update_candidate_data(session, domain_name, update_json):
     async with session.put(
         f"{domain_name}/api/update_candidate", json=update_json
     ) as response:
-        return await response
+        return await response.json(), response.status
 
 
 async def fetch_jobs_data(session, domain_name):
     async with session.get(f"{domain_name}/api/get_all_jobs") as response:
-        return await response
+        return await response.json(), response.status
 
 
 async def update_job(session, domain_name, job_id, matching_candidates):
@@ -61,7 +63,7 @@ async def update_job(session, domain_name, job_id, matching_candidates):
     async with session.put(
         f"{domain_name}/api/update_job", json=update_job_json
     ) as response:
-        return await response
+        return await response.json(), response.status
 
 
 async def match_jobs_logic(domain_name, data):
@@ -69,26 +71,32 @@ async def match_jobs_logic(domain_name, data):
     job_match = []
 
     async with aiohttp.ClientSession() as session:
-        candidate_response = await fetch_candidate_data(session, domain_name, id)
-        jobs_response = await fetch_jobs_data(session, domain_name)
+        candidate, candidate_response = await fetch_candidate_data(
+            session, domain_name, id
+        )
+        jobs, jobs_response = await fetch_jobs_data(session, domain_name)
 
-        if (
-            jobs_response
-            and candidate_response
-            and jobs_response.status == 200
-            and candidate_response.status == 200
-        ):
-            jobs = jobs_response.json()["jobs"]
-            candidate = candidate_response.json()
-            existing_matching_jobs = candidate.get("candidates", {}).get(
+        if jobs and candidate and jobs_response == 200 and candidate_response == 200:
+            jobs = jobs["jobs"]
+            existing_matching_jobs = candidate.get("candidates").get(
                 "matching_jobs", []
             )
+            cand_skills = [
+                skill["skill_name"] for skill in candidate["candidates"]["skills"]
+            ]
+            print("CAND SKILLS", cand_skills)
+            cand_levels = [
+                skill["skill_level"] for skill in candidate["candidates"]["skills"]
+            ]
+            cand_values = candidate["candidates"]["values"]
+            cand_soft_skills = candidate["candidates"]["soft_skills"]
 
             for job in jobs:
-                job_skills = [skill["skill_name"] for skill in job.get("skills", [])]
+                print("JOB")
+                job_skills = [skill["skill_name"] for skill in job.get("skills")]
                 job_id = job["id"]
 
-                if any(
+                if existing_matching_jobs and any(
                     matching_job["id"] == job_id
                     for matching_job in existing_matching_jobs
                 ):
@@ -96,30 +104,27 @@ async def match_jobs_logic(domain_name, data):
 
                 count = 4
                 total_score = 0
+                print("YES")
 
                 if job_skills:
-                    job_tech_score = score(
-                        job_skills,
-                        candidate.get("candidates", {}).get("skills", []),
-                        candidate.get("candidates", {}).get("skills_levels", []),
-                    )
+                    print("JOB SKILL")
+                    job_tech_score = score(job_skills, cand_skills, cand_levels)
                     total_score += 4 * job_tech_score
 
                     if job.get("values"):
+                        print("VALUES")
+                        print("VALUES", job.get("values"))
                         count += 1
-                        job_val_score = score(
-                            job.get("values"),
-                            candidate.get("candidates", {}).get("values", []),
-                        )
-                        total_score += job_val_score
+                        if cand_values:
+                            job_val_score = score(job["values"], cand_values)
+                            total_score += job_val_score
 
                     if job.get("soft_skills"):
+                        print("SOFT SKILLS")
                         count += 2
-                        job_soft_score = score(
-                            job.get("soft_skills"),
-                            candidate.get("candidates", {}).get("soft_skills", []),
-                        )
-                        total_score += 2 * job_soft_score
+                        if cand_soft_skills:
+                            job_soft_score = score(job["soft_skills"], cand_soft_skills)
+                            total_score += 2 * job_soft_score
 
                     job_score = round(total_score / count, 1)
 
@@ -152,22 +157,23 @@ async def match_jobs_logic(domain_name, data):
                                 {"id": id, "score": job_score}
                             )
 
-                        update_job_response = await update_job(
+                        update_job, update_job_response = await update_job(
                             session,
                             domain_name,
                             job_id,
-                            job.get("matching_candidates", []),
+                            job.get("matching_candidates"),
                         )
-                        print("UPDATE JOB", update_job_response.status)
+                        print("UPDATE JOB", update_job_response)
 
+            print("JOB MATCH", job_match)
             if not job_match:
                 return jsonify({"message": "No matching jobs"}), 200
 
             update_json = {"user_id": id, "matching_jobs": job_match}
-            update_cand = await fetch_update_candidate_data(
+            update_cand, update_cand_response = await fetch_update_candidate_data(
                 session, domain_name, update_json
             )
-            if update_cand and update_cand.status == 200:
+            if update_cand and update_cand_response == 200:
                 return (
                     jsonify(
                         {
