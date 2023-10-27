@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { JobCard } from "../../UI/card/JobCard";
 import styling from "./Shortlist.module.css";
 import { getAllCandidates, getCandidateById } from "../../../api/candidates";
-import {
-  Candidate,
-  Company,
-  Job,
-  User,
-} from "../../../types/types";
+import { Candidate, Company, Job, User } from "../../../types/types";
 import { getJobById } from "../../../api/jobs";
 import { useNavigate } from "react-router-dom";
 import { getAllCompanies, getCompanyById } from "../../../api/companies";
@@ -122,7 +117,10 @@ const Shortlist = () => {
                 key={index}
                 candidate={candidate}
                 user={user}
-                // subheader="Software Engineer"
+                header={
+                  (candidate?.experience && candidate?.experience[0]?.role) ||
+                  "Not specified"
+                }
                 associations={candidate?.associations}
                 skills={candidate?.skills}
                 onClickRedirect={() => {
