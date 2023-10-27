@@ -95,7 +95,6 @@
 }
 
 .skillTag div {
-  background-color: var(--label-color);
   border-radius: var(--tag-radius);
   display: flex;
   flex-direction: row;
@@ -114,4 +113,8 @@
 
 .savedBookmark {
   fill: black;
+}
+
+.label {
+  background-color: var(--skills-label);
 }
