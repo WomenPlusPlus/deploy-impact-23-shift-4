@@ -53,11 +53,9 @@ const Register: React.FC<RegisterProps> = ({
       .then((response) => {
         const { data } = response;
         if (data.message === "User registered successfully") {
-          console.log("Registration Successful!");
           setIsLoading(false);
           navigate("/login");
         } else {
-          console.log("Registration Failed!");
           setIsLoading(false);
         }
       })

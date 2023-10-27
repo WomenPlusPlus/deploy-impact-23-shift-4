@@ -3,7 +3,7 @@
   flex-direction: row;
   min-height: 100vh;
   padding: 3rem;
-  background-color: var(--background-color);
+  background-color: var(--blue-lighter);
 }
 
 .grid {

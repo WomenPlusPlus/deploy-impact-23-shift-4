@@ -62,7 +62,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
   const contentStyle: React.CSSProperties = {
     minHeight: 120,
     color: "black",
-    backgroundColor: "var(--background-color)",
+    backgroundColor: "var(--blue-lighter)",
     marginLeft: collapsed ? 80 : 200,
     paddingTop: 64,
     paddingRight: 40,

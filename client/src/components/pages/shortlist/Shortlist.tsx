@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { JobCard } from "../../UI/card/JobCard";
+import { JobCard } from "../../shared/jobCard/JobCard";
 import styling from "./Shortlist.module.css";
 import { getAllCandidates, getCandidateById } from "../../../api/candidates";
 import { Candidate, Company, Job, User } from "../../../types/types";

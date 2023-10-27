@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import styling from "./Card.module.css";
 import { IconBookmark, IconExternalLink } from "@tabler/icons-react";
 import { Labels } from "../labels/Label";
 import Avatar from "../avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
 import { updateCompanyById } from "../../../api/companies";
 import { updateAssociationById } from "../../../api/associations";
+import styling from "./Card.module.css";
 
 interface CardProps {
   user?: User;

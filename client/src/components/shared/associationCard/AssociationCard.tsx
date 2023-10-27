@@ -1,9 +1,10 @@
 import React from "react";
-import styling from "./Card.module.css";
 import { IconExternalLink } from "@tabler/icons-react";
-import { Labels } from "../labels/Label";
-import Avatar from "../avatar/Avatar";
+import { Labels } from "../../UI/labels/Label";
+import Avatar from "../../UI/avatar/Avatar";
 import { Association } from "../../../types/types";
+
+import styling from "./AssociationCard.module.css";
 
 interface CardProps {
   association?: Association;
@@ -28,8 +29,6 @@ const AssociationCard: React.FC<CardProps> = ({
   avatar,
   onClickRedirect,
 }) => {
-  // pass company, pass candidateID
-  // state
   const [isSaved, setIsSaved] = React.useState(false);
 
   return (

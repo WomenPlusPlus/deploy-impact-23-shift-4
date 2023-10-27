@@ -4,7 +4,7 @@ import Searchbar from "../../UI/searchbar/Searchbar";
 import styling from "./Associations.module.css";
 import { getAllAssociations } from "../../../api/associations";
 import { Association } from "../../../types/types";
-import AssociationCard from "../../UI/card/AssociationCard";
+import AssociationCard from "../../shared/associationCard/AssociationCard";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/spinner/Spinner";
 

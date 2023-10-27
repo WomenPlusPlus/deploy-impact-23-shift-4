@@ -1,7 +1,7 @@
 import styling from "./CandidateMatchesTab.module.css";
 
 import { Candidate, Company, Job } from "../../../../../types/types";
-import { JobCard } from "../../../../UI/card/JobCard";
+import { JobCard } from "../../../../shared/jobCard/JobCard";
 import { useNavigate } from "react-router-dom";
 
 interface Props {

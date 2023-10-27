@@ -43,20 +43,20 @@
 }
 
 .applyDiv {
-  background-color: var(--color-button);
+  background-color: var(--blue-dark);
   color: white;
 }
 
 .applyButton {
   width: 100%;
   margin-top: 1rem;
-  background-color: var(--background-hover);
+  background-color: var(--blue-medium);
   color: white;
   font-size: large;
 }
 
 .companyButton {
-  background-color: var(--background-avatar);
+  background-color: var(--blue-darker);
   color: white;
 }
 
