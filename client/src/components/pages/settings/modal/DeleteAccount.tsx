@@ -58,6 +58,7 @@ const DeleteAccount = ({
           className={styling.buttonDelete}
           onClick={() => handleOnDelete()}
           danger
+          type="primary"
         >
           Delete
         </Button>
