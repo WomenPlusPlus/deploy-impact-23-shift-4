@@ -8,7 +8,7 @@ import { Button } from "../../UI/button/Button";
 import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import Table from "../../UI/table/Table";
-import { Space, message } from "antd";
+import { message } from "antd";
 import { useEffect, useState } from "react";
 import SendInviteModal from "../../shared/sendInvite/SendInviteModal";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,6 @@ import {
 } from "../../../api/associations";
 import { sendInvite } from "../../../api/invite";
 import { getAllUsers } from "../../../api/user";
-import RequestsComponent from "../associationProfile/tabs/requestsTab/Requests";
 import { Association, Payload } from "../../../types/types";
 import ApprovalTable from "../associationProfile/tabs/requestsTab/components/ApprovalTable";
 import Spinner from "../../UI/spinner/Spinner";
@@ -123,7 +122,7 @@ const DashboardAssociations = () => {
       key: "email",
     },
     {
-      title: "User type",
+      title: "User",
       dataIndex: "user_type",
       key: "user_type",
     },
@@ -139,14 +138,16 @@ const DashboardAssociations = () => {
     const inviteDate = new Date(invite?.createdAt);
     const timeDifference = today.getTime() - inviteDate.getTime();
 
-    const expiresInDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const expiresInDays = Math.floor(
+      7 - timeDifference / (1000 * 60 * 60 * 24)
+    );
 
     return {
       key: index,
       name: invite?.name,
       email: invite?.email,
       user_type: invite?.user_type,
-      expiresIn: expiresInDays > 0 ? `${expiresInDays} days` : "Expired",
+      expiresIn: expiresInDays < 7 ? `${expiresInDays} days` : "Expired",
     };
   });
 
