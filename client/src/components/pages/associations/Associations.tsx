@@ -42,13 +42,20 @@ const Associations = () => {
       setAssociation(filteredAssociations);
       setAssociationSource(filteredAssociations);
       setFilterAssociation(filteredAssociations);
-      //associations names
+
       setAssociationIniciatives(
-        filterAssociations
-          .flatMap((association: Association) => association.iniciatives || [])
-          .map((initiative: Iniciatives) => initiative.title)
-          .filter(Boolean)
+        Array.from(
+          new Set(
+            filteredAssociations
+              .flatMap(
+                (association: Association) => association.iniciatives || []
+              )
+              .map((initiative: Iniciatives) => initiative.title)
+              .filter(Boolean)
+          )
+        )
       );
+
       setAssociationName(
         filteredAssociations.map(
           (association: Association) => association?.association_name

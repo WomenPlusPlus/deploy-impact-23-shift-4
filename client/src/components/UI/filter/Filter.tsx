@@ -29,10 +29,23 @@ const Filter = ({
       filteredCriteria.length === 0
         ? data
         : data.filter((item) => {
-            if (item[criteria] && Array.isArray(item[criteria])) {
+            console.log("item", item);
+            console.log("criteria", criteria);
+            if (item[criteria] && criteria === "iniciatives") {
               if (
                 item[criteria].some((field: any) =>
                   selectedCriteria.includes(field.title)
+                )
+              ) {
+                return item;
+              }
+            } else if (
+              item[criteria] &&
+              (criteria === "associations" || criteria === "values")
+            ) {
+              if (
+                item[criteria].some((field: any) =>
+                  selectedCriteria.includes(field)
                 )
               ) {
                 return item;
