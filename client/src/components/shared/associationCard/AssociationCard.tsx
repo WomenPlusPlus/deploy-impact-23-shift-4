@@ -54,19 +54,23 @@ const AssociationCard: React.FC<CardProps> = ({
         <p>{description}</p>
       </div>
       <hr className={styling.divider} />
-      <div className={styling.container}>
-        <div className={styling.labelContainer}>
-          {association?.iniciatives?.map((initiative, index) => (
-            <Labels
-              key={index}
-              color="var(--association-label)"
-              labelName={initiative?.title!}
-              customClass={styling.label}
-              disableCloseIcon
-            />
-          ))}
+      {association?.iniciatives && association?.iniciatives?.length > 0 ? (
+        <div className={styling.container}>
+          <div className={styling.labelContainer}>
+            {association?.iniciatives?.map((initiative, index) => (
+              <Labels
+                key={index}
+                color="var(--association-label)"
+                labelName={initiative?.title!}
+                customClass={styling.label}
+                disableCloseIcon
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <p className={styling.noInfo}>No initiatives</p>
+      )}
     </div>
   );
 };

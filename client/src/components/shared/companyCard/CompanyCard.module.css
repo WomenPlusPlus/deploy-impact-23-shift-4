@@ -35,6 +35,12 @@
   cursor: pointer;
 }
 
+.rowSubheader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .subheader {
   font-size: 1.6rem;
   font-weight: 600;

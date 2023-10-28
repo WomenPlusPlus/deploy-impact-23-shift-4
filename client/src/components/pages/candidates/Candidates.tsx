@@ -98,6 +98,7 @@ const Candidates = () => {
             user={user}
             user_type={userType}
             header={candidate?.preferred_title}
+            subheader={candidate?.job_status}
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {

@@ -161,6 +161,7 @@ export interface Skill {
   skill_name: string;
   skill_id?: string;
   skill_level?: string;
+  category?: "hard_skill" | "soft_skill";
 }
 
 export interface AllValues {
@@ -171,7 +172,7 @@ export interface AllValues {
 export interface AllSkill {
   name: string;
   id: string;
-  category: string;
+  category: "hard_skill" | "soft_skill";
 }
 
 export interface Section {

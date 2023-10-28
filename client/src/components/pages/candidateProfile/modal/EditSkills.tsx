@@ -3,7 +3,7 @@ import { Button, Modal, Input, Select } from "antd";
 import { IconEdit } from "@tabler/icons-react";
 import { Labels } from "../../../UI/labels/Label";
 import styling from "./EditSkills.module.css";
-import { Candidate, Skill } from "../../../../types/types";
+import { AllSkill, Candidate, Skill } from "../../../../types/types";
 
 const { Option } = Select;
 
@@ -12,7 +12,7 @@ interface EditSkillsProps {
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: string[];
+  allLabels: AllSkill[];
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
@@ -32,64 +32,91 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [candidateLabels, setCandidateLabels] = useState<Skill[]>([]);
-  const [filteredSkills, setFilteredSkills] = useState<string[]>([]);
+  const [candidateHardSkills, setCandidateHardSkills] = useState<Skill[]>([]);
+  const [candidateSoftSkills, setCandidateSoftSkills] = useState<Skill[]>([]);
+  const [filteredSkills, setFilteredSkills] = useState<AllSkill[]>([]);
 
-  useEffect(() => {
-    setCandidateLabels(candidate?.skills as Skill[]);
+  const fetchSkills = async () => {
+    // add only hard skills
+    console.log("candidate", candidate?.skills);
+    const hardSkills = (candidate?.skills as Skill[])?.filter(
+      (skill) => skill?.category === "hard_skill"
+    );
+    const softSkills = (candidate?.skills as Skill[])?.filter(
+      (skill) => skill?.category === "soft_skill"
+    );
+    setCandidateHardSkills(hardSkills);
+    setCandidateSoftSkills(softSkills);
     setFilteredSkills(allLabels);
     updateFilteredSkills(candidate?.skills as Skill[]);
+  };
+
+  useEffect(() => {
+    fetchSkills();
   }, [candidate, allLabels]);
 
   const handleSearchTextChange = (searchText: string) => {
     setSearchText(searchText);
-    updateFilteredSkills(candidateLabels, searchText);
+    updateFilteredSkills(candidateHardSkills, searchText);
   };
 
   const updateFilteredSkills = (
     skillsToDelete: Skill[],
     searchText?: string
   ) => {
-    const updatedFilteredSkills = allLabels?.filter((skill) => {
-      const isSkillInCandidate = skillsToDelete?.every(
-        (candidateSkill) => candidateSkill.skill_name !== skill
-      );
-      if (!searchText) {
-        return isSkillInCandidate;
-      } else {
-        return (
-          (isSkillInCandidate &&
-            skill?.toLowerCase().startsWith(searchText.toLowerCase())) ||
-          skill?.toLowerCase().includes(searchText.toLowerCase())
+    if (skillsToDelete?.length > 0) {
+      const updatedFilteredSkills = allLabels?.filter((skill) => {
+        const isSkillInCandidate = skillsToDelete?.every(
+          (candidateSkill) => candidateSkill?.skill_name !== skill?.name
         );
-      }
-    });
-    setFilteredSkills(updatedFilteredSkills);
+        if (!searchText) {
+          return isSkillInCandidate;
+        } else {
+          return (
+            (isSkillInCandidate &&
+              skill?.name
+                ?.toLowerCase()
+                .startsWith(searchText.toLowerCase())) ||
+            skill?.name?.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+      });
+      setFilteredSkills(updatedFilteredSkills);
+    }
   };
 
-  const handleCloseSkill = (skillToRemove: string) => {
-    const updatedSkills = candidateLabels.filter(
-      (skill) => skill.skill_name !== skillToRemove
+  const handleCloseHardSkill = (skillToRemove: string) => {
+    const updatedSkills = candidateHardSkills.filter(
+      (skill) => skill?.skill_name !== skillToRemove
     );
-    setCandidateLabels(updatedSkills as Skill[]);
+    setCandidateHardSkills(updatedSkills as Skill[]);
     updateFilteredSkills(updatedSkills);
   };
 
-  const addSkillToCandidateSkills = (skillToAdd: string) => {
-    // Check if candidateLabels is not empty
-    const candidateSkill = {
+  const handleCloseSoftSkill = (skillToRemove: string) => {
+    const updatedSkills = candidateSoftSkills.filter(
+      (skill) => skill?.skill_name !== skillToRemove
+    );
+    setCandidateSoftSkills(updatedSkills as Skill[]);
+    updateFilteredSkills(updatedSkills);
+  };
+
+  const addSkillToCandidateSkills = (skillToAdd: AllSkill) => {
+    // Check if candidateHardSkills is not empty
+    const candidateSkill: Skill = {
       skill_id: "",
-      skill_name: skillToAdd,
+      skill_name: skillToAdd?.name,
       skill_level: "",
+      category: skillToAdd?.category,
     };
 
-    if (candidateLabels) {
-      const updatedSkills = [...candidateLabels, candidateSkill];
-      setCandidateLabels(updatedSkills);
+    if (candidateHardSkills) {
+      const updatedSkills = [...candidateHardSkills, candidateSkill];
+      setCandidateHardSkills(updatedSkills);
       updateFilteredSkills(updatedSkills);
     } else {
-      // If it's empty, initialize candidateLabels with an array containing the skillToAdd
-      setCandidateLabels([candidateSkill]);
+      // If it's empty, initialize candidateHardSkills with an array containing the skillToAdd
+      setCandidateHardSkills([candidateSkill]);
       updateFilteredSkills([candidateSkill]);
     }
   };
@@ -100,15 +127,16 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     setTimeout(() => {
       setLoading(false);
       setVisible(false);
-      setCandidate({ ...candidate, skills: candidateLabels });
-      onSave && onSave({ ...candidate, skills: candidateLabels } as Candidate);
+      setCandidate({ ...candidate, skills: candidateHardSkills });
+      onSave &&
+        onSave({ ...candidate, skills: candidateHardSkills } as Candidate);
       setSearchText("");
     }, 300);
   };
 
   const handleCancel = () => {
     setVisible(false);
-    setCandidateLabels(candidate.skills as Skill[]);
+    setCandidateHardSkills(candidate?.skills as Skill[]);
     setFilteredSkills(allLabels);
     setSearchText("");
   };
@@ -141,35 +169,49 @@ const EditSkills: React.FC<EditSkillsProps> = ({
       >
         {/* Candidates skills */}
         <div className={styling.column}>
-          {candidateLabels &&
-            candidateLabels?.map((skill, index) => (
+          {candidateHardSkills &&
+            candidateHardSkills?.map((skill, index) => (
               <div className={styling.row} key={index}>
                 <Labels
                   icon={icon}
                   labelName={skill.skill_name}
-                  onCloseIcon={() => handleCloseSkill(skill.skill_name)}
+                  onCloseIcon={() => handleCloseHardSkill(skill.skill_name)}
                   disableCloseIcon={false}
                   customClass={styling.labelClassSelected}
                 />
-
-                <Select
-                  style={{ width: "100%" }}
-                  placeholder="Select skill level"
-                  defaultValue={skill.skill_level}
-                  onChange={(value) => {
-                    const updatedSkills = candidateLabels.map((item) =>
-                      item.skill_id === skill.skill_id
-                        ? { ...item, skill_level: value }
-                        : item
-                    );
-                    setCandidateLabels(updatedSkills);
-                  }}
-                >
-                  <Option value="beginner">🌱 Beginner</Option>
-                  <Option value="intermediate">🌟 Intermediate</Option>
-                  <Option value="advanced">🚀 Advanced</Option>
-                  <Option value="pro">🌌 Pro</Option>
-                </Select>
+                {skill?.category === "hard_skill" && (
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Select skill level"
+                    defaultValue={skill.skill_level}
+                    onChange={(value) => {
+                      const updatedSkills = candidateHardSkills?.map((item) =>
+                        item.skill_id === skill.skill_id
+                          ? { ...item, skill_level: value }
+                          : item
+                      );
+                      setCandidateHardSkills(updatedSkills);
+                    }}
+                  >
+                    <Option value="beginner">🌱 Beginner</Option>
+                    <Option value="intermediate">🌟 Intermediate</Option>
+                    <Option value="advanced">🚀 Advanced</Option>
+                    <Option value="pro">🌌 Pro</Option>
+                  </Select>
+                )}
+              </div>
+            ))}
+          {candidateSoftSkills &&
+            candidateSoftSkills?.length > 0 &&
+            candidateSoftSkills?.map((skill, index) => (
+              <div className={styling.row} key={index}>
+                <Labels
+                  icon={icon}
+                  labelName={skill.skill_name}
+                  onCloseIcon={() => handleCloseSoftSkill(skill.skill_name)}
+                  disableCloseIcon={false}
+                  customClass={styling.labelClassSelected}
+                />
               </div>
             ))}
         </div>
@@ -182,21 +224,25 @@ const EditSkills: React.FC<EditSkillsProps> = ({
         <div className={styling.elementInOneRow}>
           {filteredSkills && (
             <>
-              {filteredSkills.slice(0, 10).map((skill, index) => (
+              {filteredSkills?.slice(0, 10).map((skill, index) => (
                 <Labels
                   key={index}
                   icon={icon}
-                  labelName={skill}
+                  labelName={skill.name}
                   disableCloseIcon={true}
-                  customClass={styling.labelClass}
+                  customClass={
+                    skill?.category === "hard_skill"
+                      ? styling.labelHardSkill
+                      : styling.labelSoftSkill
+                  }
                   onClickHandle={() => addSkillToCandidateSkills(skill)}
                 />
               ))}
-              {filteredSkills.length > 10 && (
+              {filteredSkills?.length > 10 && (
                 <Labels
                   key="more-label"
                   labelName={`+ ${filteredSkills.length - 10} more`}
-                  customClass={styling.labelClass}
+                  customClass={styling.labelHardSkill}
                   disableCloseIcon={true}
                 />
               )}

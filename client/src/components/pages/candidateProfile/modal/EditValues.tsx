@@ -48,21 +48,23 @@ const EditValues: React.FC<EditValuesProps> = ({
     valuesToDelete: string[],
     searchText?: string
   ) => {
-    const updatedFilteredValues = allLabels?.filter((value) => {
-      const isValueInCandidate = valuesToDelete?.every(
-        (candidateValue) => candidateValue !== value
-      );
-      if (!searchText) {
-        return isValueInCandidate;
-      } else {
-        return (
-          (isValueInCandidate &&
-            value?.toLowerCase().startsWith(searchText.toLowerCase())) ||
-          value?.toLowerCase().includes(searchText.toLowerCase())
+    if (valuesToDelete?.length > 0) {
+      const updatedFilteredValues = allLabels?.filter((value) => {
+        const isValueInCandidate = valuesToDelete?.every(
+          (candidateValue) => candidateValue !== value
         );
-      }
-    });
-    setFilteredValues(updatedFilteredValues);
+        if (!searchText) {
+          return isValueInCandidate;
+        } else {
+          return (
+            (isValueInCandidate &&
+              value?.toLowerCase().startsWith(searchText.toLowerCase())) ||
+            value?.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+      });
+      setFilteredValues(updatedFilteredValues);
+    }
   };
 
   const handleCloseValue = (valueToRemove: string) => {
@@ -163,11 +165,11 @@ const EditValues: React.FC<EditValuesProps> = ({
                   onClickHandle={() => addSkillToDeleteState(value)}
                 />
               ))}
-              {filteredValues.length > 10 && (
+              {filteredValues?.length > 10 && (
                 <Labels
                   key="more-label"
                   icon={icon}
-                  labelName={`+ ${filteredValues.length - 10} more`}
+                  labelName={`+ ${filteredValues?.length - 10} more`}
                   disableCloseIcon={true}
                   customClass={styling.labelClass}
                 />

@@ -118,6 +118,7 @@ const Shortlist = () => {
                 candidate={candidate}
                 user={user}
                 header={candidate?.preferred_title}
+                subheader={candidate?.job_status}
                 associations={candidate?.associations}
                 skills={candidate?.skills}
                 onClickRedirect={() => {

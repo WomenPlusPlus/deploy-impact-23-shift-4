@@ -33,6 +33,7 @@ const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
 const fieldsToDisplayProfile = [
   "First name",
   "Last name",
+  "Preferred Title",
   "Job status",
   "City",
   "Country",

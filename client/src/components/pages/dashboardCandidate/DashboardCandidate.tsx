@@ -89,12 +89,9 @@ const DashboardCandidate: React.FC = () => {
               <h2 className={styling.headerTitle}>Welcome!</h2>
             )}
             {candidate?.experience ? (
-              <p className={styling.roleYes}>
-                {" "}
-                {candidate?.experience[0]?.role}
-              </p>
+              <p className={styling.roleYes}> {candidate?.preferred_title}</p>
             ) : (
-              <p className={styling.role}>Add your current role</p>
+              <p className={styling.role}>Add your preferred title</p>
             )}
           </div>
 
@@ -120,7 +117,13 @@ const DashboardCandidate: React.FC = () => {
               </div>
 
               <div>
-                <Button>Complete your profile</Button>
+                <Button
+                  onClick={() =>
+                    navigate(`/candidate-profile/${candidate?.id}`)
+                  }
+                >
+                  Complete your profile
+                </Button>
               </div>
             </div>
           </CardContainer>
