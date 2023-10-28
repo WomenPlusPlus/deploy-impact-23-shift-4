@@ -64,7 +64,7 @@ const CandidateProfile = () => {
   // loading
   const [isLoading, setIsLoading] = useState(true);
 
-  const [allSkills, setAllSkills] = useState([]);
+  const [allSkills, setAllSkills] = useState<AllSkill[]>([]);
   const [allValues, setAllValues] = useState([]);
   const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
   // count null categories
@@ -93,14 +93,11 @@ const CandidateProfile = () => {
       const skills = await getAllSkills();
       const values = await getAllValues();
       const candidateFetched = await getCandidateById(auth?.user?.id);
-      const allSkill = skills.map((skill: AllSkill) => {
-        return skill.name;
-      });
       const allValues = values.map((value: AllValues) => {
         return value.name;
       });
       setAllValues(allValues);
-      setAllSkills(allSkill);
+      setAllSkills(skills);
       setCandidate(candidateFetched);
       const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
@@ -417,7 +414,7 @@ const CandidateProfile = () => {
       >
         <div className={styling.profileCompletedEditIcon}>
           <div>
-            <h3 className={styling.h3}>Skills</h3>
+            <h3 className={styling.h3}>Hard skills & Soft skills</h3>
             <SkillsLevelGuide />
           </div>
           <EditSkills
