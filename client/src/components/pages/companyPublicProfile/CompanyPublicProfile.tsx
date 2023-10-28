@@ -11,7 +11,6 @@ import {
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
-import { Spin } from "antd";
 import Spinner from "../../UI/spinner/Spinner";
 
 const CompanyPublicProfile = () => {

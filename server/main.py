@@ -46,7 +46,7 @@ from routes.jobs import add_job
 from routes.jobs import delete_job
 from routes.jobs import update_job
 from routes.matching import match_candidates
-from routes.matching import match_jobs_async as match_jobs
+from routes.matching import match_jobs as match_jobs
 
 # Env
 from dotenv import load_dotenv

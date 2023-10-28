@@ -13,7 +13,7 @@ with open("model/vectorizer.pkl", "rb") as file:
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
-    # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
+   
     candidate_skills = [
         "_".join(skill.lower().split(" ")) for skill in candidate_skills
     ]
@@ -69,20 +69,10 @@ def match_jobs_route(domain_name):
                 if jobs_response.status_code == 200:
                     jobs = jobs_response.json()["jobs"]
 
-                    existing_matching_jobs = candidate.json()["candidates"].get(
-                        "matching_jobs", []
-                    )
-
                     for job in jobs:
                         job_skills = [skill["skill_name"] for skill in job["skills"]]
-                        # if cand_skills and any(item in cand_skills for item in job_skills_ids):
+                       
                         job_id = job["id"]
-
-                        if any(
-                            matching_job["id"] == job_id
-                            for matching_job in existing_matching_jobs
-                        ):
-                            continue
 
                         count = 4
                         total_score = 0
@@ -107,8 +97,7 @@ def match_jobs_route(domain_name):
 
                             job_score = round(total_score / count, 1)
 
-                            # TODO: increase threshold to 60
-                            if job_score >= 20:
+                            if job_score >= 60:
                                 job_match.append({"id": job_id, "score": job_score})
                                 if job["matching_candidates"]:
                                     duplicate = [
@@ -139,9 +128,6 @@ def match_jobs_route(domain_name):
                                     f"{domain_name}/api/update_job",
                                     json=update_job_json,
                                 )
-
-                    if len(job_match) == 0:
-                        return jsonify({"message": "No matching jobs"}), 200
 
                     update_json = {"user_id": id, "matching_jobs": job_match}
                     update_cand = requests.put(
