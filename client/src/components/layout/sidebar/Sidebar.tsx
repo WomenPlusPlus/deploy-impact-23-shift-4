@@ -17,7 +17,6 @@ import {
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
-import { get } from "http";
 const axios = configureAxios();
 
 const { Sider } = AntLayout;
@@ -58,12 +57,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   }
 
   // Set permissions for sidebar items
-  const isCompaniesVisible = auth?.user?.user_type === "company" ? false : true;
-  const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
+  const isCompaniesVisible = auth?.user?.user_type !== "company";
+  const isTalentVisible = auth?.user?.user_type !== "candidate";
   const isShortListVisible =
-    auth?.user?.user_type === "association" || "admin" ? false : true;
+    auth?.user?.user_type !== "association" &&
+    auth?.user?.user_type !== "admin";
   const isFaqVisible =
-    auth?.user?.user_type === "association" || "admin" ? false : true;
+    auth?.user?.user_type !== "association" &&
+    auth?.user?.user_type !== "admin";
 
   const topItems: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),

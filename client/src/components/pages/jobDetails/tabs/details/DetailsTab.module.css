@@ -42,6 +42,16 @@
   margin-top: 1.5rem;
 }
 
+.skillsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sideSkills {
+  width: 100%;
+}
+
 .applyDiv {
   background-color: var(--blue-dark);
   color: white;
