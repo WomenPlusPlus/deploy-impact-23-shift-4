@@ -74,7 +74,7 @@ const AssociationProfile = () => {
 
   const tabs = [
     {
-      label: "Iniciatives",
+      label: "Initiatives",
       key: "1",
       children: (
         <IniciativesComponent

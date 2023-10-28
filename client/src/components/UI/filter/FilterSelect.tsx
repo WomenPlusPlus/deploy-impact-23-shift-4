@@ -35,13 +35,12 @@ const FilterSelect: React.FC<multiOptionProps> = ({
       groupName: "Work Locations",
       key: "work_location",
       options: [
-        { value: "Office", label: "Office" },
+        { value: "Remote", label: "Remote" },
         { value: "Hybrid", label: "Hybrid" },
         { value: "On site", label: "On site" },
       ],
     },
   ];
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [internalSelectedOptions, setInternalSelectedOptions] =
     useState<string[]>(selectedValues);
 
@@ -51,7 +50,6 @@ const FilterSelect: React.FC<multiOptionProps> = ({
 
   const handleSelectChange = (selectedValues: string[]) => {
     setInternalSelectedOptions(selectedValues);
-    setSelectedOptions(selectedValues);
     const selectedFilters = filterData(selectedValues, data);
     onSearch(selectedFilters);
     onSelectChange(selectedValues);

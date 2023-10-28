@@ -74,8 +74,6 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
     setCandidateFields(initialCandidateFields);
   }, []);
 
-  console.log("candidateFields", candidateFields);
-
   const handleAddField = () => {
     if (selectedField) {
       if (

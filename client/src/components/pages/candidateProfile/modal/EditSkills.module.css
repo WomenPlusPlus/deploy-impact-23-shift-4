@@ -3,15 +3,26 @@
   border-radius: var(--tag-radius);
 }
 
-.labelClass {
+.labelHardSkill {
   background-color: var(--white);
   border-radius: var(--tag-radius);
   border: 1px solid var(--gray-dark);
   cursor: pointer;
 }
 
-.labelClass:hover {
+.labelHardSkill:hover {
   background-color: var(--gray-bright);
+}
+
+.labelSoftSkill {
+  background-color: var(--gray-bright);
+  border-radius: var(--tag-radius);
+  border: 1px solid var(--gray-dark);
+  cursor: pointer;
+}
+
+.labelSoftSkill:hover {
+  background-color: var(--gray-light);
 }
 
 .elementInOneRow {

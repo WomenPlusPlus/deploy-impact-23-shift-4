@@ -120,7 +120,7 @@ const Companies = () => {
             key={index}
             header={company?.company_name}
             companyName={company?.company_name}
-            subheader={company?.address}
+            subheader={company?.address ? company?.address : "No address"}
             associations={company?.associations}
             values={company?.values}
             onClickRedirect={() => {

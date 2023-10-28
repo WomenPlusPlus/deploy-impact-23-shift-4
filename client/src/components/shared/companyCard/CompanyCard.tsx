@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styling from "./CompanyCard.module.css";
-import { IconBookmark, IconExternalLink } from "@tabler/icons-react";
+import { IconBookmark, IconExternalLink, IconMap, IconMapPin } from "@tabler/icons-react";
 import { Labels } from "../../UI/labels/Label";
 import Avatar from "../../UI/avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
@@ -145,7 +145,10 @@ const CompanyCard: React.FC<CardProps> = ({
           <h2 className={styling.header} onClick={onClickRedirect}>
             {header}
           </h2>
-          <p className={styling.subheader}>{subheader}</p>
+          <div className={styling.rowSubheader}>
+            <IconMapPin size={20} />
+            <p className={styling.subheader}>{subheader}</p>
+          </div>
         </div>
         <div className={styling.topRightIcon}>
           {renderBookmark()}
