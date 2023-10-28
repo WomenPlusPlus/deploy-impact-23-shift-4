@@ -77,12 +77,14 @@ const Candidates = () => {
         />
         <div className={"filter-dropdown"}>
           <Filter
+            placeholder="Skills"
             options={skillsOptions}
             data={candidates}
             criteria="skills"
             onFilterChange={handleFilterChange}
           />
           <Filter
+            placeholder="Associations"
             options={associationsOptions}
             data={candidates}
             criteria="associations"

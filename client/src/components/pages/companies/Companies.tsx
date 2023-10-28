@@ -99,12 +99,14 @@ const Companies = () => {
         />
         <div className={styling.filterDropdown}>
           <Filter
+            placeholder="Values"
             options={values}
             data={companies}
             criteria="values"
             onFilterChange={handleFilterChange}
           />
           <Filter
+            placeholder="Associations"
             options={associationsOptions}
             data={companies}
             criteria="associations"
