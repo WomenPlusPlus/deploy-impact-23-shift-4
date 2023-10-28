@@ -13,7 +13,7 @@ with open("model/vectorizer.pkl", "rb") as file:
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
-   
+
     candidate_skills = [
         "_".join(skill.lower().split(" ")) for skill in candidate_skills
     ]
@@ -46,88 +46,111 @@ def match_jobs_route(domain_name):
                 id = data.get("user_id")
 
                 job_match = []
+                cand_skills = []
+                cand_levels = []
+                cand_values = []
+                cand_soft_skills = []
+
                 cand_json = {"user_id": id}
 
                 candidate = requests.post(
                     f"{domain_name}/api/get_candidate_by_id", json=cand_json
                 )
-                print("CANDIDATE", candidate.json())
                 if candidate.status_code == 200:
-                    cand_skills = [
-                        skill["skill_name"]
-                        for skill in candidate.json()["candidates"]["skills"]
-                    ]
-                    cand_levels = [
-                        skill["skill_level"]
-                        for skill in candidate.json()["candidates"]["skills"]
-                    ]
-                    cand_values = candidate.json()["candidates"]["values"]
-                    cand_soft_skills = candidate.json()["candidates"]["soft_skills"]
+                    if len(candidate.json()["candidates"]["skills"]) > 0:
+                        candidate_skills = [
+                            skill["skill_name"]
+                            for skill in candidate.json()["candidates"]["skills"]
+                        ]
+                        candidate_skills.append(cand_skills)
+                        candidate_levels = [
+                            skill["skill_level"]
+                            for skill in candidate.json()["candidates"]["skills"]
+                        ]
+                        candidate_levels.append(cand_levels)
+
+                    if len(candidate.json()["candidates"]["values"]) > 0:
+                        candidate_values = candidate.json()["candidates"]["values"]
+                        cand_values.append(candidate_values)
+
+                    if len(candidate.json()["candidates"]["soft_skills"]) > 0:
+                        candidate_soft_skills = candidate.json()["candidates"][
+                            "soft_skills"
+                        ]
+                        cand_soft_skills.append(candidate_soft_skills)
 
                 jobs_response = requests.get(f"{domain_name}/api/get_all_jobs")
-                print("JOBS", jobs_response.json())
                 if jobs_response.status_code == 200:
                     jobs = jobs_response.json()["jobs"]
 
                     for job in jobs:
-                        job_skills = [skill["skill_name"] for skill in job["skills"]]
-                       
-                        job_id = job["id"]
+                        if len(job["skills"]) > 0:
+                            job_skills = [
+                                skill["skill_name"] for skill in job["skills"]
+                            ]
 
-                        count = 4
-                        total_score = 0
+                            job_id = job["id"]
 
-                        if job_skills:
-                            job_tech_score = score(job_skills, cand_skills, cand_levels)
-                            total_score += 4 * job_tech_score
+                            count = 4
+                            total_score = 0
 
-                            if job["values"]:
-                                count += 1
-                                if cand_values:
-                                    job_val_score = score(job["values"], cand_values)
-                                    total_score += job_val_score
+                            if job_skills and len(cand_skills) > 0:
+                                job_tech_score = score(
+                                    job_skills, cand_skills, cand_levels
+                                )
+                                total_score += 4 * job_tech_score
 
-                            if job["soft_skills"]:
-                                count += 2
-                                if cand_soft_skills:
-                                    job_soft_score = score(
-                                        job["soft_skills"], cand_soft_skills
-                                    )
-                                    total_score += 2 * job_soft_score
-
-                            job_score = round(total_score / count, 1)
-
-                            if job_score >= 60:
-                                job_match.append({"id": job_id, "score": job_score})
-                                if job["matching_candidates"]:
-                                    duplicate = [
-                                        ix
-                                        for ix, cand in enumerate(
-                                            job["matching_candidates"]
+                                if job["values"] and len(cand_values) > 0:
+                                    count += 1
+                                    if cand_values:
+                                        job_val_score = score(
+                                            job["values"], cand_values
                                         )
-                                        if cand["id"] == id
-                                    ]
-                                    if duplicate:
-                                        job["matching_candidates"][duplicate[0]][
-                                            "score"
-                                        ] = job_score
+                                        total_score += job_val_score
+
+                                if job["soft_skills"] and len(cand_soft_skills) > 0:
+                                    count += 2
+                                    if cand_soft_skills:
+                                        job_soft_score = score(
+                                            job["soft_skills"], cand_soft_skills
+                                        )
+                                        total_score += 2 * job_soft_score
+
+                                job_score = round(total_score / count, 1)
+
+                                if job_score >= 60:
+                                    job_match.append({"id": job_id, "score": job_score})
+                                    if job["matching_candidates"]:
+                                        duplicate = [
+                                            ix
+                                            for ix, cand in enumerate(
+                                                job["matching_candidates"]
+                                            )
+                                            if cand["id"] == id
+                                        ]
+                                        if duplicate:
+                                            job["matching_candidates"][duplicate[0]][
+                                                "score"
+                                            ] = job_score
+                                        else:
+                                            job["matching_candidates"].append(
+                                                {"id": id, "score": job_score}
+                                            )
                                     else:
+                                        job["matching_candidates"] = []
                                         job["matching_candidates"].append(
                                             {"id": id, "score": job_score}
                                         )
-                                else:
-                                    job["matching_candidates"] = []
-                                    job["matching_candidates"].append(
-                                        {"id": id, "score": job_score}
+                                    update_job_json = {
+                                        "job_id": job_id,
+                                        "matching_candidates": job[
+                                            "matching_candidates"
+                                        ],
+                                    }
+                                    update_job_response = requests.put(
+                                        f"{domain_name}/api/update_job",
+                                        json=update_job_json,
                                     )
-                                update_job_json = {
-                                    "job_id": job_id,
-                                    "matching_candidates": job["matching_candidates"],
-                                }
-                                update_job_response = requests.put(
-                                    f"{domain_name}/api/update_job",
-                                    json=update_job_json,
-                                )
 
                     update_json = {"user_id": id, "matching_jobs": job_match}
                     update_cand = requests.put(

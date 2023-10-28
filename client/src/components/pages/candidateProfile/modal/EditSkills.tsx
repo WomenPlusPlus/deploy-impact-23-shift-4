@@ -12,7 +12,8 @@ interface EditSkillsProps {
   setCandidate: (updatedCandidate: Candidate) => void;
   icon: React.ReactNode;
   titleName: string;
-  allLabels: AllSkill[];
+  allHardSkills: AllSkill[];
+  allSoftSkills: string[];
   onSave?: (arg: Candidate) => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
@@ -24,7 +25,8 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   icon,
   titleName,
   setCandidate,
-  allLabels,
+  allHardSkills,
+  allSoftSkills,
   onSave,
   visible,
   setVisible,
@@ -32,32 +34,39 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [searchSoftSkills, setSearchSoftSkills] = useState("");
   const [candidateHardSkills, setCandidateHardSkills] = useState<Skill[]>([]);
-  const [candidateSoftSkills, setCandidateSoftSkills] = useState<Skill[]>([]);
+  const [candidateSoftSkills, setCandidateSoftSkills] = useState<string[]>([]);
   const [filteredSkills, setFilteredSkills] = useState<AllSkill[]>([]);
+  const [filteredSoftSkills, setFilteredSoftSkills] = useState<string[]>([]);
 
   const fetchSkills = async () => {
-    // add only hard skills
-    console.log("candidate", candidate?.skills);
-    const hardSkills = (candidate?.skills as Skill[])?.filter(
+    const hardSkills = (allHardSkills as AllSkill[])?.filter(
       (skill) => skill?.category === "hard_skill"
     );
-    const softSkills = (candidate?.skills as Skill[])?.filter(
+    const softSkills = (allHardSkills as AllSkill[])?.filter(
       (skill) => skill?.category === "soft_skill"
     );
-    setCandidateHardSkills(hardSkills);
-    setCandidateSoftSkills(softSkills);
-    setFilteredSkills(allLabels);
+    setCandidateHardSkills(candidate?.skills as Skill[]);
+    setCandidateSoftSkills(candidate?.soft_skills as string[]);
+    setFilteredSkills(hardSkills);
+    setFilteredSoftSkills(softSkills?.map((skill) => skill?.name));
     updateFilteredSkills(candidate?.skills as Skill[]);
+    updateFilteredSoftSkills(candidate?.soft_skills as string[]);
   };
 
   useEffect(() => {
     fetchSkills();
-  }, [candidate, allLabels]);
+  }, [candidate, allHardSkills]);
 
   const handleSearchTextChange = (searchText: string) => {
     setSearchText(searchText);
     updateFilteredSkills(candidateHardSkills, searchText);
+  };
+
+  const handleSearchSoftSkills = (searchText: string) => {
+    setSearchSoftSkills(searchText);
+    updateFilteredSoftSkills(candidateSoftSkills, searchText);
   };
 
   const updateFilteredSkills = (
@@ -65,7 +74,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     searchText?: string
   ) => {
     if (skillsToDelete?.length > 0) {
-      const updatedFilteredSkills = allLabels?.filter((skill) => {
+      const updatedFilteredSkills = allHardSkills?.filter((skill) => {
         const isSkillInCandidate = skillsToDelete?.every(
           (candidateSkill) => candidateSkill?.skill_name !== skill?.name
         );
@@ -93,12 +102,48 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     updateFilteredSkills(updatedSkills);
   };
 
+  const updateFilteredSoftSkills = (
+    skillsToDelete: string[],
+    searchText?: string
+  ) => {
+    if (skillsToDelete?.length > 0) {
+      const updatedFilteredSkills = allSoftSkills?.filter((skill) => {
+        const isSkillInCandidate = skillsToDelete?.every(
+          (candidateSkill) => candidateSkill !== skill
+        );
+        if (!searchText) {
+          return isSkillInCandidate;
+        } else {
+          return (
+            (isSkillInCandidate &&
+              skill?.toLowerCase().startsWith(searchText.toLowerCase())) ||
+            skill?.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+      });
+      setFilteredSoftSkills(updatedFilteredSkills);
+    }
+  };
+
   const handleCloseSoftSkill = (skillToRemove: string) => {
     const updatedSkills = candidateSoftSkills.filter(
-      (skill) => skill?.skill_name !== skillToRemove
+      (skill) => skill !== skillToRemove
     );
-    setCandidateSoftSkills(updatedSkills as Skill[]);
-    updateFilteredSkills(updatedSkills);
+    setCandidateSoftSkills(updatedSkills as string[]);
+    updateFilteredSoftSkills(updatedSkills);
+  };
+
+  const addSoftSkillToCandidateSkills = (skillToAdd: string) => {
+    // Check if candidateHardSkills is not empty
+    if (candidateSoftSkills && skillToAdd) {
+      const updatedSkills = [...candidateSoftSkills, skillToAdd];
+      setCandidateSoftSkills(updatedSkills);
+      updateFilteredSoftSkills(updatedSkills);
+    } else {
+      // If it's empty, initialize candidateHardSkills with an array containing the skillToAdd
+      setCandidateSoftSkills([skillToAdd]);
+      updateFilteredSoftSkills([skillToAdd]);
+    }
   };
 
   const addSkillToCandidateSkills = (skillToAdd: AllSkill) => {
@@ -107,10 +152,9 @@ const EditSkills: React.FC<EditSkillsProps> = ({
       skill_id: "",
       skill_name: skillToAdd?.name,
       skill_level: "",
-      category: skillToAdd?.category,
     };
 
-    if (candidateHardSkills) {
+    if (candidateHardSkills && skillToAdd?.category === "hard_skill") {
       const updatedSkills = [...candidateHardSkills, candidateSkill];
       setCandidateHardSkills(updatedSkills);
       updateFilteredSkills(updatedSkills);
@@ -127,9 +171,17 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     setTimeout(() => {
       setLoading(false);
       setVisible(false);
-      setCandidate({ ...candidate, skills: candidateHardSkills });
+      setCandidate({
+        ...candidate,
+        skills: candidateHardSkills,
+        soft_skills: candidateSoftSkills,
+      });
       onSave &&
-        onSave({ ...candidate, skills: candidateHardSkills } as Candidate);
+        onSave({
+          ...candidate,
+          skills: candidateHardSkills,
+          soft_skills: candidateSoftSkills,
+        } as Candidate);
       setSearchText("");
     }, 300);
   };
@@ -137,7 +189,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   const handleCancel = () => {
     setVisible(false);
     setCandidateHardSkills(candidate?.skills as Skill[]);
-    setFilteredSkills(allLabels);
+    setFilteredSkills(allHardSkills);
     setSearchText("");
   };
 
@@ -153,6 +205,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
         title={titleName}
         onOk={handleOk}
         onCancel={handleCancel}
+        style={{ minWidth: "1000px" }}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
@@ -167,87 +220,137 @@ const EditSkills: React.FC<EditSkillsProps> = ({
           </Button>,
         ]}
       >
-        {/* Candidates skills */}
-        <div className={styling.column}>
-          {candidateHardSkills &&
-            candidateHardSkills?.map((skill, index) => (
-              <div className={styling.row} key={index}>
-                <Labels
-                  icon={icon}
-                  labelName={skill.skill_name}
-                  onCloseIcon={() => handleCloseHardSkill(skill.skill_name)}
-                  disableCloseIcon={false}
-                  customClass={styling.labelClassSelected}
-                />
-                {skill?.category === "hard_skill" && (
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Select skill level"
-                    defaultValue={skill.skill_level}
-                    onChange={(value) => {
-                      const updatedSkills = candidateHardSkills?.map((item) =>
-                        item.skill_id === skill.skill_id
-                          ? { ...item, skill_level: value }
-                          : item
-                      );
-                      setCandidateHardSkills(updatedSkills);
-                    }}
-                  >
-                    <Option value="beginner">🌱 Beginner</Option>
-                    <Option value="intermediate">🌟 Intermediate</Option>
-                    <Option value="advanced">🚀 Advanced</Option>
-                    <Option value="pro">🌌 Pro</Option>
-                  </Select>
+        <div className={styling.editSkillsDiv}>
+          {/* Candidates skills */}
+          <div className={styling.candidateSkills}>
+            {/* Candidates hard skills */}
+            <div className={styling.candidateHardSkills}>
+              {candidateHardSkills &&
+                candidateHardSkills?.map((skill, index) => (
+                  <div className={styling.row} key={index}>
+                    <Labels
+                      icon={icon}
+                      labelName={skill.skill_name}
+                      onCloseIcon={() => handleCloseHardSkill(skill.skill_name)}
+                      disableCloseIcon={false}
+                      customClass={styling.labelClassSelected}
+                    />
+                    <Select
+                      style={{ width: "50%" }}
+                      placeholder="Select skill level"
+                      defaultValue={skill.skill_level}
+                      onChange={(value) => {
+                        const updatedSkills = candidateHardSkills?.map((item) =>
+                          item.skill_id === skill.skill_id
+                            ? { ...item, skill_level: value }
+                            : item
+                        );
+                        setCandidateHardSkills(updatedSkills);
+                      }}
+                    >
+                      <Option value="beginner">🌱 Beginner</Option>
+                      <Option value="intermediate">🌟 Intermediate</Option>
+                      <Option value="advanced">🚀 Advanced</Option>
+                      <Option value="pro">🌌 Pro</Option>
+                    </Select>
+                  </div>
+                ))}
+            </div>
+            {/* Candidates soft skills */}
+            <div className={styling.candidateSoftSkills}>
+              {/* Candidate soft skills */}
+              {candidateSoftSkills &&
+                candidateSoftSkills?.length > 0 &&
+                candidateSoftSkills?.map((skill, index) => (
+                  <div className={styling.row} key={index}>
+                    <Labels
+                      icon={icon}
+                      labelName={skill}
+                      onCloseIcon={() => handleCloseSoftSkill(skill)}
+                      disableCloseIcon={false}
+                      customClass={styling.labelClassSelected}
+                    />
+                  </div>
+                ))}
+            </div>
+          </div>
+          {/* All skills */}
+          <div className={styling.allSkills}>
+            {/* Search bar Hard skills */}
+            <div className={styling.hardSkillDiv}>
+              <Input
+                className={styling.searchInput}
+                style={{ width: "100%" }}
+                placeholder="Search Hard Skills"
+                value={searchText}
+                onChange={(e) => handleSearchTextChange(e.target.value)}
+              />
+              {/* Hard Skills */}
+              <h3>Hard Skills</h3>
+              <div className={styling.elementInOneRow}>
+                {filteredSkills && (
+                  <>
+                    {filteredSkills?.slice(0, 10).map((skill, index) => (
+                      <Labels
+                        key={index}
+                        icon={icon}
+                        labelName={skill.name}
+                        disableCloseIcon={true}
+                        customClass={styling.labelHardSkill}
+                        onClickHandle={() => addSkillToCandidateSkills(skill)}
+                      />
+                    ))}
+                    {filteredSkills?.length > 10 && (
+                      <Labels
+                        key="more-label"
+                        labelName={`+ ${filteredSkills.length - 10} more`}
+                        customClass={styling.labelHardSkill}
+                        disableCloseIcon={true}
+                      />
+                    )}
+                  </>
                 )}
               </div>
-            ))}
-          {candidateSoftSkills &&
-            candidateSoftSkills?.length > 0 &&
-            candidateSoftSkills?.map((skill, index) => (
-              <div className={styling.row} key={index}>
-                <Labels
-                  icon={icon}
-                  labelName={skill.skill_name}
-                  onCloseIcon={() => handleCloseSoftSkill(skill.skill_name)}
-                  disableCloseIcon={false}
-                  customClass={styling.labelClassSelected}
-                />
+            </div>
+            {/* Soft skills */}
+            {/* Search bar Soft skills */}
+            <div className={styling.softSkillDiv}>
+              <Input
+                className={styling.searchInput}
+                style={{ width: "100%" }}
+                placeholder="Search Soft Skills"
+                value={searchSoftSkills}
+                onChange={(e) => handleSearchSoftSkills(e.target.value)}
+              />
+              <h3>Soft Skills</h3>
+              <div className={styling.elementInOneRow}>
+                {filteredSoftSkills && (
+                  <>
+                    {filteredSoftSkills?.slice(0, 10).map((skill, index) => (
+                      <Labels
+                        key={index}
+                        icon={icon}
+                        labelName={skill}
+                        disableCloseIcon={true}
+                        customClass={styling.labelSoftSkill}
+                        onClickHandle={() =>
+                          addSoftSkillToCandidateSkills(skill)
+                        }
+                      />
+                    ))}
+                    {filteredSoftSkills?.length > 10 && (
+                      <Labels
+                        key="more-label"
+                        labelName={`+ ${filteredSkills.length - 10} more`}
+                        customClass={styling.labelSoftSkill}
+                        disableCloseIcon={true}
+                      />
+                    )}
+                  </>
+                )}
               </div>
-            ))}
-        </div>
-        <Input
-          className={styling.searchInput}
-          placeholder="Search Skills"
-          value={searchText}
-          onChange={(e) => handleSearchTextChange(e.target.value)}
-        />
-        <div className={styling.elementInOneRow}>
-          {filteredSkills && (
-            <>
-              {filteredSkills?.slice(0, 10).map((skill, index) => (
-                <Labels
-                  key={index}
-                  icon={icon}
-                  labelName={skill.name}
-                  disableCloseIcon={true}
-                  customClass={
-                    skill?.category === "hard_skill"
-                      ? styling.labelHardSkill
-                      : styling.labelSoftSkill
-                  }
-                  onClickHandle={() => addSkillToCandidateSkills(skill)}
-                />
-              ))}
-              {filteredSkills?.length > 10 && (
-                <Labels
-                  key="more-label"
-                  labelName={`+ ${filteredSkills.length - 10} more`}
-                  customClass={styling.labelHardSkill}
-                  disableCloseIcon={true}
-                />
-              )}
-            </>
-          )}
+            </div>
+          </div>
         </div>
       </Modal>
     </>
