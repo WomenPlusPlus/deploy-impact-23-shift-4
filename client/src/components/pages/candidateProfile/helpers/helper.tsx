@@ -95,6 +95,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   notice_period: "Job Preferences",
   job_status: "Personal Info",
   preferred_jobs: "Type of jobs",
+  preferred_title: "Profile",
   company_type: "Experience",
   matching_jobs: "",
   matching_companies: "",

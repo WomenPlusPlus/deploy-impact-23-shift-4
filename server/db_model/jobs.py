@@ -19,7 +19,7 @@ def init_jobs_model(db):
             db.String(80), db.ForeignKey("user.id"), nullable=False
         )  # Company ID as a string from the user table
         title = db.Column(db.String(256))  # Title as a string
-        description = db.Column(db.String(1000))  # Description as a string
+        description = db.Column(db.String(10000))  # Description as a string
         values = db.Column(
             db.ARRAY(db.String)
         )  # Values as an array of foreign keys (integer)

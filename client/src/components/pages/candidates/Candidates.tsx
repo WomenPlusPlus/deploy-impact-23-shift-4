@@ -47,7 +47,7 @@ const Candidates = () => {
       } else if (userType === "company") {
         const company = await getCompanyById(userId);
         setUser(company);
-      } 
+      }
       setCandidates(candidates);
       setFilteredCandidates(candidates);
       setIsLoading(false);
@@ -97,10 +97,7 @@ const Candidates = () => {
             candidate={candidate}
             user={user}
             user_type={userType}
-            header={`${
-              (candidate?.experience && candidate.experience[0]?.role) ||
-              "Not specified"
-            }`}
+            header={candidate?.preferred_title}
             associations={candidate?.associations}
             skills={candidate?.skills}
             onClickRedirect={() => {

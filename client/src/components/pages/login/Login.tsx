@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
 import BridgeLogo from "../../../media/bridge-logo.png";
+import BridgeImage from "../../../media/four-hands-meeting.jpg";
 
 import styling from "./Login.module.css";
 
@@ -81,65 +82,85 @@ const Login = () => {
   };
 
   return (
-    <div className={styling.loginContainer}>
-      <div className={styling.loginBox}>
-        <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
-        <h1>Login</h1>
-        <ToastContainer theme="light" />
-        <Form
-          name="normal_login"
-          className={styling.loginForm}
-          initialValues={{ remember: true }}
-          onFinish={onClickLogin}
-        >
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+    <div className={styling.container}>
+      <div className={styling.loginContainer}>
+        <div className={styling.loginBox}>
+          <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
+          <h1>Login</h1>
+          <ToastContainer theme="light" />
+          <Form
+            name="normal_login"
+            className={styling.loginForm}
+            initialValues={{ remember: true }}
+            onFinish={onClickLogin}
           >
-            <Input
-              prefix={<UserOutlined className={styling.icon} />}
-              type="text"
+            <Form.Item
               name="email"
-              value={formData.email}
-              placeholder="email"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined className={styling.icon} />}
+              rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input
+                prefix={<UserOutlined className={styling.icon} />}
+                type="text"
+                name="email"
+                value={formData.email}
+                placeholder="email"
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+            <Form.Item
               name="password"
-              value={formData.password}
-              placeholder="Password"
-              iconRender={(visible) =>
-                visible ? <IconEyeOff size={20} /> : <IconEye size={20} />
-              }
-              onChange={handleInputChange}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
+              rules={[
+                { required: true, message: "Please input your Password!" },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined className={styling.icon} />}
+                name="password"
+                value={formData.password}
+                placeholder="Password"
+                iconRender={(visible) =>
+                  visible ? <IconEyeOff size={20} /> : <IconEye size={20} />
+                }
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+
+              <a className={styling.forgotButton} href="/*">
+                Forgot password
+              </a>
             </Form.Item>
 
-            <a className={styling.forgotButton} href="">
-              Forgot password
-            </a>
-          </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className={styling.loginButton}
+              >
+                {isLoading ? <SpinnerLogin /> : "Log in"}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className={styling.loginButton}
-            >
-              {isLoading ? <SpinnerLogin /> : "Log in"}
-            </Button>
-          </Form.Item>
-        </Form>
+        <div className={styling.containerTwo}>
+          {/* background image */}
+          <div
+            className={styling.containerTwoImage}
+            style={{ backgroundImage: `url(${BridgeImage})` }}
+          ></div>
+          <div className={styling.containerTwoText}>
+            <h1 className={styling.slogan}>
+              Empowering Diversity in Swiss Tech
+            </h1>
+            <p className={styling.sloganP}>
+              Let's get connected. Let's get hired. Let's get started.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

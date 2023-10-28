@@ -117,10 +117,7 @@ const Shortlist = () => {
                 key={index}
                 candidate={candidate}
                 user={user}
-                header={
-                  (candidate?.experience && candidate?.experience[0]?.role) ||
-                  "Not specified"
-                }
+                header={candidate?.preferred_title}
                 associations={candidate?.associations}
                 skills={candidate?.skills}
                 onClickRedirect={() => {
