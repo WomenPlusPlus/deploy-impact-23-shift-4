@@ -40,10 +40,10 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     // add only hard skills
     console.log("candidate", candidate?.skills);
     const hardSkills = (candidate?.skills as Skill[])?.filter(
-      (skill) => skill.category === "hard_skill"
+      (skill) => skill?.category === "hard_skill"
     );
     const softSkills = (candidate?.skills as Skill[])?.filter(
-      (skill) => skill.category === "soft_skill"
+      (skill) => skill?.category === "soft_skill"
     );
     setCandidateHardSkills(hardSkills);
     setCandidateSoftSkills(softSkills);
@@ -67,7 +67,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
     if (skillsToDelete?.length > 0) {
       const updatedFilteredSkills = allLabels?.filter((skill) => {
         const isSkillInCandidate = skillsToDelete?.every(
-          (candidateSkill) => candidateSkill.skill_name !== skill.name
+          (candidateSkill) => candidateSkill?.skill_name !== skill?.name
         );
         if (!searchText) {
           return isSkillInCandidate;
@@ -87,7 +87,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 
   const handleCloseHardSkill = (skillToRemove: string) => {
     const updatedSkills = candidateHardSkills.filter(
-      (skill) => skill.skill_name !== skillToRemove
+      (skill) => skill?.skill_name !== skillToRemove
     );
     setCandidateHardSkills(updatedSkills as Skill[]);
     updateFilteredSkills(updatedSkills);
@@ -95,7 +95,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 
   const handleCloseSoftSkill = (skillToRemove: string) => {
     const updatedSkills = candidateSoftSkills.filter(
-      (skill) => skill.skill_name !== skillToRemove
+      (skill) => skill?.skill_name !== skillToRemove
     );
     setCandidateSoftSkills(updatedSkills as Skill[]);
     updateFilteredSkills(updatedSkills);
@@ -136,7 +136,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
 
   const handleCancel = () => {
     setVisible(false);
-    setCandidateHardSkills(candidate.skills as Skill[]);
+    setCandidateHardSkills(candidate?.skills as Skill[]);
     setFilteredSkills(allLabels);
     setSearchText("");
   };
@@ -230,7 +230,11 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                   icon={icon}
                   labelName={skill.name}
                   disableCloseIcon={true}
-                  customClass={styling.labelClass}
+                  customClass={
+                    skill?.category === "hard_skill"
+                      ? styling.labelHardSkill
+                      : styling.labelSoftSkill
+                  }
                   onClickHandle={() => addSkillToCandidateSkills(skill)}
                 />
               ))}
@@ -238,7 +242,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                 <Labels
                   key="more-label"
                   labelName={`+ ${filteredSkills.length - 10} more`}
-                  customClass={styling.labelClass}
+                  customClass={styling.labelHardSkill}
                   disableCloseIcon={true}
                 />
               )}
