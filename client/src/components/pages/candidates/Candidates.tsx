@@ -66,7 +66,10 @@ const Candidates = () => {
 
   return (
     <div className="main">
-      <h1 className="header">The best talent is right here!</h1>
+      <div>
+        <h1 className="header">The best talent is right here!</h1>
+        <p>Here you can find highly skilled candidates</p>
+      </div>
       <div className="filters">
         <Searchbar
           placeholder="Search..."

@@ -110,6 +110,7 @@ const Companies = () => {
   return (
     <div className={styling.main}>
       <h1 className={styling.header}>Our partner companies</h1>
+      <p>Here you can find every partner company</p>
       <div className={styling.filters}>
         <Searchbar
           placeholder="Search..."

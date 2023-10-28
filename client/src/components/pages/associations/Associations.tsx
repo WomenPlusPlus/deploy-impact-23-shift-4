@@ -131,6 +131,7 @@ const Associations = () => {
   return (
     <div className={styling.main}>
       <h1>Associations</h1>
+      <p>Here you can find every association and its iniciatives</p>
       <div className={styling.filters}>
         <Searchbar
           placeholder="Search..."
