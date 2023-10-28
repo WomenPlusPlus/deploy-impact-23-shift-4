@@ -21,6 +21,7 @@ import AssociationProfile from "../components/pages/associationProfile/Associati
 import CandidatePublicProfile from "../components/pages/candidatePublicProfile/CandidatePublicProfile";
 import AssociationPublicProfile from "../components/pages/associationPublicProfile/AssociationPublicProfile";
 import FAQ from "../components/pages/faq/FAQ";
+import Invite from "../components/UI/Invite";
 
 const Routes: React.FC = () => {
   return (
@@ -87,6 +88,7 @@ const Routes: React.FC = () => {
         />
         <Route path="/faq" element={<Authenticated content={<FAQ />} />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/invite" element={<Invite />} />
       </Routing>
     </BrowserRouter>
   );
