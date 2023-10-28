@@ -37,7 +37,8 @@ const Labels: React.FC<LabelProps> = ({
         </div>
       ) : (
         <div className={styling.labelIcon}>
-          {icon} <strong>{labelName}</strong> | {skillLevel}
+          {icon} <strong>{labelName}</strong> {skillLevel ? "| " : ""}
+          {skillLevel}
         </div>
       )}
 

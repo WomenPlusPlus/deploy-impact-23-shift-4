@@ -8,8 +8,8 @@ import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 import AddEditJob from "../../shared/addEditJob/AddEditJob";
 import EditCompanyProfile from "../../shared/editCompanyProfile/EditCompanyProfile";
-import { Company } from "../../../types/types";
-import { addJob, getAllJobs } from "../../../api/jobs";
+import { Company, Job } from "../../../types/types";
+import { addJob, getAllJobs, updateJobById } from "../../../api/jobs";
 import { getCompanyById, updateCompanyById } from "../../../api/companies";
 
 import {
@@ -21,25 +21,42 @@ import {
 
 import styling from "./CompanyProfile.module.css";
 import Avatar from "../../UI/avatar/Avatar";
+import DeleteJob from "../../shared/deleteJob/DeleteJob";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
 
   // State
   const [open, setOpen] = useState(false);
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState([] as Job[]);
   const [company, setCompany] = useState({} as Company);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmEditCompanyLoading, setConfirmEditCompanyLoading] =
     useState(false);
   const [openEditJobModal, setOpenEditJobModal] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [job, setJob] = useState({} as Job);
 
   /**
    * Handles the toggle of the Add Job modal
    */
   const toggleAddJobModal = () => {
     setOpen(!open);
+  };
+
+  /**
+   * Handles the toggle of the Edit Job modal
+   */
+  const toggleEditJobModal = (job: Job) => {
+    setJob(job);
+    setEditModalOpen(!isEditModalOpen);
+  };
+
+  const closeEditJobModal = () => {
+    setEditModalOpen(!isEditModalOpen);
   };
 
   /**
@@ -70,6 +87,23 @@ const CompanyProfile = () => {
 
     setConfirmLoading(true);
     setOpen(false);
+    fetchCompanyInfo();
+  };
+
+  const toggleDeleteJob = () => {
+    setDeleteModalOpen(!isDeleteModalOpen);
+  };
+
+  /**
+   * Handles the edit of a  job
+   * @param payload the job data to edit
+   */
+  const handleEditJob = async (jobId: string, payload: object) => {
+    setConfirmLoading(true);
+
+    await updateJobById(jobId, payload);
+
+    setEditModalOpen(false);
     fetchCompanyInfo();
   };
 
@@ -108,19 +142,32 @@ const CompanyProfile = () => {
             Create new job
           </Button>
         </div>
-        {jobs?.map((job: Record<string, any>, index: number) => {
-          return (
-            <div onClick={() => navigate(`/job/${job?.id}`)} key={index}>
-              <HorizontalCard
-                avatar={true}
-                button="Go to description"
-                firstName={company?.company_name}
-                title={job?.title}
-                subtitle={job?.description}
-              />
-            </div>
-          );
-        })}
+        {jobs &&
+          jobs.length > 0 &&
+          jobs?.map((job: Job, index: number) => {
+            return (
+              <div key={index}>
+                <HorizontalCard
+                  avatar={true}
+                  button="Delete job"
+                  isButtonDisabled
+                  firstName={company?.company_name}
+                  title={job?.title}
+                  subtitle={job?.description}
+                  deleteEdit
+                  onDeleteClick={toggleDeleteJob}
+                  onEditClick={() => toggleEditJobModal(job)}
+                  onTitleClick={() => navigate(`/job/${job?.id}`)}
+                />
+
+                <DeleteJob
+                  jobId={job?.id}
+                  showModal={isDeleteModalOpen}
+                  setShowModal={toggleDeleteJob}
+                />
+              </div>
+            );
+          })}
       </div>
     </CardContainer>
   );
@@ -260,6 +307,17 @@ const CompanyProfile = () => {
       </div>
 
       <AddEditJob
+        open={isEditModalOpen}
+        onEdit={handleEditJob}
+        onCancel={closeEditJobModal}
+        confirmLoading={confirmLoading}
+        companyId={company?.user_id}
+        companyValues={company?.values || []}
+        associations={company?.associations}
+        job={job}
+      />
+
+      <AddEditJob
         open={open}
         onOk={handleAddJobPayload}
         onCancel={toggleAddJobModal}
@@ -271,9 +329,11 @@ const CompanyProfile = () => {
     </>
   );
 
-  return (
-    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
-  );
+  if (!isLoading) {
+    return <Spinner />;
+  }
+
+  return <div className={styling.main}>{content}</div>;
 };
 
 export default CompanyProfile;

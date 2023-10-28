@@ -45,19 +45,41 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
     <>
       {/* Containers */}
       <CardContainer className={styling.cardCont}>
-        <h1 className={styling.titles}>Skills</h1>
-        <SkillsLevelGuide />
-        <div className={styling.labelDiv}>
-          {jobData?.skills?.map((skill, index) => (
-            <Labels
-              key={`technical_${index}`}
-              labelName={skill?.skill_name}
-              isSkill={true}
-              skillLevel={skill?.skill_level}
-              disableCloseIcon={true}
-              customClass={styling.label}
-            />
-          ))}
+        <div className={styling.skillsContainer}>
+          <div className={styling.sideSkills}>
+            <h1 className={styling.titles}>Hard Skills</h1>
+
+            <div className={styling.labelDiv}>
+              {jobData?.skills?.map((skill, index) => (
+                <Labels
+                  key={`technical_${index}`}
+                  labelName={skill?.skill_name}
+                  isSkill={true}
+                  skillLevel={skill?.skill_level}
+                  disableCloseIcon={true}
+                  customClass={styling.label}
+                />
+              ))}
+            </div>
+
+            <SkillsLevelGuide />
+          </div>
+
+          <div className={styling.sideSkills}>
+            <h1 className={styling.titles}>Soft Skills</h1>
+
+            <div className={styling.labelDiv}>
+              {jobData?.soft_skills?.map((skill, index) => (
+                <Labels
+                  key={`technical_${index}`}
+                  labelName={skill}
+                  isSkill={true}
+                  disableCloseIcon={true}
+                  customClass={styling.label}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </CardContainer>
 

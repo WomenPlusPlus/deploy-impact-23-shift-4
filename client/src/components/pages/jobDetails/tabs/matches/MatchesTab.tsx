@@ -26,7 +26,7 @@ const JobMatchesTab: React.FC<Props> = ({ job }) => {
 
   // Match candidates from matchingCandidates with allCandidates
   const matchingCandidates = allCandidates.filter((candidate: any) => {
-    return job?.matching_candidates?.map((matchedCandidate) => {
+    return job?.matching_candidates?.some((matchedCandidate) => {
       return candidate?.user_id === matchedCandidate?.id;
     });
   });
