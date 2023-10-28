@@ -39,6 +39,23 @@
 }
 
 .button {
-  margin-left: auto; /* Push the icon to the right */
+  margin-left: auto;
   height: 5rem;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-left: auto;
+}
+
+.antButton {
+  margin-left: auto;
+  width: 16rem;
+  height: 3rem;
+  border-radius: 3rem;
+  box-shadow: none;
 }
