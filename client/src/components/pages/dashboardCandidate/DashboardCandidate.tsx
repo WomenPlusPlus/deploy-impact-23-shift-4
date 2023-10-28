@@ -68,6 +68,7 @@ const DashboardCandidate: React.FC = () => {
     return countProgress;
   };
 
+  console.log("candidate", candidate);
   useEffect(() => {
     fetchInfo(auth?.user?.id);
   }, [auth?.user?.id]);
@@ -88,7 +89,10 @@ const DashboardCandidate: React.FC = () => {
               <h2 className={styling.headerTitle}>Welcome!</h2>
             )}
             {candidate?.experience ? (
-              <p className={styling.roleYes}> {candidate?.experience[0]?.role}</p>
+              <p className={styling.roleYes}>
+                {" "}
+                {candidate?.experience[0]?.role}
+              </p>
             ) : (
               <p className={styling.role}>Add your current role</p>
             )}
@@ -152,6 +156,7 @@ const DashboardCandidate: React.FC = () => {
             {candidate &&
               candidate?.matching_jobs?.map((matchedJob: any) => {
                 let description = "";
+                console.log("matchedJob", matchedJob);
 
                 if (matchedJob?.score >= 90) {
                   description = "Your dream job is waiting for you! 🌟";

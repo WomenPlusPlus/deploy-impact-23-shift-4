@@ -13,7 +13,7 @@ with open("model/vectorizer.pkl", "rb") as file:
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
-    # candidate_skills, candidate_levels = zip(*candidate_skills_dict.items())
+
     candidate_skills = [
         "_".join(skill.lower().split(" ")) for skill in candidate_skills
     ]
@@ -66,10 +66,6 @@ def match_candidates_route(domain_name):
                 )
                 candidates = candidates_response.json()["candidates"]
 
-                existing_matching_candidates = job.json()["jobs"].get(
-                    "matching_candidates", []
-                )
-
                 for candidate in candidates:
                     # Check if candidate has skills
                     if candidate["skills"] is not None:
@@ -79,20 +75,8 @@ def match_candidates_route(domain_name):
                         cand_levels = [
                             skill["skill_level"] for skill in candidate["skills"]
                         ]
-                        # if cand_skills and any(item in cand_skills for item in job_skills_ids):
-                        cand_id = candidate["user_id"]
-                        # print("LEVELS", cand_levels)
 
-                        if (
-                            existing_matching_candidates
-                            and len(existing_matching_candidates) > 0
-                            and any(
-                                matching_candidate["id"] == cand_id
-                                for matching_candidate in existing_matching_candidates
-                            )
-                        ):
-                            # skip to next candidate
-                            continue
+                        cand_id = candidate["user_id"]
 
                         count = 4
                         total_score = 0
@@ -121,8 +105,7 @@ def match_candidates_route(domain_name):
 
                             cand_score = round(total_score / count, 1)
 
-                            # TODO: increase threshold to 60
-                            if cand_score >= 20:
+                            if cand_score >= 60:
                                 cand_match.append({"id": cand_id, "score": cand_score})
                                 if candidate["matching_jobs"]:
                                     duplicate = [
@@ -156,9 +139,6 @@ def match_candidates_route(domain_name):
                     else:
                         print("No candidates skills available")
                         continue
-
-                if len(cand_match) == 0:
-                    return jsonify({"message": "No matching candidates"}), 200
 
                 update_json = {"job_id": id, "matching_candidates": cand_match}
                 update_job = requests.put(
