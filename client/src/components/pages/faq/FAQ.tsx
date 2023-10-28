@@ -109,9 +109,7 @@ const FAQ = () => {
     },
   ];
 
-  const [activeIndexes, setActiveIndexes] = useState<number[]>(
-    Array.from({ length: faqDataCandidates.length }, (_, i) => i)
-  );
+  const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
 
   const togglePanel = (index: number) => {
     if (activeIndexes.includes(index)) {
@@ -122,7 +120,7 @@ const FAQ = () => {
   };
 
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-  const userType = auth.user.user_type;
+  const userType = auth?.user?.user_type;
 
   const faqContent =
     userType === "candidate" ? faqDataCandidates : faqDataCompanies;
@@ -130,7 +128,7 @@ const FAQ = () => {
   return (
     <div className={styling.main}>
       <h1>Frequently Asked Questions</h1>
-      {faqContent.map((item: any, index: number) => (
+      {faqContent?.map((item: any, index: number) => (
         <div key={index} className={styling.panel}>
           <div className={styling.question} onClick={() => togglePanel(index)}>
             {item.question}
