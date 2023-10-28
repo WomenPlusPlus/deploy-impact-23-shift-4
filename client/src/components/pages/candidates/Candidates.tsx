@@ -103,6 +103,7 @@ const Candidates = () => {
             subheader={candidate?.job_status}
             associations={candidate?.associations}
             skills={candidate?.skills}
+            soft_skills={candidate?.soft_skills}
             onClickRedirect={() => {
               navigate(`/candidate/${candidate.user_id}`);
             }}

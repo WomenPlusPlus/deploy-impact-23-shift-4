@@ -159,7 +159,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 <Labels
                   key={index}
                   labelName={skill?.skill_name}
-                  customClass={styling.label}
+                  customClass={styling.hardSkill}
                   disableCloseIcon
                 />
               ))}
@@ -167,7 +167,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 <Labels
                   key={index + 1}
                   labelName={softSkill}
-                  customClass={styling.label}
+                  customClass={styling.softSkill}
                   disableCloseIcon
                 />
               ))}

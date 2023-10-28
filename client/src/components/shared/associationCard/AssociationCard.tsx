@@ -29,8 +29,6 @@ const AssociationCard: React.FC<CardProps> = ({
   avatar,
   onClickRedirect,
 }) => {
-  const [isSaved, setIsSaved] = React.useState(false);
-
   return (
     <div className={styling.candidateCard}>
       <div className={styling.cardHeader}>
@@ -50,10 +48,7 @@ const AssociationCard: React.FC<CardProps> = ({
         </div>
       </div>
 
-      <div className={styling.description}>
-        <p>{description}</p>
-      </div>
-      <hr className={styling.divider} />
+      <hr className={styling.horizontalLine} />
       {association?.iniciatives && association?.iniciatives?.length > 0 ? (
         <div className={styling.container}>
           <div className={styling.labelContainer}>

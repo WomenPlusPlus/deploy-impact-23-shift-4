@@ -18,6 +18,7 @@ interface CardProps {
   associations?: string[];
   description?: string;
   skills?: object[] | undefined;
+  soft_skills?: string[] | undefined;
   values?: string[];
   isBookmarkVisible?: boolean;
   onClickRedirect?: () => void;
@@ -33,6 +34,7 @@ const CandidateCard: React.FC<CardProps> = ({
   description,
   associations,
   skills,
+  soft_skills,
   values,
   isBookmarkVisible = false,
   onClickRedirect,
@@ -145,6 +147,8 @@ const CandidateCard: React.FC<CardProps> = ({
         </div>
       )}
 
+      <hr className={styling.horizontalLine} />
+
       <div className={styling.container}>
         <div className={styling.labelContainer}>
           {associations?.map((association, index) => (
@@ -164,6 +168,18 @@ const CandidateCard: React.FC<CardProps> = ({
               key={index}
               color="var(--skills-label)"
               labelName={skill?.skill_name}
+              customClass={styling.label}
+              disableCloseIcon
+            />
+          ))}
+        </div>
+
+        <div className={styling.labelContainer}>
+          {soft_skills?.map((skill: any, index) => (
+            <Labels
+              key={index}
+              color="var(--softSkills-label)"
+              labelName={soft_skills[index] as string}
               customClass={styling.label}
               disableCloseIcon
             />
