@@ -75,3 +75,7 @@
 .savedBookmark {
   fill: black;
 }
+
+.noInfo {
+  color: var(--gray-medium);
+}

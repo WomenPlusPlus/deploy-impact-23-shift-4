@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Tabs from "../../UI/tabs/Tabs";
 import { CardContainer } from "../../UI/container/CardContainer";
 import PublicIniciativesComponent from "./tabs/iniciativesTab/Iniciatives";
@@ -50,7 +50,7 @@ const AssociationPublicProfile = () => {
       children: about,
     },
     {
-      label: "Iniciatives",
+      label: "Initiatives",
       key: "2",
       children: <PublicIniciativesComponent association={association} />,
     },
