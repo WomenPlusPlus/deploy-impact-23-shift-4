@@ -84,3 +84,18 @@
   color: var(--blue-lighter);
   z-index: 9999;
 }
+
+.oauth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.horizontalLine {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 80%;
+  margin-bottom: 1rem;
+}
