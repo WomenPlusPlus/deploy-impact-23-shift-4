@@ -6,7 +6,7 @@ import TextArea from "antd/es/input/TextArea";
 
 interface StringSelectorModalProps {
   visible: boolean;
-  strings: string[];
+  allCategories: string[];
   selectedStrings: boolean[];
   title: string;
   subtitle?: string;
@@ -22,7 +22,7 @@ interface StringSelectorModalProps {
 
 const ToggleModal: React.FC<StringSelectorModalProps> = ({
   visible,
-  strings,
+  allCategories,
   selectedStrings,
   title,
   subtitle,
@@ -34,7 +34,9 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
 }) => {
   const [textAreaValue, setTextAreaValue] = useState("");
   const handleOk = () => {
-    const enabledStrings = strings.filter((_, index) => selectedStrings[index]);
+    const enabledStrings = allCategories.filter(
+      (_, index) => selectedStrings[index]
+    );
     onAcceptWithEnabledStrings(enabledStrings, textAreaValue);
   };
   return (
@@ -55,7 +57,7 @@ const ToggleModal: React.FC<StringSelectorModalProps> = ({
         {subtitle}
       </p>
       <div className={styling.center}>
-        {strings?.map((string, index) => (
+        {allCategories?.map((string, index) => (
           <div key={index} className={styling.options}>
             <p className={styling.field}>{string}</p>
             <Switch

@@ -1,5 +1,6 @@
 import styling from "./HorizontalCard.module.css";
 import { Button } from "../button/Button";
+import { Button as AntButton } from "antd";
 import Avatar from "../avatar/Avatar";
 
 interface HorizontalCardProps {
@@ -8,8 +9,13 @@ interface HorizontalCardProps {
   firstName?: string;
   lastName?: string;
   title?: string;
-  subtitle?: string;
+  subtitle?: string | JSX.Element;
+  isButtonDisabled?: boolean;
+  deleteEdit?: boolean;
   onClick?: () => void;
+  onTitleClick?: () => void;
+  onEditClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
 //TODO: add title and description props
@@ -20,31 +26,52 @@ const HorizontalCard: React.FC<HorizontalCardProps> = ({
   lastName,
   title,
   subtitle,
+  isButtonDisabled = false,
+  deleteEdit,
   onClick,
+  onTitleClick,
+  onEditClick,
+  onDeleteClick,
 }) => {
-  const positionTitle = "Developer europe remote";
-  const matchingText = [
-    "Your dream job is waiting for you",
-    "Great match for this role!",
-    "Give it a shot, you might be a good fit!",
-  ];
   return (
     <div className={styling.container}>
       {avatar && <Avatar firstName={firstName} lastName={lastName} size={70} />}
 
       <div className={styling.text}>
-        <h2 className={styling.title} style={{ cursor: "pointer" }}>
-          {title ? title : positionTitle}
+        <h2
+          className={styling.title}
+          style={{ cursor: "pointer" }}
+          onClick={onTitleClick}
+        >
+          {title}
         </h2>
-        <p className={styling.subtitle}>
-          {subtitle ? subtitle : matchingText[0]}
-        </p>
+        <p className={styling.subtitle}>{subtitle}</p>
       </div>
 
-      {button && (
+      {!isButtonDisabled && button && (
         <Button className={styling.button} onClick={onClick}>
           {button}
         </Button>
+      )}
+
+      {deleteEdit && (
+        <div className={styling.buttons}>
+          <AntButton
+            className={styling.antButton}
+            onClick={onEditClick}
+            type="primary"
+          >
+            Edit
+          </AntButton>
+          <AntButton
+            className={styling.antButton}
+            onClick={onDeleteClick}
+            type="default"
+            danger
+          >
+            Delete
+          </AntButton>
+        </div>
       )}
     </div>
   );

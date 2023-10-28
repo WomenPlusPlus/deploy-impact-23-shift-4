@@ -13,7 +13,8 @@ import Tabs from "../../UI/tabs/Tabs";
 import { CandidateMatchesTab } from "./tabs/matches/CandidateMatchesTab";
 import { CandidateResumeTab } from "./tabs/resume/CandidateResumeTab";
 import { getAllJobs } from "../../../api/jobs";
-import { getAllCompanies, getCompanyById } from "../../../api/companies";
+import { getAllCompanies } from "../../../api/companies";
+import Spinner from "../../UI/spinner/Spinner";
 
 const CandidatePublicProfile = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const CandidatePublicProfile = () => {
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchingJobs, setMatchingJobs] = useState([] as Job[]);
   const [companies, setCompanies] = useState([] as Company[]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchInfo = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -55,8 +57,8 @@ const CandidatePublicProfile = () => {
       const matchedJobs = filterMatchingJobs(candidateFetched, filteredJobs);
       setMatchingJobs(matchedJobs);
     }
-
     setCandidate(candidateFetched);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const CandidatePublicProfile = () => {
   function filterMatchingJobs(candidate: Candidate, jobs: Job[]): Job[] {
     const matchedJobs: Job[] = [];
     jobs.map((job) => {
-      candidate.matching_jobs?.forEach((matchingJob: Job) => {
+      candidate?.matching_jobs?.forEach((matchingJob: Job) => {
         if (matchingJob?.id === job?.id) {
           matchedJobs.push(job);
         }
@@ -97,6 +99,10 @@ const CandidatePublicProfile = () => {
     },
   ];
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <div className={styling.main}>
@@ -118,18 +124,22 @@ const CandidatePublicProfile = () => {
               )}
             </div>
             <div className={styling.row}>
-              <IconMapPin color="black" />
-              {candidate?.city && candidate?.country ? (
-                <p className={styling.location}>
-                  {candidate?.city}, {candidate?.country}
-                </p>
-              ) : (
-                <p className={styling.location}>Not visible</p>
-              )}
-              <p> | </p>
+              <div className={styling.location}>
+                <IconMapPin color="black" />
+                {candidate?.city && candidate?.country ? (
+                  <div className={styling.row}>
+                    <p className={styling.locationTextYes}>
+                      {candidate?.city}, {candidate?.country}
+                    </p>
+                  </div>
+                ) : (
+                  <p className={styling.locationText}>Not provided</p>
+                )}
+              </div>
+              {candidate?.links && candidate?.links?.length > 0 && <p> | </p>}
               {candidate?.links && candidate?.links?.length > 0
                 ? candidate?.links?.map((link, index) => (
-                    <div key={index} className={styling.link}>
+                    <div key={index} className={`${styling.link}`}>
                       {link.name === "LinkedIn" ? (
                         <a href={link.url} target="_blank" rel="noreferrer">
                           <IconBrandLinkedin color="black" />

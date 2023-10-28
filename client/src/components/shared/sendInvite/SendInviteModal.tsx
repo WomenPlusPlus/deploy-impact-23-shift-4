@@ -10,22 +10,10 @@ import {
 } from "antd";
 import { IconInbox } from "@tabler/icons-react";
 import Dragger from "antd/es/upload/Dragger";
-import TextArea from "antd/es/input/TextArea";
 
 import styling from "./SendInviteModal.module.css";
-
-interface SendInviteModalProps {
-  isOpen: boolean;
-  defaultOption: string;
-  handleSend: (payload: Payload) => void;
-  onClose: () => void;
-}
-interface Payload {
-  user_type: string | null;
-  name: string;
-  recipient_email: string;
-  association: string;
-}
+import { SendInviteModalProps } from "../../../types/types";
+import UnderConstruction from "../underConstruction/UnderConstruction";
 
 const SendInviteModal: React.FC<SendInviteModalProps> = ({
   isOpen,
@@ -36,7 +24,7 @@ const SendInviteModal: React.FC<SendInviteModalProps> = ({
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [checked, setChecked] = useState<string | null>(defaultOption);
-  const [content, setContent] = useState("");
+  const [constractionModal, setConstractionModal] = useState(false);
 
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
@@ -54,7 +42,7 @@ const SendInviteModal: React.FC<SendInviteModalProps> = ({
     const payload = {
       user_type: checked?.toLowerCase()!,
       recipient_email: email,
-      association: "",
+      association_name: "",
       name: name,
     };
     return payload;
@@ -71,8 +59,9 @@ const SendInviteModal: React.FC<SendInviteModalProps> = ({
   ];
 
   const props: UploadProps = {
+    disabled: true,
     beforeUpload: (file) => {
-      const isCSV = file.type === "csv";
+      const isCSV = file.type === ".csv";
       if (!isCSV) {
         message.error(`${file.name} is not a csv file`);
       }
@@ -83,13 +72,9 @@ const SendInviteModal: React.FC<SendInviteModalProps> = ({
     },
   };
 
-  const defaultEmailContent = `Dear ${defaultOption},
-We are excited to invite you to join Bridge Software, a comprehensive system designed to empower underrepresented groups in Switzerland by providing them with the tools, resources, and support they need to find entry-level jobs in the tech industry.
-This system embodies the spirit of inclusion, diversity, and innovation, fostering a brighter future for refugees and the Swiss tech industry alike.
-
-We look forward to having you as a valuable member of our community.
-Sincerely,
-The BRIDGE Team`;
+  const handleConstructionModal = () => {
+    setConstractionModal(!constractionModal);
+  };
 
   return (
     <>
@@ -112,13 +97,6 @@ The BRIDGE Team`;
           ))}
         </Radio.Group>
 
-        <p>Email content:</p>
-        <TextArea
-          className={styling.description}
-          placeholder="Email content"
-          value={defaultEmailContent}
-          onChange={(e) => setContent(e.target.value)}
-        />
         <Divider> Send individual invitation</Divider>
 
         <p>Name:</p>
@@ -134,17 +112,27 @@ The BRIDGE Team`;
           onChange={handleEmailChange}
         />
         <Divider> Or send in bulk</Divider>
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <IconInbox />
-          </p>
-          <p className="ant-upload-text">Click or drag a CSV file to upload</p>
-          <p className="ant-upload-hint">
-            Support for a single upload. Strictly prohibited from uploading
-            company data or other banned files.
-          </p>
-        </Dragger>
+        <div onClick={handleConstructionModal}>
+          <Dragger {...props}>
+            <p className="ant-upload-drag-icon">
+              <IconInbox />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag a CSV file to upload
+            </p>
+            <p className="ant-upload-hint">
+              Support for a single upload. Strictly prohibited from uploading
+              company data or other banned files.
+            </p>
+          </Dragger>
+        </div>
       </Modal>
+
+      <UnderConstruction
+        isOpen={constractionModal}
+        onClose={handleConstructionModal}
+        subtitle="Send in bulk coming soon!"
+      />
     </>
   );
 };

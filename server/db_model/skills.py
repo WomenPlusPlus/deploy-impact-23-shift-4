@@ -14,7 +14,7 @@ def init_skills_model(db):
             unique=True,
             nullable=False,
         )
-        name = db.Column(db.String(256), nullable=False)
+        name = db.Column(db.String(256), nullable=False, unique=True)
         category = db.Column(
             db.String(256), nullable=False
         )  # category: hard_skill or soft_skill

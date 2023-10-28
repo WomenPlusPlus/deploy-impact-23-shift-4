@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from sqlalchemy import text
 
+
 def init_user_model(db):
     class User(db.Model, UserMixin):
         """
@@ -32,7 +33,7 @@ def init_user_model(db):
             self.password = password
             self.email = email
             self.user_type = user_type
-        
+
         def to_dict(self):
             """
             Convert the user object to a dictionary.

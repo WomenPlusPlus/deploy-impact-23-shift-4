@@ -9,7 +9,7 @@
 .button {
   width: 70%;
   color: var(--white);
-  background-color: var(--background-avatar);
+  background-color: var(--blue-darker);
 }
 
 .title {

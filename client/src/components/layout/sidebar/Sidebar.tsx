@@ -11,6 +11,9 @@ import {
   IconBuildingSkyscraper,
   IconBookmarks,
   IconStar,
+  IconSettings,
+  IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
@@ -54,12 +57,16 @@ const Sidebar: React.FC<SidebarProps> = ({
   }
 
   // Set permissions for sidebar items
-  const isCompaniesVisible = auth?.user?.user_type === "company" ? false : true;
-  const isTalentVisible = auth?.user?.user_type === "candidate" ? false : true;
+  const isCompaniesVisible = auth?.user?.user_type !== "company";
+  const isTalentVisible = auth?.user?.user_type !== "candidate";
   const isShortListVisible =
-    auth?.user?.user_type === "association" ? false : true;
+    auth?.user?.user_type !== "association" &&
+    auth?.user?.user_type !== "admin";
+  const isFaqVisible =
+    auth?.user?.user_type !== "association" &&
+    auth?.user?.user_type !== "admin";
 
-  const items: MenuItem[] = [
+  const topItems: MenuItem[] = [
     getItem("Dashboard", "", <IconDashboard />),
     isCompaniesVisible
       ? getItem("Jobs", "jobs", <IconDeviceLaptop />)
@@ -68,23 +75,17 @@ const Sidebar: React.FC<SidebarProps> = ({
       ? getItem("Companies", "companies", <IconBuildingSkyscraper />)
       : null,
     isTalentVisible ? getItem("Talent", "candidates", <IconStar />) : null,
+    getItem("Associations", "associations", <IconUsers />),
     isShortListVisible
       ? getItem("Short List", "saved", <IconBookmarks />)
       : null,
-    getItem("Logout", "logout", <IconLogout2 />),
+    isFaqVisible ? getItem("FAQ", "faq", <IconInfoCircle />) : null,
   ];
 
-  const logoutError = () =>
-    toast.error("Logout error", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const bottomItems: MenuItem[] = [
+    getItem("Settings", "settings", <IconSettings />),
+    getItem("Logout", "logout", <IconLogout2 />),
+  ];
 
   const handleButtonClick = async (
     button: string,
@@ -95,14 +96,22 @@ const Sidebar: React.FC<SidebarProps> = ({
         try {
           // Send logout request to the backend (you'll need to replace the URL and method)
           await axios.get("/api/logout", { withCredentials: true });
-          console.log("Logout Successful");
           // Remove user_type, auth from local storage
           localStorage.removeItem("user_type");
           localStorage.removeItem("auth");
           // Navigate to the login page
           navigate("/login");
         } catch (error) {
-          logoutError();
+          toast.error("Logout error", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       } else {
         navigate(`/${button}`);
@@ -132,7 +141,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           <Menu
             className="custom-menu"
             mode="inline"
-            items={items ?? []}
+            items={topItems ?? []}
+            onClick={(item) => {
+              setSelectedKey(item.key.toString());
+              handleButtonClick(item.key.toString(), navigate);
+              return item.key.toString();
+            }}
+            selectedKeys={[selectedKey]}
+          />
+
+          <Menu
+            className="bottom-menu"
+            mode="inline"
+            items={bottomItems ?? []}
             onClick={(item) => {
               setSelectedKey(item.key.toString());
               handleButtonClick(item.key.toString(), navigate);

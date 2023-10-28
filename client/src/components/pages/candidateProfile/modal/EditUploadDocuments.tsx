@@ -47,7 +47,6 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
 
   const handleSave = () => {
     if (onSave) {
-      console.log("certificates", { certificates });
       if (cvFile) {
         if (candidate) {
           candidate.cv_reference = cvFile;
@@ -65,7 +64,7 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
 
   return (
     <div>
-      <IconEdit onClick={showModal} />
+      <IconEdit onClick={showModal} style={{ cursor: "pointer" }} />
       <Modal
         open={visible}
         onCancel={handleCancel}
@@ -91,7 +90,7 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
           cvReference={cvReference}
           setCVReference={setCvReference}
         />
-        <hr />
+        <hr style={{ marginTop: "1rem" }} />
         <Certificates
           candidate={candidate}
           certificates={certificates}

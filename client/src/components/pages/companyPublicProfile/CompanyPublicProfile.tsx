@@ -11,16 +11,19 @@ import {
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
+import Spinner from "../../UI/spinner/Spinner";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
 
   const [company, setCompany] = useState<Company>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCompany = useCallback(async () => {
     if (id) {
       const company = await getCompanyById(id);
       setCompany(company);
+      setIsLoading(false);
     }
   }, [id]);
 
@@ -93,6 +96,10 @@ const CompanyPublicProfile = () => {
       children: culture,
     },
   ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

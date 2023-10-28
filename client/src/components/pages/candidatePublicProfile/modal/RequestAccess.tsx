@@ -3,28 +3,31 @@ import React from "react";
 import { toast } from "react-toastify";
 import { Job } from "../../../../types/types";
 import TextArea from "antd/es/input/TextArea";
+import { getCandidateById, updateCandidateById } from "../../../../api/candidates";
+import { getCompanyById } from "../../../../api/companies";
 const { Option } = Select;
 
 interface RequestAccessProps {
+  candidateId: string;
   show: boolean;
   setShow: (arg: boolean) => void;
   jobs: Job[];
 }
 
 const RequestAccess: React.FC<RequestAccessProps> = ({
+  candidateId,
   show,
   setShow,
   jobs,
 }) => {
   const [selectedJob, setSelectedJob] = React.useState<Job | null>(null);
+  const companyId = JSON.parse(localStorage.getItem("auth") || "{}").user?.id;
 
   const onCancel = () => {
-    console.log("onCancel");
     setShow(false);
   };
 
-  const onRequestAccess = () => {
-    console.log("onRequestAccess");
+  const onRequestAccess = async () => {
     toast.success(`Access requested`, {
       position: "top-right",
       autoClose: 5000,
@@ -34,6 +37,27 @@ const RequestAccess: React.FC<RequestAccessProps> = ({
       draggable: true,
       progress: undefined,
       theme: "light",
+    });
+    const company = await getCompanyById(companyId);
+    const existingCandidateData = await getCandidateById(candidateId);
+
+    // new request object
+    const newRequest = {
+      job_id: selectedJob?.id || "",
+      job_title: selectedJob?.title || "",
+      company_id: companyId,
+      company_name: company?.company_name,
+    };
+
+    // Append the new request to the existing package_requested
+    const updatedPackageRequested = [
+      ...(existingCandidateData?.package_requested || []),
+      newRequest,
+    ];
+
+    // Update the candidate's data with the modified package_requested array
+    const updatedCandidate = await updateCandidateById(candidateId, {
+      package_requested: updatedPackageRequested,
     });
     setShow(false);
   };
@@ -65,7 +89,7 @@ const RequestAccess: React.FC<RequestAccessProps> = ({
             setSelectedJob(job || null);
           }}
         >
-          {jobs.map((job, index) => (
+          {jobs?.map((job, index) => (
             <Option value={job.id} key={index}>
               {job.title}
             </Option>

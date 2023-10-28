@@ -12,13 +12,8 @@ import { getAllAssociations } from "../../../api/associations";
 import { getAllCandidates } from "../../../api/candidates";
 import { getAllCompanies } from "../../../api/companies";
 import { getAllUsers } from "../../../api/user";
-
-interface Payload {
-  name: string;
-  user_type: string | null;
-  recipient_email: string;
-  association: string;
-}
+import { Payload } from "../../../types/types";
+import Spinner from "../../UI/spinner/Spinner";
 
 const DashboardAdmin = () => {
   //State
@@ -27,6 +22,7 @@ const DashboardAdmin = () => {
   const [candidates, setCandidates] = useState<any>(null);
   const [isSendInviteOpen, setSendInviteOpen] = useState(false);
   const [defaultOption, setDefaultOption] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /**
    * Sends the invite to the backend
@@ -36,7 +32,7 @@ const DashboardAdmin = () => {
     const payloadInvite = {
       user_type: payload.user_type,
       recipient_email: payload.recipient_email,
-      association: "default", // TODO: Update send invite modal to allow for a payload without association
+      association_name: "default", // TODO: Update send invite modal to allow for a payload without association
     };
 
     // Check if user already exists in the database
@@ -79,9 +75,7 @@ const DashboardAdmin = () => {
     setAssociations(associations);
     setCandidates(candidates);
     setCompanies(companies);
-    console.log("associations", associations);
-    console.log("candidates", candidates);
-    console.log("companies", companies);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -134,6 +128,10 @@ const DashboardAdmin = () => {
       relatedCandidates: relatedCandidatesCount,
     };
   });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>

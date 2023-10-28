@@ -62,7 +62,7 @@ def init_candidate_model(db):
         )  # Visible information as an array of strings e.g ['Salary range', 'Visa status']
         experience = db.Column(
             db.JSON
-        )  # Experience as e.g [{'industries': 'IT', 'role': 'Software engineer', 'years_of_experience': 3}]
+        )  # Experience as e.g [{'industries': 'IT', 'role': 'Software engineer', 'years_of_experience': '3 years'}]
         visa_status = db.Column(
             db.ARRAY(db.String)
         )  # Visa status as an array of strings e.g ['EU citizen', 'Work permit']
@@ -80,9 +80,11 @@ def init_candidate_model(db):
         )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
         date_profile_modified = db.Column(db.DateTime)
         package_requested = db.Column(db.JSON)  # Package requestes from the company
+        package_accepted = db.Column(db.JSON)  # Package accepted by the candidate
         requested_jobs = db.Column(
             db.ARRAY(db.String)
         )  # Array with ids form jobs requested by the candidate
+        initiatives_accepted = db.Column(db.JSON)
 
         def __init__(
             self,
@@ -121,7 +123,9 @@ def init_candidate_model(db):
             saved_items=None,
             date_profile_modified=None,
             package_requested=None,
+            package_accepted=None,
             requested_jobs=None,
+            initiatives_accepted=None,
         ):
             """
             Initialize a new candidate object.
@@ -164,7 +168,9 @@ def init_candidate_model(db):
             self.saved_items = saved_items
             self.date_profile_modified = date_profile_modified
             self.package_requested = package_requested
+            self.package_accepted = package_accepted
             self.requested_jobs = requested_jobs
+            self.initiatives_accepted = initiatives_accepted
 
         def to_dict(self):
             """
@@ -208,7 +214,9 @@ def init_candidate_model(db):
                 if self.date_profile_modified
                 else None,
                 "package_requested": self.package_requested,
+                "package_accepted": self.package_accepted,
                 "requested_jobs": self.requested_jobs,
+                "initiatives_accepted": self.initiatives_accepted,
             }
 
     return Candidate

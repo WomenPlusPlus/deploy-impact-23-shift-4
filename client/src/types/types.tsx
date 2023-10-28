@@ -4,6 +4,19 @@ export interface Language {
   score: number; // Allow null for initial values
 }
 
+export interface PackageAccepted {
+  visible_info: string[];
+  position: string | null;
+  key: number | null;
+  company: string;
+  companyId: string;
+}
+
+export interface User {
+  user_id: string;
+  saved_items: string[];
+}
+
 export interface Candidate {
   id: string;
   user_id: string;
@@ -18,9 +31,9 @@ export interface Candidate {
   cv_reference?: string | null;
   address?: string;
   phone_number?: string;
-  birth_date?: string; // You may want to use a Date type, or ISO string
-  work_permit: string;
-  notice_period?: string;
+  birth_date?: string;
+  work_permit: string | null;
+  notice_period?: string | null;
   job_status?: string;
   preferred_jobs?: { [key: string]: any }[];
   company_type?: string[];
@@ -33,15 +46,17 @@ export interface Candidate {
   links?: { [key: string]: any }[];
   certificates?: { [key: string]: any }[];
   visible_information?: string[];
-  experience?: { [key: string]: any }[];
-  visa_status?: string[];
-  salary_expectation?: string[];
-  possible_work_locations?: string[];
-  type_of_work?: string[];
-  saved_items?: string[];
+  experience?: { [key: string]: any }[] | null;
+  visa_status?: string[] | null;
+  salary_expectation?: string[] | null;
+  possible_work_locations?: string[] | null;
+  type_of_work?: string[] | null;
+  saved_items?: string[] | null;
   date_profile_modified?: string;
-  package_requested?: { [key: string]: any }[];
-  requested_jobs?: string[];
+  package_requested?: { [key: string]: any }[] | null;
+  package_accepted?: PackageAccepted[];
+  requested_jobs?: string[] | null;
+  initiatives_accepted?: { [key: string]: any }[] | null;
 }
 
 export interface EditInputProps<Candidate> {
@@ -67,7 +82,7 @@ export interface Company {
   linkedin_url?: string;
   values?: string[];
   job_types?: string[];
-  contact_details?: Record<string, any>; // JSON object
+  contact_details?: Record<string, any>;
   kununu_url?: string;
   open_positions?: string[];
   company_size?: string;
@@ -83,7 +98,7 @@ export interface Company {
 export interface Experience {
   role: string;
   industries: string;
-  years_of_experience?: number;
+  years_of_experience?: string;
 }
 
 export interface Job {
@@ -105,21 +120,57 @@ export interface Job {
   date_created?: string;
 }
 
+export interface Iniciatives {
+  id?: string;
+  associations: string[];
+  title?: string;
+  description?: string;
+  skills?: Skill[];
+  participants?: string[];
+  location_address?: string;
+  work_location?: string;
+  link: string;
+  date_created?: string;
+}
+
 export interface Association {
   id: string;
   user_id: string;
+  password: string;
+  email: string;
   association_name: string;
   logo: string;
   address: string;
+  url: string;
+  contact_details: {
+    [key: string]: any;
+  };
   description: string;
-  iniciatives: Object[];
-  invites: Object[];
+  iniciatives: Iniciatives[];
+  invites: {
+    [key: string]: any;
+  }[];
+  requests: {
+    [key: string]: any;
+  }[];
+  size: string;
 }
+
 export interface Skill {
   skill_name: string;
   skill_id?: string;
   skill_level?: string;
-  score?: number;
+}
+
+export interface AllValues {
+  name: string;
+  id: string;
+}
+
+export interface AllSkill {
+  name: string;
+  id: string;
+  category: string;
 }
 
 export interface Section {
@@ -129,4 +180,39 @@ export interface Section {
   subtext?: string;
   icon?: JSX.Element;
   type?: string;
+}
+
+export interface Payload {
+  name: string;
+  user_type: string | null;
+  recipient_email: string;
+  association_name: string;
+}
+
+export interface SendInviteModalProps {
+  isOpen: boolean;
+  defaultOption: string;
+  handleSend: (payload: Payload) => void;
+  onClose: () => void;
+}
+
+export interface Invite {
+  key: number;
+  name: string;
+  email: string;
+  user_type: string;
+  expiresIn: string;
+}
+
+export interface InvitesComponentProps {
+  association: Association;
+  callback?: () => void;
+}
+
+export interface TableRecord {
+  key: string;
+  candidate: string;
+  candidateId: string;
+  project: string;
+  associationId: string;
 }

@@ -17,13 +17,13 @@
 
 .title {
   font-size: 4rem;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .subtitle {
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  gap: 0.8rem;
   font-size: 2rem;
   font-weight: 600;
   color: var(--gray-medium);
@@ -64,5 +64,10 @@
 
 .button {
   color: var(--white);
-  background-color: var(--color-button);
+  background-color: var(--blue-dark);
+}
+
+.subtext {
+  font-size: 1.5rem;
+  color: var(--gray-medium);
 }

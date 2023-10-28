@@ -22,40 +22,51 @@ import {
 } from "@tabler/icons-react";
 
 import styling from "./DashboardCompanies.module.css";
+import { getMatchCandidates } from "../../../api/match";
 
 const DashboardCompany = () => {
   const progress = 80;
 
   const navigate = useNavigate();
 
+  const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
   const [company, setCompany] = useState({} as Company);
   const [matchingCandidates, setMatchingCandidates] = useState([]);
   const [allJobs, setAllJobs] = useState<Record<string, any>[]>();
   const [allCandidates, setAllCandidates] = useState<Candidate[]>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchInfo = async () => {
-    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    const userId = auth.user.id;
-    const company = await getCompanyById(userId);
+    try {
+      const allCandidates = await getAllCandidates();
+      setAllCandidates(allCandidates);
+      const allJobs = await getAllJobs();
+      setAllJobs(allJobs);
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        return job["company_id"] === userId;
+      });
 
-    const allJobs = await getAllJobs();
-    console.log("allJobs", allJobs);
-    const allCandidates = await getAllCandidates();
+      await Promise.all(
+        jobs?.map(async (job: Record<string, any>) => {
+          if (job && job?.id) {
+            return getMatchCandidates(job?.id);
+          }
+        })
+      );
+      const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
+      setMatchingCandidates(matchingCandidates);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Matching error: ", error);
+    }
 
-    const jobs = allJobs.map((job: Record<string, any>) => {
-      if (job["company_id"] === userId) {
-        return job;
-      }
-    });
-
-    const matchingCandidates = getMatchingCandidatesInfo(jobs, allCandidates);
-
-    setCompany(company);
-    setAllCandidates(allCandidates);
-    setAllJobs(allJobs);
-    setMatchingCandidates(matchingCandidates);
-    setIsLoading(true);
+    try {
+      const company = await getCompanyById(userId);
+      setCompany(company);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Company error: ", error);
+    }
   };
 
   useEffect(() => {
@@ -68,6 +79,10 @@ const DashboardCompany = () => {
     <Avatar firstName={company.company_name} size={80} />
   );
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   const content = (
     <>
       {/* Profile component */}
@@ -79,30 +94,42 @@ const DashboardCompany = () => {
             Welcome back, {company.company_name}
           </h2>
           <div className={styling.subtitle}>
-            <IconMapPin />
-            {company.address} | {company.company_size} employees |
-            <IconBrandLinkedin /> <IconWorldWww />
+            {company?.address ? (
+              <>
+                <IconMapPin />
+                <p className={styling.subtext}>{company?.address}</p>
+              </>
+            ) : (
+              <>
+                <IconMapPin />
+                <p className={styling.subtextNot}>Address not provided</p>
+              </>
+            )}
+            {company.company_size ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <p className={styling.subtext}>
+                  {company.company_size} employees
+                </p>
+              </>
+            ) : null}
+            {company.company_website ? (
+              <>
+                <p className={styling.subtext}> | </p>
+                <IconBrandLinkedin
+                  onClick={() => navigate(`${company?.company_website}`)}
+                />{" "}
+                <IconWorldWww />
+              </>
+            ) : null}
           </div>
         </div>
 
         <IconExternalLink
           className={styling.icon}
           color="black"
-          onClick={() => navigate("/company-profile")}
+          onClick={() => navigate(`/company-profile/${userId}`)}
         />
-      </CardContainer>
-
-      {/* Progress bar */}
-      <CardContainer className={styling.progress}>
-        <p>You've completed {progress}% </p>
-
-        <div className={styling.progressSection}>
-          <div className={styling.progressBar}>
-            <ProgressBar progress={progress} />
-          </div>
-
-          <Button>Complete your profile</Button>
-        </div>
       </CardContainer>
 
       {/* Find Jobs */}
@@ -164,7 +191,7 @@ const DashboardCompany = () => {
   );
 
   return (
-    <div className={styling.main}>{isLoading ? content : <Spinner />}</div>
+    <div className={styling.main}>{content}</div>
   );
 };
 

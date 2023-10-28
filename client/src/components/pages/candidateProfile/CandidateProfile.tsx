@@ -12,8 +12,10 @@ import { EditExperience } from "./modal/EditExperience";
 import { EditJobSearchPref } from "./modal/EditJobSearchPref";
 import {
   allCategories,
+  allTypeOfJob,
   countNullFieldsByCategory,
-  getFakeData,
+  fieldsToDisplayContactInfo,
+  fieldsToDisplayProfile,
   transformCandidateDocs,
   transformCandidateJobPref,
   transformExperience,
@@ -33,11 +35,14 @@ import {
 import { DocumentUploadModal } from "./modal/EditUploadDocuments";
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
-import { Candidate } from "../../../types/types";
+import { Candidate, AllSkill, AllValues } from "../../../types/types";
 
 import styling from "./CandidateProfile.module.css";
 import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
 import ToggleModal from "../../shared/toggleModal/ToggleModal";
+import { getAllSkills } from "../../../api/skills";
+import { getAllValues } from "../../../api/values";
+import Spinner from "../../UI/spinner/Spinner";
 
 const CandidateProfile = () => {
   // State
@@ -56,6 +61,8 @@ const CandidateProfile = () => {
   const [isTypeOfJobsEdit, setIsTypeOfJobsEdit] = useState(false);
   const [isExperienceEdit, setIsExperienceEdit] = useState(false);
   const [isDocumentsEdit, setIsDocumentsEdit] = useState(false);
+  // loading
+  const [isLoading, setIsLoading] = useState(true);
 
   const [allSkills, setAllSkills] = useState([]);
   const [allValues, setAllValues] = useState([]);
@@ -81,9 +88,19 @@ const CandidateProfile = () => {
 
   const fetchCandidate = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
-    console.log("user_id", auth.user.id);
+
     try {
-      const candidateFetched = await getCandidateById(auth.user.id);
+      const skills = await getAllSkills();
+      const values = await getAllValues();
+      const candidateFetched = await getCandidateById(auth?.user?.id);
+      const allSkill = skills.map((skill: AllSkill) => {
+        return skill.name;
+      });
+      const allValues = values.map((value: AllValues) => {
+        return value.name;
+      });
+      setAllValues(allValues);
+      setAllSkills(allSkill);
       setCandidate(candidateFetched);
       const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
@@ -94,10 +111,7 @@ const CandidateProfile = () => {
         candidateFetched.experience
       );
       setSectionsExperience(transformedExperience);
-      // Count the number of null categories
-      const countFields = countNullFieldsByCategory(candidate, allCategories);
-      setCountNullCategories(countFields);
-      console.log("countFields", countFields);
+      setIsLoading(false);
     } catch (error) {
       console.log("error", error);
     }
@@ -105,9 +119,7 @@ const CandidateProfile = () => {
 
   useEffect(() => {
     fetchCandidate();
-    setAllSkills(getFakeData().allSkill as []);
-    setAllValues(getFakeData().allValue as []);
-    setAllTypeOfJobs(getFakeData().allTypeOfJob as []);
+    setAllTypeOfJobs(allTypeOfJob as []);
   }, []);
 
   // handlers
@@ -171,14 +183,16 @@ const CandidateProfile = () => {
       candidateUpdated
     );
     await fetchCandidate();
-    console.log("is_updated", is_updated);
   };
 
   const handleSaveToggleModal = (enabledStrings: string[]) => {
     setShowToggleModal(false);
     handleSaveEdit({ visible_information: enabledStrings });
-    console.log("Enabled Strings:", enabledStrings);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styling.main}>
@@ -251,7 +265,7 @@ const CandidateProfile = () => {
             setVisible={setIsProfileEdit}
             candidate={candidate}
             setValuesToEdit={setCandidate}
-            fieldsToDisplay={getFakeData().fieldsToDisplayProfile}
+            fieldsToDisplay={fieldsToDisplayProfile}
             showModal={editHandlerProfile}
             onSave={handleSaveEdit}
             fieldKeysToEdit={[
@@ -269,6 +283,7 @@ const CandidateProfile = () => {
       <div className={styling.profileCompletedComponent}>
         {/* Profile completed */}
         <ProfileComplete
+          setCountNullCategories={setCountNullCategories}
           className={styling.profileCompletedElement}
           candidate={candidate}
           editContactInfo={editContactInfo}
@@ -280,6 +295,7 @@ const CandidateProfile = () => {
           editExperience={editExperience}
           editDocuments={editDocuments}
           editVisibleInformation={editHandlerJobSearchPref}
+          editJobSearchPref={editHandlerJobSearchPref}
           getProgress={getProgress}
           hidden={isCompleteProfile}
         />
@@ -297,7 +313,7 @@ const CandidateProfile = () => {
             <IconEdit color="black" onClick={() => setShowToggleModal(true)} />
             <ToggleModal
               visible={showToggleModal}
-              strings={allCategories}
+              allCategories={allCategories}
               selectedStrings={selectedStrings}
               title="Visible Information"
               subtitle="Choose what information you want to be visible to recruiters."
@@ -475,11 +491,11 @@ const CandidateProfile = () => {
               onSave={handleSaveEdit}
             />
           </div>
-          <ContentBlock sections={sectionsExperience} />
+          <ContentBlock sections={sectionsExperience} width="22rem" />
         </CardContainer>
       </div>
 
-      {/* Contact info, languages, experience */}
+      {/* Contact info, languages, Documents */}
       {/* Contact info */}
       <div className={styling.inOneRow}>
         <CardContainer
@@ -496,20 +512,20 @@ const CandidateProfile = () => {
               setVisible={setIsEditContactInfo}
               candidate={candidate}
               setValuesToEdit={setCandidate}
-              fieldsToDisplay={getFakeData().fieldsToDisplayContactInfo}
+              fieldsToDisplay={fieldsToDisplayContactInfo}
               showModal={editContactInfo}
               onSave={handleSaveEdit}
               fieldKeysToEdit={["phone_number", "email", "address"]}
             />
           </div>
-          <div>
-            <p>
+          <div className={styling.padding}>
+            <p className={styling.contactParagraph}>
               <strong>Phone number:</strong> {candidate?.phone_number}
             </p>
-            <p>
+            <p className={styling.contactParagraph}>
               <strong>Email:</strong> {candidate?.email}
             </p>
-            <p>
+            <p className={styling.contactParagraph}>
               <strong>Address:</strong> {candidate?.address}
             </p>
           </div>
@@ -582,7 +598,7 @@ const CandidateProfile = () => {
           />
         </div>
         <div className={styling.visibleSection}>
-          <ContentBlock sections={sectionsJobSearchPref} />
+          <ContentBlock sections={sectionsJobSearchPref} width="16rem" />
         </div>
       </CardContainer>
     </div>

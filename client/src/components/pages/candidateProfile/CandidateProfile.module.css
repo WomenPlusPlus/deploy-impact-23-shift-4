@@ -48,6 +48,7 @@
   align-items: flex-start;
   gap: 0.9rem;
   margin-left: 1rem;
+  margin-top: 1rem;
   color: black;
   font-size: large;
 }
@@ -100,6 +101,15 @@
 
 .editIcon {
   margin-left: auto;
+}
+
+.padding {
+  padding: 0 1rem;
+}
+
+.contactParagraph {
+  margin-top: 4rem;
+  font-size: medium;
 }
 
 /* Associations */
@@ -235,7 +245,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 12%;
+  margin: 5% 0;
 }
 
 .unbiasedSearch p {

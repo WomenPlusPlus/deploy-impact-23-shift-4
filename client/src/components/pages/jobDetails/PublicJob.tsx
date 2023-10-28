@@ -1,5 +1,4 @@
 import styling from "./PublicJob.module.css";
-import { CardContainer } from "../../UI/container/CardContainer";
 import Avatar from "../../UI/avatar/Avatar";
 import { Button } from "../../UI/button/Button";
 import {
@@ -7,8 +6,6 @@ import {
   IconMapPin,
   IconBriefcase2,
   IconChartPie,
-  IconWorldWww,
-  IconUsers,
 } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -16,40 +13,29 @@ import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { Job, Company, Candidate } from "../../../types/types";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
-import { SkillsLevelGuide } from "../../shared/skillsLevelGuide/SkillsLevelGuide";
-import { Labels } from "../../UI/labels/Label";
+
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
-import ApplyModal from "./applyModal/ApplyModal";
-import { get } from "http";
+
+import { Tabs } from "antd";
+import DetailsTab from "./tabs/details/DetailsTab";
+import JobMatchesTab from "./tabs/matches/MatchesTab";
+import Spinner from "../../UI/spinner/Spinner";
 
 const PublicJob = () => {
   // Job id from url
   const { id } = useParams<{ id: string }>();
   const userId = JSON.parse(localStorage.getItem("auth") || "{}")?.user?.id;
-  const usetType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+  const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
     ?.user_type;
   const iconSize = 20;
-  const companyIconSize = 15;
-  const matchScore = 80;
+
   // state
   const [candidate, setCandidate] = useState<Candidate>();
   const [jobData, setJobData] = useState<Job>({} as Job);
   const [companyData, setCompanyData] = useState<Company>();
   const [isSaved, setIsSaved] = useState(false);
-  const [isApplyModalOpen, setApplyModalOpen] = useState(false);
-
-  const toggleApplyModal = () => {
-    setApplyModalOpen(!isApplyModalOpen);
-    getInfo(id ?? "");
-  };
-
-  const isApplied = () => {
-    const requestedJobs = candidate?.requested_jobs;
-    if (requestedJobs) {
-      return requestedJobs.includes(jobData?.id);
-    }
-    return false;
-  };
+  const [matchScore, setMatchScore] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Get job and company data
@@ -58,17 +44,34 @@ const PublicJob = () => {
   const getInfo = async (id: string) => {
     const getJob = await getJobById(id);
 
-    if (usetType === "candidate") {
-      const candidate = await getCandidateById(userId);
-      const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
-      setIsSaved(fetchIsSaved);
-      setCandidate(candidate);
+    if (userType === "candidate") {
+      try {
+        const candidate = await getCandidateById(userId);
+        const fetchIsSaved = candidate?.saved_items?.includes(getJob?.id);
+        setIsSaved(fetchIsSaved);
+        setCandidate(candidate);
+
+        const matchScore = candidate?.matching_jobs.find(
+          (job: Job) => job.id === getJob?.id
+        )?.match_score;
+        if (matchScore) {
+          setMatchScore(matchScore);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
     }
 
     if (getJob) {
-      const getCompany = await getCompanyById(getJob?.company_id ?? "");
-      setCompanyData(getCompany);
-      setJobData(getJob);
+      try {
+        const getCompany = await getCompanyById(getJob?.company_id ?? "");
+        setCompanyData(getCompany);
+        setJobData(getJob);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -113,7 +116,32 @@ const PublicJob = () => {
       });
     }
   };
-  console.log("CANDIDATE", candidate);
+
+  const tabs = [
+    {
+      label: "Details",
+      key: "1",
+      children: (
+        <DetailsTab
+          candidate={candidate}
+          companyData={companyData}
+          jobData={jobData}
+          getInfo={getInfo}
+          id={id}
+        />
+      ),
+    },
+    {
+      label: "Matches",
+      key: "2",
+      children: <JobMatchesTab job={jobData} />,
+    },
+  ];
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div className={styling.main}>
       {/* First line */}
@@ -147,10 +175,12 @@ const PublicJob = () => {
       <div>
         <h1 className={styling.jobTitle}>{jobData?.title}</h1>
         <div className={styling.row}>
-          <div className={styling.row}>
-            <IconChartPie size={iconSize} />
-            <p>{matchScore}% Match</p>
-          </div>
+          {matchScore && (
+            <div className={styling.row}>
+              <IconChartPie size={iconSize} />
+              <p>{matchScore}% Match</p>
+            </div>
+          )}
 
           <div className={styling.row}>
             <IconMapPin size={iconSize} />{" "}
@@ -165,103 +195,10 @@ const PublicJob = () => {
         </div>
       </div>
 
-      {/* Containers */}
-      <CardContainer className={styling.cardCont}>
-        <h1 className={styling.titles}>Skills</h1>
-        <SkillsLevelGuide />
-        <div className={styling.labelDiv}>
-          {jobData?.skills?.map((skill, index) => (
-            <Labels
-              key={`technical_${index}`}
-              labelName={skill?.skill_name}
-              isSkill={true}
-              skillLevel={skill?.skill_level}
-              disableCloseIcon={true}
-              customClass={styling.label}
-            />
-          ))}
-        </div>
-      </CardContainer>
-
-      {/* Job Description */}
-      <CardContainer className={styling.cardCont}>
-        <h1 className={styling.titles}>Job Description</h1>
-        <h2 className={styling.h2Title}>What will you do?</h2>
-        <p>{jobData?.description}</p>
-      </CardContainer>
-
-      {/* Accepting applications */}
-      <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
-        <h1 className={styling.titles}>Accepting applications</h1>
-        <Button
-          className={styling.applyButton}
-          onClick={toggleApplyModal}
-          disabled={isApplied()}
-        >
-          {isApplied()
-            ? "You have already shown interest in this position"
-            : "Show your interest in the position"}
-        </Button>
-      </CardContainer>
-
-      <ApplyModal
-        isApplyModalOpen={isApplyModalOpen}
-        company={companyData}
-        jobId={jobData?.id}
-        candidate={candidate}
-        callback={toggleApplyModal}
-      />
-
-      <CardContainer className={styling.cardCont}>
-        <h1 className={styling.titles}>Company details</h1>
-        <div className={`${styling.rowEnd} ${styling.allWidth}`}>
-          <div className={styling.row}>
-            <Avatar firstName={companyData?.company_name} size={50} />
-            <div>
-              {companyData?.company_name ? (
-                <h3 className={styling.companyName}>
-                  {companyData?.company_name}
-                </h3>
-              ) : (
-                <h3 className={styling.companyName}>Company</h3>
-              )}
-
-              <div className={styling.row}>
-                <IconMapPin size={companyIconSize} />
-                {companyData?.address ? (
-                  <p>{companyData?.address}</p>
-                ) : (
-                  <p>Basel, CH</p>
-                )}
-                <p>|</p>
-                <div className={styling.row}>
-                  <IconUsers size={companyIconSize} />
-                  {companyData?.company_size ? (
-                    <p>companyData?.company_size</p>
-                  ) : (
-                    <p>100-200</p>
-                  )}
-                </div>
-                <p>|</p>
-                <a
-                  href={companyData?.linkedin_url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <IconWorldWww size={companyIconSize} color="black" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className={styling.row}>
-            <Button className={styling.companyButton}>View company</Button>
-          </div>
-        </div>
-        <div>
-          <h2 className={styling.h2Title}>About us</h2>
-          <p>{companyData?.company_description}</p>
-        </div>
-      </CardContainer>
+      {/* Tabs */}
+      <div className={styling.margin}>
+        <Tabs items={tabs} centered={false} size="large" />
+      </div>
     </div>
   );
 };

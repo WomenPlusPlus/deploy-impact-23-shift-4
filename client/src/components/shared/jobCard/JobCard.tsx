@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { Card, Avatar } from "antd";
-import { Labels } from "../labels/Label";
+import { Card } from "antd";
+import { Labels } from "../../UI/labels/Label";
 import { IconBookmark, IconMapPin, IconShoppingBag } from "@tabler/icons-react";
 import { PieChartFilled } from "@ant-design/icons";
 
 import styling from "./JobCard.module.css";
 import { Candidate, Company, Job } from "../../../types/types";
 import { updateCandidateById } from "../../../api/candidates";
+import Avatar from "../../UI/avatar/Avatar";
 
 interface JobCardProps {
   job: Job;
@@ -28,12 +29,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
     ?.user_type;
 
-  const truncatedDescription: string | undefined = job?.description
-    ? typeof job?.description === "string" && job?.description?.length > 150
-      ? `${job?.description.slice(0, 150)}...`
-      : job?.description
-    : undefined;
-
   // Return the company name for a given job
   const getCompanyName = (job: Job) => {
     const company = companies?.find(
@@ -45,7 +40,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const logo = companies?.find(
     (company) => company?.user_id === job?.company_id
   )?.logo;
-  const company_name = getCompanyName(job);
 
   // Get the matching score for a given job
   const matchingJobs = candidate?.matching_jobs;
@@ -112,18 +106,13 @@ const JobCard: React.FC<JobCardProps> = ({
       <Card className={styling.card}>
         <div className={styling.jobHeader}>
           <div className={styling.row}>
-            <Avatar
-              className={styling.avatar}
-              src={logo}
-              size={70}
-              onClick={onClick}
-            />
+            <Avatar size={50} firstName={getCompanyName(job)} />
             <div className={styling.title}>
               <h2 className={styling.jobTitle} onClick={onClick}>
                 {job?.title}
               </h2>
               <p className={styling.companyName} onClick={onClick}>
-                @{company_name}
+                @{getCompanyName(job)}
               </p>
             </div>
           </div>
@@ -169,7 +158,7 @@ const JobCard: React.FC<JobCardProps> = ({
             <>
               {job?.skills?.map((skill, index) => (
                 <Labels
-                  key={`technical_${index}`}
+                  key={index}
                   labelName={skill?.skill_name}
                   customClass={styling.label}
                   disableCloseIcon
@@ -177,7 +166,7 @@ const JobCard: React.FC<JobCardProps> = ({
               ))}
               {job?.soft_skills?.map((softSkill, index) => (
                 <Labels
-                  key={`soft_${index}`}
+                  key={index + 1}
                   labelName={softSkill}
                   customClass={styling.label}
                   disableCloseIcon

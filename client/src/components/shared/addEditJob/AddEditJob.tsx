@@ -4,7 +4,7 @@ import { Modal as AntdModal, Input, Select, Divider, AutoComplete } from "antd";
 import { Button } from "../../UI/button/Button";
 import { Labels } from "../../UI/labels/Label";
 
-import { Skill } from "../../../types/types";
+import { AllSkill, Job, Skill } from "../../../types/types";
 
 import { getAllSkills } from "../../../api/skills";
 
@@ -15,12 +15,14 @@ const { Option } = Select;
 
 interface ModalProps {
   open: boolean;
-  onOk: (payload: any) => void;
+  onOk?: (payload: any) => void;
   onCancel: () => void;
   confirmLoading: boolean;
   companyId: string;
   companyValues: string[];
   associations: string[];
+  onEdit?: (jobId: string, payload: any) => void;
+  job?: Job;
 }
 
 const AddEditJob: React.FC<ModalProps> = ({
@@ -31,6 +33,8 @@ const AddEditJob: React.FC<ModalProps> = ({
   companyId,
   companyValues,
   associations,
+  onEdit,
+  job,
 }) => {
   // Constants
   const skillLevels = ["beginner", "intermediate", "advanced", "pro"];
@@ -47,14 +51,17 @@ const AddEditJob: React.FC<ModalProps> = ({
   const [location_country, setLocationCountry] = useState<string>("");
   const [work_location, setWorkLocation] = useState<string>("");
   const [employment_type, setEmploymentType] = useState<string>("");
-  const [selectedSkill, setSelectedSkill] = useState<string>("");
-  const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
-  const [selectedSkillLevel, setSelectedSkillLevel] =
-    useState<string>("beginner");
+  const [selectedHardSkill, setSelectedHardSkill] = useState<string>("");
+  const [selectedSoftSkill, setSelectedSoftSkill] = useState<string>("");
+  const [selectedSoftSkills, setSelectedSoftSkills] = useState<string[]>([]);
+  const [selectedHardSkills, setSelectedHardSkills] = useState<Skill[]>([]);
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState<string>("");
   // Initial state of skills
-  const [skillDataSource, setSkillDataSource] = useState<string[]>();
+  const [softSkillSource, setSoftSkillSource] = useState<string[]>();
+  const [hardSkillSource, setHardSkillSource] = useState<string[]>();
   // Filtered skill through autocomplete
-  const [filteredSkills, setFilteredSkills] = useState<string[]>();
+  const [filteredSoftSkills, setFilteredSoftSkills] = useState<string[]>();
+  const [filteredHardSkills, setFilteredHardSkills] = useState<string[]>();
 
   /**
    * Handle the ok button click
@@ -66,7 +73,8 @@ const AddEditJob: React.FC<ModalProps> = ({
       title: title,
       description: description,
       values: companyValues,
-      skills: selectedSkills,
+      skills: selectedHardSkills,
+      soft_skills: selectedSoftSkills,
       hiring_process_duration: hiring_process_duration,
       matching_candidates: [],
       salary: [minSalary, maxSalary],
@@ -76,54 +84,113 @@ const AddEditJob: React.FC<ModalProps> = ({
       employment_type: employment_type,
     };
 
-    console.log(payload);
-    onOk(payload);
-  };
-
-  /**
-   * Add a skill to the selected skills array
-   */
-  const addSkill = () => {
-    if (
-      selectedSkill &&
-      filteredSkills?.includes(selectedSkill) &&
-      !selectedSkills.some((skill) => skill.skill_name === selectedSkill)
-    ) {
-      const newSkill = {
-        skill_name: selectedSkill,
-        skill_level: selectedSkillLevel,
-      };
-      setSelectedSkills([...selectedSkills, newSkill]);
-      setSelectedSkill("");
+    if (job && onEdit) {
+      onEdit(job.id, payload);
+    } else if (onOk) {
+      onOk(payload);
     }
   };
 
   /**
-   * Remove a skill from the selected skills array
+   * Add a hard skill to the selected skills array
+   */
+  const addHardSkill = () => {
+    if (
+      selectedHardSkill &&
+      filteredHardSkills?.includes(selectedHardSkill) &&
+      !selectedHardSkills.some(
+        (skill) => skill.skill_name === selectedHardSkill
+      )
+    ) {
+      const newSkill = {
+        skill_name: selectedHardSkill,
+        skill_level: selectedSkillLevel,
+      };
+      setSelectedHardSkills([...selectedHardSkills, newSkill]);
+      setSelectedHardSkill("");
+    }
+  };
+
+  /**
+   * Remove a hard skill from the selected skills array
    * @param skillName the name of the skill to remove
    */
-  const removeSkill = (skillName: string) => {
-    setSelectedSkills(
-      selectedSkills?.filter((skill) => skill?.skill_name !== skillName)
+  const removeHardSkill = (skillName: string) => {
+    setSelectedHardSkills(
+      selectedHardSkills?.filter((skill) => skill?.skill_name !== skillName)
+    );
+  };
+
+  /**
+   * Add a hard skill to the selected skills array
+   */
+  const addSoftSkill = () => {
+    if (
+      selectedSoftSkill &&
+      filteredSoftSkills?.includes(selectedSoftSkill) &&
+      !selectedSoftSkills.includes(selectedSoftSkill)
+    ) {
+      setSelectedSoftSkills([...selectedSoftSkills, selectedSoftSkill]);
+      setSelectedSoftSkill("");
+    }
+  };
+
+  /**
+   * Remove a soft skill from the selected skills array
+   * @param skillName the name of the skill to remove
+   */
+  const removeSoftSkill = (selectedSkill: string) => {
+    setSelectedSoftSkills(
+      selectedSoftSkills?.filter((skill) => skill !== selectedSkill)
     );
   };
 
   /**
    * Fetches all skills from the server
    */
-  const fetchSkills = async () => {
+  const fetchInfo = async () => {
     const allSkills = await getAllSkills();
-    const skills = allSkills?.map((skill: any) => skill?.name);
-    setSkillDataSource(skills);
-    setFilteredSkills(skills);
+
+    const skillsWithCategory = allSkills?.map((skill: AllSkill) => ({
+      name: skill.name,
+      category: skill.category,
+    }));
+
+    // Separate soft and hard skills
+    const softSkills = skillsWithCategory.filter(
+      (skill: AllSkill) => skill.category === "soft_skill"
+    );
+    const hardSkills = skillsWithCategory.filter(
+      (skill: AllSkill) => skill.category === "hard_skill"
+    );
+
+    // Extract just the names for your purposes
+    const softSkillNames = softSkills.map((skill: AllSkill) => skill.name);
+    const hardSkillNames = hardSkills.map((skill: AllSkill) => skill.name);
+
+    setSoftSkillSource(softSkillNames);
+    setHardSkillSource(hardSkillNames);
   };
 
   /**
    * Fetches all skills on component mount
    */
   useEffect(() => {
-    fetchSkills();
-  }, []);
+    if (job) {
+      setTitle(job?.title ?? "");
+      setDescription(job?.description ?? "");
+      setHiringProcessDuration(job?.hiring_process_duration ?? "");
+      setMinSalary(job?.salary?.map((salary) => salary)[0] ?? "");
+      setMaxSalary(job?.salary?.map((salary) => salary)[1] ?? "");
+      setLocationCity(job?.location_city ?? "");
+      setLocationCountry(job?.location_country ?? "");
+      setWorkLocation(job?.work_location ?? "");
+      setEmploymentType(job?.employment_type ?? "");
+      setSelectedHardSkills(job?.skills ?? []);
+      setSelectedSoftSkills(job?.soft_skills ?? []);
+    }
+    fetchInfo();
+  }, [job]);
 
   return (
     <AntdModal
@@ -132,7 +199,7 @@ const AddEditJob: React.FC<ModalProps> = ({
       onOk={handleCreate}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
-      okText="Create"
+      okText={job ? "Save" : "Create"}
     >
       <h2 className={styling.header}>Create new job</h2>
       <Divider>Job Info</Divider>
@@ -151,33 +218,33 @@ const AddEditJob: React.FC<ModalProps> = ({
 
       <div className={styling.twoColumn}>
         <div className={styling.sider}>
-          <Divider>Skills</Divider>
+          <Divider>Hard Skills</Divider>
           <div className={styling.autocomplete}>
             <AutoComplete
               placeholder="Search for skills"
-              value={selectedSkill}
-              options={filteredSkills?.map((skill) => ({ value: skill }))}
+              value={selectedHardSkill}
+              options={filteredHardSkills?.map((skill) => ({ value: skill }))}
               onSelect={(value) => {
-                setSelectedSkill(value);
+                setSelectedHardSkill(value);
               }}
               style={{ width: "100%" }}
               popupClassName="scrollable-dropdown"
               popupMatchSelectWidth={false}
               onSearch={(searchText) => {
-                setSelectedSkill(searchText);
+                setSelectedHardSkill(searchText);
                 if (searchText === "") {
-                  setFilteredSkills(skillDataSource);
+                  setFilteredHardSkills(hardSkillSource);
                 } else {
-                  const filterSkills = skillDataSource?.filter((skill) =>
+                  const filterSkills = hardSkillSource?.filter((skill) =>
                     skill.toLowerCase().includes(searchText.toLowerCase())
                   );
-                  setFilteredSkills(filterSkills);
+                  setFilteredHardSkills(filterSkills);
                 }
               }}
               onBlur={() => {
-                if (!selectedSkill) {
+                if (!selectedHardSkill) {
                   // When the input field is cleared, reset the filteredSkills to the initial options
-                  setFilteredSkills(skillDataSource);
+                  setFilteredHardSkills(hardSkillSource);
                 }
               }}
             />
@@ -194,15 +261,63 @@ const AddEditJob: React.FC<ModalProps> = ({
               ))}
             </Select>
 
-            <Button onClick={addSkill}>Add</Button>
+            <Button onClick={addHardSkill}>Add</Button>
           </div>
           <div className={styling.labelContainer}>
-            {selectedSkills?.map((skill: any, index: number) => (
+            {selectedHardSkills?.map((skill: any, index: number) => (
               <Labels
                 key={index}
                 customClass={styling.label}
                 labelName={`${skill?.skill_name} | ${skill?.skill_level}`}
-                onCloseIcon={() => removeSkill(skill?.skill_name)}
+                onCloseIcon={() => removeHardSkill(skill?.skill_name)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className={styling.twoColumn}>
+        <div className={styling.sider}>
+          <Divider>Soft skills</Divider>
+          <div className={styling.autocomplete}>
+            <AutoComplete
+              placeholder="Search for skills"
+              value={selectedSoftSkill}
+              options={filteredSoftSkills?.map((skill) => ({ value: skill }))}
+              onSelect={(value) => {
+                setSelectedSoftSkill(value);
+              }}
+              style={{ width: "100%" }}
+              popupClassName="scrollable-dropdown"
+              popupMatchSelectWidth={false}
+              onSearch={(searchText) => {
+                setSelectedSoftSkill(searchText);
+                if (searchText === "") {
+                  setFilteredSoftSkills(softSkillSource);
+                } else {
+                  const filterSkills = softSkillSource?.filter((skill) =>
+                    skill.toLowerCase().includes(searchText.toLowerCase())
+                  );
+                  setFilteredSoftSkills(filterSkills);
+                }
+              }}
+              onBlur={() => {
+                if (!selectedSoftSkill) {
+                  // When the input field is cleared, reset the filteredSkills to the initial options
+                  setFilteredSoftSkills(softSkillSource);
+                }
+              }}
+            />
+
+            <Button onClick={addSoftSkill}>Add</Button>
+          </div>
+          <div className={styling.labelContainer}>
+            {selectedSoftSkills?.map((skill: any, index: number) => (
+              <Labels
+                key={index}
+                customClass={styling.label}
+                labelName={skill}
+                onCloseIcon={() => removeSoftSkill(skill)}
               />
             ))}
           </div>
@@ -264,12 +379,22 @@ const AddEditJob: React.FC<ModalProps> = ({
           </Select>
 
           <p className={styling.sectionName}>City:</p>
-          <Input
+          <Select
             className={styling.input}
             placeholder="City"
             value={location_city}
-            onChange={(e) => setLocationCity(e.target.value)}
-          />
+            onChange={(e) => setLocationCity(e)}
+            style={{ minWidth: "100%" }}
+          >
+            <Option value="Zurich">Zurich</Option>
+            <Option value="Bern">Bern</Option>
+            <Option value="Basel">Basel</Option>
+            <Option value="Geneva">Geneva</Option>
+            <Option value="Lausanne">Lausanne</Option>
+            <Option value="Lugano">Lugano</Option>
+            <Option value="Luzern">Luzern</Option>
+            <Option value="St. Gallen">St. Gallen</Option>
+          </Select>
 
           <p className={styling.sectionName}>Country:</p>
           <Input

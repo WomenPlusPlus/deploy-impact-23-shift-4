@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal as AntModal, AutoComplete, Input } from "antd";
 
 import styling from "./EditCompanyProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
 import { Button } from "../../UI/button/Button";
 import { Labels } from "../../UI/labels/Label";
+import { getAllValues } from "../../../api/values";
 
 interface ModalProps {
   open: boolean;
@@ -25,8 +26,6 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   companyInfo,
 }) => {
   const MAX_LABELS_DISPLAYED = 6;
-  const arrayOfValues = ["Teamwork", "Accountability", "Diversity"];
-  console.log("companyInfo", companyInfo.company_name);
 
   // State
   const [company_name, setCompanyName] = useState<string>(
@@ -41,6 +40,9 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   );
   const [values, setValues] = useState<string[]>(companyInfo.values || []);
   const [address, setAddress] = useState<string>(companyInfo.address || "");
+  const [company_website, setCompanyWebsite] = useState<string>(
+    companyInfo.company_website || ""
+  );
   const [kununu_url, setKununuUrl] = useState<string>(
     companyInfo.kununu_url || ""
   );
@@ -49,8 +51,24 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   );
   const [logo, setLogo] = useState<string>(companyInfo.logo || "");
   const [selectedValue, setSelectedValue] = useState<string>("");
-  const [valueDataSource, setValueDataSource] =
-    useState<string[]>(arrayOfValues);
+  const [valueDataSource, setValueDataSource] = useState<string[]>([]);
+  const [allValues, setAllValues] = useState<string[]>([]);
+
+  /**
+   * Fetches all values from the database and sets the state
+   */
+  const fetchValues = async () => {
+    const values = await getAllValues();
+
+    const arrayOfValues = values?.map((value: any) => value?.name);
+
+    setValueDataSource(arrayOfValues);
+    setAllValues(arrayOfValues);
+  };
+
+  useEffect(() => {
+    fetchValues();
+  }, []);
 
   const handleOk = () => {
     const payload = {
@@ -58,10 +76,11 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
       company_name: company_name,
       company_size: company_size,
       company_description: description,
-      company_address: address,
+      address: address,
       values: values,
       kununu_url: kununu_url,
       linkedin_url: linkedin_url,
+      company_website: company_website,
       logo: logo,
     };
 
@@ -69,7 +88,11 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
   };
 
   const addValue = () => {
-    if (selectedValue && !values.includes(selectedValue)) {
+    if (
+      selectedValue &&
+      valueDataSource.includes(selectedValue) &&
+      !values.includes(selectedValue)
+    ) {
       setValues([...values, selectedValue]);
       setSelectedValue("");
     }
@@ -174,19 +197,22 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
             <AutoComplete
               placeholder="Search for values"
               value={selectedValue}
-              dataSource={valueDataSource}
-              onSelect={setSelectedValue}
+              options={valueDataSource?.map((value) => ({ value: value }))}
+              onSelect={(value) => {
+                setSelectedValue(value);
+              }}
               style={{ width: "100%" }}
               onSearch={(searchText) => {
-                if (searchText === "") {
-                  setValueDataSource(arrayOfValues);
-                }
                 setSelectedValue(searchText);
 
-                const filteredValues = arrayOfValues.filter((value) =>
-                  value.toLowerCase().includes(searchText.toLowerCase())
-                );
-                setValueDataSource(filteredValues);
+                if (searchText === "") {
+                  setValueDataSource(allValues);
+                } else {
+                  const filteredValues = valueDataSource?.filter((value) =>
+                    value.toLowerCase().includes(searchText.toLowerCase())
+                  );
+                  setValueDataSource(filteredValues);
+                }
               }}
             />
 
@@ -194,6 +220,16 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
           </div>
 
           {renderValueLabels()}
+        </div>
+
+        <div className={styling.section}>
+          <p className={styling.sectionName}>Company URL:</p>
+          <Input
+            className={styling.input}
+            placeholder="Company URL"
+            value={company_website}
+            onChange={(e) => setCompanyWebsite(e.target.value)}
+          />
         </div>
 
         <div className={styling.section}>

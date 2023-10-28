@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
-import styling from "./RegisterCandidate.module.css"; // You can create a separate CSS file for styling
+import styling from "./Register.module.css"; // You can create a separate CSS file for styling
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../../UI/oauth/GoogleButton";
 import TermsAndConditions from "./TermsAndConditions";
 import BridgeLogo from "../../../media/bridge-logo.png";
+import { SpinnerGlobal } from "../../layout/authenticated/SpinnerGlobal";
 
-interface RegisterCandidateProps {
+interface RegisterProps {
   token: string;
   expires: string;
   user_type: string;
@@ -16,42 +17,16 @@ interface RegisterCandidateProps {
   associations: string[];
 }
 
-const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
+const Register: React.FC<RegisterProps> = ({
   token,
   expires,
   user_type,
   signature,
   associations,
 }) => {
-  console.log(
-    "Token:",
-    token,
-    "Expires:",
-    expires,
-    "User type:",
-    user_type,
-    "Signature:",
-    signature
-  );
   // state
-  const [formData, setFormData] = useState(
-    user_type === "candidate"
-      ? {
-          first_name: "",
-          last_name: "",
-          password: "",
-          email: "",
-          user_type: user_type,
-          associations: associations,
-        }
-      : {
-          password: "",
-          email: "",
-          user_type: user_type,
-          associations: associations,
-          company_name: "",
-        }
-  );
+  const [formData, setFormData] = useState({} as any);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [agree, setAgree] = useState(false);
 
@@ -65,26 +40,41 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
 
   const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
-    // Send registration data to the backend (you'll need to replace the URL and method)
+  const onClickRegister = (values: any) => {
+    setIsLoading(true);
+    // add associations to the form data
+    const data = {
+      ...formData,
+      associations,
+      user_type,
+    };
     axios
-      .post("/api/register", formData, { withCredentials: true }) // Replace with your registration endpoint
+      .post("/api/register", data, { withCredentials: true }) // Replace with your registration endpoint
       .then((response) => {
-        // Handle the backend response here (e.g., show a success message)
-        console.log("Registration Successful!");
-        console.log(`${response.data}`);
-        navigate("/login"); // Redirect to the login page after successful registration
+        const { data } = response;
+        if (data.message === "User registered successfully") {
+          setIsLoading(false);
+          navigate("/login");
+        } else {
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         // Handle any errors here (e.g., display error messages)
         if (error.response) {
           console.error("HTTP Status Code:", error.response.status);
           console.error("Response Data:", error.response.data);
+          setIsLoading(false);
         } else {
           console.error("Network Error:", error.message);
+          setIsLoading(false);
         }
       });
   };
+
+  if (isLoading) {
+    return <SpinnerGlobal />;
+  }
 
   return (
     <div className={styling.registerContainer}>
@@ -95,9 +85,9 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
           name="register_form"
           className={styling.registerForm}
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={onClickRegister}
         >
-          {user_type === "candidate" ? (
+          {user_type === "candidate" && (
             <>
               <Form.Item
                 name="first_name"
@@ -110,7 +100,7 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
                   className={styling.antInput}
                   type="text"
                   name="first_name"
-                  value={formData.first_name}
+                  value={formData?.first_name}
                   placeholder="First Name"
                   onChange={handleInputChange}
                 />
@@ -127,13 +117,14 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
                   className={styling.antInput}
                   type="text"
                   name="last_name"
-                  value={formData.last_name}
+                  value={formData?.last_name}
                   placeholder="Last Name"
                   onChange={handleInputChange}
                 />
               </Form.Item>
             </>
-          ) : (
+          )}
+          {user_type === "company" && (
             <Form.Item
               name="company_name"
               rules={[
@@ -145,8 +136,52 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
                 className={styling.antInput}
                 type="text"
                 name="company_name"
-                value={formData.company_name}
+                value={formData?.company_name}
                 placeholder="Company Name"
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          )}
+
+          {user_type === "association" && (
+            <Form.Item
+              name="association_name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Association Name!",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                className={styling.antInput}
+                type="text"
+                name="association_name"
+                value={formData?.association_name}
+                placeholder="Association Name"
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          )}
+
+          {user_type === "admin" && (
+            <Form.Item
+              name="admin_name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Admin Name!",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                className={styling.antInput}
+                type="text"
+                name="admin_name"
+                value={formData?.admin_name}
+                placeholder="Admin Name"
                 onChange={handleInputChange}
               />
             </Form.Item>
@@ -161,7 +196,7 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
               className={styling.antInput}
               type="email"
               name="email"
-              value={formData.email}
+              value={formData?.email}
               placeholder="Email"
               onChange={handleInputChange}
             />
@@ -176,7 +211,7 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
               className={styling.antInput}
               type="password"
               name="password"
-              value={formData.password}
+              value={formData?.password}
               placeholder="Password"
               onChange={handleInputChange}
             />
@@ -215,4 +250,4 @@ const RegisterCandidate: React.FC<RegisterCandidateProps> = ({
   );
 };
 
-export default RegisterCandidate;
+export default Register;

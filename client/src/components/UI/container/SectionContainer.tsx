@@ -3,15 +3,17 @@ import styling from "./SectionContainer.module.css";
 import { IconCertificate, IconClipboardText } from "@tabler/icons-react";
 
 interface ContentBlockProps {
+  customClass?: string;
   sections: Section[];
+  width?: string;
 }
 
-const ContentBlock: React.FC<ContentBlockProps> = ({ sections }) => (
-  <div className={styling.containerVisibleInfo}>
+const ContentBlock: React.FC<ContentBlockProps> = ({ sections, customClass, width }) => (
+  <div className={`${styling.containerVisibleInfo} ${customClass}`}>
     {sections &&
       sections?.map((section, index) => (
         <div key={index} className={styling.inOneRow}>
-          <div className={styling.section}>
+          <div className={styling.section} style={{width: width}}>
             <p className={styling.title}>{section.title}</p>
             {section.type === "cv" ? (
               <IconCertificate size={50} stroke={0.5} color="black" />

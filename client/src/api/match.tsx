@@ -15,7 +15,6 @@ export async function getMatchCandidates(id: string) {
     );
 
     if (response.status === 200) {
-      console.log("Matching candidates result:", response.data);
     } else {
       throw new Error("Error matching candidates");
     }
@@ -32,7 +31,7 @@ export async function getMatchJobs(id: string) {
   try {
     const response = await axios.post(
       "/api/match_jobs",
-      { candidate_id: id },
+      { user_id: id },
       { withCredentials: true }
     );
 

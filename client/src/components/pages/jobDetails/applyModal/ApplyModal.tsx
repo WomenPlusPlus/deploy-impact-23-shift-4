@@ -3,6 +3,7 @@ import ToggleModal from "../../../shared/toggleModal/ToggleModal";
 import { updateCompanyById } from "../../../../api/companies";
 import { Candidate, Company } from "../../../../types/types";
 import { updateCandidateById } from "../../../../api/candidates";
+import { allCategories } from "../../candidateProfile/helpers/helper";
 
 interface ApplyModalProps {
   company: Company | undefined;
@@ -19,12 +20,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
   isApplyModalOpen,
   callback,
 }) => {
-  const infoToShare = [
-    "Job search preferences",
-    "Languages ",
-    "Contact info ",
-    "Uploaded documents",
-  ];
 
   // State
   const [selectedStrings, setSelectedStrings] = useState<boolean[]>([
@@ -49,11 +44,8 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
    * @param enabledStrings - strings that are enabled
    */
   const handleShare = async (enabledStrings: string[], message: string) => {
-    console.log("Enabled Strings:", enabledStrings);
     const requestedJobs = candidate?.requested_jobs || [];
 
-    console.log("requestedJobs", requestedJobs);
-    console.log("candidate id", candidate);
     requestedJobs?.push(jobId);
     await updateCandidateById(candidate?.user_id ?? "", {
       requested_jobs: requestedJobs,
@@ -61,7 +53,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
 
     let existingInterestedCandidates = company?.interested_candidates || [];
 
-    console.log(candidate?.user_id);
     const newInterestedCandidate = {
       job_id: jobId,
       candidate_id: candidate?.user_id,
@@ -91,7 +82,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
     <div>
       <ToggleModal
         visible={isApplyModalOpen}
-        strings={infoToShare}
+        allCategories={allCategories}
         selectedStrings={selectedStrings}
         title="Show your interest in the position and share your info"
         subtitle="Select the information you want to share with the company"

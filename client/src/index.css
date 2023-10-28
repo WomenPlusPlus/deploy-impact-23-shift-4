@@ -9,17 +9,20 @@
   --tag-radius: 1rem;
   /* Color Palette */
   --white: #ffff;
-  --background-color: #f0f5ff;
-  --background-hover: #597ef7;
-  --backgroun-light-blue: #bacae8;
-  --color-button: #10239e;
-  --background-avatar: #030852;
+  --blue-lighter: #f0f5ff;
+  --blue-light: #bacae8;
+  --blue-medium: #597ef7;
+  --blue-dark: #10239e;
+  --blue-darker: #030852;
   --gray-bright: #eeeeee;
   --gray-light: #bfbfbf;
   --gray-medium: #595959;
   --gray-dark: #141414;
   --label-color: #e4e4e4;
   --line-color: #ccc;
+  --association-label: #c59ffd;
+  --skills-label: #a6d7c2;
+  --values-label: #a4c4e4;
 }
 
 html {
