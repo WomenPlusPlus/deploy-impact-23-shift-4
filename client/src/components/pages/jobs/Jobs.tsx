@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { JobCard } from "../../shared/jobCard/JobCard";
 import { getAllJobs } from "../../../api/jobs";
 import styling from "./Jobs.module.css";
@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { Candidate, Company, Job } from "../../../types/types";
 import { getCandidateById } from "../../../api/candidates";
 import SearchJobs from "../../UI/searchbar/SearchJobs";
-import fakeData from "./FakeDataForJobs";
+import FilterSelect from "../../UI/filter/FilterSelect";
+import DisplayMultiFilter from "../../UI/filter/DisplayMultiFilter";
 import { Select } from "antd";
+import SortBy from "../../UI/filter/SortBy";
+import { IconMapPin } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
-
-const { Option } = Select;
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -24,39 +25,37 @@ const Jobs = () => {
   const [companies, setCompanies] = useState([] as Company[]);
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchedScoreVisible, setMatchedScoreVisible] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState("Anywhere");
-
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [sortOrder, setSortOrder] = useState<string | undefined>(undefined);
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchInfo = async () => {
     const allJobs = await getAllJobs();
-
-    if (userType === "company") {
-      setMatchedScoreVisible(false);
-      // filter jobs by company id
-      const jobs = allJobs?.filter((job: any) => job?.company_id === userId);
-      setCompanyJobs(jobs);
-      setIsLoading(false);
-    } else if (userType === "association") {
-      setJobs(allJobs);
-      setIsLoading(false);
-    } else if (userType === "admin") {
-      setJobs(allJobs);
-      setIsLoading(false);
-    } else {
-      // userType === "candidate"
+    const allCompanies = await getAllCompanies();
+    if (auth?.user?.user_type === "candidate") {
       const candidate = await getCandidateById(userId);
       setCandidate(candidate);
     }
-    const allCompanies = await getAllCompanies();
-    setJobs(allJobs);
+
+    if (auth?.user?.user_type === "company") {
+      setMatchedScoreVisible(false);
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        if (job["company_id"] === userId) {
+          return job;
+        }
+      });
+      setJobs(jobs);
+    } else {
+      setJobs(allJobs);
+    }
     setCompanies(allCompanies);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchInfo();
-    console.log("isler", jobs);
   }, []);
 
   const header = () => {
@@ -77,52 +76,159 @@ const Jobs = () => {
     }
   };
 
-  const content = () => {
-    if (userType === "company") {
-      return (
-        <div className={styling.cardContainer}>
-          {companyJobs.length > 0 &&
-            companyJobs?.map((job, index) => (
-              <JobCard
-                key={index}
-                job={job}
-                companies={companies}
-                candidate={candidate}
-                onClick={() => navigate(`/job/${job?.id}`)}
-                isMatchVisible={matchedScoreVisible}
-              />
-            ))}
-        </div>
+  const locationOptions = Array.from(
+    new Set(jobs?.map((job) => job?.location_city))
+  );
+
+  const handleLocationChange = (selected: string[]) => {
+    setSelectedLocations(selected);
+  };
+  const handleSearch = (results: (Job | Company)[]) => {
+    const jobResults = results.filter((item) => "company_id" in item) as Job[];
+    setFilteredJobs(jobResults);
+  };
+  const handleSelectChange = (selectedValues: string[]) => {
+    setSelectedValues(selectedValues);
+  };
+
+  const filterData = (
+    selectedOptions: string[],
+    data: (Company | Job)[]
+  ): (Company | Job)[] => {
+    return data.filter((item) => {
+      if ("work_location" in item && "employment_type" in item) {
+        const matches = selectedOptions.some((option) => {
+          const lowercaseOption = option.toLowerCase();
+          const lowercaseWorkLocation =
+            item["work_location"]?.toLowerCase() || "";
+          const lowercaseEmploymentType =
+            item["employment_type"]?.toLowerCase() || "";
+          return (
+            lowercaseWorkLocation === lowercaseOption ||
+            lowercaseEmploymentType === lowercaseOption
+          );
+        });
+        return matches;
+      }
+      return false;
+    });
+  };
+
+  useEffect(() => {
+    const applyFilters = () => {
+      const filteredJobs = jobs.filter(
+        (job) =>
+          (selectedLocations.length === 0 ||
+            selectedLocations.includes(job.location_city || "")) &&
+          (selectedValues.length === 0 ||
+            selectedValues.some(
+              (value) =>
+                job.work_location?.toLowerCase() === value.toLowerCase() ||
+                job.employment_type?.toLowerCase() === value.toLowerCase()
+            ))
       );
+      setFilteredJobs(filteredJobs);
+    };
+
+    if (selectedValues.length === 0 && selectedLocations.length === 0) {
+      setFilteredJobs(jobs);
     } else {
-      return (
-        <div className={styling.cardContainer}>
-          {jobs.length > 0 &&
-            jobs?.map((job, index) => (
-              <JobCard
-                key={index}
-                job={job}
-                companies={companies}
-                candidate={candidate}
-                onClick={() => navigate(`/job/${job?.id}`)}
-                isMatchVisible={matchedScoreVisible}
-              />
-            ))}
-        </div>
-      );
+      applyFilters();
+    }
+  }, [selectedLocations, selectedValues, jobs]);
+  const handleSortChange = (order: string) => {
+    setSortOrder(order);
+    const sortedJobs = [...jobs].sort(sortJobsByDate);
+    setJobs(sortedJobs);
+  };
+
+  const sortJobsByDate = (a: Job, b: Job) => {
+    const dateA = new Date(a.date_created ?? "");
+    const dateB = new Date(b.date_created ?? "");
+    if (dateA < dateB) {
+      return sortOrder === "asc" ? -1 : 1;
+    } else if (dateA > dateB) {
+      return sortOrder === "asc" ? 1 : -1;
+    } else {
+      return 0;
     }
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
-  return (
+  const content = (
     <div className={styling.main}>
       {header()}
-      {content()}
+      <div className={styling.inputContainer}>
+        <div className={styling.inputs}>
+          <div className={styling.searchText}>
+            <SearchJobs data={jobs} onSearch={handleSearch} />
+          </div>
+          <div>
+            {" "}
+            <Select
+              placeholder="Anywhere"
+              style={{ width: 200 }}
+              mode="multiple"
+              value={selectedLocations}
+              onChange={handleLocationChange}
+              maxTagCount={1}
+              suffixIcon={<IconMapPin />}
+            >
+              {locationOptions?.map((location, index) => {
+                return (
+                  <Select.Option key={index} value={location}>
+                    {location}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          </div>
+          <div>
+            {" "}
+            <FilterSelect
+              filterData={filterData}
+              data={jobs}
+              onSearch={handleSearch}
+              onSelectChange={handleSelectChange}
+              selectedValues={selectedValues}
+            />
+          </div>
+        </div>
+        <div className={styling.multiFilter}>
+          <DisplayMultiFilter
+            filterData={filterData}
+            data={jobs}
+            selectedValues={selectedValues}
+            onSelectChange={handleSelectChange}
+            onSearch={handleSearch}
+          />
+        </div>
+      </div>
+      <div className={styling.sortByDate}>
+        <div>
+          We have found{" "}
+          <span className={styling.count}>{filteredJobs.length}</span> jobs!
+        </div>
+        <div className={styling.sortBy}>
+          <SortBy onChange={handleSortChange} />
+        </div>
+      </div>
+      <div className={styling.cardContainer}>
+        {filteredJobs &&
+          filteredJobs?.map((job) => (
+            <JobCard
+              key={job?.id}
+              job={job}
+              companies={companies}
+              candidate={candidate}
+              onClick={() => navigate(`/job/${job?.id}`)}
+              isMatchVisible={matchedScoreVisible}
+            />
+          ))}
+      </div>
     </div>
   );
+
+  return isLoading ? <Spinner /> : content;
 };
 
 export default Jobs;
