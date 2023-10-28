@@ -79,12 +79,14 @@ const Candidates = () => {
           <Filter
             options={skillsOptions}
             data={candidates}
+            placeholder="Skills"
             criteria="skills"
             onFilterChange={handleFilterChange}
           />
           <Filter
             options={associationsOptions}
             data={candidates}
+            placeholder="Associations"
             criteria="associations"
             onFilterChange={handleFilterChange}
           />

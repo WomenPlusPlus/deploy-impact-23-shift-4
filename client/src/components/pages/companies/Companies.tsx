@@ -101,12 +101,14 @@ const Companies = () => {
           <Filter
             options={values}
             data={companies}
+            placeholder="Values"
             criteria="values"
             onFilterChange={handleFilterChange}
           />
           <Filter
             options={associationsOptions}
             data={companies}
+            placeholder="Associations"
             criteria="associations"
             onFilterChange={handleFilterChange}
           />
