@@ -24,23 +24,18 @@ def init_candidate_model(db):
             db.String(128), nullable=False
         )  # Store the hashed password
         email = db.Column(db.String(120), unique=True, nullable=False)
+        preferred_title = db.Column(db.String(80), nullable=False)  # Preferred name as a string
         associations = db.Column(db.ARRAY(db.String), nullable=False)
         first_name = db.Column(db.String(80))  # First name as a string
         last_name = db.Column(db.String(80))  # Last name as a string
-        preferred_name = db.Column(db.String(80))  # Preferred name as a string
         city = db.Column(db.String(80))  # City as a string
         country = db.Column(db.String(80))  # Country as a string
         cv_reference = db.Column(db.String(256))  # CV reference as a string
         address = db.Column(db.String(256))  # Address as a string
         phone_number = db.Column(db.String(20))  # Phone number as a string
-        birth_date = db.Column(db.Date)  # Birth date as a date
-        work_permit = db.Column(db.String(80))  # Work permit as a string
         notice_period = db.Column(db.String(80))  # Notice period as a string
         job_status = db.Column(db.String(256))  # Job status as a string
         preferred_jobs = db.Column(db.JSON)  # Type of job you're looking for as JSON
-        company_type = db.Column(
-            db.ARRAY(db.String)
-        )  # Type of company as an JSN of strings
         matching_jobs = db.Column(
             db.JSON
         )  # Matching jobs as an JSON of foreign keys (integer)
@@ -96,17 +91,14 @@ def init_candidate_model(db):
             last_name=None,
             city=None,
             country=None,
-            preferred_name=None,
+            preferred_title=None,
             cv_reference=None,
             values=None,
             preferred_jobs=None,
             address=None,
             phone_number=None,
-            birth_date=None,
-            work_permit=None,
             notice_period=None,
             job_status=None,
-            company_type=None,
             matching_jobs=None,
             matching_companies=None,
             skills=None,
@@ -141,17 +133,14 @@ def init_candidate_model(db):
             self.last_name = last_name
             self.city = city
             self.country = country
-            self.preferred_name = preferred_name
+            self.preferred_title = preferred_title
             self.cv_reference = cv_reference
             self.values = values
             self.preferred_jobs = preferred_jobs
             self.address = address
             self.phone_number = phone_number
-            self.birth_date = birth_date
-            self.work_permit = work_permit
             self.notice_period = notice_period
             self.job_status = job_status
-            self.company_type = company_type
             self.matching_jobs = matching_jobs
             self.matching_companies = matching_companies
             self.skills = skills
@@ -185,17 +174,14 @@ def init_candidate_model(db):
                 "last_name": self.last_name,
                 "city": self.city,
                 "country": self.country,
-                "preferred_name": self.preferred_name,
+                "preferred_title": self.preferred_title,
                 "cv_reference": self.cv_reference,
                 "values": self.values,
                 "preferred_jobs": self.preferred_jobs,
                 "address": self.address,
                 "phone_number": self.phone_number,
-                "birth_date": self.birth_date.isoformat() if self.birth_date else None,
-                "work_permit": self.work_permit,
                 "notice_period": self.notice_period,
                 "job_status": self.job_status,
-                "company_type": self.company_type,
                 "matching_jobs": self.matching_jobs,
                 "matching_companies": self.matching_companies,
                 "skills": self.skills,
