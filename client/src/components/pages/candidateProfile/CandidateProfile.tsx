@@ -209,11 +209,25 @@ const CandidateProfile = () => {
         )}
 
         <div>
-          <div className={styling.userName}>
-            <h3 className={styling.h3}>
-              {candidate?.first_name} {candidate?.last_name}
-            </h3>
-            <h4>{candidate?.job_status}</h4>
+          <div className={styling.profile}>
+            <div className={styling.profileTitle}>
+              <h3>
+                {candidate?.first_name} {candidate?.last_name}
+              </h3>
+              <h4 className={styling.preferredTitle}>
+                {" "}
+                | {candidate?.preferred_title}
+              </h4>
+            </div>
+            <div
+              className={
+                candidate?.job_status === "Looking for a job"
+                  ? `${styling.transparentGreen} ${styling.jobStatusTag}`
+                  : `${styling.transparentRed} ${styling.jobStatusTag}`
+              }
+            >
+              <h4>{candidate?.job_status}</h4>
+            </div>
           </div>
 
           <div className={styling.location}>
@@ -258,7 +272,6 @@ const CandidateProfile = () => {
             </div>
           </div>
         </div>
-
         <div className={styling.editIcon}>
           <EditInput
             visible={isProfileEdit}
@@ -271,6 +284,7 @@ const CandidateProfile = () => {
             fieldKeysToEdit={[
               "first_name",
               "last_name",
+              "preferred_title",
               "job_status",
               "city",
               "country",

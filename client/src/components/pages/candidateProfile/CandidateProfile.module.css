@@ -11,6 +11,12 @@
   font-size: 2rem;
 }
 
+.preferredTitle {
+  font-size: 2rem;
+  margin: 0;
+  align-items: center;
+}
+
 .profileSectionElement {
   width: var(--secton-width);
   box-sizing: border-box;
@@ -28,18 +34,43 @@
   cursor: pointer;
 }
 
-.userName {
+.profile {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   margin-left: 1rem;
 }
 
-.userName h3 {
+.profile h3 {
   font-size: 3.5rem;
   color: black;
   margin: 0;
+}
+
+.profileTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.jobStatusTag {
+  border-radius: var(--tag-radius);
+  padding: 0.2rem 0.1rem;
+  color: var(--gray-dark);
+}
+
+.jobStatusTag h4 {
+  margin: 0.3rem 1rem;
+}
+
+.transparentGreen {
+  background-color: rgba(124, 222, 124, 0.4);
+}
+
+.transparentRed {
+  background-color: rgba(168, 36, 53, 0.4);
 }
 
 .location {

@@ -46,6 +46,7 @@ const JobMatchesTab: React.FC<Props> = ({ job }) => {
                   key={candidate?.id}
                   candidate={candidate}
                   header={candidate?.preferred_title}
+                  subheader={candidate?.job_status}
                   skills={candidate?.skills}
                   values={candidate?.values}
                   associations={candidate?.associations}
