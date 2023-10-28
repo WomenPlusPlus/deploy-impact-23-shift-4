@@ -154,7 +154,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
       skill_level: "",
     };
 
-    if (candidateHardSkills && skillToAdd?.category === "hard_skill") {
+    if (candidateHardSkills) {
       const updatedSkills = [...candidateHardSkills, candidateSkill];
       setCandidateHardSkills(updatedSkills);
       updateFilteredSkills(updatedSkills);
@@ -241,7 +241,7 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                       defaultValue={skill.skill_level}
                       onChange={(value) => {
                         const updatedSkills = candidateHardSkills?.map((item) =>
-                          item.skill_id === skill.skill_id
+                          item.skill_name === skill.skill_name
                             ? { ...item, skill_level: value }
                             : item
                         );

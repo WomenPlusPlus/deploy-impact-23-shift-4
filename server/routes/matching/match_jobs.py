@@ -117,8 +117,9 @@ def match_jobs_route(domain_name):
                                         total_score += 2 * job_soft_score
 
                                 job_score = round(total_score / count, 1)
-
-                                if job_score >= 60:
+                                
+                                print("JOB SCORE", job_score)
+                                if job_score >= 20:
                                     job_match.append({"id": job_id, "score": job_score})
                                     if job["matching_candidates"]:
                                         duplicate = [
@@ -151,12 +152,12 @@ def match_jobs_route(domain_name):
                                         f"{domain_name}/api/update_job",
                                         json=update_job_json,
                                     )
-
+                    print("JOB MATCH", job_match)
                     update_json = {"user_id": id, "matching_jobs": job_match}
                     update_cand = requests.put(
                         f"{domain_name}/api/update_candidate", json=update_json
                     )
-                    print("UPDATE", update_cand.json())
+                    
                     if update_cand.status_code == 200:
                         return (
                             jsonify(
