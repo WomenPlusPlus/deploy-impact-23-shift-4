@@ -53,12 +53,14 @@ def register_route(User, Candidate, Company, Association, Admin, db):
                     first_name = data.get("first_name")
                     last_name = data.get("last_name")
                     associations = data.get("associations")
+                    preferred_title = data.get("preferred_title")
                     # Save the user also in the "candidate" table
                     new_candidate = Candidate(
                         user_id=user_id,
                         password=hashed_password,
                         first_name=first_name,
                         last_name=last_name,
+                        preferred_title=preferred_title,
                         email=email,
                         associations=associations,
                     )

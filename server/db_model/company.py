@@ -39,7 +39,8 @@ def init_company_model(db):
         )  # Positions/job lists as an array of foreign keys (integer)
         company_size = db.Column(db.String(256))  # Company size as a string
         company_type = db.Column(db.String(256))
-        company_description = db.Column(db.String(3000))
+        company_description = db.Column(db.String(10000))
+        company_culture = db.Column(db.String(10000))
         company_website = db.Column(db.String(256))
         company_industry = db.Column(db.String(256))
         saved_items = db.Column(db.ARRAY(db.String))  # Saved items as an array of strings

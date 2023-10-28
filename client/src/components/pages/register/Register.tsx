@@ -8,7 +8,7 @@ import { GoogleButton } from "../../UI/oauth/GoogleButton";
 import TermsAndConditions from "./TermsAndConditions";
 import BridgeLogo from "../../../media/bridge-logo.png";
 import { SpinnerGlobal } from "../../layout/authenticated/SpinnerGlobal";
-
+import BridgeImage from "../../../media/four-hands-meeting.jpg";
 interface RegisterProps {
   token: string;
   expires: string;
@@ -77,174 +77,236 @@ const Register: React.FC<RegisterProps> = ({
   }
 
   return (
-    <div className={styling.registerContainer}>
-      <div className={styling.registerBox}>
-        <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
-        <h1>Register</h1>
-        <Form
-          name="register_form"
-          className={styling.registerForm}
-          initialValues={{ remember: true }}
-          onFinish={onClickRegister}
-        >
-          {user_type === "candidate" && (
-            <>
+    <div className={styling.container}>
+      <div className={styling.registerContainer}>
+        <div className={styling.registerBox}>
+          <img src={BridgeLogo} alt="Bridge Logo" className={styling.logo} />
+          <div>
+            <h1>Register</h1>
+            <Form
+              name="register_form"
+              className={styling.registerForm}
+              initialValues={{ remember: true }}
+              onFinish={onClickRegister}
+            >
+              {user_type === "candidate" && (
+                <>
+                  <div className={styling.row}>
+                    <Form.Item
+                      style={{ width: "100%" }}
+                      name="first_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your First Name",
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={
+                          <UserOutlined className="site-form-item-icon" />
+                        }
+                        className={styling.antInput}
+                        type="text"
+                        name="first_name"
+                        value={formData?.first_name}
+                        placeholder="First Name"
+                        onChange={handleInputChange}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{ width: "100%" }}
+                      name="last_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Last Name",
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={
+                          <UserOutlined className="site-form-item-icon" />
+                        }
+                        className={styling.antInput}
+                        type="text"
+                        name="last_name"
+                        value={formData?.last_name}
+                        placeholder="Last Name"
+                        onChange={handleInputChange}
+                      />
+                    </Form.Item>
+                  </div>
+                  <Form.Item
+                    name="preferred_title"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your preferred_title",
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<UserOutlined className="site-form-item-icon" />}
+                      className={styling.antInput}
+                      type="text"
+                      name="preferred_title"
+                      value={formData?.preferred_title}
+                      placeholder="Preferred Title e.g Software Engineer"
+                      onChange={handleInputChange}
+                    />
+                  </Form.Item>
+                </>
+              )}
+              {user_type === "company" && (
+                <Form.Item
+                  name="company_name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Company Name!",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    className={styling.antInput}
+                    type="text"
+                    name="company_name"
+                    value={formData?.company_name}
+                    placeholder="Company Name"
+                    onChange={handleInputChange}
+                  />
+                </Form.Item>
+              )}
+
+              {user_type === "association" && (
+                <Form.Item
+                  name="association_name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Association Name!",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    className={styling.antInput}
+                    type="text"
+                    name="association_name"
+                    value={formData?.association_name}
+                    placeholder="Association Name"
+                    onChange={handleInputChange}
+                  />
+                </Form.Item>
+              )}
+
+              {user_type === "admin" && (
+                <Form.Item
+                  name="admin_name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Admin Name!",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    className={styling.antInput}
+                    type="text"
+                    name="admin_name"
+                    value={formData?.admin_name}
+                    placeholder="Admin Name"
+                    onChange={handleInputChange}
+                  />
+                </Form.Item>
+              )}
+
               <Form.Item
-                name="first_name"
+                name="email"
                 rules={[
-                  { required: true, message: "Please input your First Name!" },
+                  { required: true, message: "Please input your Email!" },
                 ]}
               >
                 <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  prefix={<MailOutlined className="site-form-item-icon" />}
                   className={styling.antInput}
-                  type="text"
-                  name="first_name"
-                  value={formData?.first_name}
-                  placeholder="First Name"
+                  type="email"
+                  name="email"
+                  value={formData?.email}
+                  placeholder="Email"
                   onChange={handleInputChange}
                 />
               </Form.Item>
 
               <Form.Item
-                name="last_name"
+                name="password"
                 rules={[
-                  { required: true, message: "Please input your Last Name!" },
+                  { required: true, message: "Please input your Password!" },
                 ]}
               >
                 <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  prefix={<LockOutlined className="site-form-item-icon" />}
                   className={styling.antInput}
-                  type="text"
-                  name="last_name"
-                  value={formData?.last_name}
-                  placeholder="Last Name"
+                  type="password"
+                  name="password"
+                  value={formData?.password}
+                  placeholder="Password"
                   onChange={handleInputChange}
                 />
               </Form.Item>
-            </>
-          )}
-          {user_type === "company" && (
-            <Form.Item
-              name="company_name"
-              rules={[
-                { required: true, message: "Please input your Company Name!" },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                className={styling.antInput}
-                type="text"
-                name="company_name"
-                value={formData?.company_name}
-                placeholder="Company Name"
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          )}
 
-          {user_type === "association" && (
-            <Form.Item
-              name="association_name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Association Name!",
-                },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                className={styling.antInput}
-                type="text"
-                name="association_name"
-                value={formData?.association_name}
-                placeholder="Association Name"
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          )}
+              <Form.Item>
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+              </Form.Item>
 
-          {user_type === "admin" && (
-            <Form.Item
-              name="admin_name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Admin Name!",
-                },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                className={styling.antInput}
-                type="text"
-                name="admin_name"
-                value={formData?.admin_name}
-                placeholder="Admin Name"
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          )}
+              <Form.Item>
+                <TermsAndConditions
+                  onAgreeChange={(value) => setAgree(value)}
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Please input your Email!" }]}
-          >
-            <Input
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              className={styling.antInput}
-              type="email"
-              name="email"
-              value={formData?.email}
-              placeholder="Email"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className={styling.registerFormButton}
+                  disabled={!agree}
+                >
+                  Register
+                </Button>
+              </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              className={styling.antInput}
-              type="password"
-              name="password"
-              value={formData?.password}
-              placeholder="Password"
-              onChange={handleInputChange}
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-          </Form.Item>
-
-          <Form.Item>
-            <TermsAndConditions onAgreeChange={(value) => setAgree(value)} />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className={styling.registerFormButton}
-              disabled={!agree}
-            >
-              Register
-            </Button>
-          </Form.Item>
-
-          {/* OAuth */}
-          <div className={styling.oauth}>
-            <hr className={styling.horizontalLine} />
-            <p>or register with</p>
-            <GoogleButton />
+              {/* OAuth */}
+              <div className={styling.oauth}>
+                <hr className={styling.horizontalLine} />
+                <p>or register with</p>
+                <GoogleButton />
+              </div>
+            </Form>
           </div>
-        </Form>
+        </div>
+
+        <div className={styling.containerTwo}>
+          {/* background image */}
+          <div
+            className={styling.containerTwoImage}
+            style={{ backgroundImage: `url(${BridgeImage})` }}
+          ></div>
+          <div className={styling.containerTwoText}>
+            <h1 className={styling.slogan}>
+              Empowering Diversity in Swiss Tech
+            </h1>
+            <p className={styling.sloganP}>
+              Let's get connected. Let's get hired. Let's get started.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

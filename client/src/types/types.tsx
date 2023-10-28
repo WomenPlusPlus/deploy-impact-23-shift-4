@@ -36,6 +36,7 @@ export interface Candidate {
   notice_period?: string | null;
   job_status?: string;
   preferred_jobs?: { [key: string]: any }[];
+  preferred_title?: string;
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };
