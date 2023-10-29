@@ -5,7 +5,7 @@ import styling from "./EditCompanyProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
 import { Labels } from "../../UI/labels/Label";
 import { getAllValues } from "../../../api/values";
-import { companySizes } from "../../pages/candidateProfile/helpers/helper";
+import { companySizes } from "../../pages/helpers/helper";
 import { Company } from "../../../types/types";
 
 const { Option } = Select;

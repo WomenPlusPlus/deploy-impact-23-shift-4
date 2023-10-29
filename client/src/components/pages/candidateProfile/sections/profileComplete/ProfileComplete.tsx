@@ -6,7 +6,7 @@ import {
   countNullFieldsByCategory,
   percentage,
   allCategories,
-} from "../../helpers/helper";
+} from "../../../helpers/helper";
 import { Candidate } from "../../../../../types/types";
 import { useEffect, useState } from "react";
 

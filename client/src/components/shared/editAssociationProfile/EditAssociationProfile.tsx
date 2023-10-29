@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal as AntModal, Button, Input, Select } from "antd";
 import styling from "./EditAssociationProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
-import { companySizes } from "../../pages/candidateProfile/helpers/helper";
+import { companySizes } from "../../pages/helpers/helper";
 
 const { Option } = Select;
 

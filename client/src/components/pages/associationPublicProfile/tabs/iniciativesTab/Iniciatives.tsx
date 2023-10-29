@@ -4,7 +4,7 @@ import { HorizontalCard } from "../../../../UI/horizontalCard/HorizontalCard";
 import { Association } from "../../../../../types/types";
 import styling from "./Iniciatives.module.css";
 import { useState } from "react";
-import { TimeAgo } from "../../../candidateProfile/helpers/helper";
+import { TimeAgo } from "../../../helpers/helper";
 import RequestParticipation from "./modal/RequestParticipation";
 
 const PublicIniciativesComponent = ({

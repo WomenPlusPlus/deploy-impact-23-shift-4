@@ -15,7 +15,7 @@ import {
   allCategories,
   countNullFieldsByCategory,
   percentage,
-} from "../candidateProfile/helpers/helper";
+} from "../helpers/helper";
 import ApplicationRequests from "./applicationRequests/ApplicationRequests";
 import { getAllJobs } from "../../../api/jobs";
 import { getMatchJobs } from "../../../api/match";

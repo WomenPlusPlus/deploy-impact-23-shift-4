@@ -30,6 +30,9 @@ const FilterSelect: React.FC<multiOptionProps> = ({
         { value: "Full Time", label: "Full Time" },
         { value: "Part Time", label: "Part Time" },
         { value: "Internship", label: "Internship" },
+        { value: "Contract", label: "Contract" },
+        { value: "Temporary", label: "Temporary" },
+        { value: "Freelance", label: "Freelance" },
       ],
     },
     {
@@ -38,7 +41,7 @@ const FilterSelect: React.FC<multiOptionProps> = ({
       options: [
         { value: "Remote", label: "Remote" },
         { value: "Hybrid", label: "Hybrid" },
-        { value: "On site", label: "On site" },
+        { value: "On-site", label: "On-site" },
       ],
     },
   ];

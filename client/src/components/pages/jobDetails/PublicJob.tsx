@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { Job, Company, Candidate } from "../../../types/types";
-import { TimeAgo } from "../candidateProfile/helpers/helper";
+import { TimeAgo } from "../helpers/helper";
 
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 

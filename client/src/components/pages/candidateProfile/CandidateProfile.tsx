@@ -18,7 +18,7 @@ import {
   transformCandidateDocs,
   transformCandidateJobPref,
   transformExperience,
-} from "./helpers/helper";
+} from "../helpers/helper";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";

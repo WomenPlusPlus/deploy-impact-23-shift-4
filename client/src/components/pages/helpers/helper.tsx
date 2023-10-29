@@ -1,4 +1,4 @@
-import { Candidate, Experience, TimeAgoProps } from "../../../../types/types";
+import { Candidate, Experience, TimeAgoProps } from "../../../types/types";
 import React from "react";
 
 const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -24,14 +24,14 @@ const allCategories = [
 ];
 
 const companySizes = [
-  '1-10',
-  '11-50',
-  '51-200',
-  '201-500',
-  '501-1000',
-  '1001-5000',
-  '5001-10,000',
-  '10,001+',
+  "1-10",
+  "11-50",
+  "51-200",
+  "201-500",
+  "501-1000",
+  "1001-5000",
+  "5001-10,000",
+  "10,001+",
 ];
 
 const workLocationTypes: string[] = ["Hybrid", "Remote", "On-site"];
@@ -188,7 +188,7 @@ function transformCandidateJobPref(candidate: Candidate) {
   ) {
     sectionsVisibleInfo.push({
       title: "Salary bracket",
-      subtitle: `CHF ${candidate.salary_expectation[0]} / ${candidate.salary_expectation[1]} CHF`,
+      subtitle: `CHF ${candidate.salary_expectation[0]} - ${candidate.salary_expectation[1]} CHF`,
     });
   }
 

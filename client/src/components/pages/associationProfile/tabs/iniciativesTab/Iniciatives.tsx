@@ -5,7 +5,7 @@ import { Association } from "../../../../../types/types";
 import { AddInitiatives } from "./modal/AddInitiatives";
 import styling from "./Iniciatives.module.css";
 import { useState } from "react";
-import { TimeAgo } from "../../../candidateProfile/helpers/helper";
+import { TimeAgo } from "../../../helpers/helper";
 
 const IniciativesComponent = ({
   association,
@@ -18,7 +18,7 @@ const IniciativesComponent = ({
 
   const onClick = (link: string) => {
     window.open(link, "_blank");
-  }
+  };
 
   return (
     <CardContainer>
