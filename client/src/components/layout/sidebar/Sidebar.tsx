@@ -122,22 +122,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  useEffect(() => {
-    // Ekran boyutu değişikliklerini dinleyin
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Dinleme işlemi başlat
-    window.addEventListener("resize", handleResize);
-
-    // Temizleme işlemi
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+ 
 
   return (
     <>

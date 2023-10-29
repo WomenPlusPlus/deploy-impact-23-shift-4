@@ -1,9 +1,8 @@
-/* MobileNavbar.css */
 .mobile-navbar {
     background-color: var(--blue-dark);
     color: #fff;
     width: 100%;
-    position: fixed; /* Sabit konumda */
+    position: fixed; 
     bottom: 0;
     left: 0;
     z-index: 100;
@@ -23,55 +22,54 @@
     align-items: center;
   }
   
-  /* Ikonlarin yan yana gorunmesini saglayan stil */
   .menu-item .icon {
-    margin-right: 10px; /* Ikonlar arasindaki bosluk */
+    margin-right: 10px; 
   }
   
   .menu-item a {
-    text-decoration: none; /* Link alti cizgiyi kaldirir */
-    color: #fff; /* Link metin rengi */
+    text-decoration: none; 
+    color: #fff; 
     display: flex;
     align-items: center;
     padding: 0.09rem;
   }
   
   .menu-item a:hover {
-    background-color: var(--blue-medium) ; /* Üzerine gelindiginde arka plan rengi */
-    border-radius: 5px; /* Kenar yuvarlama */
+    background-color: var(--blue-medium) ; 
+    border-radius: 5px; 
   }
   
   .menu-item.active {
-    background-color: var(--blue-medium); /* Aktif menu ögesi arka plan rengi */
-    border-radius: 5px; /* Kenar yuvarlama */
+    background-color: var(--blue-medium); 
+    border-radius: 5px; 
   }
   
   .menu-toggle {
-    background-color: #555; /* Menu acma/kapama dügmesinin arka plan rengi */
+    background-color: #555; 
     text-align: center;
     padding: 10px;
     cursor: pointer;
   }
   
   .menu-toggle .menu-icon {
-    width: 30px; /* Menu simgesinin boyutu */
-    height: 3px; /* Menu simgesinin yüksekligi */
-    background-color: #fff; /* Menu simgesi rengi */
-    border-radius: 3px; /* Kenar yuvarlama */
-    transition: all 0.3s; /* Gecis efektleri için süre */
+    width: 30px;/*icon size*/
+    height: 3px; 
+    background-color: #fff; 
+    border-radius: 3px; 
+    transition: all 0.3s; 
   }
   
   .menu-toggle .menu-icon.open {
-    transform: rotate(45deg); /* Menu açikken simgeyi döndür */
+    transform: rotate(45deg); 
   }
   
   .menu-toggle .menu-icon.closed {
-    transform: rotate(0deg); /* Menu kapaliyken simgeyi sifirla */
+    transform: rotate(0deg); 
   }
 
   @media (min-width: 769px) {
     .mobile-navbar {
-      display: none; /* Görünmez yap */
+      display: none; 
     }
   }
   
