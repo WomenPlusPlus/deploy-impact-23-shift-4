@@ -127,7 +127,7 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
           <p className={styling.sectionName}>Description:</p>
           <TextArea
             className={styling.description}
-            placeholder="Description"
+            placeholder="Description. Max 1000 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

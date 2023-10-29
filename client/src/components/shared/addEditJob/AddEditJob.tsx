@@ -211,7 +211,7 @@ const AddEditJob: React.FC<ModalProps> = ({
       />
       <TextArea
         className={styling.description}
-        placeholder="Description"
+        placeholder="Description. Max 10000 characters"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
