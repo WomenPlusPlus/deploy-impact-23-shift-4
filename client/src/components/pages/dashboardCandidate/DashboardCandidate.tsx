@@ -156,10 +156,9 @@ const DashboardCandidate: React.FC = () => {
         <div className={styling.section}>
           <CardContainer className={styling.matches}>
             <h1 className={styling.matchesTitle}>Your matches</h1>
-            {candidate &&
+            {candidate && candidate?.matching_jobs?.length > 0 ? (
               candidate?.matching_jobs?.map((matchedJob: any) => {
                 let description = "";
-                console.log("matchedJob", matchedJob);
 
                 if (matchedJob?.score >= 90) {
                   description = "Your dream job is waiting for you! 🌟";
@@ -170,7 +169,6 @@ const DashboardCandidate: React.FC = () => {
                 }
 
                 return jobs.map((job: Job) => {
-                  // Use `return` to return the JSX elements
                   if (
                     matchedJob.id === job.id &&
                     candidate?.skills?.length !== undefined &&
@@ -178,7 +176,7 @@ const DashboardCandidate: React.FC = () => {
                   ) {
                     return (
                       <HorizontalCard
-                        key={job.id} // Add a unique key for each card
+                        key={job.id}
                         avatar={false}
                         button="Go to job"
                         title={job.title}
@@ -187,9 +185,14 @@ const DashboardCandidate: React.FC = () => {
                       />
                     );
                   }
-                  return null; // Return null for unmatched jobs
+                  return null;
                 });
-              })}
+              })
+            ) : (
+              <p className={styling.emptyText}>
+                Ups... looks like there are no matches to show... YET!
+              </p>
+            )}
           </CardContainer>
           <ApplicationRequests />
         </div>

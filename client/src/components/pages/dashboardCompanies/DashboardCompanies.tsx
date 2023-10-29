@@ -138,6 +138,7 @@ const DashboardCompany = () => {
           <h1>Interested candidates</h1>
 
           {Array.isArray(company?.interested_candidates) &&
+          company?.interested_candidates.length > 0 ? (
             company?.interested_candidates.map(
               (candidate: any, key: number) => {
                 const candidateInfo = allCandidates?.find(
@@ -158,19 +159,25 @@ const DashboardCompany = () => {
                       avatar={true}
                       firstName={candidateInfo?.first_name}
                       lastName={candidateInfo?.last_name}
-                      title={`A new candidate is interested in your ${jobInfo?.title} vancancy!`}
+                      title={`A new candidate is interested in your ${jobInfo?.title} vacancy!`}
                       subtitle={`Get in touch with them!`}
                     />
                   </div>
                 );
               }
-            )}
+            )
+          ) : (
+            <p className={styling.emptyText}>
+              {" "}
+              Ups... looks like there is nothing to show... YET!
+            </p>
+          )}
         </CardContainer>
 
         <CardContainer className={styling.card}>
           <h1>Newest matches</h1>
-          {matchingCandidates?.map((candidate: Record<string, any>, index) => {
-            return (
+          {matchingCandidates && matchingCandidates.length > 0 ? (
+            matchingCandidates.map((candidate: Record<string, any>, index) => (
               <div
                 key={index}
                 onClick={() => navigate(`/candidate/${candidate?.candidateId}`)}
@@ -183,16 +190,18 @@ const DashboardCompany = () => {
                   subtitle={`Great match for ${candidate?.jobTitle} job!`}
                 />
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <p className={styling.emptyText}>
+              Ups... looks like there is nothing to show... YET!
+            </p>
+          )}
         </CardContainer>
       </div>
     </>
   );
 
-  return (
-    <div className={styling.main}>{content}</div>
-  );
+  return <div className={styling.main}>{content}</div>;
 };
 
 export default DashboardCompany;

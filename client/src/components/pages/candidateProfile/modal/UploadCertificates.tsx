@@ -23,7 +23,7 @@ const Certificates: React.FC<CertificatesProps> = ({
     setCertificates(
       candidate?.certificates as { name: string; reference: string }[]
     );
-  }, [candidate]);
+  }, [candidate, setCertificates]);
 
   const certificateProps = {
     beforeUpload: (file: UploadFile) => {
@@ -32,6 +32,8 @@ const Certificates: React.FC<CertificatesProps> = ({
         message.error("Please enter a certificate name before uploading.");
         return false;
       }
+      console.log(file.name);
+      console.log(currentCertificateTitle);
 
       // Add the new certificate to the certificateFiles state
       setCertificates([
@@ -45,6 +47,8 @@ const Certificates: React.FC<CertificatesProps> = ({
       return false;
     },
   };
+
+  console.log("certificates", certificates);
 
   return (
     <>

@@ -3,7 +3,6 @@ import styling from "./CompanyCard.module.css";
 import {
   IconBookmark,
   IconExternalLink,
-  IconMap,
   IconMapPin,
 } from "@tabler/icons-react";
 import { Labels } from "../../UI/labels/Label";

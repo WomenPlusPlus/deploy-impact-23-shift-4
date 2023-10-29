@@ -72,12 +72,7 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
           <Button key="cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button
-            key="save"
-            type="primary"
-            icon={<SaveOutlined />}
-            onClick={handleSave}
-          >
+          <Button key="save" type="primary" onClick={handleSave}>
             Save
           </Button>,
         ]}

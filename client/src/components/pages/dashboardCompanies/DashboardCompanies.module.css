@@ -88,3 +88,15 @@
 .subtext {
   font-size: 1.5rem;
 }
+
+.emptyText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  padding: 0 10rem;
+  font-size: 3rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gray-light);
+}
