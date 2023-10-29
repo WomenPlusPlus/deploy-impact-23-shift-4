@@ -9,6 +9,7 @@ import TermsAndConditions from "./TermsAndConditions";
 import BridgeLogo from "../../../media/bridge-logo.png";
 import { SpinnerGlobal } from "../../layout/authenticated/SpinnerGlobal";
 import BridgeImage from "../../../media/four-hands-meeting.jpg";
+import SpinnerLogin from "../../UI/spinner/LoginSpinner";
 interface RegisterProps {
   token: string;
   expires: string;
@@ -71,10 +72,6 @@ const Register: React.FC<RegisterProps> = ({
         }
       });
   };
-
-  if (isLoading) {
-    return <SpinnerGlobal />;
-  }
 
   return (
     <div className={styling.container}>
@@ -278,7 +275,7 @@ const Register: React.FC<RegisterProps> = ({
                   className={styling.registerFormButton}
                   disabled={!agree}
                 >
-                  Register
+                  {isLoading ? <SpinnerLogin /> : "Register"}
                 </Button>
               </Form.Item>
 
