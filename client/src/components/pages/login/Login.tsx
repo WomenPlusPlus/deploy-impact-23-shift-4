@@ -148,7 +148,7 @@ const Login = () => {
             <div className={styling.oauth}>
               <hr className={styling.horizontalLine} />
               <p>or login with</p>
-              <GoogleButton text={"signin_with"} />
+              <GoogleButton text={"signin_with"} isDisabled={true} />
             </div>
           </Form>
         </div>

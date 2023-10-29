@@ -197,6 +197,8 @@ const CandidateProfile = () => {
     return <Spinner />;
   }
 
+  console.log("candidate", candidate);
+
   return (
     <div className={styling.main}>
       {/* Profile text */}
@@ -601,6 +603,7 @@ const CandidateProfile = () => {
             <h3 className={styling.h3}>Uploaded documents</h3>
             <DocumentUploadModal
               candidate={candidate}
+              setCandidate={setCandidate}
               visible={isDocumentsEdit}
               setVisible={setIsDocumentsEdit}
               showModal={editDocuments}

@@ -156,7 +156,7 @@ const DashboardAdmin = () => {
           <Button
             className={styling.inviteButton}
             onClick={() => {
-              handleOpenInvite("Admin");
+              handleOpenInvite("Association");
             }}
           >
             Invite

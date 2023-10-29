@@ -69,6 +69,19 @@ def func_send_email(recipient_email, user_type, association_name):
     <p>If you like what you see, you can request their full information package, which includes their CV, certificates and contact information for you to directly snatch them off the market!</p>
     """
 
+    association_body = f"""
+    <p>We’re delighted to welcome you to our community at Bridge. Bridge is a hub that connects talented individuals, innovative companies, and dynamic associations.</p>
+
+    <h3>What do you need to do?</h3>
+    <p>If you represent an association, it's important to showcase your organization's mission, values, and the opportunities you offer. Create a profile that highlights the essence of your association and what you stand for.</p>
+    <p>At Bridge, we believe in the power of collaboration, so ensure your association's unique values are well-defined.</p>
+
+    <h3>What can you expect?</h3>
+    <p>Bridge provides a platform for associations to connect with a diverse pool of talents and businesses. You can discover individuals with a wide range of skills and values that align with your organization's goals.</p>
+    <p>Additionally, you'll be able to explore potential collaborations with companies and candidates, enabling mutually beneficial partnerships.</p>
+    <p>Bridge is where associations like yours thrive, and we're excited to have you on board.</p>
+    """
+
     body = f"""
     <html>
         <head></head>
@@ -86,7 +99,8 @@ def func_send_email(recipient_email, user_type, association_name):
                             <div style="width: 480px; text-align: left; margin-bottom: 60px; font-size: 1em;"> 
                                 <p style="font-size: 1em;"><strong>{association_name}</strong> has invited you to join Bridge.</p>
                                 {candidate_body if user_type == "candidate" else ""}
-                                {company_body if user_type == "company" else ""}                             
+                                {company_body if user_type == "company" else ""}
+                                {association_body if user_type == "association" else ""}                          
                                 <p style="font-size: 1em;">Click the button below to access Bridge and be part of this inspiring journey.</p>
                                 <p style="font-size: 1em;">The invitation link will <strong>expire in 7 days.</strong></p>
                             </div>

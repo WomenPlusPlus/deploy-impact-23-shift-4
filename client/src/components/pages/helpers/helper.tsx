@@ -87,7 +87,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   job_status: "Personal Info",
   preferred_jobs: "Type of jobs",
   preferred_title: "Profile",
-  company_type: "Experience",
+  company_type: "",
   matching_jobs: "",
   matching_companies: "",
   values: "Values",
@@ -128,7 +128,8 @@ const countNullFieldsByCategory = (
     const nullFieldsCount = fieldsForCategory?.reduce((count, field) => {
       if (Array.isArray(candidate[field])) {
         if (candidate[field]?.length === 0) {
-          return count + 1; // Empty array should be counted as null
+          // Empty array should be counted as null
+          return count + 1;
         }
       } else if (candidate[field] === null) {
         return count + 1;
@@ -169,7 +170,7 @@ function transformCandidateDocs(candidate: Candidate) {
   if (candidate.certificates && Array.isArray(candidate.certificates)) {
     candidate.certificates.forEach((certificate) => {
       const title = "Certificate";
-      const subtext = `${certificate.name} 2023`;
+      const subtext = `${certificate.name}`;
       const type = "certificate";
       transformedData.push({ title, subtext, type });
     });

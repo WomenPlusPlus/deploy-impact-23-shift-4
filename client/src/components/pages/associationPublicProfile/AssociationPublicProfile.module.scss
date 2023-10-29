@@ -110,3 +110,17 @@
   @extend .accept;
   background-color: rgb(244, 172, 172);
 }
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin: 0;
+  gap: 0.7rem;
+  font-size: medium;
+  color: var(--gray-medium);
+}
+
+.subtitle p {
+  margin: 0.5rem 0;
+}
