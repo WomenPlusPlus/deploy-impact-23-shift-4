@@ -22,6 +22,7 @@ import {
 import styling from "./CompanyProfile.module.css";
 import Avatar from "../../UI/avatar/Avatar";
 import DeleteJob from "../../shared/deleteJob/DeleteJob";
+import { Labels } from "../../UI/labels/Label";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -194,6 +195,19 @@ const CompanyProfile = () => {
     <CardContainer>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>Company culture</h2>
+        <div className={styling.values}>
+          {company?.values &&
+            company?.values?.map((value, index) => (
+              <Labels
+                key={index}
+                color="var(--values-label)"
+                labelName={value}
+                customClass={styling.label}
+                disableCloseIcon
+              />
+            ))}
+        </div>
+
         {company?.company_culture ? (
           <div className={styling.description}>
             <h3 className={styling.subtitles}>Description</h3>

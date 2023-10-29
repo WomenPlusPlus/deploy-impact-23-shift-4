@@ -84,7 +84,11 @@ const CandidatePublicProfile = () => {
       label: "Resume",
       key: "1",
       children: (
-        <CandidateResumeTab candidate={candidate} matchingJobs={matchingJobs} userType={userType} />
+        <CandidateResumeTab
+          candidate={candidate}
+          matchingJobs={matchingJobs}
+          userType={userType}
+        />
       ),
     },
     {
@@ -116,13 +120,7 @@ const CandidatePublicProfile = () => {
           />
           <div className={styling.column}>
             <div>
-              {candidate?.experience ? (
-                <h1 className={styling.title}>
-                  {candidate?.experience[0]?.role}
-                </h1>
-              ) : (
-                <h1 className={styling.title}>Software Engineer</h1>
-              )}
+              <h1 className={styling.title}>{candidate?.preferred_title}</h1>
             </div>
             <div className={styling.row}>
               <div className={styling.location}>
