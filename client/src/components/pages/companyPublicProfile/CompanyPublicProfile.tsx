@@ -9,12 +9,14 @@ import { Company, Job } from "../../../types/types";
 import {
   IconBrandLinkedin,
   IconMapPin,
+  IconWaveSine,
   IconWorldWww,
 } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
 import { getAllJobs } from "../../../api/jobs";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
 import { useNavigate } from "react-router-dom";
+import Avatar from "../../UI/avatar/Avatar";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
@@ -119,15 +121,36 @@ const CompanyPublicProfile = () => {
     <div className={styling.main}>
       <div className={styling.container}>
         <div className={styling.header}>
-          <img className={styling.logo} src={company?.logo} alt="Avatar" />
+          {company?.logo ? (
+            <img className={styling.logo} src={company?.logo} alt="Avatar" />
+          ) : (
+            <Avatar firstName={company?.company_name} size={80} />
+          )}
 
           <div>
             <h1 className={styling.title}>{company?.company_name}</h1>
 
             <div className={styling.subtitle}>
-              <IconMapPin />
-              {company?.address} | {company?.company_size} employees |
-              <IconBrandLinkedin /> <IconWorldWww />
+              <div className={styling.location}>
+                <IconMapPin />
+                {company?.address ? company?.address : "No address provided"}
+              </div>
+              <p> | </p>
+              {company?.company_size ? (
+                <p>{company?.company_size} employees</p>
+              ) : (
+                "No size provided"
+              )}
+              {company?.company_website ||
+              company?.linkedin_url ||
+              company?.kununu_url ? (
+                <p> | </p>
+              ) : (
+                ""
+              )}
+              {company?.company_website && <IconWorldWww />}
+              {company?.linkedin_url && <IconBrandLinkedin />}
+              {company?.kununu_url && <IconWaveSine />}
             </div>
           </div>
         </div>
