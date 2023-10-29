@@ -8,13 +8,11 @@ import { CV } from "./UploadCV";
 
 interface CertificateUploadModalProps {
   candidate: Candidate;
+  setCandidate: (candidate: Candidate) => void;
   showModal: () => void;
   visible: boolean;
   setVisible: (arg: boolean) => void;
-  onSave?: (arg: {
-    cv_reference: string | null | undefined;
-    certificates: { name: string; reference: string }[];
-  }) => void;
+  onSave?: (arg: object) => void;
 }
 
 const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
@@ -25,23 +23,30 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
   onSave,
 }) => {
   const [certificates, setCertificates] = useState<
-    { name: string; reference: string }[]
+    { name: string; reference: string }[] | null
   >([]);
   const [cvReference, setCvReference] = useState<string | null>();
   const [cvFile, setCvFile] = useState<string | null>();
-  const [currentCertificateTitle, setCurrentCertificateTitle] = useState("");
+  const [currentCertificateTitle, setCurrentCertificateTitle] = useState<
+    string | null
+  >(null);
+  const [candidateCertificates, setCandidateCertificates] = useState<
+    { name: string; reference: string }[] | null
+  >(null);
 
   useEffect(() => {
     setCertificates(
-      candidate?.certificates as { name: string; reference: string }[]
+      candidate?.certificates as { name: string; reference: string }[] | null
     );
     setCvReference(candidate?.cv_reference);
-  }, [candidate]);
+    setCandidateCertificates(candidate?.certificates as any);
+  }, [candidate, visible]);
 
   const handleCancel = () => {
-    setCurrentCertificateTitle("");
+    setCurrentCertificateTitle(null);
     setCvFile(null);
     setCvReference(null);
+    setCandidateCertificates(candidate?.certificates as any);
     setVisible(false);
   };
 
@@ -57,10 +62,12 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
           candidate.certificates = certificates;
         }
       }
-      onSave({ cv_reference: cvFile, certificates });
+      onSave({ cv_reference: cvFile, certificates: certificates });
     }
     setVisible(false);
   };
+
+  console.log("certificates", certificates);
 
   return (
     <div>
@@ -97,6 +104,8 @@ const DocumentUploadModal: React.FC<CertificateUploadModalProps> = ({
           setCertificates={setCertificates}
           currentCertificateTitle={currentCertificateTitle}
           setCurrentCertificateTitle={setCurrentCertificateTitle}
+          candidateCertificates={candidateCertificates}
+          setCandidateCertificates={setCandidateCertificates}
         />
       </Modal>
     </div>

@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../UI/avatar/Avatar";
 import Spinner from "../../UI/spinner/Spinner";
-import { Button } from "../../UI/button/Button";
-import { ProgressBar } from "../../UI/progressbar/ProgressBar";
 import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { CardContainer } from "../../UI/container/CardContainer";
 
@@ -25,7 +23,6 @@ import styling from "./DashboardCompanies.module.css";
 import { getMatchCandidates } from "../../../api/match";
 
 const DashboardCompany = () => {
-  const progress = 80;
 
   const navigate = useNavigate();
 
@@ -58,6 +55,7 @@ const DashboardCompany = () => {
       setIsLoading(false);
     } catch (error) {
       console.log("Matching error: ", error);
+      setIsLoading(false);
     }
 
     try {
@@ -66,6 +64,7 @@ const DashboardCompany = () => {
       setIsLoading(false);
     } catch (error) {
       console.log("Company error: ", error);
+      setIsLoading(false);
     }
   };
 
