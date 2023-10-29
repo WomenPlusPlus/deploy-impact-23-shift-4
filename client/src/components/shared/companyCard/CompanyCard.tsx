@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import styling from "./CompanyCard.module.css";
-import { IconBookmark, IconExternalLink, IconMap, IconMapPin } from "@tabler/icons-react";
+import {
+  IconBookmark,
+  IconExternalLink,
+  IconMap,
+  IconMapPin,
+} from "@tabler/icons-react";
 import { Labels } from "../../UI/labels/Label";
 import Avatar from "../../UI/avatar/Avatar";
 import { Candidate, User } from "../../../types/types";
@@ -141,7 +146,7 @@ const CompanyCard: React.FC<CardProps> = ({
     <div className={styling.candidateCard}>
       <div className={styling.cardHeader}>
         <Avatar firstName={companyName} size={50} />
-        <div>
+        <div className={styling.headerContainer}>
           <h2 className={styling.header} onClick={onClickRedirect}>
             {header}
           </h2>
@@ -161,6 +166,8 @@ const CompanyCard: React.FC<CardProps> = ({
           <p>{description}</p>
         </div>
       )}
+
+      <hr className={styling.horizontalLine} />
 
       <div className={styling.container}>
         <div className={styling.labelContainer}>

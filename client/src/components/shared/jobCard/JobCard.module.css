@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font: size 16px;
+  font: size 1.6rem;
   margin: 1.5rem 0;
 }
 
@@ -22,15 +22,15 @@
   margin: 2rem 2rem 2rem 0;
   background-color: #fdfdfd;
   box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 0.8rem;
   text-align: left;
   overflow: hidden;
   cursor: pointer;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 8rem;
+  height: 8rem;
 }
 
 .jobTitle {
@@ -55,15 +55,15 @@
 
 .horizontalLine {
   border: 0;
-  border-top: 2px solid #ddd;
-  margin: 10px 0;
+  border-top: 0.2rem solid #ddd;
+  margin: 2rem 0;
 }
 
 .iconAndText {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 0.4rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: var(--gray-medium);
 }
@@ -73,15 +73,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--grey-8, #595959);
-  font-size: 14px;
+  font-size: 1.4rem;
   font-style: normal;
   font-weight: 400;
   line-height: 2.2rem;
 }
 
 .iconAndText svg {
-  width: 16px;
-  height: 16px;
+  width: 1.6rem;
+  height: 1.6rem;
   vertical-align: middle;
 }
 
@@ -113,8 +113,12 @@
   fill: black;
 }
 
-.label {
+.hardSkill {
   background-color: var(--skills-label);
+}
+
+.softSkill {
+  background-color: var(--softSkills-label);
 }
 
 @media (max-width: 768px) {
