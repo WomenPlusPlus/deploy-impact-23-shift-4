@@ -112,7 +112,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   package_requested: "",
   package_accepted: "",
   saved_items: "",
-  date_profile_modified: "",
+  date_created: "",
   requested_jobs: "",
   initiatives_accepted: "",
 };

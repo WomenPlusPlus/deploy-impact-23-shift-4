@@ -85,6 +85,7 @@ const EditExperience: React.FC<EditExperienceProps> = ({
     const updatedExperience = [...experience];
     updatedExperience.splice(index, 1);
     setExperience(updatedExperience);
+    setSaveDisabled(false);
   };
 
   return (
@@ -102,7 +103,12 @@ const EditExperience: React.FC<EditExperienceProps> = ({
           <Button key="cancel" onClick={onCancel}>
             Cancel
           </Button>,
-          <Button key="save" type="primary" onClick={handleSave} disabled={saveDisabled}>
+          <Button
+            key="save"
+            type="primary"
+            onClick={handleSave}
+            disabled={saveDisabled}
+          >
             Save
           </Button>,
         ]}
