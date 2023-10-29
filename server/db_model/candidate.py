@@ -24,7 +24,9 @@ def init_candidate_model(db):
             db.String(128), nullable=False
         )  # Store the hashed password
         email = db.Column(db.String(120), unique=True, nullable=False)
-        preferred_title = db.Column(db.String(80), nullable=False)  # Preferred name as a string
+        preferred_title = db.Column(
+            db.String(80), nullable=False
+        )  # Preferred name as a string
         associations = db.Column(db.ARRAY(db.String), nullable=False)
         first_name = db.Column(db.String(80))  # First name as a string
         last_name = db.Column(db.String(80))  # Last name as a string
@@ -73,7 +75,7 @@ def init_candidate_model(db):
         saved_items = db.Column(
             db.ARRAY(db.String)
         )  # Saved items as an array of strings e.g ['31-djdw231-yxx31', '31-djdw231-yxx32']
-        date_profile_modified = db.Column(db.DateTime)
+        date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
         package_requested = db.Column(db.JSON)  # Package requestes from the company
         package_accepted = db.Column(db.JSON)  # Package accepted by the candidate
         requested_jobs = db.Column(
@@ -113,7 +115,7 @@ def init_candidate_model(db):
             possible_work_locations=None,
             type_of_work=None,
             saved_items=None,
-            date_profile_modified=None,
+            date_created=None,
             package_requested=None,
             package_accepted=None,
             requested_jobs=None,
@@ -155,7 +157,7 @@ def init_candidate_model(db):
             self.possible_work_locations = possible_work_locations
             self.type_of_work = type_of_work
             self.saved_items = saved_items
-            self.date_profile_modified = date_profile_modified
+            self.date_created = date_created
             self.package_requested = package_requested
             self.package_accepted = package_accepted
             self.requested_jobs = requested_jobs
@@ -196,8 +198,8 @@ def init_candidate_model(db):
                 "possible_work_locations": self.possible_work_locations,
                 "type_of_work": self.type_of_work,
                 "saved_items": self.saved_items,
-                "date_profile_modified": self.date_profile_modified.isoformat()
-                if self.date_profile_modified
+                "date_created": self.date_created.isoformat()
+                if self.date_created
                 else None,
                 "package_requested": self.package_requested,
                 "package_accepted": self.package_accepted,
