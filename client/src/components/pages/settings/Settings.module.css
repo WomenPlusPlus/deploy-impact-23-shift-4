@@ -27,7 +27,7 @@
 .row {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .spaceBetween {
@@ -49,4 +49,9 @@
   font-size: 2.5rem;
   font-weight: 500;
   margin: 0;
+}
+
+.showPassword {
+  margin-bottom: 2rem;
+  cursor: pointer;
 }

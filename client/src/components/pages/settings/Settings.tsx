@@ -48,6 +48,12 @@ const Settings = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false); // Add this state
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className={styling.main}>
       <h1 className="header">Settings</h1>
@@ -67,6 +73,7 @@ const Settings = () => {
               <p>Current password</p>
               <Input
                 placeholder="Current password"
+                type={showPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
@@ -76,6 +83,7 @@ const Settings = () => {
                 <p>New password</p>
                 <Input
                   placeholder="New password"
+                  type={showPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
@@ -84,11 +92,19 @@ const Settings = () => {
                 <p>Confirm New password</p>
                 <Input
                   placeholder="Confirm New password"
+                  type={showPassword ? "text" : "password"}
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                 />
               </div>
             </div>
+            <a
+              onClick={togglePasswordVisibility}
+              className={styling.showPassword}
+            >
+              {showPassword ? "Hide Password" : "Show Password"}
+            </a>
+
             <Button
               className={styling.buttonPassword}
               type="primary"
