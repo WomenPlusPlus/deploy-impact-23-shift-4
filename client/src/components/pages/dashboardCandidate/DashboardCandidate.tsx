@@ -179,7 +179,7 @@ const DashboardCandidate: React.FC = () => {
                         key={job.id}
                         avatar={false}
                         button="Go to job"
-                        title={job.title}
+                        title={`${job.title} - ${matchedJob.score}%`}
                         subtitle={description}
                         onClick={() => navigate(`/job/${job.id}`)}
                       />

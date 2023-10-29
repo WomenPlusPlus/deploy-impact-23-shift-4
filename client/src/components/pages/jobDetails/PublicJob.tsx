@@ -56,7 +56,7 @@ const PublicJob = () => {
 
         const matchScore = candidate?.matching_jobs.find(
           (job: Job) => job.id === getJob?.id
-        )?.match_score;
+        )?.score;
         if (matchScore) {
           setMatchScore(matchScore);
         }
@@ -216,15 +216,10 @@ const PublicJob = () => {
 
       {/* Second line */}
       <div>
-        <h1 className={styling.jobTitle}>{jobData?.title}</h1>
+        <div>
+          <h1 className={styling.jobTitle}>{jobData?.title}</h1>
+        </div>
         <div className={styling.row}>
-          {matchScore && (
-            <div className={styling.row}>
-              <IconChartPie size={iconSize} />
-              <p>{matchScore}% Match</p>
-            </div>
-          )}
-
           <div className={styling.row}>
             <IconMapPin size={iconSize} />{" "}
             <p>
@@ -248,6 +243,12 @@ const PublicJob = () => {
             </p>
           </div>
         </div>
+        {matchScore && (
+          <div className={`${styling.row} ${styling.matchingScoreDiv}`}>
+            <IconChartPie size={35} fill="#2839A8" />
+            <p className={styling.matchScore}>{matchScore}% Match</p>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

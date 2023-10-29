@@ -80,7 +80,7 @@ def match_jobs_route(domain_name):
 
                         job_id = job["id"]
 
-                        count = 0
+                        count = 3
                         total_score = 0
 
                         if job_skills:
@@ -95,17 +95,16 @@ def match_jobs_route(domain_name):
                                     total_score += job_val_score
 
                             if job["soft_skills"]:
-                                count += 2
+                                count += 1
                                 if cand_soft_skills:
                                     job_soft_score = score(
                                         job["soft_skills"], cand_soft_skills
                                     )
                                     total_score += 2 * job_soft_score
-                            
+
                             job_score = round(total_score / count, 1)
-                            
+
                             if job_score >= 30:
-                                
                                 job_match.append({"id": job_id, "score": job_score})
                                 if job["matching_candidates"]:
                                     duplicate = [
@@ -124,7 +123,7 @@ def match_jobs_route(domain_name):
                                             {"id": id, "score": job_score}
                                         )
                                 else:
-                                    print("else",job_id, job_score)
+                                    print("else", job_id, job_score)
                                     job["matching_candidates"] = []
                                     job["matching_candidates"].append(
                                         {"id": id, "score": job_score}
@@ -133,12 +132,12 @@ def match_jobs_route(domain_name):
                                     "job_id": job_id,
                                     "matching_candidates": job["matching_candidates"],
                                 }
-                                
+
                                 update_job_response = requests.put(
                                     f"{domain_name}/api/update_job",
                                     json=update_job_json,
                                 )
-                    
+
                     update_json = {"user_id": id, "matching_jobs": job_match}
                     update_cand = requests.put(
                         f"{domain_name}/api/update_candidate", json=update_json
