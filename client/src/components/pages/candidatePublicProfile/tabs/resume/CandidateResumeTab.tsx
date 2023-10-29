@@ -25,11 +25,13 @@ import { allCategories } from "../../../../../components/pages/candidateProfile/
 interface CandidateResumeTabProps {
   candidate: Candidate;
   matchingJobs: Job[];
+  userType?: string;
 }
 
 const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
   candidate,
   matchingJobs,
+  userType,
 }) => {
   const candidateId = candidate?.user_id;
   const companyId = JSON.parse(localStorage.getItem("auth") || "{}").user?.id;
@@ -39,53 +41,70 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
   const [sectionsJobSearchPref, setSectionsJobSearchPref] = useState([] as any);
   const [sectionDocuments, setSectionDocuments] = useState([] as Section[]);
   const [companyVisibleInfo, setCompanyVisibleInfo] = useState([] as string[]);
-  const [jobPreferences, setJobPreferences] = useState(false);
-  const [experience, setExperience] = useState(false);
-  const [skills, setSkills] = useState(false);
-  const [values, setValues] = useState(false);
-  const [languages, setLanguages] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState(false);
-  const [contactInfo, setContactInfo] = useState(false);
-  const [typeOfJobs, setTypeOfJobs] = useState(false);
-  const [documents, setDocuments] = useState(false);
 
   useEffect(() => {
     // read if access from local storage
-    if (candidate) {
-      const transformedExperience = transformExperience(
-        candidate.experience as Experience[]
-      );
-      const transformedVisibleInfo = transformCandidateJobPref(candidate);
-      const transformedData = transformCandidateDocs(candidate);
-      setSectionDocuments(transformedData);
-      setSectionsJobSearchPref(transformedVisibleInfo);
-      setSectionsExperience(transformedExperience);
-    }
+    if (userType === "company") {
+      if (candidate) {
+        const transformedExperience = transformExperience(
+          candidate.experience as Experience[]
+        );
+        const transformedVisibleInfo = transformCandidateJobPref(candidate);
+        const transformedData = transformCandidateDocs(candidate);
+        setSectionDocuments(transformedData);
+        setSectionsJobSearchPref(transformedVisibleInfo);
+        setSectionsExperience(transformedExperience);
+      }
 
-    const packageCandidateAccepted = candidate?.package_accepted as
-      | PackageAccepted[]
-      | undefined;
+      const packageCandidateAccepted = candidate?.package_accepted as
+        | PackageAccepted[]
+        | undefined;
 
-    if (packageCandidateAccepted && packageCandidateAccepted.length > 0) {
-      setIsPackageVisible(true);
-      // Find company id in package accepted
-      const matchingObject = packageCandidateAccepted.find(
-        (obj) => obj.companyId === companyId
-      );
+      if (packageCandidateAccepted && packageCandidateAccepted.length > 0) {
+        setIsPackageVisible(true);
+        // Find company id in package accepted
+        const matchingObject = packageCandidateAccepted.find(
+          (obj) => obj.companyId === companyId
+        );
 
-      if (matchingObject) {
-        const visibleInfoArray: string[] = matchingObject.visible_info;
-        setCompanyVisibleInfo(visibleInfoArray);
+        if (matchingObject) {
+          const visibleInfoArray: string[] = matchingObject.visible_info;
+          setCompanyVisibleInfo(visibleInfoArray);
+        } else {
+          console.log("No matching object found for the specified companyId.");
+        }
       } else {
-        console.log("No matching object found for the specified companyId.");
+        setIsPackageVisible(false);
       }
     } else {
-      setIsPackageVisible(false);
+      setIsPackageVisible(true);
     }
   }, [candidate]);
 
   const requestAccess = () => {
     setIsModalVisible(true);
+  };
+
+  const isJobPrefVisible = () => {
+    if (userType === "company") {
+      return companyVisibleInfo.includes("Job Preferences");
+    } else {
+      return true;
+    }
+  };
+  const isLanguagesVisible = () => {
+    if (userType === "company") {
+      return companyVisibleInfo.includes("Languages");
+    } else {
+      return true;
+    }
+  };
+  const isDocumentsVisible = () => {
+    if (userType === "company") {
+      return companyVisibleInfo.includes("Documents");
+    } else {
+      return true;
+    }
   };
 
   return (
@@ -246,7 +265,7 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
             {/* Job search preferences */}
             <CardContainer
               className={
-                companyVisibleInfo.includes("Job Preferences")
+                isJobPrefVisible()
                   ? styling.jobPrefContainer
                   : styling.jobPrefBlur
               }
@@ -263,7 +282,7 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
               {/* Laguages */}
               <CardContainer
                 className={
-                  companyVisibleInfo.includes("Languages")
+                  isLanguagesVisible()
                     ? styling.lowerContainer
                     : styling.blurredText
                 }
@@ -280,7 +299,7 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
               {/* Uploaded documents */}
               <CardContainer
                 className={
-                  companyVisibleInfo.includes("Documents")
+                  isDocumentsVisible()
                     ? styling.lowerContainer
                     : styling.blurredText
                 }

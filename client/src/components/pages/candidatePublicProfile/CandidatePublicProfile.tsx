@@ -18,7 +18,8 @@ import Spinner from "../../UI/spinner/Spinner";
 
 const CandidatePublicProfile = () => {
   const { id } = useParams();
-
+  const userType = JSON.parse(localStorage.getItem("auth") || "{}")?.user
+    ?.user_type;
   const [candidate, setCandidate] = useState({} as Candidate);
   const [matchingJobs, setMatchingJobs] = useState([] as Job[]);
   const [companies, setCompanies] = useState([] as Company[]);
@@ -83,7 +84,7 @@ const CandidatePublicProfile = () => {
       label: "Resume",
       key: "1",
       children: (
-        <CandidateResumeTab candidate={candidate} matchingJobs={matchingJobs} />
+        <CandidateResumeTab candidate={candidate} matchingJobs={matchingJobs} userType={userType} />
       ),
     },
     {

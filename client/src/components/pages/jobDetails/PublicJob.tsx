@@ -117,6 +117,20 @@ const PublicJob = () => {
     }
   };
 
+  const isBookmark = () => {
+    if (userType === "candidate") {
+      if (isSaved) {
+        return (
+          <IconBookmark className={styling.savedBookmark} onClick={saveJob} />
+        );
+      } else {
+        return <IconBookmark className={styling.bookmark} onClick={saveJob} />;
+      }
+    } else {
+      return null;
+    }
+  };
+
   const tabs = [
     {
       label: "Details",
@@ -128,6 +142,7 @@ const PublicJob = () => {
           jobData={jobData}
           getInfo={getInfo}
           id={id}
+          userType={userType}
         />
       ),
     },
@@ -162,12 +177,10 @@ const PublicJob = () => {
           </p>
         </div>
         <div className={styling.row}>
-          {isSaved ? (
-            <IconBookmark className={styling.savedBookmark} onClick={saveJob} />
-          ) : (
-            <IconBookmark className={styling.bookmark} onClick={saveJob} />
+          {isBookmark()}
+          {userType === "candidate" && (
+            <Button className={styling.companyButton}>Apply</Button>
           )}
-          <Button className={styling.companyButton}>Apply</Button>
         </div>
       </div>
 

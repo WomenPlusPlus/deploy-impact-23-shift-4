@@ -18,7 +18,7 @@ const CandidateMatchesTab: React.FC<Props> = ({
   const navigate = useNavigate();
   return (
     <div className={styling.main}>
-      {matchingJobs.length > 0 ? (
+      {matchingJobs?.length > 0 ? (
         <>
           <h1>Matches</h1>
           {matchingJobs?.map((job, index) => (
