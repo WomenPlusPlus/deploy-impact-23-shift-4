@@ -260,7 +260,7 @@ const CompanyProfile = () => {
               ) : (
                 <>
                   <IconMapPin />
-                  <p className={styling.subtextNot}>Address not provided</p>
+                  <p className={styling.subtext}>Address not provided</p>
                 </>
               )}
               {company.company_size ? (

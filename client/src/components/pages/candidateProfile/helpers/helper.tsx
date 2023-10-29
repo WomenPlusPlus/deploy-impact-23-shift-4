@@ -1,9 +1,49 @@
-import { Candidate, Experience } from "../../../../types/types";
+import { Candidate, Experience, TimeAgoProps } from "../../../../types/types";
 import React from "react";
 
-interface TimeAgoProps {
-  timestamp: string;
-}
+const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
+const fieldsToDisplayProfile = [
+  "First name",
+  "Last name",
+  "Preferred Title",
+  "Job status",
+  "City",
+  "Country",
+];
+
+const allCategories = [
+  "Job Preferences",
+  "Experience",
+  "Skills",
+  "Values",
+  "Languages",
+  "Personal Info",
+  "Contact info",
+  "Type of jobs",
+  "Documents",
+];
+
+const companySizes = [
+  '1-10',
+  '11-50',
+  '51-200',
+  '201-500',
+  '501-1000',
+  '1001-5000',
+  '5001-10,000',
+  '10,001+',
+];
+
+const workLocationTypes: string[] = ["Hybrid", "Remote", "On-site"];
+
+const allTypeOfJob: string[] = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Freelance",
+];
 
 const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   const getTimeAgo = (timestampStr: string): string => {
@@ -28,54 +68,6 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
 
   return <span>{getTimeAgo(timestamp)}</span>;
 };
-
-const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
-const fieldsToDisplayProfile = [
-  "First name",
-  "Last name",
-  "Preferred Title",
-  "Job status",
-  "City",
-  "Country",
-];
-const allTypeOfJob = [
-  "Full-time",
-  "Part-time",
-  "Contract",
-  "Temporary",
-  "Internship",
-  "Freelance",
-];
-const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
-const allValue = [
-  "Teamwork", // Add more values as neede
-  "Communication",
-  "Problem solving",
-  "Creativity",
-  "Work ethic",
-  "Interpersonal skills",
-  "Adaptability",
-];
-const allSkill = [
-  { skill_name: "React", skill_id: "React", score: 20 },
-  { skill_name: "Node.js", skill_id: "Node.js", score: 20 },
-  { skill_name: "TypeScript", skill_id: "TypeScript", score: 20 },
-  { skill_name: "JavaScript", skill_id: "JavaScript", score: 20 },
-  { skill_name: "HTML/CSS", skill_id: "HTML/CSS", score: 20 },
-  { skill_name: "Python", skill_id: "Python", score: 20 },
-];
-
-const allCategories = [
-  "Job Preferences",
-  "Experience",
-  "Skills",
-  "Values",
-  "Languages",
-  "Personal Info",
-  "Contact info",
-  "Type of jobs",
-  "Documents",
-];
 
 type FieldCategoryMapping = Record<keyof Candidate, string>;
 const fieldCategoryMapping: FieldCategoryMapping = {
@@ -289,29 +281,10 @@ function transformExperience(experience: Experience[]) {
   return sectionsExperience;
 }
 
-export const workLocationTypes: string[] = [
-  "Hybrid",
-  "Remote",
-  "On-site",
-  "In-office",
-];
-
-export const employmentTypes: string[] = [
-  "Full-time",
-  "Part-time",
-  "Contract",
-  "Temporary",
-  "Internship",
-  "Freelance",
-];
-
 export {
   fieldsToDisplayContactInfo,
   fieldsToDisplayProfile,
   allTypeOfJob,
-  allTypeOfJobStatus,
-  allValue,
-  allSkill,
   countNullFieldsByCategory,
   percentage,
   fieldCategoryMapping,
@@ -321,4 +294,6 @@ export {
   transformExperience,
   TimeAgo,
   allCategories,
+  workLocationTypes,
+  companySizes,
 };

@@ -4,6 +4,10 @@ export interface Language {
   score: number; // Allow null for initial values
 }
 
+export interface TimeAgoProps {
+  timestamp: string;
+}
+
 export interface PackageAccepted {
   visible_info: string[];
   position: string | null;
