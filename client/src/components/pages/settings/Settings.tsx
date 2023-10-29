@@ -128,7 +128,7 @@ const Settings = () => {
               Bridge makes it easy to delete your account and all data
               associated with it. You cannot undo this.
             </p>
-            <Button type="default" danger onClick={handleShowModal}>
+            <Button type="default" danger className={styling.deleteButton} onClick={handleShowModal}>
               Delete my account
             </Button>
             <DeleteAccount
