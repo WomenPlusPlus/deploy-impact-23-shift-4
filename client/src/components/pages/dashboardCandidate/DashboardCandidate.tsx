@@ -182,6 +182,7 @@ const DashboardCandidate: React.FC = () => {
                         title={`${job.title} - ${matchedJob.score}%`}
                         subtitle={description}
                         onClick={() => navigate(`/job/${job.id}`)}
+                        onTitleClick={() => navigate(`/job/${job.id}`)}
                       />
                     );
                   }
