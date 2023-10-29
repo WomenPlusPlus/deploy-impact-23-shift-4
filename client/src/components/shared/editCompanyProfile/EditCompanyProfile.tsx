@@ -170,6 +170,7 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
             <p className={styling.sectionName}>Company size:</p>
             <Select
               placeholder="Select Company size"
+              className={styling.input}
               style={{ width: "100%" }}
               value={company_size}
               onChange={(value) => setCompanySize(value)}

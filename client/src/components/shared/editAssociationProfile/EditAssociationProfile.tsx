@@ -88,6 +88,7 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
             <p className={styling.sectionName}>Association size:</p>
             <Select
               placeholder="Select Association size"
+              className={styling.input}
               style={{ width: "100%" }}
               value={association_size}
               onChange={(value) => setAssociationSize(value)}
