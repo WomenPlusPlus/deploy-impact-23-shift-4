@@ -35,8 +35,17 @@ const EditValues: React.FC<EditValuesProps> = ({
 
   useEffect(() => {
     setCandidateLabels(candidate?.values as string[]);
-    setFilteredValues(allLabels);
     updateFilteredValues(candidate?.values as string[]);
+    if (candidate?.values && candidate?.values?.length > 0) {
+      // Filter out values that are already in candidate.values
+      const filteredValues = allLabels.filter(
+        (label) => !candidate?.values?.includes(label)
+      );
+      setFilteredValues(filteredValues);
+    } else {
+      // If candidate.values is empty, set filteredValues to allLabels
+      setFilteredValues(allLabels);
+    }
   }, [candidate, allLabels]);
 
   const handleSearchTextChange = (searchText: string) => {
@@ -55,14 +64,14 @@ const EditValues: React.FC<EditValuesProps> = ({
         );
         if (!searchText) {
           return isValueInCandidate;
-        } else {
-          return (
-            (isValueInCandidate &&
-              value?.toLowerCase().startsWith(searchText.toLowerCase())) ||
-            value?.toLowerCase().includes(searchText.toLowerCase())
-          );
         }
       });
+      setFilteredValues(updatedFilteredValues);
+    }
+    if (searchText) {
+      const updatedFilteredValues = filteredValues?.filter((value) =>
+        value.toLowerCase().includes(searchText.toLowerCase())
+      );
       setFilteredValues(updatedFilteredValues);
     }
   };
