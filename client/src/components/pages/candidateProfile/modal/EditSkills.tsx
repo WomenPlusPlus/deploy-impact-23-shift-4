@@ -272,10 +272,10 @@ const EditSkills: React.FC<EditSkillsProps> = ({
                         setCandidateHardSkills(updatedSkills);
                       }}
                     >
-                      <Option value="beginner">🌱 Beginner</Option>
-                      <Option value="intermediate">🌟 Intermediate</Option>
-                      <Option value="advanced">🚀 Advanced</Option>
-                      <Option value="pro">🌌 Pro</Option>
+                      <Option value="b">🌱 Beginner</Option>
+                      <Option value="i">🌟 Intermediate</Option>
+                      <Option value="a">🚀 Advanced</Option>
+                      <Option value="p">🌌 Pro</Option>
                     </Select>
                   </div>
                 ))}

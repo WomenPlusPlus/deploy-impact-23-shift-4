@@ -20,6 +20,7 @@ import { Tabs } from "antd";
 import DetailsTab from "./tabs/details/DetailsTab";
 import JobMatchesTab from "./tabs/matches/MatchesTab";
 import Spinner from "../../UI/spinner/Spinner";
+import ApplyModal from "./applyModal/ApplyModal";
 
 const PublicJob = () => {
   // Job id from url
@@ -36,6 +37,7 @@ const PublicJob = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [matchScore, setMatchScore] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isApplyModalOpen, setApplyModalOpen] = useState(false);
 
   /**
    * Get job and company data
@@ -78,6 +80,19 @@ const PublicJob = () => {
   useEffect(() => {
     getInfo(id ?? "");
   }, [id]);
+
+  const toggleApplyModal = () => {
+    setApplyModalOpen(!isApplyModalOpen);
+    getInfo(id ?? "");
+  };
+
+  const isApplied = () => {
+    const requestedJobs = candidate?.requested_jobs;
+    if (requestedJobs) {
+      return requestedJobs.includes(jobData?.id);
+    }
+    return false;
+  };
 
   const saveJob = async () => {
     // add to local storage
@@ -150,6 +165,7 @@ const PublicJob = () => {
       label: "Matches",
       key: "2",
       children: <JobMatchesTab job={jobData} />,
+      disabled: userType === "candidate",
     },
   ];
 
@@ -179,10 +195,23 @@ const PublicJob = () => {
         <div className={styling.row}>
           {isBookmark()}
           {userType === "candidate" && (
-            <Button className={styling.companyButton}>Apply</Button>
+            <Button
+              className={styling.companyButton}
+              onClick={toggleApplyModal}
+              disabled={isApplied()}
+            >
+              Apply
+            </Button>
           )}
         </div>
       </div>
+      <ApplyModal
+        isApplyModalOpen={isApplyModalOpen}
+        company={companyData}
+        jobId={jobData?.id}
+        candidate={candidate}
+        callback={toggleApplyModal}
+      />
 
       {/* Second line */}
       <div>

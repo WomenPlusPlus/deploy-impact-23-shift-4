@@ -9,6 +9,7 @@ import { useState } from "react";
 
 import styling from "./DetailsTab.module.css";
 import { Candidate, Company, Job } from "../../../../../types/types";
+import { useNavigate } from "react-router-dom";
 
 interface DetailsTabProps {
   jobData: Job;
@@ -29,6 +30,8 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
 }) => {
   const companyIconSize = 15;
 
+  const navigate = useNavigate();
+
   const [isApplyModalOpen, setApplyModalOpen] = useState(false);
 
   const toggleApplyModal = () => {
@@ -43,6 +46,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
     }
     return false;
   };
+
   return (
     <>
       {/* Containers */}
@@ -158,7 +162,14 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
             </div>
           </div>
           <div className={styling.row}>
-            <Button className={styling.companyButton}>View company</Button>
+            <Button
+              className={styling.companyButton}
+              onClick={() => {
+                navigate(`/company/${companyData?.user_id}`);
+              }}
+            >
+              View company
+            </Button>
           </div>
         </div>
         <div>
