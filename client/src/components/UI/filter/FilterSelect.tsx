@@ -29,6 +29,7 @@ const FilterSelect: React.FC<multiOptionProps> = ({
       options: [
         { value: "Full Time", label: "Full Time" },
         { value: "Part Time", label: "Part Time" },
+        { value: "Internship", label: "Internship" },
       ],
     },
     {

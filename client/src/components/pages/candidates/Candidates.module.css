@@ -15,7 +15,7 @@
   padding: 1rem 0;
 }
 
-.filter-dropdown {
+.filterDropdown {
   display: flex;
   gap: 1rem;
 }
@@ -23,5 +23,20 @@
 .cards {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
+}
+
+.sortByDate {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.4rem;
+  color: var(--grey-8, #595959);
+  margin-bottom: -1rem;
+  margin-top: 2rem;
+  width: 99%;
+}
+
+.count {
+  color: var(--color-button);
+  font-size: 1.5rem;
+  font-weight: bolder;
 }

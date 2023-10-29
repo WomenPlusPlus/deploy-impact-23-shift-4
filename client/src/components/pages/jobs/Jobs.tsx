@@ -162,8 +162,7 @@ const Jobs = () => {
           <div className={styling.searchText}>
             <SearchJobs data={jobs} onSearch={handleSearch} />
           </div>
-          <div>
-            {" "}
+          <div className={styling.filters}>
             <Select
               placeholder="Anywhere"
               style={{ width: 200 }}
@@ -181,9 +180,7 @@ const Jobs = () => {
                 );
               })}
             </Select>
-          </div>
-          <div>
-            {" "}
+
             <FilterSelect
               filterData={filterData}
               data={jobs}

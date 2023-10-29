@@ -46,7 +46,7 @@ const SearchJobs: React.FC<SearchJobsProps> = ({ onSearch, data }) => {
   return (
     <div>
       <Search
-        placeholder="Input search text"
+        placeholder="Search..."
         allowClear
         value={searchValue}
         onChange={handleSearchChange}
