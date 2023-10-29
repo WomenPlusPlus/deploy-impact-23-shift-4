@@ -3,7 +3,7 @@ import { CardContainer } from "../../../UI/container/CardContainer";
 import { useEffect, useState } from "react";
 import styling from "./ApplicationRequests.module.scss";
 import ToggleModal from "../../../shared/toggleModal/ToggleModal";
-import { allCategories } from "../../candidateProfile/helpers/helper";
+import { allCategories } from "../../helpers/helper";
 import { Candidate } from "../../../../types/types";
 import {
   getCandidateById,

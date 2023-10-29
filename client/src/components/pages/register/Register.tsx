@@ -282,7 +282,7 @@ const Register: React.FC<RegisterProps> = ({
               <div className={styling.oauth}>
                 <hr className={styling.horizontalLine} />
                 <p>or register with</p>
-                <GoogleButton text={"signup_with"} />
+                <GoogleButton text={"signup_with"} isDisabled={true}/>
               </div>
             </Form>
           </div>

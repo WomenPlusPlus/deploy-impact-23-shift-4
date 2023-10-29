@@ -12,6 +12,7 @@ import styling from "./AssociationPublicProfile.module.scss";
 
 import { IconMapPin, IconWorldWww } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
+import Avatar from "../../UI/avatar/Avatar";
 
 const AssociationPublicProfile = () => {
   //State
@@ -37,8 +38,10 @@ const AssociationPublicProfile = () => {
     <CardContainer>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>About us</h2>
-
-        <p className={styling.text}>{association?.description}</p>
+        <div className={styling.description}>
+          <h3 className={styling.subtitles}>Description</h3>
+          <p className={styling.text}>{association?.description}</p>
+        </div>
       </div>
     </CardContainer>
   );
@@ -64,7 +67,15 @@ const AssociationPublicProfile = () => {
     <div className={styling.main}>
       <div className={styling.container}>
         <div className={styling.header}>
-          <img className={styling.logo} src={association?.logo} alt="Avatar" />
+          {association?.logo ? (
+            <img
+              className={styling.logo}
+              src={association?.logo}
+              alt="Avatar"
+            />
+          ) : (
+            <Avatar firstName={association?.association_name} size={80} />
+          )}
 
           <div>
             <h1 className={styling.headerTitle}>

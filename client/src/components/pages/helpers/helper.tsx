@@ -1,4 +1,4 @@
-import { Candidate, Experience, TimeAgoProps } from "../../../../types/types";
+import { Candidate, Experience, TimeAgoProps } from "../../../types/types";
 import React from "react";
 
 const fieldsToDisplayContactInfo = ["Phone number", "Email", "Address"];
@@ -24,14 +24,14 @@ const allCategories = [
 ];
 
 const companySizes = [
-  '1-10',
-  '11-50',
-  '51-200',
-  '201-500',
-  '501-1000',
-  '1001-5000',
-  '5001-10,000',
-  '10,001+',
+  "1-10",
+  "11-50",
+  "51-200",
+  "201-500",
+  "501-1000",
+  "1001-5000",
+  "5001-10,000",
+  "10,001+",
 ];
 
 const workLocationTypes: string[] = ["Hybrid", "Remote", "On-site"];
@@ -87,7 +87,7 @@ const fieldCategoryMapping: FieldCategoryMapping = {
   job_status: "Personal Info",
   preferred_jobs: "Type of jobs",
   preferred_title: "Profile",
-  company_type: "Experience",
+  company_type: "",
   matching_jobs: "",
   matching_companies: "",
   values: "Values",
@@ -128,7 +128,8 @@ const countNullFieldsByCategory = (
     const nullFieldsCount = fieldsForCategory?.reduce((count, field) => {
       if (Array.isArray(candidate[field])) {
         if (candidate[field]?.length === 0) {
-          return count + 1; // Empty array should be counted as null
+          // Empty array should be counted as null
+          return count + 1;
         }
       } else if (candidate[field] === null) {
         return count + 1;
@@ -169,7 +170,7 @@ function transformCandidateDocs(candidate: Candidate) {
   if (candidate.certificates && Array.isArray(candidate.certificates)) {
     candidate.certificates.forEach((certificate) => {
       const title = "Certificate";
-      const subtext = `${certificate.name} 2023`;
+      const subtext = `${certificate.name}`;
       const type = "certificate";
       transformedData.push({ title, subtext, type });
     });
@@ -188,7 +189,7 @@ function transformCandidateJobPref(candidate: Candidate) {
   ) {
     sectionsVisibleInfo.push({
       title: "Salary bracket",
-      subtitle: `CHF ${candidate.salary_expectation[0]} / ${candidate.salary_expectation[1]} CHF`,
+      subtitle: `CHF ${candidate.salary_expectation[0]} - ${candidate.salary_expectation[1]} CHF`,
     });
   }
 

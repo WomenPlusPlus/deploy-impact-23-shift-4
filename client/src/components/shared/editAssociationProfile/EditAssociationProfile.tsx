@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal as AntModal, Button, Input, Select } from "antd";
 import styling from "./EditAssociationProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
-import { companySizes } from "../../pages/candidateProfile/helpers/helper";
+import { companySizes } from "../../pages/helpers/helper";
 
 const { Option } = Select;
 
@@ -88,6 +88,7 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
             <p className={styling.sectionName}>Association size:</p>
             <Select
               placeholder="Select Association size"
+              className={styling.input}
               style={{ width: "100%" }}
               value={association_size}
               onChange={(value) => setAssociationSize(value)}
@@ -127,7 +128,7 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
           <p className={styling.sectionName}>Description:</p>
           <TextArea
             className={styling.description}
-            placeholder="Description"
+            placeholder="Description. Max 1000 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

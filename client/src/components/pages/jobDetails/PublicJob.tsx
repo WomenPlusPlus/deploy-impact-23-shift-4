@@ -5,6 +5,7 @@ import {
   IconBookmark,
   IconMapPin,
   IconBriefcase2,
+  IconCoins,
   IconChartPie,
 } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
 import { getJobById } from "../../../api/jobs";
 import { getCompanyById } from "../../../api/companies";
 import { Job, Company, Candidate } from "../../../types/types";
-import { TimeAgo } from "../candidateProfile/helpers/helper";
+import { TimeAgo } from "../helpers/helper";
 
 import { getCandidateById, updateCandidateById } from "../../../api/candidates";
 
@@ -20,6 +21,7 @@ import { Tabs } from "antd";
 import DetailsTab from "./tabs/details/DetailsTab";
 import JobMatchesTab from "./tabs/matches/MatchesTab";
 import Spinner from "../../UI/spinner/Spinner";
+import ApplyModal from "./applyModal/ApplyModal";
 
 const PublicJob = () => {
   // Job id from url
@@ -36,6 +38,7 @@ const PublicJob = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [matchScore, setMatchScore] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isApplyModalOpen, setApplyModalOpen] = useState(false);
 
   /**
    * Get job and company data
@@ -78,6 +81,19 @@ const PublicJob = () => {
   useEffect(() => {
     getInfo(id ?? "");
   }, [id]);
+
+  const toggleApplyModal = () => {
+    setApplyModalOpen(!isApplyModalOpen);
+    getInfo(id ?? "");
+  };
+
+  const isApplied = () => {
+    const requestedJobs = candidate?.requested_jobs;
+    if (requestedJobs) {
+      return requestedJobs.includes(jobData?.id);
+    }
+    return false;
+  };
 
   const saveJob = async () => {
     // add to local storage
@@ -150,6 +166,7 @@ const PublicJob = () => {
       label: "Matches",
       key: "2",
       children: <JobMatchesTab job={jobData} />,
+      disabled: userType === "candidate",
     },
   ];
 
@@ -179,10 +196,23 @@ const PublicJob = () => {
         <div className={styling.row}>
           {isBookmark()}
           {userType === "candidate" && (
-            <Button className={styling.companyButton}>Apply</Button>
+            <Button
+              className={styling.companyButton}
+              onClick={toggleApplyModal}
+              disabled={isApplied()}
+            >
+              Apply
+            </Button>
           )}
         </div>
       </div>
+      <ApplyModal
+        isApplyModalOpen={isApplyModalOpen}
+        company={companyData}
+        jobId={jobData?.id}
+        candidate={candidate}
+        callback={toggleApplyModal}
+      />
 
       {/* Second line */}
       <div>
@@ -204,6 +234,18 @@ const PublicJob = () => {
           </div>
           <div className={styling.row}>
             <IconBriefcase2 size={iconSize} /> <p>{jobData?.employment_type}</p>
+          </div>
+          <div className={styling.row}>
+            <IconCoins size={iconSize} />{" "}
+            <p>
+              {jobData?.salary && jobData?.salary?.length > 0 ? (
+                <>
+                  {jobData?.salary![0]} - {jobData?.salary![1]}
+                </>
+              ) : (
+                "Not provided"
+              )}
+            </p>
           </div>
         </div>
       </div>

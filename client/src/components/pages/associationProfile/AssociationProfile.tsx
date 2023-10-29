@@ -66,8 +66,10 @@ const AssociationProfile = () => {
     <CardContainer>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>About us</h2>
-
-        <p className={styling.text}>{association?.description}</p>
+        <div className={styling.description}>
+          <h3 className={styling.subtitles}>Description</h3>
+          <p className={styling.text}>{association?.description}</p>
+        </div>
       </div>
     </CardContainer>
   );

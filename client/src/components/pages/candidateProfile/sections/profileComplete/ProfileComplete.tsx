@@ -6,14 +6,14 @@ import {
   countNullFieldsByCategory,
   percentage,
   allCategories,
-} from "../../helpers/helper";
+} from "../../../helpers/helper";
 import { Candidate } from "../../../../../types/types";
 import { useEffect, useState } from "react";
 
 interface ProfileCompletedProps {
   candidate: Candidate;
   className?: string;
-  setCountNullCategories?: (arg: Record<string, number>) => void;
+  setCountNullCategories: (arg: Record<string, number>) => void;
   getProgress?: (arg: number) => void;
   editContactInfo?: () => void;
   editLanguages?: () => void;

@@ -80,6 +80,6 @@
 }
 
 .labelClass {
-  background-color: var(--label-color);
+  background-color: var(--values-label);
   border-radius: var(--tag-radius);
 }

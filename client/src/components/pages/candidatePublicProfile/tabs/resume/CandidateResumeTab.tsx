@@ -17,10 +17,10 @@ import {
   transformCandidateDocs,
   transformCandidateJobPref,
   transformExperience,
-} from "../../../candidateProfile/helpers/helper";
+} from "../../../helpers/helper";
 import { Button } from "../../../../UI/button/Button";
 import { ProgressBarComponent } from "../../../../UI/progressbar/ProgressBarComponent";
-import { allCategories } from "../../../../../components/pages/candidateProfile/helpers/helper";
+import { allCategories } from "../../../helpers/helper";
 
 interface CandidateResumeTabProps {
   candidate: Candidate;

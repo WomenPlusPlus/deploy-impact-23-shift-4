@@ -3,7 +3,7 @@ import ToggleModal from "../../../shared/toggleModal/ToggleModal";
 import { updateCompanyById } from "../../../../api/companies";
 import { Candidate, Company } from "../../../../types/types";
 import { updateCandidateById } from "../../../../api/candidates";
-import { allCategories } from "../../candidateProfile/helpers/helper";
+import { allCategories } from "../../helpers/helper";
 
 interface ApplyModalProps {
   company: Company | undefined;
@@ -20,7 +20,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
   isApplyModalOpen,
   callback,
 }) => {
-
   // State
   const [selectedStrings, setSelectedStrings] = useState<boolean[]>([
     true,

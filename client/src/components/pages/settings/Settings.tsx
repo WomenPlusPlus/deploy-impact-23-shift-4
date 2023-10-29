@@ -4,6 +4,7 @@ import { Button, Input } from "antd";
 import DeleteAccount from "./modal/DeleteAccount";
 import { changePassword } from "../../../api/user";
 import { toast } from "react-toastify";
+import SpinnerLogin from "../../UI/spinner/LoginSpinner";
 
 const Settings = () => {
   const userId = JSON.parse(localStorage.getItem("auth")!)?.user?.id;
@@ -11,6 +12,7 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [checkingPassword, setCheckingPassword] = useState<boolean>(false);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -25,6 +27,7 @@ const Settings = () => {
   };
 
   const handleChangePassword = async () => {
+    setCheckingPassword(true);
     if (checkPasswords()) {
       try {
         const response = await changePassword(
@@ -37,15 +40,26 @@ const Settings = () => {
           setConfirmNewPassword("");
           setCurrentPassword("");
           toast.success("Password changed successfully");
+          setCheckingPassword(false);
         } else if (response === 400) {
           toast.error("Incorrect current password");
+          setCheckingPassword(false);
         } else {
           toast.error("Oops, something went wrong. Please try again later.");
+          setCheckingPassword(false);
         }
       } catch (error) {
         console.error("Error:", error);
+        setCheckingPassword(false);
       }
     }
+    setCheckingPassword(false);
+  };
+
+  const [showPassword, setShowPassword] = useState(false); // Add this state
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -67,6 +81,7 @@ const Settings = () => {
               <p>Current password</p>
               <Input
                 placeholder="Current password"
+                type={showPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
@@ -76,6 +91,7 @@ const Settings = () => {
                 <p>New password</p>
                 <Input
                   placeholder="New password"
+                  type={showPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
@@ -84,17 +100,25 @@ const Settings = () => {
                 <p>Confirm New password</p>
                 <Input
                   placeholder="Confirm New password"
+                  type={showPassword ? "text" : "password"}
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                 />
               </div>
             </div>
+            <a
+              onClick={togglePasswordVisibility}
+              className={styling.showPassword}
+            >
+              {showPassword ? "Hide Password" : "Show Password"}
+            </a>
+
             <Button
               className={styling.buttonPassword}
               type="primary"
               onClick={handleChangePassword}
             >
-              Update password
+              {checkingPassword ? <SpinnerLogin /> : "Update password"}
             </Button>
           </div>
         </div>
@@ -112,7 +136,12 @@ const Settings = () => {
               Bridge makes it easy to delete your account and all data
               associated with it. You cannot undo this.
             </p>
-            <Button type="default" danger onClick={handleShowModal}>
+            <Button
+              type="default"
+              danger
+              className={styling.deleteButton}
+              onClick={handleShowModal}
+            >
               Delete my account
             </Button>
             <DeleteAccount

@@ -156,7 +156,7 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
                 onChange={(e) =>
                   setSalaryRange([e.target.value, salaryRange[1]])
                 }
-                placeholder="Min Salary"
+                placeholder="Min Salary e.g 50'000"
               />
               <p>Max: </p>
               <Input
@@ -164,7 +164,7 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
                 onChange={(e) =>
                   setSalaryRange([salaryRange[0], e.target.value])
                 }
-                placeholder="Max Salary"
+                placeholder="Max Salary e.g 80'000"
               />
               {showDeleteButton && (
                 <Button

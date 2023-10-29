@@ -15,7 +15,7 @@ import {
 } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
 import { getAllJobs } from "../../../api/jobs";
-import { TimeAgo } from "../candidateProfile/helpers/helper";
+import { TimeAgo } from "../helpers/helper";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../UI/avatar/Avatar";
 import { Labels } from "../../UI/labels/Label";

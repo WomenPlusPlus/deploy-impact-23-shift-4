@@ -18,7 +18,7 @@ import {
   transformCandidateDocs,
   transformCandidateJobPref,
   transformExperience,
-} from "./helpers/helper";
+} from "../helpers/helper";
 import { CardContainer } from "../../UI/container/CardContainer";
 import { ProgressBarComponent } from "../../UI/progressbar/ProgressBarComponent";
 import { ContentBlock } from "../../UI/container/SectionContainer";
@@ -196,6 +196,8 @@ const CandidateProfile = () => {
   if (isLoading) {
     return <Spinner />;
   }
+
+  console.log("candidate", candidate);
 
   return (
     <div className={styling.main}>
@@ -601,6 +603,7 @@ const CandidateProfile = () => {
             <h3 className={styling.h3}>Uploaded documents</h3>
             <DocumentUploadModal
               candidate={candidate}
+              setCandidate={setCandidate}
               visible={isDocumentsEdit}
               setVisible={setIsDocumentsEdit}
               showModal={editDocuments}

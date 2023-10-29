@@ -211,7 +211,7 @@ const AddEditJob: React.FC<ModalProps> = ({
       />
       <TextArea
         className={styling.description}
-        placeholder="Description"
+        placeholder="Description. Max 10000 characters"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
@@ -351,13 +351,13 @@ const AddEditJob: React.FC<ModalProps> = ({
           <div className={styling.salary}>
             <Input
               className={styling.input}
-              placeholder="Minimum Salary"
+              placeholder="Minimum Salary e.g 50'000"
               value={minSalary}
               onChange={(e) => setMinSalary(e.target.value)}
             />
             <Input
               className={styling.input}
-              placeholder="Maximum Salary"
+              placeholder="Maximum Salary e.g 100'000"
               value={maxSalary}
               onChange={(e) => setMaxSalary(e.target.value)}
             />
