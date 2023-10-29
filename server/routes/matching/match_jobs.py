@@ -1,7 +1,6 @@
 # from .train_model import vectorizer
 import dill
 import requests
-import string
 import numpy as np
 from flask import Blueprint, jsonify, request
 from sklearn.metrics.pairwise import cosine_similarity
@@ -13,7 +12,7 @@ with open("model/vectorizer.pkl", "rb") as file:
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
-   
+
     candidate_skills = [
         "_".join(skill.lower().split(" ")) for skill in candidate_skills
     ]
@@ -35,6 +34,14 @@ def score(job_skills, candidate_skills, candidate_levels=False):
 
 
 def match_jobs_route(domain_name):
+    """
+    This script defines a Flask Blueprint for matching job candidates to job postings based on their skills and qualifications. It uses a pre-trained TfidfVectorizer to transform skills into numerical representations for comparison. The matching algorithm calculates a percentage score for each job based on the similarity between the candidate's skills and the job's requirements.
+
+    The Blueprint includes an API route ('/api/match_jobs') that accepts POST requests with user data and returns a list of matching job postings along with their matching scores.
+
+    This script assumes the availability of a pre-trained TfidfVectorizer loaded from 'model/vectorizer.pkl' for skill vectorization connected to the database.
+    When updated a new skill/value in the database, the vectorizer should be retrained and saved to 'model/vectorizer.pkl'.
+    """
     match_jobs_bp = Blueprint("match_jobs", __name__)
 
     @match_jobs_bp.route("/api/match_jobs", methods=["POST"])
@@ -71,7 +78,7 @@ def match_jobs_route(domain_name):
 
                     for job in jobs:
                         job_skills = [skill["skill_name"] for skill in job["skills"]]
-                       
+
                         job_id = job["id"]
 
                         count = 4

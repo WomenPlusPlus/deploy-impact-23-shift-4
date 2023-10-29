@@ -25,18 +25,15 @@ export interface Candidate {
   associations: string[];
   first_name?: string;
   last_name?: string;
-  preferred_name?: string;
+  preferred_title?: string;
   city?: string;
   country?: string;
   cv_reference?: string | null;
   address?: string;
   phone_number?: string;
-  birth_date?: string;
-  work_permit: string | null;
   notice_period?: string | null;
   job_status?: string;
   preferred_jobs?: { [key: string]: any }[];
-  preferred_title?: string;
   company_type?: string[];
   matching_jobs?: { [key: string]: any };
   matching_companies?: { [key: string]: any };
@@ -89,6 +86,7 @@ export interface Company {
   company_size?: string;
   company_type?: string;
   company_description?: string;
+  company_culture?: string;
   company_website?: string;
   company_industry?: string[];
   saved_items?: string[];
