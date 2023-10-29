@@ -45,6 +45,9 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
   const [company_website, setCompanyWebsite] = useState<string>(
     companyInfo?.company_website || ""
   );
+  const [company_culture, setCompanyCulture] = useState<string>(
+    companyInfo?.company_culture || ""
+  );
   const [kununu_url, setKununuUrl] = useState<string>(
     companyInfo?.kununu_url || ""
   );
@@ -78,6 +81,7 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
       company_name: company_name,
       company_size: company_size,
       company_description: description,
+      company_culture: company_culture,
       address: address,
       values: values,
       kununu_url: kununu_url,
@@ -205,9 +209,19 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
           <p className={styling.sectionName}>Description:</p>
           <TextArea
             className={styling.description}
-            placeholder="Description"
+            placeholder="Company Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className={styling.section}>
+          <p className={styling.sectionName}>Company Culture:</p>
+          <TextArea
+            className={styling.culture}
+            placeholder="Company Culture"
+            value={company_culture}
+            onChange={(e) => setCompanyCulture(e.target.value)}
           />
         </div>
 

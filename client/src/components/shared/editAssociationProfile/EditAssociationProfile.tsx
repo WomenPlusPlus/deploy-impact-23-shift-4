@@ -30,7 +30,7 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
   );
 
   const [description, setDescription] = useState<string>(
-    associationInfo?.company_description || ""
+    associationInfo?.description || ""
   );
   const [address, setAddress] = useState<string>(associationInfo.address || "");
   const [association_website, setAssociationWebsite] = useState<string>(

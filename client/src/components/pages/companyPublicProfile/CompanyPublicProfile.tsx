@@ -9,6 +9,7 @@ import { Company, Job } from "../../../types/types";
 import {
   IconBrandLinkedin,
   IconMapPin,
+  IconTags,
   IconWaveSine,
   IconWorldWww,
 } from "@tabler/icons-react";
@@ -17,6 +18,7 @@ import { getAllJobs } from "../../../api/jobs";
 import { TimeAgo } from "../candidateProfile/helpers/helper";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../UI/avatar/Avatar";
+import { Labels } from "../../UI/labels/Label";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
@@ -79,8 +81,14 @@ const CompanyPublicProfile = () => {
     <CardContainer className={styling.container}>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>About the company</h2>
-
-        <p>This is about the company</p>
+        {company?.company_description ? (
+          <div className={styling.description}>
+            <h3 className={styling.subtitles}>Description</h3>
+            <p>{company?.company_description}</p>
+          </div>
+        ) : (
+          <p>Nothing added yet</p>
+        )}
       </div>
     </CardContainer>
   );
@@ -89,8 +97,34 @@ const CompanyPublicProfile = () => {
     <CardContainer className={styling.container}>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>Company culture</h2>
+        <div className={styling.description}>
+          <h3 className={styling.subtitles}>Our Values</h3>
+          {company?.values ? (
+            <>
+              {company?.values?.map((value, index) => {
+                <Labels
+                  key={index}
+                  icon={<IconTags />}
+                  labelName={value}
+                  disableCloseIcon={true}
+                  customClass={styling.labelClass}
+                />;
+              })}
+            </>
+          ) : null}
+        </div>
 
-        <p>This is about the culture</p>
+        {company?.company_culture ? (
+          <div className={styling.description}>
+            <h3 className={styling.subtitles}>Our Vision</h3>
+            <p>{company?.company_culture}</p>
+          </div>
+        ) : (
+          <div className={styling.description}>
+            <h3 className={styling.subtitles}>Our Vision</h3>
+            <p>Nothing added yet</p>
+          </div>
+        )}
       </div>
     </CardContainer>
   );
