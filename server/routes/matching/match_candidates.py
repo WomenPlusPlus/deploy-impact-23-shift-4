@@ -9,6 +9,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 with open("model/vectorizer.pkl", "rb") as file:
     vectorizer = dill.load(file)
 
+def check_conditions(job, candidate):
+    location = job['location'] in candidate['city'] + candidate['possble_work_locations']
+    return location
+
 
 def score(job_skills, candidate_skills, candidate_levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
@@ -46,6 +50,7 @@ def match_candidates_route(domain_name):
                 id = data.get("job_id")
 
                 cand_match = []
+                match_ids = []
                 job_json = {"job_id": id}
 
                 job = requests.post(f"{domain_name}/api/get_job_by_id", json=job_json)
@@ -53,14 +58,17 @@ def match_candidates_route(domain_name):
                     skill["skill_name"] for skill in job.json()["jobs"]["skills"]
                 ]
 
-                # if job.json()["jobs"]["values"]:
                 job_values = job.json()["jobs"]["values"]
-                # if job.json()["jobs"]["soft_skills"]:
                 job_soft_skills = (
                     job.json()["jobs"]["soft_skills"]
-                    if job.json()["jobs"]["soft_skills"] is not None
+                    if job.json()["jobs"]["soft_skills"]
                     else []
                 )
+                existing_match = (
+                    [cand["id"] for cand in job.json()["jobs"]["matching_candidates"]] 
+                    if job.json()["jobs"]["matching_candidates"] 
+                    else []
+                    )
                 candidates_response = requests.get(
                     f"{domain_name}/api/get_all_candidates"
                 )
@@ -105,8 +113,9 @@ def match_candidates_route(domain_name):
 
                             cand_score = round(total_score / count, 1)
 
-                            if cand_score >= 60:
+                            if cand_score >= 20:
                                 cand_match.append({"id": cand_id, "score": cand_score})
+                                match_ids.append(cand_id)
                                 if candidate["matching_jobs"]:
                                     duplicate = [
                                         ix
@@ -140,6 +149,26 @@ def match_candidates_route(domain_name):
                         print("No candidates skills available")
                         continue
 
+                changes = set(existing_match) - set(match_ids)
+                for cand in changes:
+                    cand_json = { "user_id": cand }
+                    cand_response = requests.post(f"{domain_name}/api/get_candidate_by_id", json=cand_json)
+                    match = cand_response.json()["candidates"]["matching_jobs"]
+                    job_ix = [
+                                    ix
+                                    for ix, job in enumerate(match)
+                                    if job["id"] == id
+                                ]
+                    match.pop(job_ix[0])
+                    update_cand_json = {
+                                "user_id": cand,
+                                "matching_jobs": match,
+                            }
+                    update_cand_response = requests.put(
+                                f"{domain_name}/api/update_candidate",
+                                json=update_cand_json,
+                            )
+                    
                 update_json = {"job_id": id, "matching_candidates": cand_match}
                 update_job = requests.put(
                     f"{domain_name}/api/update_job", json=update_json
