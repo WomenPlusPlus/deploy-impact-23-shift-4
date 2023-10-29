@@ -41,16 +41,36 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   const [filteredSoftSkills, setFilteredSoftSkills] = useState<string[]>([]);
 
   const fetchSkills = async () => {
+    setCandidateHardSkills(candidate?.skills as Skill[]);
+    setCandidateSoftSkills(candidate?.soft_skills as string[]);
+
     const hardSkills = (allHardSkills as AllSkill[])?.filter(
       (skill) => skill?.category === "hard_skill"
     );
     const softSkills = (allHardSkills as AllSkill[])?.filter(
       (skill) => skill?.category === "soft_skill"
     );
-    setCandidateHardSkills(candidate?.skills as Skill[]);
-    setCandidateSoftSkills(candidate?.soft_skills as string[]);
-    setFilteredSkills(hardSkills);
-    setFilteredSoftSkills(softSkills?.map((skill) => skill?.name));
+    if (!candidate?.skills) {
+      setFilteredSkills(hardSkills);
+    } else {
+      // Filter out the candidate's skills from hardSkills
+      const filteredHardSkills = hardSkills?.filter(
+        (skill) =>
+          !candidateHardSkills?.some(
+            (cSkill) => cSkill?.skill_name === skill?.name
+          )
+      );
+      setFilteredSkills(filteredHardSkills);
+    }
+    if (!candidate?.soft_skills) {
+      setFilteredSoftSkills(softSkills?.map((skill) => skill?.name));
+    } else {
+      // Filter out the candidate's skills from softSkills
+      const filteredSoftSkills = softSkills?.filter(
+        (skill) => !candidateSoftSkills.includes(skill?.name)
+      );
+      setFilteredSoftSkills(filteredSoftSkills.map((skill) => skill?.name));
+    }
     updateFilteredSkills(candidate?.skills as Skill[]);
     updateFilteredSoftSkills(candidate?.soft_skills as string[]);
   };
@@ -70,25 +90,26 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   };
 
   const updateFilteredSkills = (
-    skillsToDelete: Skill[],
+    skillsToDelete?: Skill[],
     searchText?: string
   ) => {
-    if (skillsToDelete?.length > 0) {
+    if (skillsToDelete) {
       const updatedFilteredSkills = allHardSkills?.filter((skill) => {
         const isSkillInCandidate = skillsToDelete?.every(
           (candidateSkill) => candidateSkill?.skill_name !== skill?.name
         );
         if (!searchText) {
           return isSkillInCandidate;
-        } else {
-          return (
-            (isSkillInCandidate &&
-              skill?.name
-                ?.toLowerCase()
-                .startsWith(searchText.toLowerCase())) ||
-            skill?.name?.toLowerCase().includes(searchText.toLowerCase())
-          );
         }
+      });
+      setFilteredSkills(updatedFilteredSkills);
+    }
+    if (searchText) {
+      const updatedFilteredSkills = filteredSkills?.filter((skill) => {
+        return (
+          skill?.name?.toLowerCase().startsWith(searchText.toLowerCase()) ||
+          skill?.name?.toLowerCase().includes(searchText.toLowerCase())
+        );
       });
       setFilteredSkills(updatedFilteredSkills);
     }
@@ -103,23 +124,26 @@ const EditSkills: React.FC<EditSkillsProps> = ({
   };
 
   const updateFilteredSoftSkills = (
-    skillsToDelete: string[],
+    skillsToDelete?: string[],
     searchText?: string
   ) => {
-    if (skillsToDelete?.length > 0) {
+    if (skillsToDelete) {
       const updatedFilteredSkills = allSoftSkills?.filter((skill) => {
         const isSkillInCandidate = skillsToDelete?.every(
           (candidateSkill) => candidateSkill !== skill
         );
         if (!searchText) {
           return isSkillInCandidate;
-        } else {
-          return (
-            (isSkillInCandidate &&
-              skill?.toLowerCase().startsWith(searchText.toLowerCase())) ||
-            skill?.toLowerCase().includes(searchText.toLowerCase())
-          );
         }
+      });
+      setFilteredSoftSkills(updatedFilteredSkills);
+    }
+    if (searchText) {
+      const updatedFilteredSkills = filteredSoftSkills?.filter((skill) => {
+        return (
+          skill?.toLowerCase().startsWith(searchText.toLowerCase()) ||
+          skill?.toLowerCase().includes(searchText.toLowerCase())
+        );
       });
       setFilteredSoftSkills(updatedFilteredSkills);
     }
