@@ -15,7 +15,7 @@ def add_job_route(Jobs, db):
             try:
                 data = request.get_json()
                 new_job = Jobs(**data)
-                print(new_job.to_dict())
+                
                 db.session.add(new_job)
                 db.session.commit()
 

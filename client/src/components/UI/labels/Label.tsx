@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styling from "./Label.module.css";
 import { IconX } from "@tabler/icons-react";
 
@@ -14,6 +14,13 @@ interface LabelProps {
   color?: string;
 }
 
+const skillLevelInitials = {
+  beginner: "b",
+  intermediate: "i",
+  advanced: "a",
+  pro: "p",
+};
+
 const Labels: React.FC<LabelProps> = ({
   icon,
   labelName,
@@ -25,6 +32,15 @@ const Labels: React.FC<LabelProps> = ({
   skillLevel,
   color,
 }) => {
+  const [skillLevelInitial, setSkillLevelInitial] = React.useState("");
+
+  useEffect(() => {
+    if (skillLevel && isSkill) {
+      const initials: { [key: string]: string } = skillLevelInitials;
+      setSkillLevelInitial(initials[skillLevel]);
+    }
+  }, [skillLevel, isSkill]);
+
   return (
     <div
       className={`${styling.labelContainer} ${customClass}`}
@@ -38,7 +54,7 @@ const Labels: React.FC<LabelProps> = ({
       ) : (
         <div className={styling.labelIcon}>
           {icon} <strong>{labelName}</strong> {skillLevel ? "| " : ""}
-          <strong>{skillLevel}</strong>
+          <strong>{skillLevelInitial}</strong>
         </div>
       )}
 
