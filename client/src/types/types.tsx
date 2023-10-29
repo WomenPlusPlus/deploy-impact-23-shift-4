@@ -50,7 +50,7 @@ export interface Candidate {
   possible_work_locations?: string[] | null;
   type_of_work?: string[] | null;
   saved_items?: string[] | null;
-  date_profile_modified?: string;
+  date_created?: string;
   package_requested?: { [key: string]: any }[] | null;
   package_accepted?: PackageAccepted[];
   requested_jobs?: string[] | null;
