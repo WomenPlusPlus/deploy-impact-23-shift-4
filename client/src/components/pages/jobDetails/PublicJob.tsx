@@ -5,6 +5,7 @@ import {
   IconBookmark,
   IconMapPin,
   IconBriefcase2,
+  IconCoins,
   IconChartPie,
 } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
@@ -233,6 +234,18 @@ const PublicJob = () => {
           </div>
           <div className={styling.row}>
             <IconBriefcase2 size={iconSize} /> <p>{jobData?.employment_type}</p>
+          </div>
+          <div className={styling.row}>
+            <IconCoins size={iconSize} />{" "}
+            <p>
+              {jobData?.salary && jobData?.salary?.length > 0 ? (
+                <>
+                  {jobData?.salary![0]} - {jobData?.salary![1]}
+                </>
+              ) : (
+                "Not provided"
+              )}
+            </p>
           </div>
         </div>
       </div>
