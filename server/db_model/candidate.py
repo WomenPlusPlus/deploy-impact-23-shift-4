@@ -45,7 +45,7 @@ def init_candidate_model(db):
         values = db.Column(db.ARRAY(db.String))  # Values as an array of strings
         skills = db.Column(
             db.JSON
-        )  # Hard Skills as e.g [{'skill_name': 'React', 'skill_id': 'React', 'score': 20, 'skill_level': 'intermediate'}]
+        )  # Hard Skills as e.g [{'skill_name': 'React', 'skill_id': 'React', 'skill_level': 'intermediate'}]
         soft_skills = db.Column(
             db.ARRAY(db.String)
         )  # Soft Skills as an array of strings

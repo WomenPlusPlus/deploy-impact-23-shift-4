@@ -65,6 +65,7 @@ const CandidateProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [allSkills, setAllSkills] = useState<AllSkill[]>([]);
+  const [allSoftSkills, setAllSoftSkills] = useState<string[]>([]);
   const [allValues, setAllValues] = useState([]);
   const [allTypeOfJobs, setAllTypeOfJobs] = useState([]);
   // count null categories
@@ -96,8 +97,14 @@ const CandidateProfile = () => {
       const allValues = values.map((value: AllValues) => {
         return value.name;
       });
+      const allSoftSkills = skills
+        ? skills
+            .filter((skill: AllSkill) => skill?.category === "soft_skill")
+            .map((skill: AllSkill) => skill.name)
+        : [];
       setAllValues(allValues);
       setAllSkills(skills);
+      setAllSoftSkills(allSoftSkills);
       setCandidate(candidateFetched);
       const transformedData = transformCandidateDocs(candidateFetched);
       setSectionDocuments(transformedData);
@@ -420,7 +427,8 @@ const CandidateProfile = () => {
           <EditSkills
             candidate={candidate}
             setCandidate={setCandidate}
-            allLabels={allSkills}
+            allHardSkills={allSkills}
+            allSoftSkills={allSoftSkills}
             icon={<IconTags />}
             titleName="Choose your skills"
             onSave={handleSaveEdit}
@@ -440,6 +448,18 @@ const CandidateProfile = () => {
                 customClass={styling.labelClass}
                 isSkill={true}
                 skillLevel={label.skill_level}
+              />
+            ))}
+          {/* soft skills */}
+          {candidate?.soft_skills &&
+            candidate?.soft_skills?.length > 0 &&
+            candidate?.soft_skills?.map((label, index) => (
+              <Labels
+                key={index}
+                icon={<IconTags />}
+                labelName={label}
+                disableCloseIcon={true}
+                customClass={styling.labelClass}
               />
             ))}
         </div>

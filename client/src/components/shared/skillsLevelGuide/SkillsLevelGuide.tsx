@@ -14,6 +14,10 @@ const SkillsLevelGuide = () => {
       <p>
         <strong>a</strong> - Advanced (3-5 years)
       </p>
+      <p> | </p>
+      <p>
+        <strong>p</strong> - Pro (5+ years)
+      </p>
     </div>
   );
 };
