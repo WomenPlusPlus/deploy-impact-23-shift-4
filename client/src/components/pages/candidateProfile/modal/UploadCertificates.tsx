@@ -1,88 +1,131 @@
-import React, { useEffect } from "react";
-import { Input, Button, Upload, message, UploadFile } from "antd";
+import React from "react";
+import { Input, Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { UploadFile } from "antd/lib/upload/interface";
 import { Candidate } from "../../../../types/types";
 import styling from "./UploadCertificates.module.css";
 
 interface CertificatesProps {
   candidate: Candidate;
-  certificates: { name: string; reference: string }[];
-  setCertificates: (arg: { name: string; reference: string }[]) => void;
-  currentCertificateTitle: string;
-  setCurrentCertificateTitle: (arg: string) => void;
+  certificates: { name: string; reference: string }[] | null;
+  setCertificates: (arg: { name: string; reference: string }[] | null) => void;
+  candidateCertificates: { name: string; reference: string }[] | null;
+  setCandidateCertificates: (
+    arg: { name: string; reference: string }[] | null
+  ) => void;
+  currentCertificateTitle: string | null | undefined;
+  setCurrentCertificateTitle: (arg: string | null) => void;
 }
 
 const Certificates: React.FC<CertificatesProps> = ({
   candidate,
   certificates,
+  candidateCertificates,
+  setCandidateCertificates,
   setCertificates,
-  currentCertificateTitle,
   setCurrentCertificateTitle,
+  currentCertificateTitle,
 }) => {
-  useEffect(() => {
-    setCertificates(
-      candidate?.certificates as { name: string; reference: string }[]
-    );
-  }, [candidate, setCertificates]);
-
-  const certificateProps = {
+  const cvProps = {
+    onRemove: () => {
+      setCertificates(null);
+      setCurrentCertificateTitle(null);
+    },
     beforeUpload: (file: UploadFile) => {
-      // Use certificateName as the name of the certificate
-      if (currentCertificateTitle.trim() === "") {
-        message.error("Please enter a certificate name before uploading.");
+      if (!currentCertificateTitle) {
         return false;
       }
-      console.log(file.name);
-      console.log(currentCertificateTitle);
-
-      // Add the new certificate to the certificateFiles state
       setCertificates([
-        ...certificates,
+        ...certificates!,
         { name: currentCertificateTitle, reference: file.name },
       ]);
-
-      // Clear the certificateName field
-      setCurrentCertificateTitle("");
-
+      setCandidateCertificates([
+        ...candidateCertificates!,
+        { name: currentCertificateTitle, reference: file.name },
+      ]);
+      setCurrentCertificateTitle(null);
       return false;
     },
   };
 
-  console.log("certificates", certificates);
+  const deleteCertificate = (certificateReference: string | null) => {
+    if (candidate) {
+      const deletedCertificate = candidate?.certificates?.filter(
+        (certificate) => certificate?.reference !== certificateReference
+      );
+      setCandidateCertificates(deletedCertificate as any);
+      setCertificates(deletedCertificate as any);
+    }
+  };
 
   return (
     <>
-      <h3>Your certificates</h3>
-      {certificates?.map((certificate, index) => (
-        <div key={index} className={styling.certificates}>
-          <p>
-            <strong>Title:</strong> {certificate.name}
-          </p>
-          <p>
-            <strong>Reference:</strong> {certificate.reference}
-          </p>
-          <Button
-            style={{ marginTop: "1rem" }}
-            onClick={() =>
-              setCertificates(
-                certificates.filter((cert) => cert.name !== certificate.name)
-              )
-            }
-          >
-            Delete
-          </Button>
-        </div>
-      ))}
-      <Input
-        placeholder="Certificate Title"
-        value={currentCertificateTitle}
-        onChange={(e) => setCurrentCertificateTitle(e.target.value)}
-      />
-      <Upload {...certificateProps} showUploadList={false}>
-        <Button style={{ marginTop: "1rem" }} icon={<UploadOutlined />}>
-          Upload Certificate
-        </Button>
-      </Upload>
+      {/* Show CV */}
+
+      {candidateCertificates ? (
+        <>
+          <h3>Your Certificates:</h3>
+          <div>
+            {candidateCertificates?.map((certificate, index) => (
+              <div key={certificate.name}>
+                <p>
+                  <strong>Certificate Name:</strong> {certificate.name}
+                </p>
+                <p>
+                  <strong>Reference:</strong> {certificate.reference}
+                </p>
+                <Button onClick={() => deleteCertificate(certificate.reference)}>
+                  Delete Certificate
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          <h3>Upload a new Certificate:</h3>
+          <Input
+            placeholder="Certificate Name"
+            value={currentCertificateTitle!}
+            onChange={(e) => setCurrentCertificateTitle(e.target.value)}
+          />
+          <Upload {...cvProps} showUploadList={false}>
+            <Button
+              icon={<UploadOutlined />}
+              className={styling.uploadButton}
+              disabled={
+                currentCertificateTitle === null ||
+                currentCertificateTitle === ""
+              }
+            >
+              Upload Certificate
+            </Button>
+          </Upload>
+        </>
+      ) : (
+        <>
+          <h3>Upload your Certificate:</h3>
+          <Input
+            placeholder="Certificate Name"
+            value={currentCertificateTitle!}
+            onChange={(e) => setCurrentCertificateTitle(e.target.value)}
+          />
+          <Upload {...cvProps} showUploadList={false}>
+            {certificates ? (
+              <p>{certificates[0].name}</p>
+            ) : (
+              <Button
+                icon={<UploadOutlined />}
+                className={styling.uploadButton}
+                disabled={
+                  currentCertificateTitle === null ||
+                  currentCertificateTitle === ""
+                }
+              >
+                Upload Certificate
+              </Button>
+            )}
+          </Upload>
+        </>
+      )}
     </>
   );
 };

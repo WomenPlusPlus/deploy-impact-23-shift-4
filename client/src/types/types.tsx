@@ -46,7 +46,7 @@ export interface Candidate {
   soft_skills?: string[];
   languages?: { [key: string]: any }[];
   links?: { [key: string]: any }[];
-  certificates?: { [key: string]: any }[];
+  certificates?: { [key: string]: any }[] | null;
   visible_information?: string[];
   experience?: { [key: string]: any }[] | null;
   visa_status?: string[] | null;
