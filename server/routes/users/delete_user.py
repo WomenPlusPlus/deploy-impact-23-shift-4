@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 
-def delete_user_route(User, Candidate, Company, db):
+def delete_user_route(User, Candidate, Company, Admin, Association, db):
     delete_user_bp = Blueprint("delete_user", __name__)
 
     @delete_user_bp.route("/api/delete_user", methods=["POST"])
@@ -31,11 +31,21 @@ def delete_user_route(User, Candidate, Company, db):
                     company = Company.query.filter_by(user_id=user.id).first()
                     if company:
                         db.session.delete(company)
+                elif user.user_type == "admin":
+                    admin = Admin.query.filter_by(user_id=user.id).first()
+                    if admin:
+                        db.session.delete(admin)
+                elif user.user_type == "association":
+                    association = Association.query.filter_by(
+                        user_id=user.id
+                    ).first()
+                    if association:
+                        db.session.delete(association)
 
                 db.session.delete(user)
                 db.session.commit()
                 # logout_user()
-                return jsonify({"message": "User deleted successfully"})
+                return jsonify({"message": "User deleted successfully"}), 200
 
             return jsonify({"message": "User not found"}), 404
         return jsonify({"message": "Not POST method"}), 403

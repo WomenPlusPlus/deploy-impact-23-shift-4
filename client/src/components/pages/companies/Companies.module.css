@@ -1,7 +1,7 @@
-.mainContainer {
+.main {
   padding: 2rem 4rem;
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--blue-lighter);
 }
 
 .header {
@@ -13,7 +13,7 @@
   display: flex;
   justify-content: space-between;
   gap: 2rem;
-  padding: 3rem 0;
+  padding: 1rem 0;
 }
 
 .filterDropdown {
@@ -24,4 +24,6 @@
 .cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 100%;
 }

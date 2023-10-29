@@ -2,8 +2,7 @@ import bcrypt
 from flask import Blueprint, jsonify, request
 from flask_login import login_user
 
-
-def register_route(User, Candidate, Company, Association, db):
+def register_route(User, Candidate, Company, Association, Admin, db):
     register_bp = Blueprint("register", __name__)
 
     @register_bp.route("/api/register", methods=["POST"])
@@ -31,10 +30,6 @@ def register_route(User, Candidate, Company, Association, db):
             password = data.get("password")
             email = data.get("email")
             user_type = data.get("user_type")  # Get user type from the request
-            associations = data.get("associations")
-            association_name = data.get("association_name")
-            company_name = data.get("company_name")
-
             try:
                 # Hash the password before saving it to the appropriate table
                 hashed_password = bcrypt.hashpw(
@@ -55,16 +50,26 @@ def register_route(User, Candidate, Company, Association, db):
 
                 # Create a new user and save it to the appropriate table
                 if user_type == "candidate":
+                    first_name = data.get("first_name")
+                    last_name = data.get("last_name")
+                    associations = data.get("associations")
+                    preferred_title = data.get("preferred_title")
                     # Save the user also in the "candidate" table
                     new_candidate = Candidate(
                         user_id=user_id,
                         password=hashed_password,
+                        first_name=first_name,
+                        last_name=last_name,
+                        preferred_title=preferred_title,
                         email=email,
                         associations=associations,
                     )
                     db.session.add(new_candidate)
                     db.session.commit()
+
                 elif user_type == "company":
+                    company_name = data.get("company_name")
+                    associations = data.get("associations")
                     # Save the user also in the "company" table
                     new_company = Company(
                         user_id=user_id,
@@ -75,7 +80,9 @@ def register_route(User, Candidate, Company, Association, db):
                     )
                     db.session.add(new_company)
                     db.session.commit()
+
                 elif user_type == "association":
+                    association_name = data.get("association_name")
                     # Save the user also in the "association" table
                     new_association = Association(
                         user_id=user_id,
@@ -84,6 +91,18 @@ def register_route(User, Candidate, Company, Association, db):
                         association_name=association_name,
                     )
                     db.session.add(new_association)
+                    db.session.commit()
+
+                elif user_type == "admin":
+                    admin_name = data.get("admin_name")
+                    # Save the user also in the "admin" table
+                    new_admin = Admin(
+                        user_id=user_id,
+                        password=hashed_password,
+                        email=email,
+                        admin_name=admin_name,
+                    )
+                    db.session.add(new_admin)
                     db.session.commit()
                 else:
                     return jsonify({"message": "Invalid user type"}), 400

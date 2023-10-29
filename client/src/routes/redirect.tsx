@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-import Register from "../components/pages/register/RegisterCandidate";
+import Register from "../components/pages/register/Register";
 import DashboardCompany from "../components/pages/dashboardCompanies/DashboardCompanies";
 import DashboardCandidate from "../components/pages/dashboardCandidate/DashboardCandidate";
 import DashboardAssociations from "../components/pages/dashboardAssociations/DashboardAssociations";
+import DashboardAdmin from "../components/pages/dashboardAdmin/DashboardAdmin";
 
 const RegisterRoute: React.FC = () => {
   const location = useLocation();
@@ -16,7 +17,6 @@ const RegisterRoute: React.FC = () => {
   const user_type = searchParams.get("user_type") || "";
   const signature = searchParams.get("signature") || "";
   const associations = searchParams.get("associations") || "";
-  console.log("link", link);
 
   // Use a state variable to manage the component's state
   const [validURL, setValidURL] = useState(false);
@@ -32,7 +32,6 @@ const RegisterRoute: React.FC = () => {
       )
       .then((response) => {
         // If the URL is valid, set the validURL state to true
-        console.log("response", response.data);
         const status_code = response.data.response;
         if (status_code === 200) {
           setValidURL(true);
@@ -75,6 +74,8 @@ const DashboardRoute: React.FC = () => {
     return <DashboardCompany />;
   } else if (userType === "association") {
     return <DashboardAssociations />;
+  } else if (userType === "admin") {
+    return <DashboardAdmin />;
   } else {
     return <Navigate to="/login" replace />;
   }

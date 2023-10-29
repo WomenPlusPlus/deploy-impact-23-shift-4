@@ -86,7 +86,7 @@ export async function addJob(jobData: object) {
     );
 
     if (response.status === 200) {
-      return response.data.message;
+      return response.data;
     } else {
       return response.data.message;
     }

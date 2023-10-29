@@ -1,6 +1,5 @@
 from flask_login import UserMixin
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
+from sqlalchemy import text
 
 
 def init_user_model(db):
@@ -12,7 +11,7 @@ def init_user_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )
@@ -34,7 +33,7 @@ def init_user_model(db):
             self.password = password
             self.email = email
             self.user_type = user_type
-        
+
         def to_dict(self):
             """
             Convert the user object to a dictionary.

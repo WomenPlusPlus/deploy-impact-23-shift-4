@@ -6,36 +6,33 @@ def add_job_route(Jobs, db):
 
     @add_job_bp.route("/api/add_job", methods=["POST"])
     def add_job():
-        """ """
+        """
+        Add a new job to the database
+        """
+        id = db.Column(db.Integer, primary_key=True)
+
         if request.method == "POST":
-            data = request.get_json()
-            company_id = data.get("company_id")
-            title = data.get("title")
-            description = data.get("description")
-            values = data.get("values")
-            skills = data.get("skills")
-            hiring_process_duration = data.get("hiring_process_duration")
-            posting_date = data.get("posting_date")
-            matching_candidates = data.get("matching_candidates")
-            salary = data.get("salary")
-            location = data.get("location")
+            try:
+                data = request.get_json()
+                new_job = Jobs(**data)
+                print(new_job.to_dict())
+                db.session.add(new_job)
+                db.session.commit()
 
-            new_job = Jobs(
-                company_id=company_id,
-                title=title,
-                description=description,
-                values=values,
-                skills=skills,
-                hiring_process_duration=hiring_process_duration,
-                posting_date=posting_date,
-                matching_candidates=matching_candidates,
-                salary=salary,
-                location=location,
-            )
+                new_job_id = new_job.to_dict()["id"]
+                print(new_job_id, "AAA")
 
-            db.session.add(new_job)
-            db.session.commit()
-
-            return jsonify({"message": "Job added successfully"})
+                return (
+                    jsonify(
+                        {
+                            "message": "Job added successfully",
+                            "job_id": new_job_id,
+                        }
+                    ),
+                    200,
+                )
+            except Exception as e:
+                print(e)
+                return jsonify({"message": "Error adding job"}), 500
 
     return add_job_bp

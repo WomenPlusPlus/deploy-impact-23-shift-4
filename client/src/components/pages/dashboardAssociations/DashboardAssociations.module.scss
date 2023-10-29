@@ -5,6 +5,14 @@
   padding: 3rem;
 }
 
+.logo {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0;
+}
+
 .profile {
   display: flex;
   align-items: flex-start;
@@ -19,12 +27,27 @@
   color: var(--gray-dark);
 }
 
+.headerTitle {
+  margin: 0;
+}
+
+.subheader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--gray-medium);
+  cursor: pointer;
+}
+
 .location {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.9rem;
   font-size: large;
+  color: var(--gray-medium);
 }
 
 .progress {

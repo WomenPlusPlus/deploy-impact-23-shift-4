@@ -5,6 +5,13 @@
   padding: 3rem;
 }
 
+.logo {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .profile {
   display: flex;
   align-items: center;
@@ -17,6 +24,19 @@
   text-align: left;
   padding-left: 2rem;
   color: var(--gray-dark);
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gray-medium);
 }
 
 .icon {
@@ -58,4 +78,25 @@
   width: 100%;
   padding: 3rem;
   min-height: 60rem;
+}
+
+.subtextNot {
+  color: var(--gray-light);
+  font-size: 1.5rem;
+}
+
+.subtext {
+  font-size: 1.5rem;
+}
+
+.emptyText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  padding: 0 10rem;
+  font-size: 3rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--gray-light);
 }

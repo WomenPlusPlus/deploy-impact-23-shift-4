@@ -5,7 +5,14 @@ import hmac
 import base64
 import os
 
-localhost = "http://localhost:3000"
+ENV = os.environ.get("FLASK_ENV", "development")
+print(f"ENV: {ENV}")
+
+if ENV == "development":
+    localhost = "http://localhost:3000"
+else:
+    localhost = "https://banana-builders-client.vercel.app"
+
 route = "register"
 # expiration_time = int(time.time()) + 24 * 60 * 60  # 24 hours in seconds
 secret_key = os.environ.get("SECRET_KEY")
@@ -60,10 +67,9 @@ def is_token_expired(temporary_link):
 
 
 def get_token_data(user_type, association, expiration_time):
-    token_data = (
-        f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}&association={association}"
-    )
+    token_data = f"{route}?token={secret_key}&expires={expiration_time}&user_type={user_type}&association={association}"
     return token_data
+
 
 # Function to generate a temporary signed URL
 def generate_temporary_link_signed(user_type, expiration_time, association):

@@ -1,5 +1,4 @@
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
+from sqlalchemy import text
 
 
 def init_values_model(db):
@@ -11,13 +10,11 @@ def init_values_model(db):
         id = db.Column(
             db.String(80),
             primary_key=True,
-            default=str(uuid.uuid4()),
+            server_default=text("uuid_generate_v4()"),
             unique=True,
             nullable=False,
         )
-        name = db.Column(
-            db.String(1000), nullable=False
-        )  # Name of the value as a string (maximum length 1000 characters)
+        name = db.Column(db.String(1000), nullable=False, unique=True)
 
         def __init__(self, name):
             """

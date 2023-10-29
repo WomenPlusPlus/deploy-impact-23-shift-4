@@ -1,12 +1,13 @@
 import bcrypt
 from datetime import timedelta
 from flask import Blueprint, jsonify, request
-from flask_login import (current_user, login_user)
+from flask_login import current_user, login_user
+
 
 def login_route(User):
     login_bp = Blueprint("login", __name__)
 
-    @login_bp.route("/api/login", methods=["GET","POST"])
+    @login_bp.route("/api/login", methods=["GET", "POST"])
     def login():
         """
         Authenticate and log in a user.
@@ -43,18 +44,35 @@ def login_route(User):
 
             if user:
                 # Verify the password using passlib
-                if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+                if bcrypt.checkpw(
+                    password.encode("utf-8"), user.password.encode("utf-8")
+                ):
                     # If the password is valid, mark the user as authenticated
-                    is_logged = login_user(user, force=True,remember=True, duration=timedelta(days=1))
+                    is_logged = login_user(
+                        user, force=True, remember=True, duration=timedelta(days=1)
+                    )
                     if is_logged:
-                        return jsonify({"message": "Login successful", "user": user.to_dict()}), 200
+                        return (
+                            jsonify(
+                                {"message": "Login successful", "user": user.to_dict()}
+                            ),
+                            200,
+                        )
                     else:
-                        return jsonify({"message": "Login unsuccessful", "user": user.to_dict()}), 417
+                        return (
+                            jsonify(
+                                {
+                                    "message": "Login unsuccessful",
+                                    "user": user.to_dict(),
+                                }
+                            ),
+                            417,
+                        )
                 else:
                     return jsonify({"message": "Invalid email or password"}), 401
             else:
-                return jsonify({"message": "User is not registered"}), 401
-        
+                return jsonify({"message": "User is not registered"}), 403
+
         if request.method == "GET":
             if current_user.is_authenticated:
                 return jsonify({"message": "Logged in"}), 200
@@ -62,5 +80,5 @@ def login_route(User):
                 return jsonify({"message": "Not logged in"}), 200
 
         return jsonify({"message": "Method Not Allowed"}), 405
-    
+
     return login_bp

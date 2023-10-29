@@ -5,17 +5,20 @@
 }
 
 .section {
-  padding: 1rem;
-  max-width: 20rem;
+  /* max-width: 30rem; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 0 2rem;
 }
 
 .containerVisibleInfo {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   text-align: center;
   margin: 0 auto;
-  padding: 2rem 2rem 2rem 0;
+  padding: 1rem 2rem 2rem 0;
   /* border: 1px solid #ccc; */
   /* background-color: #f9f9f9; */
 }

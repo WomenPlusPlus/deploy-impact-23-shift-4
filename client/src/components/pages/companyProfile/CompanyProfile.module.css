@@ -6,14 +6,27 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .header {
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 4rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gray-medium);
 }
 
 .logo {
@@ -35,7 +48,7 @@
 }
 
 .mainSection {
-  padding: 0 3rem;
+  padding: 2rem 3rem;
 }
 
 .sectionHeader {
@@ -51,5 +64,22 @@
 
 .button {
   color: var(--white);
-  background-color: var(--color-button);
+  background-color: var(--blue-dark);
+}
+
+.subtext {
+  font-size: 1.5rem;
+  color: var(--gray-medium);
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.labelClass {
+  background-color: var(--values-label);
+  border-radius: var(--tag-radius);
 }
