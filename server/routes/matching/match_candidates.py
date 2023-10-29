@@ -10,7 +10,7 @@ with open("model/vectorizer.pkl", "rb") as file:
     vectorizer = dill.load(file)
 
 def check_conditions(job, candidate):
-    location = job['location'] in candidate['city'] + candidate['possble_work_locations']
+    location = job['location_city'] in candidate['city'] + candidate['possible_work_locations']
     return location
 
 
@@ -113,7 +113,7 @@ def match_candidates_route(domain_name):
 
                             cand_score = round(total_score / count, 1)
 
-                            if cand_score >= 20:
+                            if cand_score >= 60:
                                 cand_match.append({"id": cand_id, "score": cand_score})
                                 match_ids.append(cand_id)
                                 if candidate["matching_jobs"]:

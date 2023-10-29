@@ -113,7 +113,7 @@ def match_jobs_route(domain_name):
 
                                     job_score = round(total_score / count, 1)
 
-                                    if job_score >= 5:
+                                    if job_score >= 60:
                                         job_match.append({"id": job_id, "score": job_score})
                                         match_ids.append(job_id)
                                         if job["matching_candidates"]:
