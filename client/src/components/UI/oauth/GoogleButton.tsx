@@ -1,9 +1,15 @@
 import { GoogleLogin } from "@react-oauth/google";
 
-const GoogleButton = () => {
+interface GoogleButtonProps {
+  text: "signin_with" | "signup_with" | "continue_with" | "signin" | undefined;
+}
+
+const GoogleButton = (
+  { text }: GoogleButtonProps = { text: "signin_with" }
+) => {
   return (
     <GoogleLogin
-      text="signup_with"
+      text={text}
       onSuccess={(credentialResponse) => {
         console.log(credentialResponse);
       }}

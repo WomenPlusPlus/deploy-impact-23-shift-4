@@ -286,7 +286,7 @@ const Register: React.FC<RegisterProps> = ({
               <div className={styling.oauth}>
                 <hr className={styling.horizontalLine} />
                 <p>or register with</p>
-                <GoogleButton />
+                <GoogleButton text={"signup_with"} />
               </div>
             </Form>
           </div>

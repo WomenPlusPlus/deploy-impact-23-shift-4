@@ -11,6 +11,7 @@ import styling from "./Login.module.css";
 import configureAxios from "./../../../config";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import SpinnerLogin from "../../UI/spinner/LoginSpinner";
+import { GoogleButton } from "../../UI/oauth/GoogleButton";
 
 const axios = configureAxios();
 
@@ -143,6 +144,12 @@ const Login = () => {
                 {isLoading ? <SpinnerLogin /> : "Log in"}
               </Button>
             </Form.Item>
+            {/* OAuth */}
+            <div className={styling.oauth}>
+              <hr className={styling.horizontalLine} />
+              <p>or login with</p>
+              <GoogleButton text={"signin_with"} />
+            </div>
           </Form>
         </div>
 
