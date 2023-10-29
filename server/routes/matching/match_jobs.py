@@ -84,7 +84,7 @@ def match_jobs_route(domain_name):
                     jobs = jobs_response.json()["jobs"]
 
                     for job in jobs:
-                        if len(job["skills"]) > 0:
+                        if job["skills"]:
                             job_skills = [
                                 skill["skill_name"] for skill in job["skills"]
                             ]
@@ -100,7 +100,7 @@ def match_jobs_route(domain_name):
                                 )
                                 total_score += 4 * job_tech_score
 
-                                if job["values"] and len(cand_values) > 0:
+                                if job["values"]:
                                     count += 1
                                     if cand_values:
                                         job_val_score = score(
@@ -108,7 +108,7 @@ def match_jobs_route(domain_name):
                                         )
                                         total_score += job_val_score
 
-                                if job["soft_skills"] and len(cand_soft_skills) > 0:
+                                if job["soft_skills"]:
                                     count += 2
                                     if cand_soft_skills:
                                         job_soft_score = score(
