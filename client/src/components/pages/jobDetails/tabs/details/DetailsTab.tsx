@@ -16,6 +16,7 @@ interface DetailsTabProps {
   candidate: Candidate | undefined;
   getInfo: (any: any) => void;
   id: string | undefined;
+  userType?: string;
 }
 
 const DetailsTab: React.FC<DetailsTabProps> = ({
@@ -24,6 +25,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
   candidate,
   getInfo,
   id,
+  userType,
 }) => {
   const companyIconSize = 15;
 
@@ -91,18 +93,20 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
       </CardContainer>
 
       {/* Accepting applications */}
-      <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
-        <h1 className={styling.titles}>Accepting applications</h1>
-        <Button
-          className={styling.applyButton}
-          onClick={toggleApplyModal}
-          disabled={isApplied()}
-        >
-          {isApplied()
-            ? "You have already shown interest in this position"
-            : "Show your interest in the position"}
-        </Button>
-      </CardContainer>
+      {userType === "candidate" && (
+        <CardContainer className={`${styling.cardCont} ${styling.applyDiv}`}>
+          <h1 className={styling.titles}>Accepting applications</h1>
+          <Button
+            className={styling.applyButton}
+            onClick={toggleApplyModal}
+            disabled={isApplied()}
+          >
+            {isApplied()
+              ? "You have already shown interest in this position"
+              : "Show your interest in the position"}
+          </Button>
+        </CardContainer>
+      )}
 
       <ApplyModal
         isApplyModalOpen={isApplyModalOpen}

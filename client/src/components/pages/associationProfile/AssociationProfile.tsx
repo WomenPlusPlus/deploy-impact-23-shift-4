@@ -14,12 +14,7 @@ import { Association } from "../../../types/types";
 
 import styling from "./AssociationProfile.module.scss";
 
-import {
-  IconBrandLinkedin,
-  IconEdit,
-  IconMapPin,
-  IconWorldWww,
-} from "@tabler/icons-react";
+import { IconEdit, IconMapPin, IconWorldWww } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
 import EditAssociationProfile from "../../shared/editAssociationProfile/EditAssociationProfile";
 import Avatar from "../../UI/avatar/Avatar";
@@ -29,17 +24,21 @@ const AssociationProfile = () => {
   const [association, setAssociation] = useState({} as Association);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [confirmEditAssociationLoading, setConfirmEditAssociationLoading] =
-    useState(false);
 
   const handleEditModal = () => {
     setEditModalOpen(!editModalOpen);
   };
 
   const handleModalSave = async (payload: object) => {
-    await updateAssociationById(association?.user_id, payload);
-
-    setConfirmEditAssociationLoading(true);
+    try {
+      const response = await updateAssociationById(
+        association?.user_id,
+        payload
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
     setEditModalOpen(false);
     fetchAssociation();
   };
@@ -53,6 +52,7 @@ const AssociationProfile = () => {
 
     if (userId) {
       const association = await getAssociationById(userId);
+      console.log(association);
       setAssociation(association);
       setIsLoading(false);
     }
@@ -164,7 +164,6 @@ const AssociationProfile = () => {
         open={editModalOpen}
         onOk={handleModalSave}
         onCancel={handleEditModal}
-        confirmLoading={confirmEditAssociationLoading}
         associationId={association?.user_id}
         associationInfo={association}
       />

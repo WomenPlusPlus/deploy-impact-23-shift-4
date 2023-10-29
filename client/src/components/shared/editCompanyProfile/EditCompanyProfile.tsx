@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Modal as AntModal, AutoComplete, Input } from "antd";
+import { Modal as AntModal, AutoComplete, Input, Select, Button } from "antd";
 
 import styling from "./EditCompanyProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
-import { Button } from "../../UI/button/Button";
 import { Labels } from "../../UI/labels/Label";
 import { getAllValues } from "../../../api/values";
+import { companySizes } from "../../pages/candidateProfile/helpers/helper";
 
-interface ModalProps {
+const { Option } = Select;
+
+interface EditCompanyProfileProps {
   open: boolean;
   onOk: (payload: any) => void;
   onCancel: () => void;
@@ -17,7 +19,7 @@ interface ModalProps {
   associations?: string[];
 }
 
-const EditCompanyProfile: React.FC<ModalProps> = ({
+const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
   open,
   onOk,
   onCancel,
@@ -29,27 +31,30 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
 
   // State
   const [company_name, setCompanyName] = useState<string>(
-    companyInfo.company_name || ""
+    companyInfo?.company_name || ""
   );
   const [company_size, setCompanySize] = useState<string>(
-    companyInfo.company_size || ""
+    companyInfo?.company_size || ""
   );
 
   const [description, setDescription] = useState<string>(
-    companyInfo.company_description || ""
+    companyInfo?.company_description || ""
   );
-  const [values, setValues] = useState<string[]>(companyInfo.values || []);
-  const [address, setAddress] = useState<string>(companyInfo.address || "");
+  const [values, setValues] = useState<string[]>(companyInfo?.values || []);
+  const [address, setAddress] = useState<string>(companyInfo?.address || "");
   const [company_website, setCompanyWebsite] = useState<string>(
-    companyInfo.company_website || ""
+    companyInfo?.company_website || ""
+  );
+  const [company_culture, setCompanyCulture] = useState<string>(
+    companyInfo?.company_culture || ""
   );
   const [kununu_url, setKununuUrl] = useState<string>(
-    companyInfo.kununu_url || ""
+    companyInfo?.kununu_url || ""
   );
   const [linkedin_url, setLinkedinUrl] = useState<string>(
-    companyInfo.linkedin_url || ""
+    companyInfo?.linkedin_url || ""
   );
-  const [logo, setLogo] = useState<string>(companyInfo.logo || "");
+  const [logo, setLogo] = useState<string>(companyInfo?.logo || "");
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [valueDataSource, setValueDataSource] = useState<string[]>([]);
   const [allValues, setAllValues] = useState<string[]>([]);
@@ -76,6 +81,7 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
       company_name: company_name,
       company_size: company_size,
       company_description: description,
+      company_culture: company_culture,
       address: address,
       values: values,
       kununu_url: kununu_url,
@@ -132,9 +138,21 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
       <AntModal
         className={styling.modal}
         open={open}
-        onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={onCancel}
+        footer={[
+          <Button key="back" className={styling.cancel} onClick={onCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            className={styling.save}
+            onClick={handleOk}
+          >
+            Save
+          </Button>,
+        ]}
       >
         <h2 className={styling.header}>Edit company information</h2>
         <div className={styling.twoColumn}>
@@ -150,12 +168,18 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
 
           <div className={styling.section}>
             <p className={styling.sectionName}>Company size:</p>
-            <Input
-              className={styling.input}
-              placeholder="Company size"
+            <Select
+              placeholder="Select Company size"
+              style={{ width: "100%" }}
               value={company_size}
-              onChange={(e) => setCompanySize(e.target.value)}
-            />
+              onChange={(value) => setCompanySize(value)}
+            >
+              {companySizes?.map((size, index) => (
+                <Option key={index} value={size}>
+                  {size} employees
+                </Option>
+              ))}
+            </Select>
           </div>
         </div>
 
@@ -185,9 +209,19 @@ const EditCompanyProfile: React.FC<ModalProps> = ({
           <p className={styling.sectionName}>Description:</p>
           <TextArea
             className={styling.description}
-            placeholder="Description"
+            placeholder="Company Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className={styling.section}>
+          <p className={styling.sectionName}>Company Culture:</p>
+          <TextArea
+            className={styling.culture}
+            placeholder="Company Culture"
+            value={company_culture}
+            onChange={(e) => setCompanyCulture(e.target.value)}
           />
         </div>
 

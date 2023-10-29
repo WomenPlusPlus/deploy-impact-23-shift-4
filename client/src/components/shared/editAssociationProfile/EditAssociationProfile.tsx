@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Modal as AntModal, Input } from "antd";
-
+import { Modal as AntModal, Button, Input, Select } from "antd";
 import styling from "./EditAssociationProfile.module.css";
 import TextArea from "antd/es/input/TextArea";
+import { companySizes } from "../../pages/candidateProfile/helpers/helper";
+
+const { Option } = Select;
 
 interface ModalProps {
   open: boolean;
   onOk: (payload: any) => void;
   onCancel: () => void;
-  confirmLoading: boolean;
   associationId: string;
   associationInfo: any;
 }
@@ -17,32 +18,31 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
   open,
   onOk,
   onCancel,
-  confirmLoading,
   associationId,
   associationInfo,
 }) => {
   // State
   const [association_name, setAssociationName] = useState<string>(
-    associationInfo.association_name || ""
+    associationInfo?.association_name || ""
   );
   const [association_size, setAssociationSize] = useState<string>(
-    associationInfo.association_size || ""
+    associationInfo?.size || ""
   );
 
   const [description, setDescription] = useState<string>(
-    associationInfo.company_description || ""
+    associationInfo?.description || ""
   );
   const [address, setAddress] = useState<string>(associationInfo.address || "");
   const [association_website, setAssociationWebsite] = useState<string>(
-    associationInfo.association_website || ""
+    associationInfo?.association_website || ""
   );
-  const [logo, setLogo] = useState<string>(associationInfo.logo || "");
+  const [logo, setLogo] = useState<string>(associationInfo?.logo || "");
 
   const handleOk = () => {
     const payload = {
       company_id: associationId,
       association_name: association_name,
-      association_size: association_size,
+      size: association_size,
       description: description,
       address: address,
       url: association_website,
@@ -57,9 +57,20 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
       <AntModal
         className={styling.modal}
         open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
         onCancel={onCancel}
+        footer={[
+          <Button key="back" className={styling.cancel} onClick={onCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            className={styling.save}
+            onClick={handleOk}
+          >
+            Save
+          </Button>,
+        ]}
       >
         <h2 className={styling.header}>Edit your association information</h2>
         <div className={styling.twoColumn}>
@@ -75,12 +86,18 @@ const EditAssociationProfile: React.FC<ModalProps> = ({
 
           <div className={styling.section}>
             <p className={styling.sectionName}>Association size:</p>
-            <Input
-              className={styling.input}
-              placeholder="Association size"
+            <Select
+              placeholder="Select Association size"
+              style={{ width: "100%" }}
               value={association_size}
-              onChange={(e) => setAssociationSize(e.target.value)}
-            />
+              onChange={(value) => setAssociationSize(value)}
+            >
+              {companySizes?.map((size, index) => (
+                <Option key={index} value={size}>
+                  {size} employees
+                </Option>
+              ))}
+            </Select>
           </div>
         </div>
 

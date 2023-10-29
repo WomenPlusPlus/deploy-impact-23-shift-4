@@ -37,7 +37,7 @@ def init_candidate_model(db):
         phone_number = db.Column(db.String(20))  # Phone number as a string
         notice_period = db.Column(db.String(80))  # Notice period as a string
         job_status = db.Column(db.String(256))  # Job status as a string
-        preferred_jobs = db.Column(db.JSON)  # Type of job you're looking for as JSON
+        preferred_jobs = db.Column(db.ARRAY(db.String))  # Preferred jobs as an array
         matching_jobs = db.Column(
             db.JSON
         )  # Matching jobs as an JSON of foreign keys (integer)

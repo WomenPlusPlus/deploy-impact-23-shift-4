@@ -120,7 +120,7 @@ const Navbar = () => {
 
             <div className="rightMenu">
               <Notifications />
-
+              
               {avatarComponent}
             </div>
           </div>

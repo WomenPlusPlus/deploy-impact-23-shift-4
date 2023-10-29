@@ -14,6 +14,10 @@
   min-height: 20rem !important;
 }
 
+.culture {
+  min-height: 10rem !important;
+}
+
 .autocomplete {
   display: flex;
   gap: 1rem;

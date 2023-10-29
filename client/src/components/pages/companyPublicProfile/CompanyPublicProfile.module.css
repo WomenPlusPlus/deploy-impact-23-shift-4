@@ -58,7 +58,26 @@
 .subtitle {
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  justify-content: left;
+  margin: 0;
+  gap: 0.7rem;
   font-size: medium;
   color: var(--gray-medium);
+}
+
+.subtitle p {
+  margin: 0.5rem 0;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.noPublishedJobs {
+  padding: 0 3rem;
+  font-size: 2rem;
+  color: var(--gray-medium);
+  margin-bottom: 3rem;
 }

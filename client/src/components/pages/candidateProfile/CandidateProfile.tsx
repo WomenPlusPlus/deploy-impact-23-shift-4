@@ -13,7 +13,6 @@ import { EditJobSearchPref } from "./modal/EditJobSearchPref";
 import {
   allCategories,
   allTypeOfJob,
-  countNullFieldsByCategory,
   fieldsToDisplayContactInfo,
   fieldsToDisplayProfile,
   transformCandidateDocs,
@@ -223,15 +222,17 @@ const CandidateProfile = () => {
                 | {candidate?.preferred_title}
               </h4>
             </div>
-            <div
-              className={
-                candidate?.job_status === "Looking for a job"
-                  ? `${styling.transparentGreen} ${styling.jobStatusTag}`
-                  : `${styling.transparentRed} ${styling.jobStatusTag}`
-              }
-            >
-              <h4>{candidate?.job_status}</h4>
-            </div>
+            {candidate?.job_status && (
+              <div
+                className={
+                  candidate?.job_status === "Looking for a job"
+                    ? `${styling.transparentGreen} ${styling.jobStatusTag}`
+                    : `${styling.transparentRed} ${styling.jobStatusTag}`
+                }
+              >
+                <h4>{candidate?.job_status}</h4>
+              </div>
+            )}
           </div>
 
           <div className={styling.location}>
@@ -402,7 +403,7 @@ const CandidateProfile = () => {
                 <Labels
                   key={index}
                   icon={<IconTags />}
-                  labelName={label.job_name}
+                  labelName={label}
                   disableCloseIcon={true}
                   customClass={styling.labelClass}
                 />
