@@ -81,3 +81,15 @@
   color: var(--gray-medium);
   margin-bottom: 3rem;
 }
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.labelClass {
+  background-color: var(--label-color);
+  border-radius: var(--tag-radius);
+}
