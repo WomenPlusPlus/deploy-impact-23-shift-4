@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import configureAxios from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 
 import "./Sidebar.css";
+import MobileNavbar from "./MobileNavbar";
 const axios = configureAxios();
 
 const { Sider } = AntLayout;
@@ -121,9 +122,27 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    // Ekran boyutu değişikliklerini dinleyin
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Dinleme işlemi başlat
+    window.addEventListener("resize", handleResize);
+
+    // Temizleme işlemi
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <div className="toggle">
+   
+   <div className="toggle">
         <Sider
           style={{
             height: "100vh",
@@ -163,6 +182,22 @@ const Sidebar: React.FC<SidebarProps> = ({
           />
         </Sider>
       </div>
+
+
+
+
+
+
+      
+        <div className="mobile-navbar-container">
+          <MobileNavbar
+            handleMenuClick={(button) => {
+              setSelectedKey(button);
+              handleButtonClick(button, navigate);
+            }}
+          />
+        </div>
+    
     </>
   );
 };

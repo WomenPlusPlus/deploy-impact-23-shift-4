@@ -13,6 +13,7 @@ interface JobCardProps {
   companies: Company[];
   candidate?: Candidate;
   isMatchVisible?: boolean;
+  avatar?: string;
   onClick: () => void;
 }
 
@@ -21,6 +22,7 @@ const JobCard: React.FC<JobCardProps> = ({
   companies,
   isMatchVisible = true,
   candidate,
+  avatar,
   onClick,
 }) => {
   const [isSaved, setIsSaved] = React.useState(false);
@@ -91,21 +93,18 @@ const JobCard: React.FC<JobCardProps> = ({
       setIsSaved(true);
     }
   }, []);
+  
 
   return (
     <>
       <Card className={styling.card}>
         <div className={styling.jobHeader}>
           <div className={styling.row}>
-            <Avatar size={50} firstName={getCompanyName(job)} imageSrc={logo} />
-            {/* <div>
-              <Avatar
-                className={styling.avatar}
-                src={logo}
-                size={70}
-                onClick={onClick}
-              />
-            </div> */}
+          {logo ? (
+          <Avatar size={50} imageSrc={logo} firstName={avatar} />
+        ) : (
+          <Avatar size={50} firstName={getCompanyName(job)} imageSrc={logo} />
+        )}
             <div className={styling.title}>
               <h2 className={styling.jobTitle} onClick={onClick}>
                 {job?.title}

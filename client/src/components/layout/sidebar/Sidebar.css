@@ -37,3 +37,15 @@
   background-color: var(--blue-medium) !important;
   color: var(--white);
 }
+
+@media screen and (max-width: 768px) {
+  .toggle {
+    display: none;
+  }
+  .ant-layout-content {
+    margin-left: 0 !important
+    
+  }
+}
+
+

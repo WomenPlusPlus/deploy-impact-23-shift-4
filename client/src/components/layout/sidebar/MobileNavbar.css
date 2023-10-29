@@ -1,0 +1,77 @@
+/* MobileNavbar.css */
+.mobile-navbar {
+    background-color: var(--blue-dark);
+    color: #fff;
+    width: 100%;
+    position: fixed; /* Sabit konumda */
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    transition: all 0.3s;
+  }
+  
+  .menu-items {
+    display: flex;
+    justify-content: space-around;
+    
+  }
+  
+  .menu-item {
+  padding-top: 10px;
+  padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Ikonlarin yan yana gorunmesini saglayan stil */
+  .menu-item .icon {
+    margin-right: 10px; /* Ikonlar arasindaki bosluk */
+  }
+  
+  .menu-item a {
+    text-decoration: none; /* Link alti cizgiyi kaldirir */
+    color: #fff; /* Link metin rengi */
+    display: flex;
+    align-items: center;
+    padding: 0.09rem;
+  }
+  
+  .menu-item a:hover {
+    background-color: var(--blue-medium) ; /* Üzerine gelindiginde arka plan rengi */
+    border-radius: 5px; /* Kenar yuvarlama */
+  }
+  
+  .menu-item.active {
+    background-color: var(--blue-medium); /* Aktif menu ögesi arka plan rengi */
+    border-radius: 5px; /* Kenar yuvarlama */
+  }
+  
+  .menu-toggle {
+    background-color: #555; /* Menu acma/kapama dügmesinin arka plan rengi */
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .menu-toggle .menu-icon {
+    width: 30px; /* Menu simgesinin boyutu */
+    height: 3px; /* Menu simgesinin yüksekligi */
+    background-color: #fff; /* Menu simgesi rengi */
+    border-radius: 3px; /* Kenar yuvarlama */
+    transition: all 0.3s; /* Gecis efektleri için süre */
+  }
+  
+  .menu-toggle .menu-icon.open {
+    transform: rotate(45deg); /* Menu açikken simgeyi döndür */
+  }
+  
+  .menu-toggle .menu-icon.closed {
+    transform: rotate(0deg); /* Menu kapaliyken simgeyi sifirla */
+  }
+
+  @media (min-width: 769px) {
+    .mobile-navbar {
+      display: none; /* Görünmez yap */
+    }
+  }
+  

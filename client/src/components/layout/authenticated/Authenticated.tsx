@@ -67,14 +67,15 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     paddingTop: 64,
     paddingRight: 40,
     paddingLeft: 40,
-    overflow: "initial",
+    //overflow: "initial",
     transition: "margin-left 0.3s",
+    overflow: collapsed ? "hidden" : "initial",
   };
 
   return (
     <>
       <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
-        <AntLayout>
+        <AntLayout >
           <Navbar />
           <AntLayout hasSider>
             <Sidebar

@@ -81,7 +81,14 @@ button {
   .inputs {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
   }
+
+  .selected {
+    width: 100%;
+  }
+ 
+
 
   .jobHeader {
     display: flex;
@@ -91,4 +98,10 @@ button {
   .multiFilter {
     flex-direction: column;
   }
+
+  .main{
+    padding: 0;
+  }
+
+  
 }
