@@ -1,6 +1,6 @@
 import { IconCircleCheck, IconProgressAlert } from "@tabler/icons-react";
 import styling from "./ProfileCompletedFields.module.css";
-import { Button } from "antd";
+import { Button } from "../../../../UI/button/Button";
 
 interface ProfileCompletedFieldsProps {
   isCompleted: boolean;

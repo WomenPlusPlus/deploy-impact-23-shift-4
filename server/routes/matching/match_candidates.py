@@ -113,7 +113,7 @@ def match_candidates_route(domain_name):
 
                             cand_score = round(total_score / count, 1)
 
-                            if cand_score >= 60:
+                            if cand_score >= 30:
                                 cand_match.append({"id": cand_id, "score": cand_score})
                                 match_ids.append(cand_id)
                                 if candidate["matching_jobs"]:

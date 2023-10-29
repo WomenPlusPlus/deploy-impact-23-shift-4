@@ -204,8 +204,9 @@
 .valuesContainer {
   padding: 3rem;
   margin-bottom: 1rem;
-  width: 100%;
+  width: 80%;
   min-height: 25rem;
+  align-self: stretch;
 }
 
 .experienceContainer {
@@ -213,6 +214,7 @@
   margin-bottom: 1rem;
   width: 100%;
   min-height: 25rem;
+  align-self: stretch;
 }
 
 .valuesContainerLabels {

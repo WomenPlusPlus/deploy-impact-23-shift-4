@@ -46,7 +46,6 @@ def match_jobs_route(domain_name):
 
     @match_jobs_bp.route("/api/match_jobs", methods=["POST"])
     def match_jobs():
-        print("DOMAIN", domain_name)
         try:
             if request.method == "POST":
                 data = request.get_json()
@@ -59,7 +58,7 @@ def match_jobs_route(domain_name):
                 candidate = requests.post(
                     f"{domain_name}/api/get_candidate_by_id", json=cand_json
                 )
-                print("CANDIDATE", candidate.json())
+
                 if candidate.status_code == 200:
                     if candidate.json()["candidates"]["skills"]:
                         cand_skills = [
@@ -113,7 +112,7 @@ def match_jobs_route(domain_name):
 
                                     job_score = round(total_score / count, 1)
 
-                                    if job_score >= 60:
+                                    if job_score >= 30:
                                         job_match.append({"id": job_id, "score": job_score})
                                         match_ids.append(job_id)
                                         if job["matching_candidates"]:
@@ -170,7 +169,7 @@ def match_jobs_route(domain_name):
                     update_cand = requests.put(
                         f"{domain_name}/api/update_candidate", json=update_json
                     )
-                    print("UPDATE", update_cand.json())
+
                     if update_cand.status_code == 200:
                         return (
                             jsonify(
