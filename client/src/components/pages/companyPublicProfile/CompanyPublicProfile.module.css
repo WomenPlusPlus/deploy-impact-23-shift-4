@@ -62,3 +62,10 @@
   font-size: medium;
   color: var(--gray-medium);
 }
+
+.noPublishedJobs {
+  padding: 0 3rem;
+  font-size: 2rem;
+  color: var(--gray-medium);
+  margin-bottom: 3rem;
+}

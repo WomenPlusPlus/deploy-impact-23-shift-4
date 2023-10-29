@@ -117,7 +117,7 @@ const CandidateResumeTab: React.FC<CandidateResumeTabProps> = ({
                 <Labels
                   key={index}
                   icon={<IconTags />}
-                  labelName={job.job_name}
+                  labelName={job}
                   disableCloseIcon={true}
                   customClass={styling.label}
                 />

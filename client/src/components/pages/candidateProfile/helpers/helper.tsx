@@ -39,11 +39,12 @@ const fieldsToDisplayProfile = [
   "Country",
 ];
 const allTypeOfJob = [
-  { job_name: "Full-time", job_id: "Full-time" },
-  { job_name: "Part-time", job_id: "Part-time" },
-  { job_name: "Internship", job_id: "Internship" },
-  { job_name: "Freelance", job_id: "Freelance" },
-  { job_name: "Remote", job_id: "Remote" },
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Freelance",
 ];
 const allTypeOfJobStatus = ["Employed", "Unemployed", "Student"];
 const allValue = [

@@ -110,7 +110,7 @@ const EditValues: React.FC<EditValuesProps> = ({
 
   const handleCancel = () => {
     setVisible(false);
-    setCandidateLabels(candidate.values as string[]); // Change the type to an array of strings
+    setCandidateLabels(candidate.values as string[]);
     setSearchText("");
   };
 

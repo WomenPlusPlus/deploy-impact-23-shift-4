@@ -192,6 +192,8 @@ const EditJobSearchPref: React.FC<ContentBlockModalProps> = ({
                 <Option value="1 week">1 week</Option>
                 <Option value="2 weeks">2 weeks</Option>
                 <Option value="1 month">1 month</Option>
+                <Option value="2 months">2 months</Option>
+                <Option value="3 months">3 months</Option>
               </Select>
               {showDeleteButton && (
                 <Button

@@ -5,23 +5,34 @@ import { HorizontalCard } from "../../UI/horizontalCard/HorizontalCard";
 import { useParams } from "react-router-dom";
 import { getCompanyById } from "../../../api/companies";
 import { useCallback, useEffect, useState } from "react";
-import { Company } from "../../../types/types";
+import { Company, Job } from "../../../types/types";
 import {
   IconBrandLinkedin,
   IconMapPin,
   IconWorldWww,
 } from "@tabler/icons-react";
 import Spinner from "../../UI/spinner/Spinner";
+import { getAllJobs } from "../../../api/jobs";
+import { TimeAgo } from "../candidateProfile/helpers/helper";
+import { useNavigate } from "react-router-dom";
 
 const CompanyPublicProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [company, setCompany] = useState<Company>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [jobs, setJobs] = useState([] as Job[]);
 
   const fetchCompany = useCallback(async () => {
     if (id) {
       const company = await getCompanyById(id);
+      const allJobs = await getAllJobs();
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        return job["company_id"] === id;
+      });
+
+      setJobs(jobs);
       setCompany(company);
       setIsLoading(false);
     }
@@ -31,30 +42,33 @@ const CompanyPublicProfile = () => {
     fetchCompany();
   }, [fetchCompany]);
 
-  const jobs = (
+  const AllCompanyJobs = (
     <CardContainer className={styling.container}>
       <div className={styling.mainSection}>
         <div className={styling.sectionHeader}>
           <h2 className={styling.titles}>Published jobs</h2>
         </div>
-        <HorizontalCard
-          avatar={true}
-          button="Go to description"
-          firstName="Laura"
-          lastName="Purcaro"
-        />
-        <HorizontalCard
-          avatar={true}
-          button="Go to description"
-          firstName="Laura"
-          lastName="Purcaro"
-        />
-        <HorizontalCard
-          avatar={true}
-          button="Go to description"
-          firstName="Laura"
-          lastName="Purcaro"
-        />
+        {jobs && jobs.length > 0 ? (
+          jobs?.map((job: Job, index: number) => {
+            return (
+              <div key={index}>
+                <HorizontalCard
+                  avatar={true}
+                  button="Go to job"
+                  firstName={company?.company_name}
+                  title={job?.title}
+                  subtitle={<TimeAgo timestamp={job?.date_created!} />}
+                  onTitleClick={() => navigate(`/job/${job?.id}`)}
+                  onClick={() => navigate(`/job/${job?.id}`)}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <div className={styling.noPublishedJobs}>
+            <p>No jobs published yet</p>
+          </div>
+        )}
       </div>
     </CardContainer>
   );
@@ -83,7 +97,7 @@ const CompanyPublicProfile = () => {
     {
       label: "Company jobs",
       key: "1",
-      children: jobs,
+      children: AllCompanyJobs,
     },
     {
       label: "About the company",
