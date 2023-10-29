@@ -16,6 +16,7 @@ import {
   IconBrandLinkedin,
   IconEdit,
   IconMapPin,
+  IconTags,
   IconWorldWww,
 } from "@tabler/icons-react";
 
@@ -37,8 +38,7 @@ const CompanyProfile = () => {
   const [openEditJobModal, setOpenEditJobModal] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [job, setJob] = useState({} as Job);
 
   /**
@@ -114,16 +114,20 @@ const CompanyProfile = () => {
   const fetchCompanyInfo = async () => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const userId = auth?.user?.id;
+    try {
+      const company = await getCompanyById(userId);
+      const allJobs = await getAllJobs();
+      const jobs = allJobs?.filter((job: Record<string, any>) => {
+        return job["company_id"] === userId;
+      });
 
-    const company = await getCompanyById(userId);
-    const allJobs = await getAllJobs();
-    const jobs = allJobs?.filter((job: Record<string, any>) => {
-      return job["company_id"] === userId;
-    });
-
-    setJobs(jobs);
-    setCompany(company);
-    setIsLoading(true);
+      setJobs(jobs);
+      setCompany(company);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   /**
@@ -131,7 +135,7 @@ const CompanyProfile = () => {
    */
   useEffect(() => {
     fetchCompanyInfo();
-  }, []);
+  }, [company?.user_id]);
 
   // Content for "Company jobs" tab
   const jobsTemp = (
@@ -190,24 +194,29 @@ const CompanyProfile = () => {
     </CardContainer>
   );
 
-  // Content for "Company culture" tab
   const culture = (
     <CardContainer>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>Company culture</h2>
-        <div className={styling.values}>
-          {company?.values &&
-            company?.values?.map((value, index) => (
-              <Labels
-                key={index}
-                color="var(--values-label)"
-                labelName={value}
-                customClass={styling.label}
-                disableCloseIcon
-              />
-            ))}
+        <div className={styling.description}>
+          <h3 className={styling.subtitles}>Our Values</h3>
+          {company?.values && company?.values?.length > 0 ? (
+            <div className={styling.labels}>
+              {company?.values?.map((value: string, index: number) => {
+                return (
+                  <Labels
+                    key={index}
+                    labelName={value}
+                    icon={<IconTags />}
+                    disableCloseIcon={true}
+                    customClass={styling.labelClass}
+                  />
+                );
+              })}
+            </div>
+          ) : null}
         </div>
-
+        {/* Culture */}
         {company?.company_culture ? (
           <div className={styling.description}>
             <h3 className={styling.subtitles}>Description</h3>
@@ -219,6 +228,7 @@ const CompanyProfile = () => {
       </div>
     </CardContainer>
   );
+  console.log(company);
 
   // Tabs
   const tabs = [
@@ -330,7 +340,7 @@ const CompanyProfile = () => {
     </>
   );
 
-  if (!isLoading) {
+  if (isLoading) {
     return <Spinner />;
   }
 

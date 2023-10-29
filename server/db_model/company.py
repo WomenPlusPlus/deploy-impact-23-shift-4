@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from sqlalchemy import text
 
+
 def init_company_model(db):
     class Company(db.Model, UserMixin):
         """
@@ -43,7 +44,9 @@ def init_company_model(db):
         company_culture = db.Column(db.String(10000))
         company_website = db.Column(db.String(256))
         company_industry = db.Column(db.String(256))
-        saved_items = db.Column(db.ARRAY(db.String))  # Saved items as an array of strings
+        saved_items = db.Column(
+            db.ARRAY(db.String)
+        )  # Saved items as an array of strings
         shared_candidate_packages = db.Column(
             db.JSON
         )  # Packages that candidates shared with the company
@@ -69,6 +72,7 @@ def init_company_model(db):
             company_size=None,
             company_type=None,
             company_description=None,
+            company_culture=None,
             company_website=None,
             company_industry=None,
             saved_items=None,
@@ -97,6 +101,7 @@ def init_company_model(db):
             self.company_size = company_size
             self.company_type = company_type
             self.company_description = company_description
+            self.company_culture = company_culture
             self.company_website = company_website
             self.company_industry = company_industry
             self.saved_items = saved_items
@@ -125,6 +130,7 @@ def init_company_model(db):
                 "company_size": self.company_size,
                 "company_type": self.company_type,
                 "company_description": self.company_description,
+                "company_culture": self.company_culture,
                 "company_website": self.company_website,
                 "company_industry": self.company_industry,
                 "saved_items": self.saved_items,

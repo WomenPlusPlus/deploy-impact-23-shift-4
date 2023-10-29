@@ -72,13 +72,14 @@
   color: var(--gray-medium);
 }
 
-.values {
+.labels {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  padding-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-.label {
+.labelClass {
+  background-color: var(--values-label);
   border-radius: var(--tag-radius);
 }

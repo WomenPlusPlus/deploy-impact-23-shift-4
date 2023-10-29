@@ -97,31 +97,34 @@ const CompanyPublicProfile = () => {
     <CardContainer className={styling.container}>
       <div className={styling.mainSection}>
         <h2 className={styling.titles}>Company culture</h2>
+        {/* Company values */}
         <div className={styling.description}>
           <h3 className={styling.subtitles}>Our Values</h3>
-          {company?.values ? (
-            <>
-              {company?.values?.map((value, index) => {
-                <Labels
-                  key={index}
-                  icon={<IconTags />}
-                  labelName={value}
-                  disableCloseIcon={true}
-                  customClass={styling.labelClass}
-                />;
+          {company?.values && company?.values?.length > 0 ? (
+            <div className={styling.labels}>
+              {company?.values?.map((value: string, index: number) => {
+                return (
+                  <Labels
+                    key={index}
+                    labelName={value}
+                    icon={<IconTags />}
+                    disableCloseIcon={true}
+                    customClass={styling.labelClass}
+                  />
+                );
               })}
-            </>
+            </div>
           ) : null}
         </div>
 
         {company?.company_culture ? (
           <div className={styling.description}>
-            <h3 className={styling.subtitles}>Our Vision</h3>
+            <h3 className={styling.subtitles}>Description</h3>
             <p>{company?.company_culture}</p>
           </div>
         ) : (
           <div className={styling.description}>
-            <h3 className={styling.subtitles}>Our Vision</h3>
+            <h3 className={styling.subtitles}>Description</h3>
             <p>Nothing added yet</p>
           </div>
         )}
