@@ -47,6 +47,34 @@ const userData: any = {
         "Make sure your data is fresh and up to date so recruiters know what to expect when they contact you!",
     },
   ],
+  admin: [
+    {
+      key: "1",
+      title: "New admin notification",
+      subtitle:
+        "Welcome to the admin panel! You have the power to manage the platform's settings.",
+    },
+    {
+      key: "2",
+      title: "System update in progress",
+      subtitle:
+        "We are currently performing system maintenance. Expect some downtime.",
+    },
+  ],
+  association: [
+    {
+      key: "1",
+      title: "Association update",
+      subtitle:
+        "Important update from the Association. Please read for the latest news and events.",
+    },
+    {
+      key: "2",
+      title: "Join the annual conference",
+      subtitle:
+        "Don't miss the opportunity to join our annual conference. Register now!",
+    },
+  ],
 };
 
 const Notifications = () => {
@@ -57,7 +85,7 @@ const Notifications = () => {
     setIsUnderConstruction(!isUnderConstruction);
   };
   const userType = localStorage.getItem("user_type");
-  if (userType === "company" || userType === "candidate") {
+  if (userType) {
     const items = userData[userType].map((data: any) => ({
       key: data.key,
       label: (
@@ -74,7 +102,7 @@ const Notifications = () => {
     return (
       <Badge color={"orange"} size="small" count={items.length}>
         <DropdownComponent
-          icon={<IconBell />}
+          icon={<IconBell style={{ cursor: "pointer" }} />}
           items={items || []}
           width={400}
           trigger={["click"]}
