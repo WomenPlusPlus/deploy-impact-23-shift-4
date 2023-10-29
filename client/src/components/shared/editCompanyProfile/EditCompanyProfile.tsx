@@ -6,6 +6,7 @@ import TextArea from "antd/es/input/TextArea";
 import { Labels } from "../../UI/labels/Label";
 import { getAllValues } from "../../../api/values";
 import { companySizes } from "../../pages/candidateProfile/helpers/helper";
+import { Company } from "../../../types/types";
 
 const { Option } = Select;
 
@@ -15,7 +16,7 @@ interface EditCompanyProfileProps {
   onCancel: () => void;
   confirmLoading: boolean;
   companyId: string;
-  companyInfo: any;
+  companyInfo: Company;
   associations?: string[];
 }
 
@@ -58,7 +59,6 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [valueDataSource, setValueDataSource] = useState<string[]>([]);
   const [allValues, setAllValues] = useState<string[]>([]);
-
   /**
    * Fetches all values from the database and sets the state
    */

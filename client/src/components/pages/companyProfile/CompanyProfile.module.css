@@ -71,3 +71,15 @@
   font-size: 1.5rem;
   color: var(--gray-medium);
 }
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.labelClass {
+  background-color: var(--label-color);
+  border-radius: var(--tag-radius);
+}
