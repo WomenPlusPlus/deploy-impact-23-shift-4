@@ -118,7 +118,10 @@
 }
 
 @media (max-width: 768px) {
-  .row {
-    flex-wrap: wrap;
+  .jobTitle{
+    white-space: wrap;
+  }
+  .card{
+    margin-right: 1.5rem;
   }
 }

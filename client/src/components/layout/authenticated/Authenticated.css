@@ -1,7 +1,6 @@
-/* .ant-layout .ant-layout-sider-children {
-  width: 10rem;
+@media (max-width: 768px) {
+  .ant-layout-content {
+   padding-left: 15px !important;
+   padding-right: 0px !important;    
+  }
 }
-
-.ant-layout .ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed {
-  width: 50rem !important;
-} */

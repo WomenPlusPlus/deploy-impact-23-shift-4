@@ -5,6 +5,7 @@ import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import "./Authenticated.css";
 
 const { Content } = AntLayout;
 
@@ -75,7 +76,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
   return (
     <>
       <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
-        <AntLayout >
+        <AntLayout>
           <Navbar />
           <AntLayout hasSider>
             <Sidebar

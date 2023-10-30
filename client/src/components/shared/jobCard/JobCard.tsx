@@ -101,9 +101,9 @@ const JobCard: React.FC<JobCardProps> = ({
         <div className={styling.jobHeader}>
           <div className={styling.row}>
           {logo ? (
-          <Avatar size={50} imageSrc={logo} firstName={avatar} />
+    <div><Avatar size={50} imageSrc={logo}  /></div>      
         ) : (
-          <Avatar size={50} firstName={getCompanyName(job)} imageSrc={logo} />
+          <div> <Avatar size={50} firstName={getCompanyName(job)?.charAt(0)}  /></div>   
         )}
             <div className={styling.title}>
               <h2 className={styling.jobTitle} onClick={onClick}>
