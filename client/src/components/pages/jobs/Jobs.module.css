@@ -31,6 +31,9 @@
   display: flex;
   justify-content: space-between;
 }
+.selected{
+  width: 25%;
+}
 
 .noResultText {
   text-align: center;
@@ -79,7 +82,9 @@ button {
 
 .selects {
   display: flex;
-  gap: 65rem;
+  flex: 1;
+  margin-left: 10rem;
+  justify-content: space-between;
 }
 
 @media (max-width: 768px) {
@@ -124,6 +129,7 @@ button {
     display: flex;
     justify-content: space-around;
     gap: 1rem;
+    margin: 0;
   }
   .ant-select {
     width: 180px !important;
