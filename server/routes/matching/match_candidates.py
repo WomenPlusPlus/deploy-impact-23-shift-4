@@ -14,7 +14,7 @@ def check_conditions(job, candidate):
     return location
 
 
-def score(job_skills, candidate_skills, candidate_levels=False):
+def score(job_skills, candidate_skills, levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
 
@@ -25,12 +25,18 @@ def score(job_skills, candidate_skills, candidate_levels=False):
     similarity_matrix = cosine_similarity(candidate_skills_vector, job_skills_vector)
     similarity_matrix_resolved = (similarity_matrix > 0.7).astype("int32")
 
-    if candidate_levels:
+    if levels:
         skills_dict = {"beginner": 1, "intermediate": 2, "advanced": 3, "pro": 4}
-        candidate_levels = [[skills_dict[level]] for level in candidate_levels]
-        total_score = 4 * len(job_skills)
+        job_levels = [skills_dict[level] for level in levels[0]]
+        candidate_levels = [skills_dict[level] for level in levels[1]]
+        match = np.where(similarity_matrix_resolved == 1)
+        for cand_ix, job_ix in zip(*match):
+            if candidate_levels[cand_ix] > job_levels[job_ix]:
+                candidate_levels[cand_ix] = job_levels[job_ix]
+        candidate_levels_resolved = [[level] for level in candidate_levels]
+        total_score = sum(job_levels)
         candidate_score = np.multiply(
-            similarity_matrix_resolved, candidate_levels
+            similarity_matrix_resolved, candidate_levels_resolved
         ).sum()
         percent_score = (candidate_score / total_score) * 100
     else:
@@ -57,7 +63,9 @@ def match_candidates_route(domain_name):
                 job_skills = [
                     skill["skill_name"] for skill in job.json()["jobs"]["skills"]
                 ]
-
+                job_levels = [
+                    skill["skill_level"] for skill in job.json()["jobs"]["skills"]
+                ]
                 job_values = job.json()["jobs"]["values"]
                 job_soft_skills = (
                     job.json()["jobs"]["soft_skills"]
@@ -86,14 +94,14 @@ def match_candidates_route(domain_name):
 
                         cand_id = candidate["user_id"]
 
-                        count = 4
+                        count = 7
                         total_score = 0
 
                         if cand_skills:
                             cand_tech_score = score(
-                                job_skills, cand_skills, cand_levels
+                                job_skills, cand_skills, (job_levels,cand_levels)
                             )
-                            total_score += 4 * cand_tech_score
+                            total_score += 7 * cand_tech_score
 
                             if job_values:
                                 count += 1

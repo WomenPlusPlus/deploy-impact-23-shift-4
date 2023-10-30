@@ -9,7 +9,7 @@ with open("model/vectorizer.pkl", "rb") as file:
     vectorizer = dill.load(file)
 
 
-def score(job_skills, candidate_skills, candidate_levels=False):
+def score(job_skills, candidate_skills, levels=False):
     job_skills = ["_".join(skill.lower().split(" ")) for skill in job_skills]
     job_skills_vector = vectorizer.transform(job_skills)
 
@@ -20,12 +20,18 @@ def score(job_skills, candidate_skills, candidate_levels=False):
     similarity_matrix = cosine_similarity(candidate_skills_vector, job_skills_vector)
     similarity_matrix_resolved = (similarity_matrix > 0.7).astype("int32")
 
-    if candidate_levels:
+    if levels:
         skills_dict = {"beginner": 1, "intermediate": 2, "advanced": 3, "pro": 4}
-        candidate_levels = [[skills_dict[level]] for level in candidate_levels]
-        total_score = 4 * len(job_skills)
+        job_levels = [skills_dict[level] for level in levels[0]]
+        candidate_levels = [skills_dict[level] for level in levels[1]]
+        match = np.where(similarity_matrix_resolved == 1)
+        for cand_ix, job_ix in zip(*match):
+            if candidate_levels[cand_ix] > job_levels[job_ix]:
+                candidate_levels[cand_ix] = job_levels[job_ix]
+        candidate_levels_resolved = [[level] for level in candidate_levels]
+        total_score = sum(job_levels)
         candidate_score = np.multiply(
-            similarity_matrix_resolved, candidate_levels
+            similarity_matrix_resolved, candidate_levels_resolved
         ).sum()
         percent_score = (candidate_score / total_score) * 100
     else:
@@ -84,17 +90,16 @@ def match_jobs_route(domain_name):
                             jobs = jobs_response.json()["jobs"]
 
                             for job in jobs:
-                                
                                 job_id = job["id"]
 
-                                count = 4
+                                count = 7
                                 total_score = 0
 
                                 if  job["skills"]:
-                                    
                                     job_skills = [skill["skill_name"] for skill in job["skills"]]
-                                    job_tech_score = score(job_skills, cand_skills, cand_levels)
-                                    total_score += 4 * job_tech_score
+                                    job_levels = [skill["skill_level"] for skill in job["skills"]]
+                                    job_tech_score = score(job_skills, cand_skills, (job_levels, cand_levels))
+                                    total_score += 7 * job_tech_score
 
                                     if job["values"]:
                                         count += 1
@@ -145,7 +150,7 @@ def match_jobs_route(domain_name):
                                             json=update_job_json,
                                         )
                     
-                    changes = set(existing_match) - set(job_match)
+                    changes = set(existing_match) - set(match_ids)
                     for job in changes:
                         job_json = { "job_id": job }
                         jobs_response = requests.post(f"{domain_name}/api/get_job_by_id", json=job_json)
