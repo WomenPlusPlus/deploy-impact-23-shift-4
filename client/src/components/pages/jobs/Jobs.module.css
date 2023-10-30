@@ -77,12 +77,16 @@ button {
   cursor: pointer;
 }
 
+.selects {
+  display: flex;
+  gap: 65rem;
+}
+
 @media (max-width: 768px) {
   .inputs {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    align-items: center;
   }
 
   .jobHeader {
@@ -91,7 +95,7 @@ button {
   }
 
   .multiFilter {
-    flex-direction: column;
+  flex-wrap: wrap;
   }
 
   .main {
@@ -105,12 +109,27 @@ button {
     align-items: baseline;
     justify-content: space-evenly;
   }
+  .sortByDate > * {
+    flex: 1;
+  }
 
   .cardContainer {
     justify-content: center;
   }
-  
+
   .searchText {
-    width: 90%;
+    width: 100%;
+  }
+  .selects {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+  }
+  .ant-select {
+    width: 180px !important;
+  }
+
+  .selected{
+    flex: 1;
   }
 }

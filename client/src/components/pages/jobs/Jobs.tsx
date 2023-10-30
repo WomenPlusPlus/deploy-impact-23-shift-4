@@ -153,7 +153,10 @@ const Jobs = () => {
       return 0;
     }
   };
-
+  const customSelectStyle = {
+    width: '100%', 
+    minWidth: '200px'
+  };
   const content = (
     <div className={styling.main}>
       {header()}
@@ -162,37 +165,40 @@ const Jobs = () => {
           <div className={styling.searchText}>
             <SearchJobs data={jobs} onSearch={handleSearch} />
           </div>
-          <div className={styling.selected}>
-            {" "}
-            <Select
-              placeholder="Anywhere"
-              style={{ width: 200 }}
-              mode="multiple"
-              value={selectedLocations}
-              onChange={handleLocationChange}
-              maxTagCount={1}
-              suffixIcon={<IconMapPin />}
-            >
-              {locationOptions?.map((location, index) => {
-                return (
-                  <Select.Option key={index} value={location}>
-                    {location}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </div>
-          <div className={styling.selected}>
-            {" "}
-            <FilterSelect
-              filterData={filterData}
-              data={jobs}
-              onSearch={handleSearch}
-              onSelectChange={handleSelectChange}
-              selectedValues={selectedValues}
-            />
+          <div className={styling.selects}>
+            <div className={styling.selected}>
+              {" "}
+              <Select
+                placeholder="Anywhere"
+                style={customSelectStyle}
+                mode="multiple"
+                value={selectedLocations}
+                onChange={handleLocationChange}
+                maxTagCount={1}
+                suffixIcon={<IconMapPin />}
+              >
+                {locationOptions?.map((location, index) => {
+                  return (
+                    <Select.Option key={index} value={location}>
+                      {location}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </div>
+            <div className={styling.selected}>
+              {" "}
+              <FilterSelect
+                filterData={filterData}
+                data={jobs}
+                onSearch={handleSearch}
+                onSelectChange={handleSelectChange}
+                selectedValues={selectedValues}
+              />
+            </div>
           </div>
         </div>
+
         <div className={styling.multiFilter}>
           <DisplayMultiFilter
             filterData={filterData}

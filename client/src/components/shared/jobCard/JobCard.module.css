@@ -121,7 +121,7 @@
   .jobTitle{
     white-space: wrap;
   }
-  .card{
-    margin-right: 1.5rem;
-  }
+ .card{
+  width: auto;
+ }
 }
