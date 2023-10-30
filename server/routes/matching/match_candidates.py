@@ -40,7 +40,7 @@ def score(job_skills, candidate_skills, levels=False):
         ).sum()
         percent_score = (candidate_score / total_score) * 100
     else:
-        percent_score = similarity_matrix_resolved.sum() / len(job_skills)
+        percent_score = similarity_matrix_resolved.sum() / len(job_skills) * 100
     return round(percent_score, 1)
 
 
