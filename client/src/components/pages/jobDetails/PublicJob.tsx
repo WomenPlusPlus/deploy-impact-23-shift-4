@@ -5,6 +5,7 @@ import {
   IconBookmark,
   IconMapPin,
   IconBriefcase2,
+  IconCoins,
   IconChartPie,
 } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
@@ -55,7 +56,7 @@ const PublicJob = () => {
 
         const matchScore = candidate?.matching_jobs.find(
           (job: Job) => job.id === getJob?.id
-        )?.match_score;
+        )?.score;
         if (matchScore) {
           setMatchScore(matchScore);
         }
@@ -215,15 +216,10 @@ const PublicJob = () => {
 
       {/* Second line */}
       <div>
-        <h1 className={styling.jobTitle}>{jobData?.title}</h1>
+        <div>
+          <h1 className={styling.jobTitle}>{jobData?.title}</h1>
+        </div>
         <div className={styling.row}>
-          {matchScore && (
-            <div className={styling.row}>
-              <IconChartPie size={iconSize} />
-              <p>{matchScore}% Match</p>
-            </div>
-          )}
-
           <div className={styling.row}>
             <IconMapPin size={iconSize} />{" "}
             <p>
@@ -234,7 +230,25 @@ const PublicJob = () => {
           <div className={styling.row}>
             <IconBriefcase2 size={iconSize} /> <p>{jobData?.employment_type}</p>
           </div>
+          <div className={styling.row}>
+            <IconCoins size={iconSize} />{" "}
+            <p>
+              {jobData?.salary && jobData?.salary?.length > 0 ? (
+                <>
+                  {jobData?.salary![0]} - {jobData?.salary![1]}
+                </>
+              ) : (
+                "Not provided"
+              )}
+            </p>
+          </div>
         </div>
+        {matchScore && (
+          <div className={`${styling.row} ${styling.matchingScoreDiv}`}>
+            <IconChartPie size={35} fill="#2839A8" />
+            <p className={styling.matchScore}>{matchScore}% Match</p>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

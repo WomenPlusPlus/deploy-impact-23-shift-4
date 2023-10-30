@@ -68,7 +68,6 @@ const DashboardCandidate: React.FC = () => {
     return countProgress;
   };
 
-  console.log("candidate", candidate);
   useEffect(() => {
     fetchInfo(auth?.user?.id);
   }, [auth?.user?.id]);
@@ -179,9 +178,10 @@ const DashboardCandidate: React.FC = () => {
                         key={job.id}
                         avatar={false}
                         button="Go to job"
-                        title={job.title}
+                        title={`${job.title} - ${matchedJob.score}%`}
                         subtitle={description}
                         onClick={() => navigate(`/job/${job.id}`)}
+                        onTitleClick={() => navigate(`/job/${job.id}`)}
                       />
                     );
                   }

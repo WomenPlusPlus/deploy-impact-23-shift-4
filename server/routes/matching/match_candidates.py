@@ -105,7 +105,7 @@ def match_candidates_route(domain_name):
 
                             cand_score = round(total_score / count, 1)
 
-                            if cand_score >= 60:
+                            if cand_score >= 30:
                                 cand_match.append({"id": cand_id, "score": cand_score})
                                 if candidate["matching_jobs"]:
                                     duplicate = [
@@ -137,7 +137,6 @@ def match_candidates_route(domain_name):
                                     json=update_cand_json,
                                 )
                     else:
-                        print("No candidates skills available")
                         continue
 
                 update_json = {"job_id": id, "matching_candidates": cand_match}

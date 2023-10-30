@@ -170,6 +170,7 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
             <p className={styling.sectionName}>Company size:</p>
             <Select
               placeholder="Select Company size"
+              className={styling.input}
               style={{ width: "100%" }}
               value={company_size}
               onChange={(value) => setCompanySize(value)}
@@ -209,7 +210,7 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
           <p className={styling.sectionName}>Description:</p>
           <TextArea
             className={styling.description}
-            placeholder="Company Description"
+            placeholder="Company Description. Max 1000 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -219,7 +220,7 @@ const EditCompanyProfile: React.FC<EditCompanyProfileProps> = ({
           <p className={styling.sectionName}>Company Culture:</p>
           <TextArea
             className={styling.culture}
-            placeholder="Company Culture"
+            placeholder="Company Culture. Max 1000 characters"
             value={company_culture}
             onChange={(e) => setCompanyCulture(e.target.value)}
           />

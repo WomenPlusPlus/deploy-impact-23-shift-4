@@ -17,7 +17,7 @@ def get_all_jobs_route(Jobs):
                 jobs = Jobs.query.all()
                 result = []
                 for job in jobs:
-                    print("JOB",job.to_dict())
+                    
                     result.append(job.to_dict())
                     
             return jsonify({"jobs": result}), 200

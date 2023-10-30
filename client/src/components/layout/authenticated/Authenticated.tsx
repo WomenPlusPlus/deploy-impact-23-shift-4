@@ -17,7 +17,7 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   const authCheck = async () => {
     try {
@@ -50,14 +50,6 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     // Save the selected component in sessionStorage
     window.sessionStorage.setItem("selectedComponent", selectedComponent);
   }, [selectedComponent]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       <LoginRedirect />
-  //     </div>
-  //   );
-  // }
 
   const contentStyle: React.CSSProperties = {
     minHeight: 120,

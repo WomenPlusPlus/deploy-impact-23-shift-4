@@ -95,11 +95,11 @@
 .containerTwoText {
   display: flex;
   flex-direction: column;
-  padding: 3rem;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10rem 3rem;
+  height: 100%;
+  margin: 0 3rem;
   z-index: 9999;
 }
 
