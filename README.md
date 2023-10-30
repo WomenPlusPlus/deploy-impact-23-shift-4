@@ -10,9 +10,10 @@ At Bridge, we envision a future where underrepresented communities in Switzerlan
 
 ## The Product ✨
 
+
 <img src="https://github.com/WomenPlusPlus/deploy-impact-23-shift-4/blob/40e54d165419c74591766a5524895a0e84251b70/docs/registration.png" alt="Registration Page" title="Registration Page">
 
-Check out our mini demo [here](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4/blob/b2e869c950d9a41852ea18d415f8bda5944f78fd/docs/bridge_demo.mov)
+Our project is live [here](https://banana-builders-client.vercel.app/login), use one of our fake users below to log in to one of the four different user types. Additionally, you can check out a mini demo [here](https://github.com/WomenPlusPlus/deploy-impact-23-shift-4/blob/b2e869c950d9a41852ea18d415f8bda5944f78fd/docs/bridge_demo.mov). Enjoy! 
 
 ### Our Fake Users 👋
 
