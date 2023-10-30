@@ -153,7 +153,7 @@ def load_user(id):
     Returns:
         User: The User object associated with the provided user ID.
     """
-    print("load_user", id)
+
     return User.query.get(id)
 
 
@@ -182,5 +182,4 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    print("Server started")
     app.run(port=5001, debug=True)

@@ -86,7 +86,6 @@ def match_jobs_route(domain_name):
                         if job_skills:
                             job_tech_score = score(job_skills, cand_skills, cand_levels)
                             total_score += 4 * job_tech_score
-                            print(job_tech_score)
 
                             if job["values"]:
                                 count += 1
@@ -123,7 +122,6 @@ def match_jobs_route(domain_name):
                                             {"id": id, "score": job_score}
                                         )
                                 else:
-                                    print("else", job_id, job_score)
                                     job["matching_candidates"] = []
                                     job["matching_candidates"].append(
                                         {"id": id, "score": job_score}

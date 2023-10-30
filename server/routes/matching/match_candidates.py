@@ -137,7 +137,6 @@ def match_candidates_route(domain_name):
                                     json=update_cand_json,
                                 )
                     else:
-                        print("No candidates skills available")
                         continue
 
                 update_json = {"job_id": id, "matching_candidates": cand_match}
