@@ -67,8 +67,6 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
                 />
               ))}
             </div>
-
-            <SkillsLevelGuide />
           </div>
 
           <div className={styling.sideSkills}>
@@ -87,6 +85,7 @@ const DetailsTab: React.FC<DetailsTabProps> = ({
             </div>
           </div>
         </div>
+        <SkillsLevelGuide />
       </CardContainer>
 
       {/* Job Description */}

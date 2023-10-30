@@ -15,12 +15,11 @@ def add_job_route(Jobs, db):
             try:
                 data = request.get_json()
                 new_job = Jobs(**data)
-                print(new_job.to_dict())
+                
                 db.session.add(new_job)
                 db.session.commit()
 
                 new_job_id = new_job.to_dict()["id"]
-                print(new_job_id, "AAA")
 
                 return (
                     jsonify(
@@ -32,7 +31,6 @@ def add_job_route(Jobs, db):
                     200,
                 )
             except Exception as e:
-                print(e)
-                return jsonify({"message": "Error adding job"}), 500
+                return jsonify({"message": "Error adding job {e}"}), 500
 
     return add_job_bp
