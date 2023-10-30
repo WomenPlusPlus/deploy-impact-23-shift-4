@@ -16,17 +16,17 @@ To keep our codebase clean and organized, we use blueprints to structure our rou
 
 User authentication is managed through Flask-Login, which simplifies user session management and allows us to protect routes and resources that require authorization.
 
-### AWS RDS for Data Storage
+### AWS RDS as Database
 
 Our data is stored in an AWS RDS (Relational Database Service) instance. This ensures the security, reliability, and scalability of our data storage.
 
 ### Main User Table
 
-We maintain all user information in the "user" table. The user's unique ID from this table is used as a reference throughout the application. This ensures a consistent and efficient way to associate data with users.
+We maintain all user information in the `user` table. The user's unique ID from this table is used as a reference throughout the application. This ensures a consistent and efficient way to associate data with users.
 
 ### Additional Tables
 
-We have several other tables such as "candidate," "admin," "company," and "associations," all of which use the "user_id" as a foreign key to link to the main "user" table. This approach simplifies data management and ensures data integrity.
+We have several other tables such as `candidate`, `admin`, `company`, and `associations` all of which use the `user_id` as a foreign key to link to the main `user` table. This approach simplifies data management and ensures data integrity.
 
 ### Deployment on Render with Docker
 
@@ -62,14 +62,14 @@ cd server
 3. Create a virtual environment and activate it (optional but recommended).
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
 ```
 
 4. Install the required Python packages from the requirements.txt file.
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 5. Make sure you have the .env file in the server root with the define enviroment variables described in the `.env.example`.

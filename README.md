@@ -39,6 +39,7 @@ If you need more information about <strong>Bridge</strong>, have a look [here](h
 | Frontend Deployment | Vercel                                          |
 | Backend Deployment | Render                                           |
 
+<br/>
 
 ## Get Started 🚀
 
@@ -56,6 +57,9 @@ If you need more information about <strong>Bridge</strong>, have a look [here](h
 3. Run `pip3 install -r requirements.txt` to install Python dependencies.
 4. To configure the environment variables please contact [Laura Purcaro](https://github.com/gitadventurer241).
 5. Run `python3 main.py` to start the backend server.
+
+
+For more information on each side, please refer to the respective `README.md` files. 
 
 <br/>
 
