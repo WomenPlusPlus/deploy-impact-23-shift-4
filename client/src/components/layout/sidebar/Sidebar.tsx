@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import configureAxios from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -122,12 +122,9 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
- 
-
   return (
     <>
-   
-   <div className="toggle">
+      <div className="toggle">
         <Sider
           style={{
             height: "100vh",
@@ -168,21 +165,14 @@ const Sidebar: React.FC<SidebarProps> = ({
         </Sider>
       </div>
 
-
-
-
-
-
-      
-        <div className="mobile-navbar-container">
-          <MobileNavbar
-            handleMenuClick={(button) => {
-              setSelectedKey(button);
-              handleButtonClick(button, navigate);
-            }}
-          />
-        </div>
-    
+      <div className="mobile-navbar-container">
+        <MobileNavbar
+          handleMenuClick={(button) => {
+            setSelectedKey(button);
+            handleButtonClick(button, navigate);
+          }}
+        />
+      </div>
     </>
   );
 };

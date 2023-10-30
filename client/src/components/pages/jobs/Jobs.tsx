@@ -162,7 +162,6 @@ const Jobs = () => {
           <div className={styling.searchText}>
             <SearchJobs data={jobs} onSearch={handleSearch} />
           </div>
-        
           <div className={styling.selected}>
             {" "}
             <Select
@@ -183,7 +182,6 @@ const Jobs = () => {
               })}
             </Select>
           </div>
-         
           <div className={styling.selected}>
             {" "}
             <FilterSelect
