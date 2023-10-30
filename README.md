@@ -17,10 +17,6 @@ At Bridge, we envision a future where underrepresented communities in Switzerlan
 | Frontend Deployment | Vercel                                         |
 | Backend Deployment | Render                                          |
 
-## Designs 🎨
-
-View our designs created using Figma [here](https://www.figma.com/file/GabIGkFDgeU7GrXLqDsT9T/Shift?type=design&mode=design&t=HVz8AfCQZmmdwH4S-0).
-
 
 ## Get Started 🚀
 
@@ -38,6 +34,16 @@ View our designs created using Figma [here](https://www.figma.com/file/GabIGkFDg
 3. Run `pip3 install -r requirements.txt` to install Python dependencies.
 4. To configure environment variables please contact [Laura Purcaro](https://github.com/gitadventurer241).
 6. Run `python3 main.py` to start the backend server.
+
+
+## Designs 🎨
+
+View our designs created using Figma [here](https://www.figma.com/file/GabIGkFDgeU7GrXLqDsT9T/Shift?type=design&mode=design&t=HVz8AfCQZmmdwH4S-0).
+
+
+## Project Management
+
+For this project we’ve been using several documents to manage our project planning and work on the scoping of this product. You can find them in this [document](https://docs.google.com/spreadsheets/d/1hzz15suqxdaHOBzxK2cfyZGQXQ_WvPOjfTUn_2UfRZg/edit).
 
 
 ## Our Team 👥
