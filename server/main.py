@@ -159,7 +159,7 @@ def load_user(id):
 
 @app.before_request
 def log_request_info():
-    app.logger.info("Requested route: %s %s", request.method, request.path)
+    app.logger.info("Before request route: %s %s", request.method, request.path)
 
 
 @app.after_request
@@ -180,6 +180,12 @@ def after_request(response):
     response.headers.add("Access-Control-Allow-Credentials", "true")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+    app.logger.info(
+        "After Requested route: %s %s - Status code: %s",
+        request.method,
+        request.path,
+        response.status_code,
+    )
     return response
 
 
