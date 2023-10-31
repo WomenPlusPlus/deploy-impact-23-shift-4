@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styling from "./FAQ.module.css";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
@@ -110,6 +110,8 @@ const FAQ = () => {
   ];
 
   const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
+  const [selectedText, setSelectedText] = useState("");
+  const [isTTSActive, setTTSActive] = useState(false);
 
   const togglePanel = (index: number) => {
     if (activeIndexes.includes(index)) {
@@ -125,9 +127,35 @@ const FAQ = () => {
   const faqContent =
     userType === "candidate" ? faqDataCandidates : faqDataCompanies;
 
+  useEffect(() => {
+    if (isTTSActive) {
+      window.speechSynthesis.cancel(); // Var olan TTS okumalarını iptal et
+
+      const msg = new SpeechSynthesisUtterance(selectedText);
+      window.speechSynthesis.speak(msg); // Seçilen metni sesli olarak oku
+    }
+  }, [selectedText, isTTSActive]);
+
+  const handleTTSButtonClick = () => {
+    setTTSActive(!isTTSActive);
+  };
+
+  const toggleTTS = () => {
+    if (isTTSActive) {
+      window.speechSynthesis.cancel();
+    } else {
+      const msg = new SpeechSynthesisUtterance(selectedText);
+      window.speechSynthesis.speak(msg);
+    }
+    setTTSActive(!isTTSActive);
+  };
+
   return (
     <div className={styling.main}>
       <h1>Frequently Asked Questions</h1>
+      <button onClick={toggleTTS}>
+        {isTTSActive ? "Stop Reading" : "Start Reading"}
+      </button>
       {faqContent?.map((item: any, index: number) => (
         <div key={index} className={styling.panel}>
           <div className={styling.question} onClick={() => togglePanel(index)}>
@@ -141,7 +169,12 @@ const FAQ = () => {
             </span>
           </div>
           {activeIndexes.includes(index) && (
-            <div className={styling.answer}>{item.answer}</div>
+            <div
+              className={styling.answer}
+              onClick={() => setSelectedText(item.answer)}
+            >
+              {item.answer}
+            </div>
           )}
         </div>
       ))}

@@ -59,7 +59,9 @@ const MobileNavbar: React.FC<{ handleMenuClick: (button: string) => void }> = ({
   const handleMenuClick = (key: string, label: string) => {
     if (key === "menu") {
       setShowSubMenu(!showSubMenu);
-      setMenuItemsToShow(showSubMenu ? menuItems.slice(0, 5) : menuItems.slice(5, 9));
+      setMenuItemsToShow(
+        showSubMenu ? menuItems.slice(0, 5) : menuItems.slice(5, 9)
+      );
     } else {
       setSelectedKey(key);
       setCollapsed(true);
