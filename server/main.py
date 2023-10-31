@@ -184,6 +184,6 @@ if __name__ == "__main__":
     db.create_all()
     # Start the server
     if os.environ.get("FLASK_ENV") == "production":
-        serve(app, host="0.0.0.0", port=5001)
+        serve(app, host="0.0.0.0", port=5001, debug=True)
     else:
         app.run(port=5001, debug=True)
