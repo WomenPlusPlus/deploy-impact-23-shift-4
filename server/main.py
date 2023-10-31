@@ -157,6 +157,11 @@ def load_user(id):
     return User.query.get(id)
 
 
+@app.before_request
+def log_request_info():
+    app.logger.info("Requested route: %s %s", request.method, request.path)
+
+
 @app.after_request
 def after_request(response):
     if os.environ.get("FLASK_ENV") == "production":
