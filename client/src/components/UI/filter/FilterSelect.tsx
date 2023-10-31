@@ -55,13 +55,9 @@ const FilterSelect: React.FC<multiOptionProps> = ({
     onSelectChange(selectedValues);
   };
 
-  const customSelectStyle = {
-    width: '100%',
-    minWidth:"140px"
-  };
   return (
     <Select
-      style={customSelectStyle}
+      style={{ width: "100%", minWidth: "140px" }}
       showSearch
       placeholder="Select a value"
       optionFilterProp="children"

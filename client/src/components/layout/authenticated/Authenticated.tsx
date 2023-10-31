@@ -68,7 +68,6 @@ const Authenticated = ({ content }: { content: JSX.Element }) => {
     paddingTop: 64,
     paddingRight: 40,
     paddingLeft: 40,
-    //overflow: "initial",
     transition: "margin-left 0.3s",
     overflow: collapsed ? "hidden" : "initial",
   };
