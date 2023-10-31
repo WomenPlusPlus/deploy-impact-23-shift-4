@@ -31,7 +31,7 @@
   display: flex;
   justify-content: space-between;
 }
-.selected{
+.selected {
   width: 25%;
 }
 
@@ -100,7 +100,7 @@ button {
   }
 
   .multiFilter {
-  flex-wrap: wrap;
+    flex-wrap: wrap;
   }
 
   .main {
@@ -112,10 +112,15 @@ button {
 
   .sortByDate {
     align-items: baseline;
-    justify-content: space-evenly;
+    justify-content: space-between;
   }
-  .sortByDate > * {
-    flex: 1;
+
+  .sortByDate :first-child {
+    white-space: nowrap;
+  }
+
+  .sortBy {
+    white-space: nowrap;
   }
 
   .cardContainer {
@@ -135,7 +140,7 @@ button {
     width: 180px !important;
   }
 
-  .selected{
+  .selected {
     flex: 1;
   }
 }

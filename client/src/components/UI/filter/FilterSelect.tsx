@@ -56,8 +56,8 @@ const FilterSelect: React.FC<multiOptionProps> = ({
   };
 
   const customSelectStyle = {
-    width: '100%', 
-    minWidth: '200px'
+    width: '100%',
+    minWidth:"140px"
   };
   return (
     <Select

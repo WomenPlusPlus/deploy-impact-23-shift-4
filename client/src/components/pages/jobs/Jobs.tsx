@@ -154,8 +154,8 @@ const Jobs = () => {
     }
   };
   const customSelectStyle = {
-    width: '100%', 
-    minWidth: '200px'
+    width: "100%",
+    minWidth: "140px",
   };
   const content = (
     <div className={styling.main}>
