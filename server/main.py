@@ -2,7 +2,6 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from waitress import serve
 
 # DB models
 from db_model.user import init_user_model
@@ -183,7 +182,4 @@ if __name__ == "__main__":
     # Make sure the tables exist
     db.create_all()
     # Start the server
-    if os.environ.get("FLASK_ENV") == "production":
-        serve(app, host="0.0.0.0", port=5001, debug=True)
-    else:
-        app.run(port=5001, debug=True)
+    app.run(port=5001, debug=True)
