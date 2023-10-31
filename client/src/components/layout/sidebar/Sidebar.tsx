@@ -15,7 +15,6 @@ import {
   IconUsers,
   IconInfoCircle,
 } from "@tabler/icons-react";
-
 import "./Sidebar.css";
 import MobileNavbar from "./MobileNavbar";
 const axios = configureAxios();

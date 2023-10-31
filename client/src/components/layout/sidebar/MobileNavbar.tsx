@@ -70,7 +70,6 @@ const MobileNavbar: React.FC<{ handleMenuClick: (button: string) => void }> = ({
   };
 
   useEffect(() => {
-    // Sayfa yüklendiğinde 5 menü öğesi göster
     setMenuItemsToShow(menuItems.slice(0, 5));
   }, []);
 
