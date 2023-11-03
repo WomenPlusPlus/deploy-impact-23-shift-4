@@ -81,7 +81,7 @@ For this project we’ve been using several documents to manage our project plan
 |-----------------|---------------------|-----------------------------------------------|
 | Laura Purcaro   | Full Stack Developer| [gitadventurer241](https://github.com/gitadventurer241)|
 | Alba Romero     | Full Stack Developer| [albarkauss](https://github.com/albarkauss)   |
-| Mehtapy Yildiz  | Full Stack Developer| [mehtapy](https://github.com/mehtapy)         |
+| Meytap Yildiz  | Full Stack Developer|  [mehtapy](https://github.com/mehtapy)         |
 | Isaac Omolayo   | Data Science        | [IzicTemi](https://github.com/IzicTemi)       |
 | Maria Reis      | UX designer         | [uxmreis](https://github.com/uxmreis)         |
 | Petra Slits     | Project Manager     | [petrajanna](https://github.com/petrajanna)   |
